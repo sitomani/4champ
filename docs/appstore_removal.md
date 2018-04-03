@@ -73,7 +73,8 @@ even though it is practically dependent of the service.
 Clearly I was at a dead end with 4champ. It seemed impossible to get the Apple Review dispute sorted out by any means 
 that I could think of, and the agreement plan had gone off too. At this point, around September 2017 I decided to pull 
 4champ from AppStore altogether. It did not feel right to keep the app available, if I could not release any updates to it. 
-As a matter of fact, it was a nice policy from Apple to let the version 2.0 stay in during the lengthy conversations.
+As a matter of fact, it was a nice policy from Apple to let the version 2.0 stay in during the lengthy conversations, but I 
+did not want to push my luck on that any further.
 
 So I set up this github repository, and added just a license and readme files back in September 2017, as a placeholder for
 releasing the app as open source project. If I could not get it listed in AppStore, anybody with Xcode could build it from
