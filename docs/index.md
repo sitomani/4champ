@@ -1,5 +1,14 @@
 # 4champ Development Journal
 
+### 17 April 2018
+Decided to start from the dependencies - I had LibOpenMPT integrated in my original project, but it was a very clumsy
+hack. In fact, I did not remember quite exactly how I put the iOS build together and after updating to latest OpenMPT sources
+from github I was facing some build errors.
+
+Some tweaking with the OpenMPT Lua scripts and I could get the thing to work, somewhat. Premake5 official release does not work too well for iOS projects so it took a pbxproj file script hack to get it done, and building requires a manual step to add the dependency libraries to linking phase, but now I have it under my OpenMPT fork at [https://github.com/sitomani/openmpt](https://github.com/sitomani/openmpt).
+
+Output from the build scripts in my fork repo is a fat binary for libopenmpt-small containing all the necessary architectures for 4champ. 
+
 ### 3 April 2018
 
 These pages are created to document my development efforts and related endeavours around 4champ mod player app.
