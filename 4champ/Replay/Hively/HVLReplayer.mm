@@ -1,0 +1,180 @@
+//
+//  HVLReplayer.m
+//  4champ
+//
+//  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
+//
+
+#import "MPTReplayer.h"
+#import "HVLReplayer.h"
+#import "hvl_replay.h"
+
+
+#define kSampleRate 44100
+#define kHivelyRenderSamples (kSampleRate/50)
+#define kBufferSamples (kSampleRate/10)
+#define kNumBuffers 8
+
+
+@implementation HVLReplayer {
+    struct hvl_tune* currentHVLtune;
+    int16_t* leftByte;
+    int16_t* rightByte;
+    int modlen;
+    int curpos;
+    
+    int hvlStereoSeparation;
+}
+
+
+static int iHivelyBufPos = 0;
+
+
+- (HVLReplayer*) init {
+    self = [super init];
+    if (self) {
+        hvl_InitReplayer();
+        
+        iHivelyBufPos = kHivelyRenderSamples;
+        leftByte = static_cast<int16_t *>(malloc(sizeof(int16_t) * kHivelyRenderSamples));
+        rightByte = static_cast<int16_t *>(malloc(sizeof(int16_t) * kHivelyRenderSamples));
+        
+        memset( leftByte, 0, sizeof(int16_t) * kHivelyRenderSamples);
+        memset( rightByte, 0, sizeof(int16_t) * kHivelyRenderSamples);
+
+        /*
+         defstereo is the stereo seperation for playing AHX tunes (HVL tunes override
+         this setting and ignore it). It can be:
+         
+         0 = 0%  (mono)
+         1 = 25%
+         2 = 50%
+         3 = 75%
+         4 = 100% (paula)*/
+        //set stereo separation
+        NSInteger stereoseparation = 50;
+        hvlStereoSeparation = ceil(stereoseparation/200 * 4);
+    }
+    return self;
+}
+
+- (void)dealloc {
+    if (currentHVLtune) {
+        hvl_FreeTune(currentHVLtune);
+        free(leftByte);
+        free(rightByte);
+        currentHVLtune = nil;
+    }
+}
+
+- (int) readFrames:(size_t)count bufLeft:(int16_t*)bufLeft bufRight:(int16_t*)bufRight {
+
+    if (currentHVLtune->ht_SongEndReached) {
+        return 0; //return zero to trigger mod change, hvl+ahx loop forever
+    }
+    int left = (int)count;
+    int readsize = 0;
+    
+    while ( (left > 0) && (iHivelyBufPos < kHivelyRenderSamples) ) {
+        *bufLeft++ = leftByte[iHivelyBufPos];
+        *bufRight++ = rightByte[iHivelyBufPos];
+        iHivelyBufPos++;
+        left--;
+        readsize++;
+    }
+    
+    while ( left > 0 ) {
+        hvl_DecodeFrame(currentHVLtune, (int8*)leftByte, (int8*)rightByte, 2);
+        iHivelyBufPos = 0;
+        while ( (left > 0) && (iHivelyBufPos < kHivelyRenderSamples) ) {
+            *bufLeft++ = leftByte[iHivelyBufPos];
+            *bufRight++ = rightByte[iHivelyBufPos];
+            iHivelyBufPos++;
+            left--;
+            readsize++;
+        }
+    }
+    
+    return readsize;
+}
+
+- (void) setStereoSeparation:(NSInteger)value {
+    int sep = ceil(value/200 * 4);
+    currentHVLtune->ht_defstereo = sep;
+    //no effect during playback.
+}
+
+- (int) currentPosition {
+    int playtime = currentHVLtune->ht_PlayingTime;
+    curpos = CGFloat(playtime) / currentHVLtune->ht_SpeedMultiplier / 50;
+    return curpos;
+}
+
+- (int) moduleLength {
+    return modlen/1000;
+}
+
+- (void) setCurrentPosition:(int)newPosition {
+    curpos = hvl_Seek(currentHVLtune, newPosition * 1000);
+}
+
+- (NSArray*) getSamples
+{
+    if (!currentHVLtune) {
+        return @[];
+    }
+    
+    int samples = currentHVLtune->ht_InstrumentNr;
+    NSMutableString* infoStr = [[NSMutableString alloc] init];
+    NSMutableArray* sampleArray = [NSMutableArray new];
+    @try {
+        for (int i = 0; i<samples; i++) {
+            
+            const char* sampleName = currentHVLtune->ht_Instruments[i].ins_Name;
+           NSString* str = [[NSString alloc] initWithUTF8String:sampleName];
+            if  (str) {
+                [sampleArray addObject:str];
+            }
+        }
+    } @catch (NSException *exception) {
+        infoStr = [@"Could not get info for module" mutableCopy];
+    } @finally {
+    }
+    return sampleArray;
+}
+
+- (NSArray<NSString*>*) getInstruments
+{
+    return [self getSamples];
+}
+
+- (NSInteger) numberOfChannels {
+    return currentHVLtune->ht_Channels;
+}
+
+- (NSInteger) volumeOnChannel:(NSInteger)channel {
+    CGFloat floatGain = CGFloat(currentHVLtune->ht_Voices[channel].vc_AudioVolume);
+    
+    //map the gain to 0-100 scale to match with what openMPT does
+    int gain = floatGain * CGFloat(100.0/64.0);
+    return gain;
+}
+
+- (bool)loadModule:(NSString *)path {
+  currentHVLtune = hvl_LoadTune((TEXT*)[path UTF8String], 44100, hvlStereoSeparation );
+  if (currentHVLtune == nil) {
+    return nil;
+  }
+  
+  curpos = 0;
+  modlen = hvl_GetPlayTime(currentHVLtune);
+  
+  
+  hvl_InitSubsong(currentHVLtune, 0);
+  return true;
+}
+
+
+
+
+@end

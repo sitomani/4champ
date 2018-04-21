@@ -1,5 +1,15 @@
 # 4champ Development Journal
 
+### 21 April 2018 I can hear things
+It was time for a rewrite on the replay routine that handles modules for 4champ. In the original app, playlist handling and replay were bundled in a single player class that used modplug to render the modules into audio stream. I wanted to avoid such tight coupling, and decided to implement the playing of modules in a way that allows for swapping the actual player libraries on the fly.
+![alt replay class diagram](images/replay_class.png "Replay class diagram")
+
+For now, I'm sticking with two libs: **libOpenMPT** and **HivelyTracker**. The first has a C++ interface, and the second is a C implementation. Since Swift does not have direct C/C++ interoperability, the Swift-facing Replay class and the library-specific wrappers are written in Objective-C. 
+
+To test run my implementation I also wrote a very bare-bones sample mod player app that bundles a set of different types of modules that resides under 
+SamplePlayer folder in the [4champ repository](https://github.com/sitomani/4champ/). You can try that out, just build the app in xcode and run in simulator or device.<br/>
+![alt Sampleplayer screen](images/sampleplayer_screen.png "SamplePlayer screenshot")
+
 ### 17 April 2018
 Decided to start from the dependencies - I had LibOpenMPT integrated in my original project, but it was a very clumsy
 hack. In fact, I did not remember quite exactly how I put the iOS build together and after updating to latest OpenMPT sources
