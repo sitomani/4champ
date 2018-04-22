@@ -10,9 +10,9 @@ project that collects anything related to Amiga music production. AMP database b
 In this repository I'm working on rewriting the app that originally was released in AppStore in 2012, and since late 2017 not available in AppStore any more 😞. You can read more about the history of the app and follow the rewrite process on the development journal that I created for this project: [sitomani.github.io/4champ](https://sitomani.github.io/4champ).
 
 ### Dependencies
-4champ uses[libOpenMPT](https://github.com/OpenMPT/openmpt) and [Hivelytracker](https://github.com/pete-gordon/hivelytracker) for module playback. 
+4champ uses [libOpenMPT](https://github.com/OpenMPT/openmpt) and [Hivelytracker](https://github.com/pete-gordon/hivelytracker) for module playback. 
 
-**Hivelytracker** replayer is included here, so it will be built automatically when you build xcode projects in this repository, no actions needed. 
+**Hivelytracker** replayer code is included in [4champ/Replay/Hively](4champ/replay/hively) folder, so it will be built automatically when you build xcode projects in this repository, no further actions needed. 
 
 **LibOpenMPT** repo does not build for iOS without small tweaks, which I have done on my own fork of the lib at https://github.com/sitomani/openmpt. In order to build it for use in connection with 4champ and the SamplePlayer demo app in thsi repository, you will need to take the following steps:
 
@@ -28,9 +28,9 @@ I plan to have a deeper look at openmpt project file generation with Genie at so
 
 ### License
 
-The code in this repository is copyright © Aleksi Sitomaniemi 2018, and licensed under [MIT license](LICENSE). 
+The code in this repository is copyright © Aleksi Sitomaniemi 2018 and licensed under [MIT license](LICENSE), **except** for HivelyTracker replay routine code which is by licenced under [BSD-3](4champ/replay/hively/LICENSE) by [Pete Gordon](https://github.com/pete-gordon).
 
-Module files included under *SamplePlayer* test project that I've used to verify the the replay routine are work of the original authors::
+Module files included under *SamplePlayer* test project that I've used to verify the the replay routine are work of the original authors:
 
 *1st_intro.mod* by florist (Aleksi Sitomaniemi - yup that's me!)<br/>
 *all.in.eightchannels.xm* by Daze (Patrick Glasby-Baldwin)<br/>

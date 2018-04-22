@@ -68,7 +68,7 @@ and could not blame them a bit for not signing an agreement just for the sake of
 even though it is practically dependent of the service.
 
 
-## Plan ~~B~~G
+## Plan B: Open Sourcing the app
 
 Clearly I was at a dead end with 4champ. It seemed impossible to get the Apple Review dispute sorted out by any means 
 that I could think of, and the agreement plan had gone off too. At this point, around September 2017 I decided to pull 
