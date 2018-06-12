@@ -1,0 +1,11 @@
+/* 
+  InfoPlist.strings
+  ampplayer
+
+  Created by Aleksi Sitomaniemi on 16/09/16.
+  Copyright © 2016 Aleksi Sitomaniemi. All rights reserved.
+*/
+
+"RADIO_NEW" = "Radio: Neu in AMP";
+"RADIO_ALL" = "Radio: Alle";
+"RADIO_LOCAL" = "Radio: Meine Sammlung";
