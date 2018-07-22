@@ -128,7 +128,7 @@ static SInt16* bufRight;
     replayerClass = [MPTReplayer class];
   }
   if (renderer) {
-    [self stop];
+    [self pause];
   }
   if (![[renderer class] isEqual:replayerClass]) {
     renderer = [[replayerClass alloc] init];
@@ -153,6 +153,7 @@ static SInt16* bufRight;
     OSStatus status = AudioOutputUnitStop(audioUnit);
     checkStatus(status);
   }
+  [self setPausedStatus:YES];
 }
 
 - (void)resume
@@ -160,6 +161,7 @@ static SInt16* bufRight;
   if(renderer) {
     OSStatus status = AudioOutputUnitStart(audioUnit);
     checkStatus(status);
+    [self setPausedStatus:NO];
   }
 }
 
@@ -169,12 +171,14 @@ static SInt16* bufRight;
     checkStatus(status);
     [renderer setCurrentPosition:0];
   }
+  [self setPlayingStatus:NO];
 }
 
 // mod specific API
 - (void)play {
   OSStatus status = AudioOutputUnitStart(audioUnit);
   checkStatus(status);
+  [self setPlayingStatus:YES];
 }
 
 - (NSArray*) getSamples
@@ -230,6 +234,23 @@ static SInt16* bufRight;
   AudioComponentInstanceDispose(audioUnit);
 }
 
+- (void) setPlayingStatus:(BOOL)playing {
+  _isPlaying = playing;
+  if (playing) {
+    [self setPausedStatus:NO];
+  }
+  if (_statusDelegate) {
+    [_statusDelegate playStatusChanged:self];
+  }
+}
+
+- (void) setPausedStatus:(BOOL)paused {
+  _isPaused = paused;
+  if (_statusDelegate) {
+    [_statusDelegate playStatusChanged:self];
+  }
+}
+
 static OSStatus playbackCallback(void *inRefCon,
                                  AudioUnitRenderActionFlags *ioActionFlags,
                                  const AudioTimeStamp *inTimeStamp,
@@ -252,10 +273,12 @@ static OSStatus playbackCallback(void *inRefCon,
         buf2[frame] = p2;
       }
     } else {
-      //out of bytes... just put frame's worth of zeros and stop
+      //out of bytes... just put frame's worth of zeros and inform delegate
       for( UInt32 i = 0; i < ioData->mNumberBuffers; i++ )
         memset( ioData->mBuffers[i].mData, 0, ioData->mBuffers[i].mDataByteSize );
-      [mp stop];
+      if ([mp streamDelegate]) {
+        [[mp streamDelegate] reachedEndOfStream:mp];
+      }
     }
   } else {
     //no replayer loaded... stop playback

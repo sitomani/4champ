@@ -1,0 +1,5 @@
+Carthage
+Cartfile.resolved
+fastlane/report.xml
+*.ipa
+*.dSYM.zip

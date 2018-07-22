@@ -3,20 +3,21 @@
 //  ampplayer
 //
 //  Created by Aleksi Sitomaniemi on 20/05/2018.
-//  Copyright © 2018 boogie. All rights reserved.
+//  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
 import UIKit
+
+let modulePlayer = ModulePlayer()
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
-
-
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     // Override point for customization after application launch.
     UIApplication.shared.statusBarStyle = .lightContent
+    Appearance.setup()
     return true
   }
 

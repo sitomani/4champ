@@ -160,7 +160,7 @@ static int iHivelyBufPos = 0;
     return gain;
 }
 
-- (bool)loadModule:(NSString *)path {
+- (bool) loadModule:(NSString *)path {
   currentHVLtune = hvl_LoadTune((TEXT*)[path UTF8String], 44100, hvlStereoSeparation );
   if (currentHVLtune == nil) {
     return nil;
@@ -173,8 +173,6 @@ static int iHivelyBufPos = 0;
   hvl_InitSubsong(currentHVLtune, 0);
   return true;
 }
-
-
 
 
 @end

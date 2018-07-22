@@ -1,0 +1,83 @@
+//
+//  MainViewController.swift
+//  ampplayer
+//
+//  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
+//
+
+import UIKit
+
+protocol NowPlayingContainer {
+  func toggleNowPlaying(_ value: Bool)
+}
+
+class MainViewController: UITabBarController {
+  
+  @IBOutlet weak var npView: NowPlayingView!
+  
+  var playingConstraint: NSLayoutConstraint?
+  var notplayingConstraint: NSLayoutConstraint?
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    view.addSubview(npView)
+    npView.translatesAutoresizingMaskIntoConstraints = false
+    npView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+    npView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+    playingConstraint = npView.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
+    playingConstraint?.isActive = false
+    notplayingConstraint = npView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+    notplayingConstraint?.priority = .defaultLow
+    notplayingConstraint?.isActive = true
+    npView.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+    npView?.alpha = 0
+    
+    modulePlayer.addPlayerObserver(self)
+    
+  }
+  
+  func toggleNowPlaying(_ value: Bool) {
+    UIView.animate(withDuration: 0.15) {
+      self.playingConstraint?.isActive = value
+      self.npView?.alpha = CGFloat(value == true ? 1 : 0)
+      self.view.layoutIfNeeded()
+    }
+    
+    for ctl in self.childViewControllers {
+      if let navCtl = ctl as? UINavigationController,
+        let firstChild = navCtl.topViewController as? NowPlayingContainer {
+        firstChild.toggleNowPlaying(value)
+      }
+    }
+  }
+  
+  @IBAction func togglePlay(_ sender: UIButton) {
+    if modulePlayer.status == .paused {
+      modulePlayer.resume()
+    } else {
+      modulePlayer.pause()
+    }
+  }
+  
+  @IBAction func showVisualizer(_ sender: UIButton) {
+    if self.presentedViewController == nil {
+      performSegue(withIdentifier: "ToVisualizer", sender: self)
+    }
+  }
+}
+
+extension MainViewController: ModulePlayerObserver {
+  func moduleChanged(module: MMD) {
+    DispatchQueue.main.async {
+      self.npView.setModule(module)
+    }
+  }
+  
+  func statusChanged(status: PlayerStatus) {
+    DispatchQueue.main.async {
+      self.toggleNowPlaying(status == .playing || status == .paused)
+      self.npView.playPauseButton?.isSelected = (status == .paused)
+    }
+  }
+}

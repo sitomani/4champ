@@ -9,7 +9,7 @@
 
 @protocol ReplayControl <NSObject>
 // Control API
-- (bool) loadModule:(NSString*)path; //loads module from given path
+- (bool) loadModule:(NSString*)path; //loads module from given path. Path extension must identify module format
 - (void) setCurrentPosition: (int)newPosition; //sets current position in current mod.
 - (void) setStereoSeparation:(NSInteger)value; //set stereo separation 0-200
 @end
@@ -29,7 +29,21 @@
 - (int) readFrames:(size_t)count bufLeft:(int16_t*)bufLeft bufRight:(int16_t*)bufRight;
 @end
 
+@class Replay;
+
+@protocol ReplayStreamDelegate <NSObject>
+- (void) reachedEndOfStream:(Replay*)replay;
+@end
+
+@protocol ReplayStatusDelegate <NSObject>
+- (void) playStatusChanged:(Replay*)replay;
+@end
+
 @interface Replay : NSObject<ReplayControl, ReplayInformation>
+@property (nonatomic, weak) NSObject<ReplayStreamDelegate>* streamDelegate;
+@property (nonatomic, weak) NSObject<ReplayStatusDelegate>* statusDelegate;
+@property (nonatomic, assign) BOOL isPlaying;
+@property (nonatomic, assign) BOOL isPaused;
 - (void) initAudio;
 - (void) play;
 - (void) stop;

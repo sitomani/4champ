@@ -17,10 +17,33 @@
 		4543984E20D0366E00991ADC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4543983D20D0366E00991ADC /* InfoPlist.strings */; };
 		4543984F20D0366E00991ADC /* String+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543984820D0366E00991ADC /* String+extension.swift */; };
 		4543985120D03C1600991ADC /* AboutHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543985020D03C1500991ADC /* AboutHeaderView.swift */; };
+		45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */; };
+		45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F420FF2F6600794147 /* RESTRoutes.swift */; };
+		45AA910220FF36C200794147 /* Replay.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F720FF36C200794147 /* Replay.m */; };
+		45AA910320FF36C200794147 /* hvl_replay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F920FF36C200794147 /* hvl_replay.cpp */; };
+		45AA910420FF36C200794147 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 45AA90FA20FF36C200794147 /* LICENSE */; };
+		45AA910520FF36C200794147 /* HVLReplayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90FB20FF36C200794147 /* HVLReplayer.mm */; };
+		45AA910620FF36C200794147 /* MPTReplayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AA910120FF36C200794147 /* MPTReplayer.m */; };
+		45AA910A20FF389800794147 /* liblibopenmpt-small.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45AA910920FF389800794147 /* liblibopenmpt-small.a */; };
+		45AA910E20FF5E8A00794147 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA910D20FF5E8A00794147 /* Structs.swift */; };
+		45AA91102100C48500794147 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA910F2100C48500794147 /* MainViewController.swift */; };
+		45AA91122100D13300794147 /* NowPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA91112100D13300794147 /* NowPlayingView.swift */; };
+		45AA91162100ECE600794147 /* VisualizerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA91142100ECE600794147 /* VisualizerViewController.swift */; };
+		45AA911A2100EF1900794147 /* AmpSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA91182100EF1900794147 /* AmpSlider.swift */; };
+		45AA911B2100EF1900794147 /* AmpVizScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA91192100EF1900794147 /* AmpVizScene.swift */; };
 		45D392A520B1DDEC00EEF4E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D392A420B1DDEC00EEF4E3 /* AppDelegate.swift */; };
 		45D392AC20B1DDEC00EEF4E3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45D392AA20B1DDEC00EEF4E3 /* Main.storyboard */; };
 		45D392AE20B1DDEE00EEF4E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45D392AD20B1DDEE00EEF4E3 /* Assets.xcassets */; };
 		45D392B120B1DDEE00EEF4E3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45D392AF20B1DDEE00EEF4E3 /* LaunchScreen.storyboard */; };
+		45D61F5120E1647300869814 /* RadioPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F4B20E1647300869814 /* RadioPresenter.swift */; };
+		45D61F5320E1647300869814 /* RadioRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F4D20E1647300869814 /* RadioRouter.swift */; };
+		45D61F5420E1647300869814 /* RadioModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F4E20E1647300869814 /* RadioModels.swift */; };
+		45D61F5520E1647300869814 /* RadioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F4F20E1647300869814 /* RadioViewController.swift */; };
+		45D61F5620E1647300869814 /* RadioInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F5020E1647300869814 /* RadioInteractor.swift */; };
+		45D61F5920E1695200869814 /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F5820E1695100869814 /* UIUtils.swift */; };
+		45D61F5B20E1780D00869814 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F5A20E1780D00869814 /* Appearance.swift */; };
+		45D61F5D20E17D8F00869814 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45D61F5C20E17D8F00869814 /* Alamofire.framework */; };
+		45D61F6320E1863600869814 /* Gzip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45D61F6220E1863600869814 /* Gzip.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,12 +70,40 @@
 		4543984B20D0366E00991ADC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4543984C20D0366E00991ADC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4543985020D03C1500991ADC /* AboutHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHeaderView.swift; sourceTree = "<group>"; };
+		45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModulePlayer.swift; sourceTree = "<group>"; };
+		45AA90F420FF2F6600794147 /* RESTRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTRoutes.swift; sourceTree = "<group>"; };
+		45AA90F720FF36C200794147 /* Replay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Replay.m; sourceTree = "<group>"; };
+		45AA90F920FF36C200794147 /* hvl_replay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hvl_replay.cpp; sourceTree = "<group>"; };
+		45AA90FA20FF36C200794147 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		45AA90FB20FF36C200794147 /* HVLReplayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HVLReplayer.mm; sourceTree = "<group>"; };
+		45AA90FC20FF36C200794147 /* hvl_replay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hvl_replay.h; sourceTree = "<group>"; };
+		45AA90FD20FF36C200794147 /* HVLReplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HVLReplayer.h; sourceTree = "<group>"; };
+		45AA90FE20FF36C200794147 /* Replay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Replay.h; sourceTree = "<group>"; };
+		45AA910020FF36C200794147 /* MPTReplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTReplayer.h; sourceTree = "<group>"; };
+		45AA910120FF36C200794147 /* MPTReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTReplayer.m; sourceTree = "<group>"; };
+		45AA910920FF389800794147 /* liblibopenmpt-small.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "liblibopenmpt-small.a"; path = "../openmpt/liblibopenmpt-small.a"; sourceTree = "<group>"; };
+		45AA910B20FF3A3B00794147 /* 4champ-bridging-header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "4champ-bridging-header.h"; path = "4champ/4champ-bridging-header.h"; sourceTree = SOURCE_ROOT; };
+		45AA910D20FF5E8A00794147 /* Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
+		45AA910F2100C48500794147 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		45AA91112100D13300794147 /* NowPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NowPlayingView.swift; path = 4champ/Scenes/NowPlayingView.swift; sourceTree = SOURCE_ROOT; };
+		45AA91142100ECE600794147 /* VisualizerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualizerViewController.swift; sourceTree = "<group>"; };
+		45AA91182100EF1900794147 /* AmpSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmpSlider.swift; sourceTree = "<group>"; };
+		45AA91192100EF1900794147 /* AmpVizScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmpVizScene.swift; sourceTree = "<group>"; };
 		45D392A120B1DDEC00EEF4E3 /* ampplayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ampplayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45D392A420B1DDEC00EEF4E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		45D392AB20B1DDEC00EEF4E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		45D392AD20B1DDEE00EEF4E3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		45D392B020B1DDEE00EEF4E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		45D392B220B1DDEE00EEF4E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		45D61F4B20E1647300869814 /* RadioPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioPresenter.swift; sourceTree = "<group>"; };
+		45D61F4D20E1647300869814 /* RadioRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioRouter.swift; sourceTree = "<group>"; };
+		45D61F4E20E1647300869814 /* RadioModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioModels.swift; sourceTree = "<group>"; };
+		45D61F4F20E1647300869814 /* RadioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioViewController.swift; sourceTree = "<group>"; };
+		45D61F5020E1647300869814 /* RadioInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioInteractor.swift; sourceTree = "<group>"; };
+		45D61F5820E1695100869814 /* UIUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
+		45D61F5A20E1780D00869814 /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
+		45D61F5C20E17D8F00869814 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		45D61F6220E1863600869814 /* Gzip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Gzip.framework; path = Carthage/Build/iOS/Gzip.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +111,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45AA910A20FF389800794147 /* liblibopenmpt-small.a in Frameworks */,
+				45D61F5D20E17D8F00869814 /* Alamofire.framework in Frameworks */,
+				45D61F6320E1863600869814 /* Gzip.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,7 +123,11 @@
 		4543982C20D0344F00991ADC /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				45AA91132100ECE600794147 /* Visualizer */,
+				45D61F4A20E1644100869814 /* Radio */,
 				4543982D20D0344F00991ADC /* About */,
+				45AA910F2100C48500794147 /* MainViewController.swift */,
+				45AA91112100D13300794147 /* NowPlayingView.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -98,9 +156,69 @@
 			path = l13n;
 			sourceTree = "<group>";
 		};
+		45AA90F320FF2F4200794147 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				45AA90F420FF2F6600794147 /* RESTRoutes.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		45AA90F620FF36C200794147 /* Replay */ = {
+			isa = PBXGroup;
+			children = (
+				45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */,
+				45AA90F720FF36C200794147 /* Replay.m */,
+				45AA90F820FF36C200794147 /* Hively */,
+				45AA90FE20FF36C200794147 /* Replay.h */,
+				45AA90FF20FF36C200794147 /* OpenMPT */,
+			);
+			path = Replay;
+			sourceTree = "<group>";
+		};
+		45AA90F820FF36C200794147 /* Hively */ = {
+			isa = PBXGroup;
+			children = (
+				45AA90F920FF36C200794147 /* hvl_replay.cpp */,
+				45AA90FA20FF36C200794147 /* LICENSE */,
+				45AA90FB20FF36C200794147 /* HVLReplayer.mm */,
+				45AA90FC20FF36C200794147 /* hvl_replay.h */,
+				45AA90FD20FF36C200794147 /* HVLReplayer.h */,
+			);
+			path = Hively;
+			sourceTree = "<group>";
+		};
+		45AA90FF20FF36C200794147 /* OpenMPT */ = {
+			isa = PBXGroup;
+			children = (
+				45AA910020FF36C200794147 /* MPTReplayer.h */,
+				45AA910120FF36C200794147 /* MPTReplayer.m */,
+			);
+			path = OpenMPT;
+			sourceTree = "<group>";
+		};
+		45AA910C20FF5E6300794147 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				45AA910D20FF5E8A00794147 /* Structs.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		45AA91132100ECE600794147 /* Visualizer */ = {
+			isa = PBXGroup;
+			children = (
+				45AA91182100EF1900794147 /* AmpSlider.swift */,
+				45AA91192100EF1900794147 /* AmpVizScene.swift */,
+				45AA91142100ECE600794147 /* VisualizerViewController.swift */,
+			);
+			path = Visualizer;
+			sourceTree = "<group>";
+		};
 		45D3929820B1DDEC00EEF4E3 = {
 			isa = PBXGroup;
 			children = (
+				45D61F5E20E17D9600869814 /* Frameworks */,
 				45D392A320B1DDEC00EEF4E3 /* 4champ */,
 				45D392A220B1DDEC00EEF4E3 /* Products */,
 			);
@@ -117,6 +235,11 @@
 		45D392A320B1DDEC00EEF4E3 /* 4champ */ = {
 			isa = PBXGroup;
 			children = (
+				45AA910C20FF5E6300794147 /* Data */,
+				45AA910B20FF3A3B00794147 /* 4champ-bridging-header.h */,
+				45AA90F620FF36C200794147 /* Replay */,
+				45AA90F320FF2F4200794147 /* Networking */,
+				45D61F5720E1695100869814 /* Utils */,
 				4543983A20D0366E00991ADC /* l13n */,
 				4543982C20D0344F00991ADC /* Scenes */,
 				45D392A420B1DDEC00EEF4E3 /* AppDelegate.swift */,
@@ -128,6 +251,37 @@
 			path = 4champ;
 			sourceTree = "<group>";
 		};
+		45D61F4A20E1644100869814 /* Radio */ = {
+			isa = PBXGroup;
+			children = (
+				45D61F4B20E1647300869814 /* RadioPresenter.swift */,
+				45D61F4D20E1647300869814 /* RadioRouter.swift */,
+				45D61F4E20E1647300869814 /* RadioModels.swift */,
+				45D61F4F20E1647300869814 /* RadioViewController.swift */,
+				45D61F5020E1647300869814 /* RadioInteractor.swift */,
+			);
+			path = Radio;
+			sourceTree = "<group>";
+		};
+		45D61F5720E1695100869814 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				45D61F5820E1695100869814 /* UIUtils.swift */,
+				45D61F5A20E1780D00869814 /* Appearance.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		45D61F5E20E17D9600869814 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				45AA910920FF389800794147 /* liblibopenmpt-small.a */,
+				45D61F6220E1863600869814 /* Gzip.framework */,
+				45D61F5C20E17D8F00869814 /* Alamofire.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -135,6 +289,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 45D392B520B1DDEE00EEF4E3 /* Build configuration list for PBXNativeTarget "ampplayer" */;
 			buildPhases = (
+				45D61F5F20E180AF00869814 /* ShellScript */,
 				45D3929D20B1DDEC00EEF4E3 /* Sources */,
 				45D3929E20B1DDEC00EEF4E3 /* Frameworks */,
 				45D3929F20B1DDEC00EEF4E3 /* Resources */,
@@ -160,6 +315,11 @@
 				TargetAttributes = {
 					45D392A020B1DDEC00EEF4E3 = {
 						CreatedOnToolsVersion = 9.3;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -193,6 +353,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45AA910420FF36C200794147 /* LICENSE in Resources */,
 				45D392B120B1DDEE00EEF4E3 /* LaunchScreen.storyboard in Resources */,
 				4543984D20D0366E00991ADC /* Localizable.strings in Resources */,
 				45D392AE20B1DDEE00EEF4E3 /* Assets.xcassets in Resources */,
@@ -203,19 +364,56 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		45D61F5F20E180AF00869814 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Gzip.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		45D3929D20B1DDEC00EEF4E3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				4543984F20D0366E00991ADC /* String+extension.swift in Sources */,
+				45AA91162100ECE600794147 /* VisualizerViewController.swift in Sources */,
+				45AA91102100C48500794147 /* MainViewController.swift in Sources */,
 				4543983820D0344F00991ADC /* AboutPresenter.swift in Sources */,
+				45AA910E20FF5E8A00794147 /* Structs.swift in Sources */,
+				45D61F5120E1647300869814 /* RadioPresenter.swift in Sources */,
+				45D61F5320E1647300869814 /* RadioRouter.swift in Sources */,
+				45D61F5B20E1780D00869814 /* Appearance.swift in Sources */,
 				4543983720D0344F00991ADC /* AboutModels.swift in Sources */,
 				4543983420D0344F00991ADC /* AboutRouter.swift in Sources */,
 				4543983920D0344F00991ADC /* AboutViewController.swift in Sources */,
+				45D61F5520E1647300869814 /* RadioViewController.swift in Sources */,
+				45D61F5420E1647300869814 /* RadioModels.swift in Sources */,
+				45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */,
+				45AA910220FF36C200794147 /* Replay.m in Sources */,
+				45AA911A2100EF1900794147 /* AmpSlider.swift in Sources */,
+				45AA910320FF36C200794147 /* hvl_replay.cpp in Sources */,
+				45D61F5920E1695200869814 /* UIUtils.swift in Sources */,
 				4543985120D03C1600991ADC /* AboutHeaderView.swift in Sources */,
 				45D392A520B1DDEC00EEF4E3 /* AppDelegate.swift in Sources */,
+				45AA911B2100EF1900794147 /* AmpVizScene.swift in Sources */,
+				45AA91122100D13300794147 /* NowPlayingView.swift in Sources */,
+				45AA910620FF36C200794147 /* MPTReplayer.m in Sources */,
 				4543983620D0344F00991ADC /* AboutInteractor.swift in Sources */,
+				45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */,
+				45AA910520FF36C200794147 /* HVLReplayer.mm in Sources */,
+				45D61F5620E1647300869814 /* RadioInteractor.swift in Sources */,
 				4543983520D0344F00991ADC /* AboutWorker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -389,14 +587,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2G92PSCBJ9;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				HEADER_SEARCH_PATHS = ../openmpt/libopenmpt;
 				INFOPLIST_FILE = "$(SRCROOT)/4champ/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.boogie.ampplayer;
+				LIBRARY_SEARCH_PATHS = ../openmpt;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boogie.fourchamp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "4champ/4champ-bridging-header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -406,14 +613,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2G92PSCBJ9;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				HEADER_SEARCH_PATHS = ../openmpt/libopenmpt;
 				INFOPLIST_FILE = "$(SRCROOT)/4champ/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.boogie.ampplayer;
+				LIBRARY_SEARCH_PATHS = ../openmpt;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boogie.fourchamp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "4champ/4champ-bridging-header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
