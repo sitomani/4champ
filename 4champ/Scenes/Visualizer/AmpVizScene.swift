@@ -1,9 +1,8 @@
 //
 //  AmpVizScene.swift
-//  ampplayer
+//  4champ Amiga Music Player
 //
-//  Created by Aleksi Sitomaniemi on 01/09/16.
-//  Copyright © 2016 Aleksi Sitomaniemi. All rights reserved.
+//  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
 import UIKit

@@ -1,6 +1,6 @@
 //
 //  VisualizerViewController.swift
-//  4champ
+//  4champ Amiga Music Player
 //
 //  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
 //
@@ -65,6 +65,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   }
   
   @IBAction func dismissMe (_ sender:UIButton) {
+    log.debug("")
     modulePlayer.removePlayerObserver(self)
     playbackTimer?.invalidate()
     self.presentingViewController?.dismiss(animated: true, completion:nil)
@@ -88,13 +89,13 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   }
   
   @IBAction func toggleText(_:UIButton) {
+    log.debug("")
     textButton.isSelected = !textButton.isSelected
     UserDefaults.standard.set(textButton.isSelected, forKey: "nowplaying_text")
     updateVisibility(ViewElement.Text)
   }
   
   func updateVisibility(_ element:UInt32) {
-    
     let textHidden = UserDefaults.standard.bool(forKey: "nowplaying_text")
     let vizHidden = UserDefaults.standard.bool(forKey: "nowplaying_viz")
     
@@ -142,6 +143,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   
   
   @IBAction func toggleVisualiser(_:UIButton) {
+    log.debug("")
     vizButton?.isSelected = !vizButton!.isSelected
     UserDefaults.standard.set(vizButton!.isSelected, forKey: "nowplaying_viz")
     updateVisibility(ViewElement.Visualiser)
@@ -167,6 +169,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   }
   
   func updateView(module: MMD?) {
+    log.debug("")
     if let sv = self.scrollV {
       sv.contentOffset = CGPoint(x: 0,y: 0);
     }
@@ -191,13 +194,9 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
       str.append("\n")
     }
     self.samplesLabel?.text = str
-    self.fixHorizontalScroll()
     if (hasUpdatedVisibility) {
       updateVisibility(ViewElement.All)
     }
-  }
-  
-  func fixHorizontalScroll() {
   }
   
   @IBAction func toggleFavorite() {
@@ -251,6 +250,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   }
   
   override func viewDidLoad() {
+    log.debug("")
     super.viewDidLoad()
     modulePlayer.addPlayerObserver(self)
     
@@ -285,7 +285,6 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     if (!hasUpdatedVisibility) {
       hasUpdatedVisibility = true
       updateVisibility(ViewElement.All)
-      self.fixHorizontalScroll()
     }
   }
   
@@ -294,6 +293,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   }
   
   func startVisualisation() {
+    log.debug("")
     let view = self.vizView
     fadeIn(view!){}
     
@@ -307,18 +307,21 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   }
   
   func stopVisualisation() {
+    log.debug("")
     fadeOut(vizView) {self.vizView.presentScene(nil)}
   }
 }
 
 extension VisualizerViewController: ModulePlayerObserver {
   func moduleChanged(module: MMD) {
+    log.debug("")
     DispatchQueue.main.async {
       self.updateView(module: module)
     }
   }
   
   func statusChanged(status: PlayerStatus) {
+    log.debug("")
     if status == .playing {
       startPlaybackTimer()
     }

@@ -1,8 +1,8 @@
 //
 //  String+extension.swift
-//  ampplayer
+//  4champ Amiga Music Player
 //
-//  Copyright © 2017 Aleksi Sitomaniemi. All rights reserved.
+//  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 import Foundation
 

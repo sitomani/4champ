@@ -1,6 +1,6 @@
 //
 //  MainViewController.swift
-//  ampplayer
+//  4champ Amiga Music Player
 //
 //  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
 //
@@ -19,6 +19,7 @@ class MainViewController: UITabBarController {
   var notplayingConstraint: NSLayoutConstraint?
   
   override func viewDidLoad() {
+    log.debug("")
     super.viewDidLoad()
     
     view.addSubview(npView)
@@ -38,6 +39,8 @@ class MainViewController: UITabBarController {
   }
   
   func toggleNowPlaying(_ value: Bool) {
+    log.debug("")
+    
     UIView.animate(withDuration: 0.15) {
       self.playingConstraint?.isActive = value
       self.npView?.alpha = CGFloat(value == true ? 1 : 0)
@@ -61,6 +64,7 @@ class MainViewController: UITabBarController {
   }
   
   @IBAction func showVisualizer(_ sender: UIButton) {
+    log.debug("")
     if self.presentedViewController == nil {
       performSegue(withIdentifier: "ToVisualizer", sender: self)
     }
@@ -69,12 +73,14 @@ class MainViewController: UITabBarController {
 
 extension MainViewController: ModulePlayerObserver {
   func moduleChanged(module: MMD) {
+    log.info("\(module.name!) (\(module.type!))")
     DispatchQueue.main.async {
       self.npView.setModule(module)
     }
   }
   
   func statusChanged(status: PlayerStatus) {
+    log.info("\(status)")
     DispatchQueue.main.async {
       self.toggleNowPlaying(status == .playing || status == .paused)
       self.npView.playPauseButton?.isSelected = (status == .paused)

@@ -1,9 +1,8 @@
 //
 //  AboutHeaderView.swift
-//  ampplayer
+//  4champ Amiga Music Player
 //
-//  Created by Aleksi Sitomaniemi on 11/10/2017.
-//  Copyright © 2017 Boogie Software Oy. All rights reserved.
+//  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
 import Foundation

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4543983420D0344F00991ADC /* AboutRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543982E20D0344F00991ADC /* AboutRouter.swift */; };
-		4543983520D0344F00991ADC /* AboutWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543982F20D0344F00991ADC /* AboutWorker.swift */; };
 		4543983620D0344F00991ADC /* AboutInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543983020D0344F00991ADC /* AboutInteractor.swift */; };
 		4543983720D0344F00991ADC /* AboutModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543983120D0344F00991ADC /* AboutModels.swift */; };
 		4543983820D0344F00991ADC /* AboutPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543983220D0344F00991ADC /* AboutPresenter.swift */; };
@@ -49,7 +48,6 @@
 
 /* Begin PBXFileReference section */
 		4543982E20D0344F00991ADC /* AboutRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutRouter.swift; sourceTree = "<group>"; };
-		4543982F20D0344F00991ADC /* AboutWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutWorker.swift; sourceTree = "<group>"; };
 		4543983020D0344F00991ADC /* AboutInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutInteractor.swift; sourceTree = "<group>"; };
 		4543983120D0344F00991ADC /* AboutModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutModels.swift; sourceTree = "<group>"; };
 		4543983220D0344F00991ADC /* AboutPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutPresenter.swift; sourceTree = "<group>"; };
@@ -140,7 +138,6 @@
 			children = (
 				4543985020D03C1500991ADC /* AboutHeaderView.swift */,
 				4543982E20D0344F00991ADC /* AboutRouter.swift */,
-				4543982F20D0344F00991ADC /* AboutWorker.swift */,
 				4543983020D0344F00991ADC /* AboutInteractor.swift */,
 				4543983120D0344F00991ADC /* AboutModels.swift */,
 				4543983220D0344F00991ADC /* AboutPresenter.swift */,
@@ -314,7 +311,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = boogie;
 				TargetAttributes = {
 					45D392A020B1DDEC00EEF4E3 = {
@@ -419,7 +416,6 @@
 				45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */,
 				45AA910520FF36C200794147 /* HVLReplayer.mm in Sources */,
 				45D61F5620E1647300869814 /* RadioInteractor.swift in Sources */,
-				4543983520D0344F00991ADC /* AboutWorker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,6 +474,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -538,6 +535,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
