@@ -28,7 +28,7 @@ class ViewController: UIViewController {
         let mods = Bundle.main.paths(forResourcesOfType: btn.lowercased(), inDirectory: nil)
         if let mod = mods.first {
           modLabel.text = String(mod.split(separator: "/").last ?? "")
-          replay.loadModule(mod, type: nil)
+          replay.loadModule(mod)
           replay.play()
         }
       }
