@@ -1,14 +1,16 @@
 //
 //  AppDelegate.swift
-//  ampplayer
+//  4champ Amiga Music Player
 //
-//  Created by Aleksi Sitomaniemi on 20/05/2018.
 //  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
 import UIKit
+import SwiftyBeaver
 
+// Global
 let modulePlayer = ModulePlayer()
+let log = SwiftyBeaver.self
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -41,6 +43,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func applicationWillTerminate(_ application: UIApplication) {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+  }
+  
+  func setupLogging() {
+    let console = ConsoleDestination()  // log to Xcode Console
+    // use custom format and set console output to short time, log level & message
+    console.format = "$DHH:mm:ss $d $L $N.$F $M"
+    console.levelString.error = "🛑"
+    console.levelString.warning = "🔶"
+    console.levelString.info = "🔷"
+    console.levelString.debug = "◾️"
+    console.levelString.verbose = "◽️"
+    log.addDestination(console)
+    
+    console.minLevel = .warning
+    #if DEBUG
+    console.minLevel = .debug
+    #endif
+    log.info("Logger initialized")
   }
 
 

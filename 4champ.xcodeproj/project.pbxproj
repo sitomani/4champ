@@ -17,6 +17,7 @@
 		4543984E20D0366E00991ADC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4543983D20D0366E00991ADC /* InfoPlist.strings */; };
 		4543984F20D0366E00991ADC /* String+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543984820D0366E00991ADC /* String+extension.swift */; };
 		4543985120D03C1600991ADC /* AboutHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543985020D03C1500991ADC /* AboutHeaderView.swift */; };
+		455CC0A62104A0E20094A5D3 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */; };
 		45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */; };
 		45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F420FF2F6600794147 /* RESTRoutes.swift */; };
 		45AA910220FF36C200794147 /* Replay.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F720FF36C200794147 /* Replay.m */; };
@@ -70,6 +71,7 @@
 		4543984B20D0366E00991ADC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4543984C20D0366E00991ADC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4543985020D03C1500991ADC /* AboutHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHeaderView.swift; sourceTree = "<group>"; };
+		455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
 		45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModulePlayer.swift; sourceTree = "<group>"; };
 		45AA90F420FF2F6600794147 /* RESTRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTRoutes.swift; sourceTree = "<group>"; };
 		45AA90F720FF36C200794147 /* Replay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Replay.m; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				45AA910A20FF389800794147 /* liblibopenmpt-small.a in Frameworks */,
+				455CC0A62104A0E20094A5D3 /* SwiftyBeaver.framework in Frameworks */,
 				45D61F5D20E17D8F00869814 /* Alamofire.framework in Frameworks */,
 				45D61F6320E1863600869814 /* Gzip.framework in Frameworks */,
 			);
@@ -275,6 +278,7 @@
 		45D61F5E20E17D9600869814 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */,
 				45AA910920FF389800794147 /* liblibopenmpt-small.a */,
 				45D61F6220E1863600869814 /* Gzip.framework */,
 				45D61F5C20E17D8F00869814 /* Alamofire.framework */,
@@ -373,6 +377,7 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Gzip.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftyBeaver.framework",
 			);
 			outputPaths = (
 			);

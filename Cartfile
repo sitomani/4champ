@@ -1,2 +1,3 @@
 github "Alamofire/Alamofire" ~> 4.7
 github "1024jp/GzipSwift"
+github "SwiftyBeaver/SwiftyBeaver"
