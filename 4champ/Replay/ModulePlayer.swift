@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MediaPlayer
 
 enum PlayerStatus:Int {
   case initialised
@@ -22,10 +23,29 @@ protocol ModulePlayerObserver: class {
 class ModulePlayer: NSObject, ReplayStreamDelegate {
   var playlist: [MMD] = []
   let renderer = Replay()
-
+  let mpImage = UIImage.init(named: "albumart")!
+  
   var currentModule: MMD? {
     didSet {
       if let mod = currentModule {
+        let author = mod.composer
+        let songName = String.init(format: "LockScreen_Playing".l13n(), mod.name!, mod.composer!)
+        let playlistName = "LockScreen_Radio".l13n()
+        
+        let artwork = MPMediaItemArtwork.init(boundsSize: mpImage.size, requestHandler: { (size) -> UIImage in
+          return self.mpImage
+        })
+        
+        let dict: [String: Any] =
+          [ MPMediaItemPropertyArtwork: artwork,
+            MPMediaItemPropertyAlbumTitle: playlistName,
+            MPMediaItemPropertyTitle: songName,
+            MPMediaItemPropertyArtist: author ?? "",
+            MPMediaItemPropertyPlaybackDuration: NSNumber.init(value: renderer.moduleLength()),
+            MPNowPlayingInfoPropertyElapsedPlaybackTime: NSNumber.init(value: renderer.currentPosition())
+        ]
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = dict
+        
         _ = observers.map {
           $0.moduleChanged(module: mod)
         }
@@ -85,11 +105,13 @@ class ModulePlayer: NSObject, ReplayStreamDelegate {
   }
   
   func pause() {
+    guard status == .playing else { return }
     renderer.pause()
     status = .paused
   }
   
   func resume() {
+    guard status == .paused else { return }
     renderer.resume()
     status = .playing
   }
@@ -97,6 +119,7 @@ class ModulePlayer: NSObject, ReplayStreamDelegate {
   func stop() {
     renderer.stop()
     status = .stopped
+    MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
   }
   
   func reachedEnd(ofStream replay: Replay!) {

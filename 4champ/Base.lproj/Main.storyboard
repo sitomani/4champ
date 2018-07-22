@@ -547,10 +547,6 @@
                                     <action selector="toggleText:" destination="twp-s7-Sug" eventType="touchUpInside" id="AJF-1k-Tm5"/>
                                 </connections>
                             </button>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KEb-Pa-41U" userLabel="colorrring">
-                                <rect key="frame" x="0.0" y="60" width="375" height="477"/>
-                                <color key="backgroundColor" red="0.070588235289999995" green="0.20392156859999999" blue="0.33725490200000002" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pKX-l3-Wif" userLabel="skene" customClass="SKView">
                                 <rect key="frame" x="0.0" y="60" width="375" height="477"/>
                                 <color key="backgroundColor" red="0.27943599219999998" green="0.4278570116" blue="0.14543387290000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -587,7 +583,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rpw-aD-EcH">
                                 <rect key="frame" x="104" y="17" width="167" height="43"/>
-                                <color key="backgroundColor" red="0.047058823530000002" green="0.14901960780000001" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="167" id="Zlc-sd-UQR"/>
                                     <constraint firstAttribute="height" constant="43" id="juG-Ei-Zy4"/>
@@ -603,7 +599,6 @@
                         <color key="backgroundColor" red="0.0" green="0.12925630807876587" blue="0.23255422711372375" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Qbe-t6-f7a" firstAttribute="trailing" secondItem="Kmt-ao-QB7" secondAttribute="trailing" id="3IP-4N-xSy"/>
-                            <constraint firstItem="KEb-Pa-41U" firstAttribute="top" secondItem="jcX-uC-gV4" secondAttribute="bottom" id="48p-nQ-8KD"/>
                             <constraint firstItem="tdl-pu-OGA" firstAttribute="leading" secondItem="Kmt-ao-QB7" secondAttribute="leading" id="626-DU-dZp"/>
                             <constraint firstItem="jcX-uC-gV4" firstAttribute="top" secondItem="8fe-Vz-2y9" secondAttribute="top" constant="16" id="7IB-dT-IhQ"/>
                             <constraint firstItem="rpw-aD-EcH" firstAttribute="top" secondItem="8fe-Vz-2y9" secondAttribute="top" constant="17" id="9A0-u0-f3O"/>
@@ -616,19 +611,15 @@
                             <constraint firstItem="pPd-Q6-6go" firstAttribute="top" secondItem="8fe-Vz-2y9" secondAttribute="top" constant="16" id="aWw-WZ-2s6"/>
                             <constraint firstItem="Qbe-t6-f7a" firstAttribute="bottom" secondItem="Kmt-ao-QB7" secondAttribute="bottom" id="cXh-UK-eEM"/>
                             <constraint firstItem="pPd-Q6-6go" firstAttribute="trailing" secondItem="Kmt-ao-QB7" secondAttribute="trailing" id="jcA-rU-s15"/>
-                            <constraint firstItem="Qbe-t6-f7a" firstAttribute="top" secondItem="KEb-Pa-41U" secondAttribute="bottom" id="oVq-xG-v6E"/>
                             <constraint firstItem="pKX-l3-Wif" firstAttribute="leading" secondItem="Kmt-ao-QB7" secondAttribute="leading" id="rzx-2h-Xl1"/>
                             <constraint firstItem="jcX-uC-gV4" firstAttribute="leading" secondItem="Kmt-ao-QB7" secondAttribute="leading" id="u1z-1m-P1D"/>
                             <constraint firstItem="pKX-l3-Wif" firstAttribute="trailing" secondItem="Kmt-ao-QB7" secondAttribute="trailing" id="umz-XE-cpd"/>
                             <constraint firstItem="Qbe-t6-f7a" firstAttribute="top" secondItem="tdl-pu-OGA" secondAttribute="bottom" id="vKc-nP-X2I"/>
-                            <constraint firstItem="KEb-Pa-41U" firstAttribute="leading" secondItem="Kmt-ao-QB7" secondAttribute="leading" id="xde-3x-VOP"/>
-                            <constraint firstItem="KEb-Pa-41U" firstAttribute="trailing" secondItem="Kmt-ao-QB7" secondAttribute="trailing" id="yhf-Qr-B5d"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Kmt-ao-QB7"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
-                        <outlet property="backdrop" destination="KEb-Pa-41U" id="eGD-D8-9sV"/>
                         <outlet property="collectionLabel" destination="dYe-LJ-GyL" id="320-CQ-dTG"/>
                         <outlet property="composerLabel" destination="PQf-mk-E4k" id="Mxj-uI-FLb"/>
                         <outlet property="faveStar" destination="udt-UI-6xl" id="shP-IR-ZiS"/>

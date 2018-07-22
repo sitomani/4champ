@@ -223,7 +223,9 @@ static SInt16* bufRight;
 }
 
 - (void)setStereoSeparation:(NSInteger)value {
-  [renderer setStereoSeparation:value];
+  if (renderer) {
+    [renderer setStereoSeparation:value];
+  }
 }
 
 

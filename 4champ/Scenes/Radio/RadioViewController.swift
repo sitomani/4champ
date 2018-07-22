@@ -87,7 +87,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   {
     log.debug("")
     super.viewDidLoad()
-    
+        
     UIUtils.roundCornersInView(currentModuleView)
     navigationItem.title = "RadioView_Title".l13n().uppercased()
 
@@ -110,8 +110,12 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     case .off:
       switchTitle?.text = "Radio_StatusOff".l13n()
       nextUpTitle?.text = ""
+      switchTitle?.textColor = UIColor.white
+      radioSwitch?.onTintColor = Appearance.successColor
     case .failure:
       switchTitle?.text = "Radio_FetchFailed".l13n()
+      switchTitle?.textColor = Appearance.errorColor
+      radioSwitch?.onTintColor = Appearance.errorColor
     case .fetching(let progress):
       nextUpTitle?.text = "Radio_Fetching".l13n()
       downloadProgress?.progress = progress
@@ -134,6 +138,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       sizeLabel?.text = "\(current.size ?? 0) kb"
     } else {
       currentModuleView?.alpha = 0.8
+      downloadProgress?.progress = 0
       composerLabel?.text = "Radio_StatusOff".l13n()
       nameLabel?.text = "..."
       sizeLabel?.text = "0 kb"

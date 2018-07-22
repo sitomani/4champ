@@ -34,6 +34,7 @@ class MainViewController: UITabBarController {
     npView.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
     npView?.alpha = 0
     
+    self.becomeFirstResponder()
     modulePlayer.addPlayerObserver(self)
     
   }
@@ -53,6 +54,29 @@ class MainViewController: UITabBarController {
         firstChild.toggleNowPlaying(value)
       }
     }
+  }
+  
+  override func remoteControlReceived(with event: UIEvent?) {
+        guard let event = event else {
+          return
+        }
+        switch event.subtype {
+        case .remoteControlPlay:
+          modulePlayer.resume()
+          break
+        case .remoteControlPause:
+          modulePlayer.pause()
+          break
+        case .remoteControlStop:
+          modulePlayer.stop()
+          break
+        case .remoteControlNextTrack:
+          modulePlayer.playNext()
+        case .remoteControlPreviousTrack:
+          modulePlayer.playPrev()
+        default:
+          log.debug("remote control event \(event.subtype) not handled")
+        }
   }
   
   @IBAction func togglePlay(_ sender: UIButton) {

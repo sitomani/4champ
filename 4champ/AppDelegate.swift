@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftyBeaver
+import AVFoundation
 
 // Global
 let modulePlayer = ModulePlayer()
@@ -21,7 +22,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     UIApplication.shared.statusBarStyle = .lightContent
     Appearance.setup()
     setupLogging()
+    setupAVSession()
     return true
+  }
+  
+  func setupAVSession() {
+    let sess = AVAudioSession.sharedInstance()
+    do {
+      try sess.setCategory(AVAudioSessionCategoryPlayback)
+      try sess.setActive(true)
+    } catch {
+      log.error(error)
+    }
   }
 
   func applicationWillResignActive(_ application: UIApplication) {

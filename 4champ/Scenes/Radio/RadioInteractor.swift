@@ -51,7 +51,8 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     if request.channel != channel {
       stopPlayback()
     }
-    
+    UIApplication.shared.beginReceivingRemoteControlEvents()
+
     modulePlayer.addPlayerObserver(self)
     playbackTimer?.invalidate()
     playbackTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
@@ -86,6 +87,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   
   private func stopPlayback() {
     log.debug("")
+    UIApplication.shared.endReceivingRemoteControlEvents()
     playbackTimer?.invalidate()
     Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
       tasks.forEach{ $0.cancel() }
@@ -220,6 +222,7 @@ extension RadioInteractor: ModulePlayerObserver {
     }
     triggerBufferPresentation()
   }
+  
   func statusChanged(status: PlayerStatus) {
     
   }

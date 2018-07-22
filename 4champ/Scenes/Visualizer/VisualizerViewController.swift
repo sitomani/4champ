@@ -30,7 +30,6 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   @IBOutlet weak var saveButton: UIButton!
   @IBOutlet weak var collectionLabel: UILabel!
   @IBOutlet weak var separator:UIView!
-  @IBOutlet weak var backdrop:UIView!
   
   @IBOutlet weak var textButton:UIButton!
   @IBOutlet weak var vizButton:UIButton!
@@ -257,8 +256,6 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     scrollV.delegate = self
     scrollV.backgroundColor = UIColor.clear
     
-    backdrop.backgroundColor = UIColor(red:0.07, green:0.20, blue:0.34, alpha:1.0)
-
     //Hide UI elements that are currently not supported
     collectionLabel.text = NSLocalizedString("Radio_InLocalCollection", comment: "")
     collectionLabel.isHidden = true

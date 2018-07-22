@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import MediaPlayer
 
 protocol RadioPresentationLogic
 {
@@ -37,22 +36,6 @@ class RadioPresenter: RadioPresentationLogic
     let vm = Radio.ChannelBuffer.ViewModel(nowPlaying: buffer.first, nextUp: nextUp)
     DispatchQueue.main.async {
       self.viewController?.displayChannelBuffer(viewModel: vm)
-    }
-    
-    if let currentMod = buffer.first {
-      let infos = MPNowPlayingInfoCenter.default()
-      let author = currentMod.composer
-      let songName = String.init(format: "LockScreen_Playing".l13n(), currentMod.name!, currentMod.composer!)
-      let playlistName = "LockScreen_Radio".l13n()
-      
-      let dict: [String: Any] =
-      [ MPMediaItemPropertyAlbumTitle: playlistName,
-        MPMediaItemPropertyTitle: songName,
-        MPMediaItemPropertyArtist: author ?? "",
-        MPMediaItemPropertyPlaybackDuration: NSNumber.init(value: modulePlayer.renderer.moduleLength()),
-        MPNowPlayingInfoPropertyElapsedPlaybackTime: NSNumber.init(value: modulePlayer.renderer.currentPosition())
-      ]
-      infos.nowPlayingInfo = dict
     }
   }
   
