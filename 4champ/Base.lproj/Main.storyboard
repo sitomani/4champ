@@ -87,7 +87,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="56G-Gw-0Kr">
-                                        <rect key="frame" x="280" y="62" width="44" height="21"/>
+                                        <rect key="frame" x="249" y="62" width="75" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="KYn-zi-uLi"/>
                                         </constraints>
@@ -159,7 +159,7 @@
                                     <constraint firstItem="76e-bz-4oq" firstAttribute="leading" secondItem="RQm-Tf-BLL" secondAttribute="leading" constant="10" id="cWw-mH-GTD"/>
                                     <constraint firstItem="C2i-QI-t6Z" firstAttribute="leading" secondItem="04q-Zu-cJ4" secondAttribute="trailing" id="ebO-bC-TLg"/>
                                     <constraint firstAttribute="trailing" secondItem="76e-bz-4oq" secondAttribute="trailing" constant="10" id="feg-c6-sNP"/>
-                                    <constraint firstItem="56G-Gw-0Kr" firstAttribute="leading" secondItem="C2i-QI-t6Z" secondAttribute="trailing" constant="11" id="hoV-xX-LPk"/>
+                                    <constraint firstItem="56G-Gw-0Kr" firstAttribute="leading" secondItem="C2i-QI-t6Z" secondAttribute="trailing" constant="-20" id="hoV-xX-LPk"/>
                                     <constraint firstAttribute="trailing" secondItem="4OQ-0n-pEG" secondAttribute="trailing" id="i6Y-fC-HIe"/>
                                     <constraint firstAttribute="height" constant="94" id="kcN-X1-thV"/>
                                     <constraint firstItem="dc9-dD-PrN" firstAttribute="top" secondItem="RQm-Tf-BLL" secondAttribute="top" constant="10" id="lOe-e2-pN4"/>

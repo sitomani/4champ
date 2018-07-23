@@ -3,18 +3,25 @@
 
 Many of us who grew up with computers in the 80's and early 90's remember Amiga and particularly its mind-blowing audio capabilities which were unrivaled at the era. Amiga inspired a lot of musicians to 
 produce a vast amount of compositions, or modules as they were called. [Amiga Music Preservation](http://amp.dascene.net) is a non-profit 
-project that collects anything related to Amiga music production. AMP database boasts over 140 thousand modules, 4champ app is your direct access to all that goodness.
+project that collects anything related to Amiga music production. AMP database boasts almost 150 000 modules, 4champ app is your direct access to all that goodness.
 
 ### Development journal
 
 In this repository I'm working on rewriting the app that originally was released in AppStore in 2012, and since late 2017 not available in AppStore any more 😞. You can read more about the history of the app and follow the rewrite process on the development journal that I created for this project: [sitomani.github.io/4champ](https://sitomani.github.io/4champ).
+
+### Main Features and their current status in this repository
+* Radio: You can listen to a random set of tunes from the whole collection of almost 150000 modules, or stream from the head, i.e. the most recently added ones. Implemented, except for the local modules radio for offline use.
+* Search (search the AMP database by module, composer, group name or sampletexts): TBD
+* Playlists (build your own playlists): TBD
+* Local Collection (store modules locally): TBD
+* Settings (control stereo separation etc): TBD
 
 ### Dependencies
 4champ uses [libOpenMPT](https://github.com/OpenMPT/openmpt) and [Hivelytracker](https://github.com/pete-gordon/hivelytracker) for module playback. 
 
 **Hivelytracker** replayer code is included in [4champ/Replay/Hively](4champ/replay/hively) folder, so it will be built automatically when you build xcode projects in this repository, no further actions needed. 
 
-**LibOpenMPT** repo does not build for iOS without small tweaks, which I have done on my own fork of the lib at https://github.com/sitomani/openmpt. In order to build it for use in connection with 4champ and the SamplePlayer demo app in thsi repository, you will need to take the following steps:
+**LibOpenMPT** repo does not build for iOS without small tweaks, which I have done on my own fork of the lib at https://github.com/sitomani/openmpt. In order to build it for use in connection with 4champ and the SamplePlayer demo app in this repository, you will need to take the following steps:
 
 1. Clone https://github.com/sitomani/openmpt at same folder where you cloned this repository at (the repositories will be subfolders in same level in the directory tree).
 2. Navigate in terminal to the openmpt repository root folder
@@ -25,6 +32,12 @@ In this repository I'm working on rewriting the app that originally was released
 7. The library file `libopenmpt-small.a` will be found under openmpt repository root, and 4champ repository projects are configured to find it there, provided that you have cloned this repository and openmpt repository in the same folder.
 
 I plan to have a deeper look at openmpt project file generation with Genie at some point, in order to reduce the number of steps above. For the time being, the project is generated using premake, which does not fit that well when targeting iOS and one must do some housekeeping after premake run in order to build a static lib properly.
+
+**[Alamofire](https://github.com/Alamofire/Alamofire)** is used for network comms.
+
+**[GzipSwift](https://github.com/1024jp/GzipSwift)** is used to unpack the gzipped module files.
+
+**[SwiftyBeaver](https://github.com/SwiftyBeaver/SwiftyBeaver)** is used for logging.
 
 ### License
 
