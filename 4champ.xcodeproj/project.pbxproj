@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4535A4642114BB2D005FBB8B /* SearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A45E2114BB2D005FBB8B /* SearchPresenter.swift */; };
+		4535A4652114BB2D005FBB8B /* SearchWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A45F2114BB2D005FBB8B /* SearchWorker.swift */; };
+		4535A4662114BB2D005FBB8B /* SearchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A4602114BB2D005FBB8B /* SearchRouter.swift */; };
+		4535A4672114BB2D005FBB8B /* SearchModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A4612114BB2D005FBB8B /* SearchModels.swift */; };
+		4535A4682114BB2D005FBB8B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A4622114BB2D005FBB8B /* SearchViewController.swift */; };
+		4535A4692114BB2D005FBB8B /* SearchInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A4632114BB2D005FBB8B /* SearchInteractor.swift */; };
+		4535A46B2114C335005FBB8B /* ModuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A46A2114C335005FBB8B /* ModuleCell.swift */; };
 		4543983420D0344F00991ADC /* AboutRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543982E20D0344F00991ADC /* AboutRouter.swift */; };
 		4543983620D0344F00991ADC /* AboutInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543983020D0344F00991ADC /* AboutInteractor.swift */; };
 		4543983720D0344F00991ADC /* AboutModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543983120D0344F00991ADC /* AboutModels.swift */; };
@@ -47,6 +54,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4535A45E2114BB2D005FBB8B /* SearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPresenter.swift; sourceTree = "<group>"; };
+		4535A45F2114BB2D005FBB8B /* SearchWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWorker.swift; sourceTree = "<group>"; };
+		4535A4602114BB2D005FBB8B /* SearchRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRouter.swift; sourceTree = "<group>"; };
+		4535A4612114BB2D005FBB8B /* SearchModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModels.swift; sourceTree = "<group>"; };
+		4535A4622114BB2D005FBB8B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		4535A4632114BB2D005FBB8B /* SearchInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInteractor.swift; sourceTree = "<group>"; };
+		4535A46A2114C335005FBB8B /* ModuleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleCell.swift; sourceTree = "<group>"; };
 		4543982E20D0344F00991ADC /* AboutRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutRouter.swift; sourceTree = "<group>"; };
 		4543983020D0344F00991ADC /* AboutInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutInteractor.swift; sourceTree = "<group>"; };
 		4543983120D0344F00991ADC /* AboutModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutModels.swift; sourceTree = "<group>"; };
@@ -121,9 +135,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4535A45D2114BB0A005FBB8B /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				4535A45E2114BB2D005FBB8B /* SearchPresenter.swift */,
+				4535A45F2114BB2D005FBB8B /* SearchWorker.swift */,
+				4535A4602114BB2D005FBB8B /* SearchRouter.swift */,
+				4535A4612114BB2D005FBB8B /* SearchModels.swift */,
+				4535A4622114BB2D005FBB8B /* SearchViewController.swift */,
+				4535A4632114BB2D005FBB8B /* SearchInteractor.swift */,
+				4535A46A2114C335005FBB8B /* ModuleCell.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		4543982C20D0344F00991ADC /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				4535A45D2114BB0A005FBB8B /* Search */,
 				45AA91132100ECE600794147 /* Visualizer */,
 				45D61F4A20E1644100869814 /* Radio */,
 				4543982D20D0344F00991ADC /* About */,
@@ -392,17 +421,23 @@
 				4543984F20D0366E00991ADC /* String+extension.swift in Sources */,
 				45AA91162100ECE600794147 /* VisualizerViewController.swift in Sources */,
 				45AA91102100C48500794147 /* MainViewController.swift in Sources */,
+				4535A4672114BB2D005FBB8B /* SearchModels.swift in Sources */,
 				4543983820D0344F00991ADC /* AboutPresenter.swift in Sources */,
 				45AA910E20FF5E8A00794147 /* Structs.swift in Sources */,
 				45D61F5120E1647300869814 /* RadioPresenter.swift in Sources */,
+				4535A4662114BB2D005FBB8B /* SearchRouter.swift in Sources */,
+				4535A4642114BB2D005FBB8B /* SearchPresenter.swift in Sources */,
 				45D61F5320E1647300869814 /* RadioRouter.swift in Sources */,
+				4535A4682114BB2D005FBB8B /* SearchViewController.swift in Sources */,
 				45D61F5B20E1780D00869814 /* Appearance.swift in Sources */,
 				4543983720D0344F00991ADC /* AboutModels.swift in Sources */,
+				4535A46B2114C335005FBB8B /* ModuleCell.swift in Sources */,
 				4543983420D0344F00991ADC /* AboutRouter.swift in Sources */,
 				4543983920D0344F00991ADC /* AboutViewController.swift in Sources */,
 				45D61F5520E1647300869814 /* RadioViewController.swift in Sources */,
 				45D61F5420E1647300869814 /* RadioModels.swift in Sources */,
 				45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */,
+				4535A4692114BB2D005FBB8B /* SearchInteractor.swift in Sources */,
 				45AA910220FF36C200794147 /* Replay.m in Sources */,
 				45AA911A2100EF1900794147 /* AmpSlider.swift in Sources */,
 				45AA910320FF36C200794147 /* hvl_replay.cpp in Sources */,
@@ -414,6 +449,7 @@
 				45AA910620FF36C200794147 /* MPTReplayer.m in Sources */,
 				4543983620D0344F00991ADC /* AboutInteractor.swift in Sources */,
 				45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */,
+				4535A4652114BB2D005FBB8B /* SearchWorker.swift in Sources */,
 				45AA910520FF36C200794147 /* HVLReplayer.mm in Sources */,
 				45D61F5620E1647300869814 /* RadioInteractor.swift in Sources */,
 			);

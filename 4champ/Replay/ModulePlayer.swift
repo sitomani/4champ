@@ -21,7 +21,7 @@ protocol ModulePlayerObserver: class {
 }
 
 class ModulePlayer: NSObject, ReplayStreamDelegate {
-  var playlist: [MMD] = []
+  var playlist: [MMD] = [] 
   let renderer = Replay()
   let mpImage = UIImage.init(named: "albumart")!
   

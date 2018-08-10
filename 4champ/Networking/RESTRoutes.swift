@@ -8,10 +8,20 @@
 import Foundation
 import Alamofire
 
+let pageSize = 50
+
+enum SearchType: String {
+  case module
+  case group
+  case composer
+  case meta
+}
+
 enum RESTRoutes: URLRequestConvertible {
   //Router paths
   case latestId
   case modulePath(id: Int)
+  case search(type: SearchType, text: String, position: Int)
   
   // Route builder
   var route: (path: String, parameters: [String: Any]?) {
@@ -20,6 +30,8 @@ enum RESTRoutes: URLRequestConvertible {
       return ("/get_latest", nil)
     case .modulePath(let id):
       return("/get_module?id=\(id)", nil)
+    case .search(let type, let text, let position):
+      return("/search_\(type.rawValue)?", ["t": text, "s":position, "e": position + pageSize])
     }
   }
   
