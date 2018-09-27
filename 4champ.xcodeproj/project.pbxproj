@@ -23,6 +23,7 @@
 		4543984E20D0366E00991ADC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4543983D20D0366E00991ADC /* InfoPlist.strings */; };
 		4543984F20D0366E00991ADC /* String+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543984820D0366E00991ADC /* String+extension.swift */; };
 		4543985120D03C1600991ADC /* AboutHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543985020D03C1500991ADC /* AboutHeaderView.swift */; };
+		454F5205215D20F3007011F3 /* ModuleFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F5204215D20F3007011F3 /* ModuleFetcher.swift */; };
 		455CC0A62104A0E20094A5D3 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */; };
 		45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */; };
 		45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F420FF2F6600794147 /* RESTRoutes.swift */; };
@@ -83,6 +84,7 @@
 		4543984B20D0366E00991ADC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4543984C20D0366E00991ADC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4543985020D03C1500991ADC /* AboutHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHeaderView.swift; sourceTree = "<group>"; };
+		454F5204215D20F3007011F3 /* ModuleFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleFetcher.swift; sourceTree = "<group>"; };
 		455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
 		45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModulePlayer.swift; sourceTree = "<group>"; };
 		45AA90F420FF2F6600794147 /* RESTRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTRoutes.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				45AA90F420FF2F6600794147 /* RESTRoutes.swift */,
+				454F5204215D20F3007011F3 /* ModuleFetcher.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -427,6 +430,7 @@
 				45D61F5120E1647300869814 /* RadioPresenter.swift in Sources */,
 				4535A4662114BB2D005FBB8B /* SearchRouter.swift in Sources */,
 				4535A4642114BB2D005FBB8B /* SearchPresenter.swift in Sources */,
+				454F5205215D20F3007011F3 /* ModuleFetcher.swift in Sources */,
 				45D61F5320E1647300869814 /* RadioRouter.swift in Sources */,
 				4535A4682114BB2D005FBB8B /* SearchViewController.swift in Sources */,
 				45D61F5B20E1780D00869814 /* Appearance.swift in Sources */,

@@ -79,6 +79,19 @@ class ModulePlayer: NSObject, ReplayStreamDelegate {
     }
   }
   
+  func play(mmd: MMD) {
+    if let mod = currentModule, var index = playlist.index(of: mod) {
+      if playlist.count > (index + 1) {
+        index += 1
+      }
+      playlist.insert(mmd, at: index)
+      play(at: index)
+    } else {
+      playlist.append(mmd)
+      play(at: playlist.count-1)
+    }
+  }
+  
   func play(at: Int) {
     guard at < playlist.count, let path = playlist[at].localPath?.path else {
       return
@@ -96,7 +109,7 @@ class ModulePlayer: NSObject, ReplayStreamDelegate {
     }
     var nextIndex = 0
     if let index = playlist.index(of: current) {
-      nextIndex = index + 1 % playlist.count
+      nextIndex = (index + 1) % playlist.count
     }
     play(at: nextIndex)
   }

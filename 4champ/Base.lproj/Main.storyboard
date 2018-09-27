@@ -761,9 +761,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" fixedFrame="YES" text="Search" showsScopeBar="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gaD-2L-PpF">
+                            <searchBar contentMode="redraw" placeholder="Type to search" showsScopeBar="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gaD-2L-PpF">
                                 <rect key="frame" x="0.0" y="20" width="375" height="100"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <color key="barTintColor" red="0.047058823530000002" green="0.14901960780000001" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <scopeButtonTitles>
@@ -773,9 +772,8 @@
                                     <string>Meta</string>
                                 </scopeButtonTitles>
                             </searchBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="76" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="CIQ-bO-rf0">
-                                <rect key="frame" x="0.0" y="128" width="375" height="539"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="76" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="CIQ-bO-rf0">
+                                <rect key="frame" x="0.0" y="120" width="375" height="498"/>
                                 <color key="backgroundColor" red="0.047058823530000002" green="0.14901960780000001" blue="0.23921568630000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <color key="sectionIndexBackgroundColor" red="0.047058823530000002" green="0.14901960780000001" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -840,7 +838,9 @@
                                                 <constraint firstItem="xEP-GH-CFR" firstAttribute="trailing" secondItem="dAN-3q-9wS" secondAttribute="trailingMargin" id="VLB-cb-US1"/>
                                                 <constraint firstItem="xEP-GH-CFR" firstAttribute="leading" secondItem="IE7-T4-zlP" secondAttribute="trailing" constant="8" id="Vqz-p1-Pg0"/>
                                                 <constraint firstItem="fkg-rx-iDJ" firstAttribute="width" secondItem="xEP-GH-CFR" secondAttribute="width" id="XwF-KD-aRq"/>
-                                                <constraint firstItem="fkg-rx-iDJ" firstAttribute="leading" secondItem="IE7-T4-zlP" secondAttribute="trailing" constant="8" id="ieH-HX-NVB"/>
+                                                <constraint firstAttribute="trailing" secondItem="fkg-rx-iDJ" secondAttribute="trailing" constant="15" id="fHl-Go-iqr"/>
+                                                <constraint firstItem="BcP-hK-T6H" firstAttribute="trailing" secondItem="dAN-3q-9wS" secondAttribute="trailingMargin" id="hPj-UK-vUy"/>
+                                                <constraint firstItem="fkg-rx-iDJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="IE7-T4-zlP" secondAttribute="trailing" symbolic="YES" id="ieH-HX-NVB"/>
                                                 <constraint firstItem="BcP-hK-T6H" firstAttribute="top" secondItem="xEP-GH-CFR" secondAttribute="bottom" id="ija-Gh-8Is"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -864,10 +864,21 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" red="0.047058823530000002" green="0.14901960780000001" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="CIQ-bO-rf0" firstAttribute="top" secondItem="gaD-2L-PpF" secondAttribute="bottom" id="1lU-TU-0d4"/>
+                            <constraint firstItem="CIQ-bO-rf0" firstAttribute="leading" secondItem="jaP-X9-oRu" secondAttribute="leading" id="2r6-3S-jru"/>
+                            <constraint firstItem="gaD-2L-PpF" firstAttribute="top" secondItem="jaP-X9-oRu" secondAttribute="top" id="Alf-SK-PNh"/>
+                            <constraint firstAttribute="bottom" secondItem="CIQ-bO-rf0" secondAttribute="bottom" id="XT2-MN-FT7"/>
+                            <constraint firstItem="CIQ-bO-rf0" firstAttribute="trailing" secondItem="jaP-X9-oRu" secondAttribute="trailing" id="amu-Mw-zAu"/>
+                            <constraint firstItem="gaD-2L-PpF" firstAttribute="trailing" secondItem="jaP-X9-oRu" secondAttribute="trailing" id="jfP-JN-ssb"/>
+                            <constraint firstItem="gaD-2L-PpF" firstAttribute="leading" secondItem="jaP-X9-oRu" secondAttribute="leading" id="vIa-xd-aug"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="jaP-X9-oRu"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Search" image="search" id="hfI-VH-a1s"/>
                     <connections>
+                        <outlet property="searchBar" destination="gaD-2L-PpF" id="R1l-1G-N1W"/>
+                        <outlet property="tableBottomConstraint" destination="XT2-MN-FT7" id="O31-rL-twh"/>
                         <outlet property="tableView" destination="CIQ-bO-rf0" id="XEZ-rn-VjW"/>
                     </connections>
                 </viewController>

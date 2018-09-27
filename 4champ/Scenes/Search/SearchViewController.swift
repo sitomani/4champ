@@ -9,13 +9,21 @@ import UIKit
 
 protocol SearchDisplayLogic: class
 {
-  func displaySomething(viewModel: Search.ModuleQuery.ViewModel)
+  func displayModules(viewModel: Search.ViewModel)
 }
 
 class SearchViewController: UIViewController, SearchDisplayLogic
 {
   var interactor: SearchBusinessLogic?
   var router: (NSObjectProtocol & SearchRoutingLogic & SearchDataPassing)?
+
+  var searchScopes = [SearchType.module, SearchType.composer, SearchType.group, SearchType.meta]
+
+  @IBOutlet var tableBottomConstraint: NSLayoutConstraint?
+  
+  var viewModel: Search.ViewModel?
+  
+  @IBOutlet weak var searchBar: UISearchBar?
   
   @IBOutlet weak var tableView: UITableView?
   // MARK: Object lifecycle
@@ -67,40 +75,55 @@ class SearchViewController: UIViewController, SearchDisplayLogic
     super.viewDidLoad()
     modulePlayer.addPlayerObserver(self)
     tableView?.dataSource = self
-    doSomething()
+    tableView?.delegate = self
+    searchBar?.delegate = self
+    
+    searchBar?.scopeButtonTitles = [SearchType.module.l13n(), SearchType.composer.l13n(), SearchType.group.l13n(), SearchType.meta.l13n()]
   }
   
   deinit {
     modulePlayer.removePlayerObserver(self)
   }
-  // MARK: Do something
   
-  //@IBOutlet weak var nameTextField: UITextField!
-  
-  func doSomething()
-  {
-//    let request = Search.ModuleQuery.Request()
-//    interactor?.doSomething(request: request)
-  }
-  
-  func displaySomething(viewModel: Search.ModuleQuery.ViewModel)
-  {
-    //nameTextField.text = viewModel.name
+  // MARK: Display Logic
+  func displayModules(viewModel: Search.ViewModel) {
+    self.viewModel = viewModel
+    tableView?.reloadData()
   }
 }
 
-// Mark datasource testing
+// MARK: SearchBar Delegate
+extension SearchViewController: UISearchBarDelegate {
+  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(triggerSearch), object: nil)
+    perform(#selector(triggerSearch), with: nil, afterDelay: 0.3)
+  }
+  
+  func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+    NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(triggerSearch), object: nil)
+    perform(#selector(triggerSearch), with: nil, afterDelay: 0.3)
+  }
+  
+  @objc func triggerSearch() {
+    guard let text = searchBar?.text, text.count > 0 else { return }
+    interactor?.search(keyword: text, type: searchScopes[searchBar?.selectedScopeButtonIndex ?? 0])
+  }
+}
+
+// MARK: Datasource
 extension SearchViewController: UITableViewDataSource {
   func numberOfSections(in tableView: UITableView) -> Int {
     return 1
   }
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return modulePlayer.playlist.count
+    guard let ds = viewModel?.modules else { return 0 }
+    return ds.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    guard let ds = viewModel?.modules else { return UITableViewCell() }
     if let cell = tableView.dequeueReusableCell(withIdentifier: "ModuleCell") as? ModuleCell {
-      let module = modulePlayer.playlist[indexPath.row]
+      let module = ds[indexPath.row]
       cell.nameLabel?.text = module.name!
       cell.composerLabel?.text = module.composer!
       cell.sizeLabel?.text = "\(module.size!) Kb"
@@ -112,11 +135,26 @@ extension SearchViewController: UITableViewDataSource {
   }
 }
 
+// MARK: Table view delegate
+extension SearchViewController: UITableViewDelegate {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    guard let ds = viewModel, indexPath.row < ds.modules.count, let id = ds.modules[indexPath.row].id else { return }
+    interactor?.download(moduleId: id)
+  }
+}
+
+// MARK: Module Player Observer
 extension SearchViewController: ModulePlayerObserver {
   func moduleChanged(module: MMD) {
     tableView?.reloadData()
   }
+  
   func statusChanged(status: PlayerStatus) {
+    if status == .stopped || status == .initialised {
+      tableBottomConstraint?.constant = 0
+    } else {
+      tableBottomConstraint?.constant = 50.0
+    }
     tableView?.reloadData()
   }
 }

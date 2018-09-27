@@ -44,12 +44,9 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   // MARK: Request handling
   func controlRadio(request: Radio.Control.Request) {
     log.debug(request)
+    stopPlayback()
     guard request.powerOn == true else {
-      stopPlayback()
       return
-    }
-    if request.channel != channel {
-      stopPlayback()
     }
     UIApplication.shared.beginReceivingRemoteControlEvents()
 
@@ -123,54 +120,9 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     log.debug("buffer length \(modulePlayer.playlist.count)")
     if bufferLen > modulePlayer.playlist.count {
       let id = getNextModuleId()
-      let req = RESTRoutes.modulePath(id: id)
-      status = .fetching(progress:0.0)
-      Alamofire.request(req).validate().responseString { resp in
-        guard resp.result.isSuccess else {
-          log.error(resp.result.error!)
-          self.status = RadioStatus.failure
-          return
-        }
-        if let uriPath = resp.result.value,
-          uriPath.count > 0,
-          let modUrl = URL.init(string: uriPath) {
-          self.fetchModule(modUrl: modUrl, id: id)
-        }
-      }
-    }
-  }
-  
-  private func fetchModule(modUrl: URL, id: Int) {
-    log.debug("")
-    Alamofire.request(modUrl).validate().responseData { resp in
-      guard resp.result.isSuccess else {
-        log.error(resp.result.error!)
-        return
-      }
-      if let moduleData = resp.result.value {
-        if let moduleDataUnzipped = self.gzipInflate(data: moduleData) {
-          var mmd = MMD.init(path: modUrl.path, modId: id)
-          mmd.size = Int(moduleDataUnzipped.count / 1024)
-          do {
-            try moduleDataUnzipped.write(to: mmd.localPath!, options: .atomic)
-          } catch {
-            log.error("Could not write module data to file: \(error)")
-          }
-          modulePlayer.playlist.append(mmd)
-          self.triggerBufferPresentation()
-          if let first = modulePlayer.playlist.first, first == mmd {
-            modulePlayer.play(at: 0)
-          }
-          self.fillBuffer()
-          self.status = .on
-        }
-      }
-      }.downloadProgress { progress in
-        var currentProg = Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
-        if currentProg == 1.0 {
-          currentProg = 0
-        }
-        self.status = .fetching(progress: currentProg)
+      
+      let fetcher = ModuleFetcher.init(delegate: self)
+      fetcher.fetchModule(ampId: id)
     }
   }
   
@@ -212,14 +164,38 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   }
 }
 
+extension RadioInteractor: ModuleFetcherDelegate {
+  func fetcherStateChanged(_ fetcher: ModuleFetcher, state: FetcherState) {
+    switch state {
+    case .failed:
+      status = .failure
+      
+    case .downloading(let progress):
+      status = .fetching(progress: progress)
+      
+    case .done(let mmd):
+      modulePlayer.playlist.append(mmd)
+      self.triggerBufferPresentation()
+      if let first = modulePlayer.playlist.first, first == mmd {
+        modulePlayer.play(at: 0)
+      }
+      self.fillBuffer()
+      self.status = .on
+      
+    default:
+      log.debug(state)
+    }
+  }
+}
+
 // Delegate for getting notified about stream ending in replayer
 extension RadioInteractor: ModulePlayerObserver {
   func moduleChanged(module: MMD) {
     log.debug("")
     if let index = modulePlayer.playlist.index(of: module), index > 0 {
       removeBufferHead()
-      fillBuffer()
     }
+    fillBuffer()
     triggerBufferPresentation()
   }
   

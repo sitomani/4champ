@@ -6,32 +6,81 @@
 //
 
 import UIKit
+import Alamofire
+import Foundation
+
+typealias ModuleResult = [SearchResultModule]
+
+struct SearchResultModule: Codable {
+  let name, composer: LabelHref
+  let format: String
+  let size, downloadCount: String
+  let infos: String
+}
+
+struct LabelHref: Codable {
+  let label: String
+  let href: String
+}
 
 protocol SearchBusinessLogic
 {
-  func doSomething(request: Search.ModuleQuery.Request)
+  func search(keyword: String, type: SearchType)
+  func download(moduleId: Int)
 }
 
 protocol SearchDataStore
 {
-  //var name: String { get set }
+  var moduleResult: [SearchResultModule] { get set }
 }
 
 class SearchInteractor: SearchBusinessLogic, SearchDataStore
 {
   var presenter: SearchPresentationLogic?
   var worker: SearchWorker?
-  //var name: String = ""
+
+  var moduleResult: [SearchResultModule] = []
   
-  // MARK: Do something
+  private var currentRequest: Alamofire.DataRequest?
   
-  func doSomething(request: Search.ModuleQuery.Request)
-  {
-//    let request = RESTRoutes.search(type: <#T##SearchType#>, text: <#T##String#>, position: <#T##Int#>)
-//    worker = SearchWorker()
-//    worker?.doSomeWork()
-//
-//    let response = Search.Something.Response()
-//    presenter?.presentSomething(response: response)
+  func search(keyword: String, type: SearchType) {
+    log.debug("keyword: \(keyword), type: \(type.rawValue)")
+    if currentRequest != nil {
+      currentRequest?.cancel()
+      currentRequest = nil
+    }
+    let restRequest = RESTRoutes.search(type: type, text: keyword, position: 0)
+    currentRequest = Alamofire.request(restRequest).validate().responseJSON { (json) in
+      log.debug("\(json.result) \(keyword)")
+      if json.result.isSuccess {
+        if let modules = try? JSONDecoder().decode(ModuleResult.self, from: json.data!) {
+          self.moduleResult = modules
+          self.presenter?.presentModules(response: Search.ModuleResponse(result: modules))
+        } else {
+          self.moduleResult = []
+          self.presenter?.presentModules(response: Search.ModuleResponse(result: []))
+        }
+      }
+      self.currentRequest = nil
+    }
+  }
+  
+  func download(moduleId: Int) {
+    let fetcher = ModuleFetcher.init(delegate: self)
+    fetcher.fetchModule(ampId: moduleId)
+  }
+}
+
+extension SearchInteractor: ModuleFetcherDelegate {
+  func fetcherStateChanged(_ fetcher: ModuleFetcher, state: FetcherState) {
+    log.debug(state)
+    switch state {
+    case .done(let mmd):
+      modulePlayer.play(mmd: mmd)
+    case .downloading(let progress):
+      log.debug(progress)
+    default:
+      log.debug("foo")
+    }
   }
 }

@@ -15,40 +15,26 @@ struct ComposerInfo {
 
 enum Search
 {
-  enum ModuleQuery {
-    struct Request {
-      var text: String
-    }
-    struct Response {
-      var result: [MMD]
-    }
-    struct ViewModel {
-      var modules: [MMD]
-    }
+  struct Request {
+    var text: String
+    var type: SearchType
   }
   
-  enum ComposerQuery {
-    struct Request {
-      var text: String
-    }
-    struct Response {
-      var result: [ComposerInfo]
-    }
+  struct ModuleResponse {
+    var result: [SearchResultModule]
   }
   
-  enum GroupQuery {
-    struct Request {
-      var text: String
-    }
-    struct Response {
-      var result: [String]
-    }
+  struct ComposerResponse {
+    var result: [ComposerInfo]
+  }
+
+  struct GroupResponse {
+    var result: [String]
   }
   
-  enum MetaQuery {
-    struct Request {
-      var text: String
-    }
+  struct ViewModel {
+    var modules: [MMD]
+    var composers: [ComposerInfo]
+    var groups: [String]
   }
-  
 }

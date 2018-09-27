@@ -10,11 +10,26 @@ import Alamofire
 
 let pageSize = 50
 
+/**
+ Search type enumeration identifies the target context for search
+ */
 enum SearchType: String {
   case module
   case group
   case composer
   case meta
+  
+  /**
+   Returns the localized name for the search type (shown on search view)
+  */
+  func l13n() -> String {
+    switch self {
+    case .module: return "G_Module".l13n()
+    case .group: return "G_Group".l13n()
+    case .composer: return "SearchView_Composer".l13n()
+    case .meta: return "G_Texts".l13n()
+    }
+  }
 }
 
 enum RESTRoutes: URLRequestConvertible {
