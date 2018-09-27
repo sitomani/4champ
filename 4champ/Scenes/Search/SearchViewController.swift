@@ -10,6 +10,7 @@ import UIKit
 protocol SearchDisplayLogic: class
 {
   func displayModules(viewModel: Search.ViewModel)
+  func displayComposers(viewModel: Search.ViewModel)
 }
 
 class SearchViewController: UIViewController, SearchDisplayLogic
@@ -74,6 +75,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   {
     super.viewDidLoad()
     modulePlayer.addPlayerObserver(self)
+    tableView?.rowHeight = UITableViewAutomaticDimension
     tableView?.dataSource = self
     tableView?.delegate = self
     searchBar?.delegate = self
@@ -87,6 +89,11 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   
   // MARK: Display Logic
   func displayModules(viewModel: Search.ViewModel) {
+    self.viewModel = viewModel
+    tableView?.reloadData()
+  }
+  
+  func displayComposers(viewModel: Search.ViewModel) {
     self.viewModel = viewModel
     tableView?.reloadData()
   }
@@ -116,22 +123,12 @@ extension SearchViewController: UITableViewDataSource {
     return 1
   }
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    guard let ds = viewModel?.modules else { return 0 }
-    return ds.count
+    return viewModel?.numberOfRows() ?? 0
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let ds = viewModel?.modules else { return UITableViewCell() }
-    if let cell = tableView.dequeueReusableCell(withIdentifier: "ModuleCell") as? ModuleCell {
-      let module = ds[indexPath.row]
-      cell.nameLabel?.text = module.name!
-      cell.composerLabel?.text = module.composer!
-      cell.sizeLabel?.text = "\(module.size!) Kb"
-      cell.typeLabel?.text = module.type!
-      return cell
-    } else {
-      return UITableViewCell()
-    }
+    guard let vm = viewModel else { return UITableViewCell() }
+    return vm.dequeueCell(for: tableView, at: indexPath.row)
   }
 }
 
@@ -156,5 +153,47 @@ extension SearchViewController: ModulePlayerObserver {
       tableBottomConstraint?.constant = 50.0
     }
     tableView?.reloadData()
+  }
+}
+
+extension Search.ViewModel {
+  func dequeueCell(for tableView: UITableView, at row: Int) -> UITableViewCell {
+    if modules.count > row {
+      if let cell = tableView.dequeueReusableCell(withIdentifier: "ModuleCell") as? ModuleCell {
+        let module = modules[row]
+        cell.nameLabel?.text = module.name!
+        cell.composerLabel?.text = module.composer!
+        cell.sizeLabel?.text = "\(module.size!) Kb"
+        cell.typeLabel?.text = module.type!
+        return cell
+      }
+    } else if composers.count > row {
+      if let cell = tableView.dequeueReusableCell(withIdentifier: "ComposerCell") as? ComposerCell {
+        let composer = composers[row]
+        cell.nameLabel?.text = composer.name
+        cell.realNameLabel?.text = composer.realName
+        cell.groupsLabel?.text = composer.groups
+        return cell
+      }
+    } else if groups.count > row {
+      if let cell = tableView.dequeueReusableCell(withIdentifier: "GroupCell") as? GroupCell {
+        let group = groups[row]
+        cell.nameLabel?.text = group.name
+        return cell
+      }
+
+    }
+    return UITableViewCell()
+  }
+  
+  func numberOfRows() -> Int {
+    if modules.count > 0 {
+      return modules.count
+    } else if composers.count > 0 {
+      return composers.count
+    } else if groups.count > 0 {
+      return groups.count
+    }
+    return 0
   }
 }

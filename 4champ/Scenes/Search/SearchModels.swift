@@ -8,9 +8,15 @@
 import UIKit
 
 struct ComposerInfo {
+  var id: Int
   var name: String
   var realName: String
   var groups: String
+}
+
+struct GroupInfo {
+  var id: Int
+  var name: String
 }
 
 enum Search
@@ -25,16 +31,16 @@ enum Search
   }
   
   struct ComposerResponse {
-    var result: [ComposerInfo]
+    var result: [SearchResultComposer]
   }
 
   struct GroupResponse {
-    var result: [String]
+    var result: [LabelHref]
   }
   
   struct ViewModel {
     var modules: [MMD]
     var composers: [ComposerInfo]
-    var groups: [String]
+    var groups: [GroupInfo]
   }
 }

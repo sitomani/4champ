@@ -19,9 +19,21 @@ class SearchPresenter: SearchPresentationLogic
   weak var viewController: SearchDisplayLogic?
   
   func presentGroups(response: Search.GroupResponse) {
+    let groups: [GroupInfo] = response.result.compactMap { g in
+      guard let gUri = URL.init(string: g.href),
+        let idString = gUri.query?.split(separator: "=").last else { return nil }
+      return GroupInfo(id: Int(idString) ?? 0, name: g.label)
+    }
+    viewController?.displayModules(viewModel: Search.ViewModel(modules: [], composers: [], groups: groups))
   }
   
   func presentComposers(response: Search.ComposerResponse) {
+    let composers: [ComposerInfo] = response.result.compactMap { c in
+      guard let cUri = URL.init(string: c.handle.href) else { return nil }
+      guard let idString  = cUri.query?.split(separator: "=").last else { return nil }
+      return ComposerInfo(id: Int(idString) ?? 0, name: c.handle.label, realName: c.realname, groups: c.groups)
+    }
+    viewController?.displayComposers(viewModel: Search.ViewModel(modules: [], composers: composers, groups: []))
   }
   
   func presentModules(response: Search.ModuleResponse) {

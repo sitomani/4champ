@@ -24,6 +24,8 @@
 		4543984F20D0366E00991ADC /* String+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543984820D0366E00991ADC /* String+extension.swift */; };
 		4543985120D03C1600991ADC /* AboutHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543985020D03C1500991ADC /* AboutHeaderView.swift */; };
 		454F5205215D20F3007011F3 /* ModuleFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F5204215D20F3007011F3 /* ModuleFetcher.swift */; };
+		454F5207215D3FF1007011F3 /* ComposerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F5206215D3FF1007011F3 /* ComposerCell.swift */; };
+		454F5209215D4587007011F3 /* GroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F5208215D4587007011F3 /* GroupCell.swift */; };
 		455CC0A62104A0E20094A5D3 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */; };
 		45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */; };
 		45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F420FF2F6600794147 /* RESTRoutes.swift */; };
@@ -85,6 +87,8 @@
 		4543984C20D0366E00991ADC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4543985020D03C1500991ADC /* AboutHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHeaderView.swift; sourceTree = "<group>"; };
 		454F5204215D20F3007011F3 /* ModuleFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleFetcher.swift; sourceTree = "<group>"; };
+		454F5206215D3FF1007011F3 /* ComposerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerCell.swift; sourceTree = "<group>"; };
+		454F5208215D4587007011F3 /* GroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCell.swift; sourceTree = "<group>"; };
 		455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
 		45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModulePlayer.swift; sourceTree = "<group>"; };
 		45AA90F420FF2F6600794147 /* RESTRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTRoutes.swift; sourceTree = "<group>"; };
@@ -147,6 +151,8 @@
 				4535A4622114BB2D005FBB8B /* SearchViewController.swift */,
 				4535A4632114BB2D005FBB8B /* SearchInteractor.swift */,
 				4535A46A2114C335005FBB8B /* ModuleCell.swift */,
+				454F5206215D3FF1007011F3 /* ComposerCell.swift */,
+				454F5208215D4587007011F3 /* GroupCell.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -446,9 +452,11 @@
 				45AA911A2100EF1900794147 /* AmpSlider.swift in Sources */,
 				45AA910320FF36C200794147 /* hvl_replay.cpp in Sources */,
 				45D61F5920E1695200869814 /* UIUtils.swift in Sources */,
+				454F5207215D3FF1007011F3 /* ComposerCell.swift in Sources */,
 				4543985120D03C1600991ADC /* AboutHeaderView.swift in Sources */,
 				45D392A520B1DDEC00EEF4E3 /* AppDelegate.swift in Sources */,
 				45AA911B2100EF1900794147 /* AmpVizScene.swift in Sources */,
+				454F5209215D4587007011F3 /* GroupCell.swift in Sources */,
 				45AA91122100D13300794147 /* NowPlayingView.swift in Sources */,
 				45AA910620FF36C200794147 /* MPTReplayer.m in Sources */,
 				4543983620D0344F00991ADC /* AboutInteractor.swift in Sources */,

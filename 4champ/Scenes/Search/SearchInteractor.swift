@@ -23,6 +23,20 @@ struct LabelHref: Codable {
   let href: String
 }
 
+typealias ComposerResult = [SearchResultComposer]
+
+struct SearchResultComposer: Codable {
+  let handle: LabelHref
+  let realname, groups: String
+}
+
+typealias GroupResult = [LabelHref]
+
+//   let transaction = try? newJSONDecoder().decode(Transaction.self, from: jsonData)
+
+import Foundation
+
+
 protocol SearchBusinessLogic
 {
   func search(keyword: String, type: SearchType)
@@ -56,6 +70,10 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
         if let modules = try? JSONDecoder().decode(ModuleResult.self, from: json.data!) {
           self.moduleResult = modules
           self.presenter?.presentModules(response: Search.ModuleResponse(result: modules))
+        } else if let composers = try? JSONDecoder().decode(ComposerResult.self, from: json.data!) {
+          self.presenter?.presentComposers(response: Search.ComposerResponse(result: composers))
+        } else if let groups = try? JSONDecoder().decode(GroupResult.self, from: json.data!) {
+          self.presenter?.presentGroups(response: Search.GroupResponse(result: groups))
         } else {
           self.moduleResult = []
           self.presenter?.presentModules(response: Search.ModuleResponse(result: []))
