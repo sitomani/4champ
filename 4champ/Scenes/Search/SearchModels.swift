@@ -1,6 +1,6 @@
 //
 //  SearchModels.swift
-//  4champ
+//  4champ Amiga Music Player
 //
 //  Copyright (c) 2018 Aleksi Sitomaniemi. All rights reserved.
 //
@@ -24,8 +24,16 @@ enum Search
   struct Request {
     var text: String
     var type: SearchType
+    var pagingIndex: Int = 0
   }
   
+  struct ProgressResponse {
+    var progress: Float
+    struct ViewModel {
+      var progress: Float
+    }
+  }
+
   struct ModuleResponse {
     var result: [SearchResultModule]
   }
@@ -44,3 +52,27 @@ enum Search
     var groups: [GroupInfo]
   }
 }
+
+// MARK: 4champ.net JSON interface objects
+typealias ModuleResult = [SearchResultModule]
+
+struct SearchResultModule: Codable {
+  let name, composer: LabelHref
+  let format: String
+  let size, downloadCount: String
+  let infos: String
+}
+
+struct LabelHref: Codable {
+  let label: String
+  let href: String
+}
+
+typealias ComposerResult = [SearchResultComposer]
+
+struct SearchResultComposer: Codable {
+  let handle: LabelHref
+  let realname, groups: String
+}
+
+typealias GroupResult = [LabelHref]

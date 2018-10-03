@@ -67,6 +67,8 @@ class AboutViewController: UIViewController, AboutDisplayLogic
   {
     log.debug("")
     super.viewDidLoad()
+    self.view.backgroundColor = Appearance.ampBgColor
+
     tabBarItem.title = "TabBar_About".l13n()
     tableView.dataSource = self
     tableView.delegate = self

@@ -7,15 +7,25 @@
 
 import UIKit
 import Alamofire
-import Gzip
 
+
+/// Radio Interactor business logic protocol
 protocol RadioBusinessLogic
 {
+  /// Radio on/off/channel switch control interface
+  /// - parameters:
+  ///   - request: Control parameters (on/off/channel) in a `Radio.Control.Request` struct
   func controlRadio(request: Radio.Control.Request)
+  
+  /// Updates the most recently added module id by querying 4champ.net REST interface
+  /// called currently only once when radio view is displayed the first time in a session.
   func updateLatest()
+  
+  /// Skips current module and starts playing the next one
   func playNext()
 }
 
+/// Radio datastore for keeping currently selected channel and status
 protocol RadioDataStore
 {
   var channel: RadioChannel { get set }
@@ -25,11 +35,9 @@ protocol RadioDataStore
 class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
 {
   var presenter: RadioPresentationLogic?
-  //var name: String = ""
   
-  private var latestId: Int = 140000
-  private var latestPlayed: Int = 0
-  private var bufferLen = 3
+  private var latestId: Int = 140000 // latest id in the AMP database (updated when NEW channel used)
+  private var latestPlayed: Int = 0 // identifier of the latest module id played (used in New channel)
   
   private var activeRequest: Alamofire.DataRequest?
   private var playbackTimer: Timer?
@@ -48,7 +56,6 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     guard request.powerOn == true else {
       return
     }
-    UIApplication.shared.beginReceivingRemoteControlEvents()
 
     modulePlayer.addPlayerObserver(self)
     playbackTimer?.invalidate()
@@ -82,6 +89,9 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     modulePlayer.playNext()
   }
   
+  // MARK: private functions
+  
+  /// Stops current playback when radio is turned off, or channel is changed
   private func stopPlayback() {
     log.debug("")
     UIApplication.shared.endReceivingRemoteControlEvents()
@@ -101,24 +111,33 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     triggerBufferPresentation()
   }
   
+  /// Triggers current radio playlist presentation
   private func triggerBufferPresentation() {
     log.debug("")
     DispatchQueue.main.async {
       self.presenter?.presentChannelBuffer(buffer: modulePlayer.playlist)
     }
   }
+
+  /// Removes the first module in current playlist and deletes the related local file
   private func removeBufferHead() {
     log.debug("")
     let current = modulePlayer.playlist.removeFirst()
     if let url = current.localPath {
       log.info("Deleting module \(url.lastPathComponent)")
-      try! FileManager.default.removeItem(at: url)
+      do {
+        try FileManager.default.removeItem(at: url)
+      } catch {
+        log.error("Deleting file at \(url) failed, \(error)")
+      }
     }
   }
   
+  /// Fills the radio buffer as needed (called when radio is turned on
+  /// and when current module changes, to keep the buffer populated
   private func fillBuffer() {
     log.debug("buffer length \(modulePlayer.playlist.count)")
-    if bufferLen > modulePlayer.playlist.count {
+    if Constants.RadioBufferLen > modulePlayer.playlist.count {
       let id = getNextModuleId()
       
       let fetcher = ModuleFetcher.init(delegate: self)
@@ -126,6 +145,8 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     }
   }
   
+  /// Returns next module id for buffer filling based on current radio channel selection
+  /// - returns: id for the next module to load into buffer
   private func getNextModuleId() -> Int {
     log.debug("")
     switch channel {
@@ -144,15 +165,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     }
   }
   
-  private func gzipInflate(data: Data) -> Data? {
-    if data.isGzipped {
-      let inflated = try! data.gunzipped()
-      return inflated
-    }
-    debugPrint("FAILED TO UNZIP")
-    return data
-  }
-
+  /// Playback time update periodic called from `playbackTimer`
   private func periodicUpdate() {
     var length = 0
     var elapsed = 0
@@ -168,7 +181,12 @@ extension RadioInteractor: ModuleFetcherDelegate {
   func fetcherStateChanged(_ fetcher: ModuleFetcher, state: FetcherState) {
     switch state {
     case .failed:
-      status = .failure
+      switch status {
+      case .off:
+        log.info("no status change on failure if status already off")
+      default:
+        status = .failure
+      }
       
     case .downloading(let progress):
       status = .fetching(progress: progress)
@@ -182,13 +200,11 @@ extension RadioInteractor: ModuleFetcherDelegate {
       self.fillBuffer()
       self.status = .on
       
-    default:
-      log.debug(state)
+    default: ()
     }
   }
 }
 
-// Delegate for getting notified about stream ending in replayer
 extension RadioInteractor: ModulePlayerObserver {
   func moduleChanged(module: MMD) {
     log.debug("")
@@ -200,6 +216,6 @@ extension RadioInteractor: ModulePlayerObserver {
   }
   
   func statusChanged(status: PlayerStatus) {
-    
+    //nop at the moment
   }
 }

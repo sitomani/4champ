@@ -2,13 +2,16 @@
 //  ModuleFetcher.swift
 //  ampplayer
 //
-//  Created by Aleksi Sitomaniemi on 27/09/2018.
-//  Copyright © 2018 boogie. All rights reserved.
+//  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
 import Foundation
 import Alamofire
+import Gzip
 
+/**
+ ModuleFetcher states
+ */
 enum FetcherState {
   case idle
   case resolvingPath
@@ -18,11 +21,26 @@ enum FetcherState {
   case done(mmd: MMD)
 }
 
+/**
+ ModuleFetcher state delegate.
+ Implemented in classes that use a fetcher to download modules, e.g. RadioInteractor and SearchInteractor
+ */
 protocol ModuleFetcherDelegate {
+  /**
+   Fetcher calls delegate on state changes.
+   - parameters:
+      - fetcher: identifies the fetcher instance
+      - state: identifies the state that fetcher changed into
+ */
   func fetcherStateChanged(_ fetcher: ModuleFetcher, state: FetcherState)
 }
 
-class ModuleFetcher: Hashable {
+/**
+ Module Fetcher class
+ Implements the flow for fetching modules, consisting of module download link fetching based on id,
+ gzipped module downloading, unzipping and saving to local filesystem.
+ */
+class ModuleFetcher {
   var delegate: ModuleFetcherDelegate?
 
   private var currentRequest: Alamofire.DataRequest?
@@ -41,14 +59,11 @@ class ModuleFetcher: Hashable {
     log.debug("")
   }
   
-  static func == (left: ModuleFetcher, right: ModuleFetcher) -> Bool {
-    return left === right
-  }
-  
-  var hashValue: Int {
-    return ObjectIdentifier(self).hashValue
-  }
-  
+  /**
+  fetches a module based on Amiga Music Preservation module id
+    - parameters:
+        - ampId: Identifier of the module to download.
+  */
   func fetchModule(ampId: Int) {
     state = .resolvingPath
     let req = RESTRoutes.modulePath(id: ampId)
@@ -66,12 +81,23 @@ class ModuleFetcher: Hashable {
     }
   }
   
+  /**
+  Cancels current fetch request if any.
+  */
   func cancel() {
     guard let req = currentRequest else { log.debug("No current request to cancel"); return }
     req.cancel()
     currentRequest = nil
   }
   
+  /**
+  private function that fetches the module from the identified download link,
+  unpacks it and saves to disk. After completion, reports the module metadata on the
+  downloaded module through a state change to `FetcherState.done(mmd)`
+   - parameters:
+      - modUrl: URL of the module to download
+      - id: numeric identifier of the module (needed for the module metadata object)
+  */
   private func fetchModule(modUrl: URL, id: Int) {
     log.debug("")
     state = .downloading(progress: 0)
@@ -105,12 +131,31 @@ class ModuleFetcher: Hashable {
     }
   }
   
+  /**
+  Unzips the module data using GzipSwift
+   - parameters:
+      - data: the gzipped module
+   - returns: module data, unzipped
+  */
   private func gzipInflate(data: Data) -> Data? {
     if data.isGzipped {
       let inflated = try! data.gunzipped()
       return inflated
     }
-    debugPrint("FAILED TO UNZIP")
+    log.error("FAILED TO UNZIP")
     return data
+  }
+}
+
+/**
+ Hashable protocol extension to ModuleFetcher for keeping the fetchers in an array
+ */
+extension ModuleFetcher: Hashable {
+  static func == (left: ModuleFetcher, right: ModuleFetcher) -> Bool {
+    return left === right
+  }
+  
+  var hashValue: Int {
+    return ObjectIdentifier(self).hashValue
   }
 }

@@ -8,6 +8,7 @@
 import Foundation
 import MediaPlayer
 
+/// possible states of a ModulePlayer
 enum PlayerStatus:Int {
   case initialised
   case stopped
@@ -15,17 +16,29 @@ enum PlayerStatus:Int {
   case paused
 }
 
+/**
+ Module Player observer delegate protocol.
+ Note that there can be multiple observers for the player
+ */
 protocol ModulePlayerObserver: class {
+  /// called when player state changes (e.g. play/pause)
+  /// - parameters:
+  ///    - status: new status
   func statusChanged(status: PlayerStatus)
+
+  /// called when module changes in the player
+  /// - parameters:
+  ///     - module: module that player changed to
   func moduleChanged(module: MMD)
 }
 
-class ModulePlayer: NSObject, ReplayStreamDelegate {
+class ModulePlayer: NSObject {
   var playlist: [MMD] = [] 
   let renderer = Replay()
   let mpImage = UIImage.init(named: "albumart")!
   
   var currentModule: MMD? {
+    // on currentModule change, post info on MPNowPlayingInfoCenter
     didSet {
       if let mod = currentModule {
         let author = mod.composer
@@ -52,6 +65,7 @@ class ModulePlayer: NSObject, ReplayStreamDelegate {
       }
     }
   }
+  
   var status: PlayerStatus = .initialised {
     didSet {
       _ = observers.map {
@@ -65,12 +79,24 @@ class ModulePlayer: NSObject, ReplayStreamDelegate {
     super.init()
     renderer.initAudio()
     renderer.streamDelegate = self
+    
+    NotificationCenter.default.addObserver(self,
+                                   selector: #selector(handleRouteChange),
+                                   name: .AVAudioSessionRouteChange,
+                                   object: nil)
   }
   
+  /// Adds an status change observer to ModulePlayer. Object registering as observer
+  /// must also remove itself from observer list when no longer needing the callbacks
+  /// - parameters:
+  ///    - observer: Object implementing ModulePlayerObserver` protocol
   func addPlayerObserver(_ observer: ModulePlayerObserver) {
     observers.append(observer)
   }
   
+  /// Removes an observer from the player
+  /// - parameters:
+  ///    - observer: Object implementing ModulePlayerObserver` protocol
   func removePlayerObserver(_ observer: ModulePlayerObserver) {
     if let index = observers.index(where: { mp -> Bool in
       return mp === observer
@@ -79,6 +105,11 @@ class ModulePlayer: NSObject, ReplayStreamDelegate {
     }
   }
   
+  /// Starts playing a module immediately. If there are modules in play queue,
+  /// the given module `mmd` will be inserted to queue at the position of currently
+  /// playing module.
+  /// - parameters:
+  ///    - mmd: Module metadata object identifying the module to play
   func play(mmd: MMD) {
     if let mod = currentModule, var index = playlist.index(of: mod) {
       if playlist.count > (index + 1) {
@@ -92,17 +123,24 @@ class ModulePlayer: NSObject, ReplayStreamDelegate {
     }
   }
   
+  /// Plays a module in the play queue at given position
+  /// - parameters:
+  ///    - at: index of the module to play in the playlist.
+  ///          Invalid index will result in no change in playback.
   func play(at: Int) {
     guard at < playlist.count, let path = playlist[at].localPath?.path else {
       return
     }
     renderer.stop()
     renderer.loadModule(path)
+    renderer.setStereoSeparation(100)
     currentModule = playlist[at]
     renderer.play()
     status = .playing
   }
   
+  /// Plays the next module in the current playlist. If there are no more modules,
+  /// the playback will wrap to the first module in the playlist
   func playNext() {
     guard let current = currentModule, playlist.count > 0 else {
       return
@@ -114,27 +152,66 @@ class ModulePlayer: NSObject, ReplayStreamDelegate {
     play(at: nextIndex)
   }
   
+  /// Plays the previous module in the current playlist. The playlist index
+  /// will not wrap from start to end when using `playPrev()` function
   func playPrev() {
+    guard let current = currentModule, playlist.count > 0 else {
+      return
+    }
+    var prevIndex = 0
+    if let index = playlist.index(of: current) {
+      if index > 0 {
+        prevIndex = index - 1
+      }
+    }
+    play(at: prevIndex)
   }
   
+  /// Pauses the current playback
   func pause() {
     guard status == .playing else { return }
     renderer.pause()
     status = .paused
   }
   
+  /// Resumes paused module
   func resume() {
     guard status == .paused else { return }
     renderer.resume()
     status = .playing
   }
   
+  /// Stops playback. This will also reset the now playing info
   func stop() {
     renderer.stop()
     status = .stopped
     MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
   }
   
+  /// Handle audio route change notifications
+  @objc func handleRouteChange(notification: Notification) {
+    guard let userInfo = notification.userInfo,
+      let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
+      let reason = AVAudioSessionRouteChangeReason(rawValue:reasonValue) else {
+        return
+    }
+    
+    // Pause current playback if user unplugs headphones
+    switch reason {
+    case .oldDeviceUnavailable:
+      if let previousRoute =
+        userInfo[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription {
+        for output in previousRoute.outputs where output.portType == AVAudioSessionPortHeadphones {
+          pause()
+          break
+        }
+      }
+    default: ()
+    }
+  }
+}
+
+extension ModulePlayer: ReplayStreamDelegate {
   func reachedEnd(ofStream replay: Replay!) {
     DispatchQueue.main.async {
       self.playNext()

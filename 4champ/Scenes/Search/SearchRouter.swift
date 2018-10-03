@@ -1,15 +1,16 @@
 //
 //  SearchRouter.swift
-//  4champ
+//  4champ Amiga Music Player
 //
 //  Copyright (c) 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
 import UIKit
 
-@objc protocol SearchRoutingLogic
+protocol SearchRoutingLogic
 {
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
+  func toComposerList(title: String, groupId: Int)
+  func toModulesList(title: String, composerId: Int)
 }
 
 protocol SearchDataPassing
@@ -23,33 +24,24 @@ class SearchRouter: NSObject, SearchRoutingLogic, SearchDataPassing
   var dataStore: SearchDataStore?
   
   // MARK: Routing
+  func toComposerList(title: String, groupId: Int) {
+    spawnSearch(title: title, type: .group, id: groupId)
+  }
+  func toModulesList(title: String, composerId: Int) {
+    spawnSearch(title: title, type: .composer, id: composerId)
+  }
   
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
-  //{
-  //  if let segue = segue {
-  //    let destinationVC = segue.destination as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //  } else {
-  //    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-  //    let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //    navigateToSomewhere(source: viewController!, destination: destinationVC)
-  //  }
-  //}
-
-  // MARK: Navigation
-  
-  //func navigateToSomewhere(source: SearchViewController, destination: SomewhereViewController)
-  //{
-  //  source.show(destination, sender: nil)
-  //}
-  
-  // MARK: Passing data
-  
-  //func passDataToSomewhere(source: SearchDataStore, destination: inout SomewhereDataStore)
-  //{
-  //  destination.name = source.name
-  //}
+  /// Instantiate another SearchViewController and prepare it for
+  /// composer/group list display by setting the autoList parameters
+  private func spawnSearch(title: String, type: SearchType, id: Int) {
+    if let vc = viewController?.storyboard?.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+      vc.shouldDisplaySearchBar = false
+      if var ds = vc.router?.dataStore {
+        ds.autoListType = type
+        ds.autoListTitle = title
+        ds.autoListId = id
+      }
+      viewController?.navigationController?.pushViewController(vc, animated: true)
+    }
+  }
 }

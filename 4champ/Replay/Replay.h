@@ -32,6 +32,10 @@
 @class Replay;
 
 @protocol ReplayStreamDelegate <NSObject>
+/**
+ Called when replay reaches end of the module
+ @param replay identifies the Replay object
+ */
 - (void) reachedEndOfStream:(Replay*)replay;
 @end
 

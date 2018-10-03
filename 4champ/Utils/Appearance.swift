@@ -13,6 +13,9 @@ class Appearance {
   static var successColor = UIColor.init(rgb: 0x4CD964)
   static var darkBlueColor = UIColor.init(rgb: 0x0C263D)
   static var tabColor = UIColor.init(rgb: 0x0C263D)
+  static var ampBgColor = UIColor.init(rgb: 0x123456)
+  static var separatorColor = UIColor.init(rgb: 0x485675)
+  static var cellColor = UIColor.clear
   
   class func setup() {
     let navigationBarAppearace = UINavigationBar.appearance()
@@ -29,5 +32,13 @@ class Appearance {
     
     let indicatorAppearance = NowPlayingView.appearance()
     indicatorAppearance.backgroundColor = Appearance.tabColor
+    
+    let tableCellAppearance = UITableViewCell.appearance()
+    tableCellAppearance.backgroundColor = cellColor
+    tableCellAppearance.selectionStyle = .none
+    
+    let tableViewAppearance = UITableView.appearance()
+    tableViewAppearance.backgroundColor = ampBgColor
+    tableViewAppearance.separatorColor = separatorColor
   }
 }

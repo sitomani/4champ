@@ -87,7 +87,9 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   {
     log.debug("")
     super.viewDidLoad()
-        
+    
+    self.view.backgroundColor = Appearance.ampBgColor
+    
     UIUtils.roundCornersInView(currentModuleView)
     navigationItem.title = "RadioView_Title".l13n().uppercased()
 

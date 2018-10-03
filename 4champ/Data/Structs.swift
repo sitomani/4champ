@@ -7,6 +7,11 @@
 
 import Foundation
 
+struct Constants {
+  static let RadioBufferLen = 3 // Length of the radio buffer
+  static let SearchDelay = 0.3
+}
+
 struct MMD {
   init() {
   }

@@ -1,6 +1,6 @@
 //
 //  SearchPresenter.swift
-//  4champ
+//  4champ Amiga Music Player
 //
 //  Copyright (c) 2018 Aleksi Sitomaniemi. All rights reserved.
 //
@@ -12,8 +12,11 @@ protocol SearchPresentationLogic
   func presentModules(response: Search.ModuleResponse)
   func presentGroups(response: Search.GroupResponse)
   func presentComposers(response: Search.ComposerResponse)
+  func presentDownloadProgress(response: Search.ProgressResponse)
 }
 
+/// Search result presentation class. Presenter wraps the json originating
+/// objects into presentable structs for `SearchViewController`
 class SearchPresenter: SearchPresentationLogic
 {
   weak var viewController: SearchDisplayLogic?
@@ -24,7 +27,9 @@ class SearchPresenter: SearchPresentationLogic
         let idString = gUri.query?.split(separator: "=").last else { return nil }
       return GroupInfo(id: Int(idString) ?? 0, name: g.label)
     }
-    viewController?.displayModules(viewModel: Search.ViewModel(modules: [], composers: [], groups: groups))
+    viewController?.displayResult(viewModel: Search.ViewModel(modules: [],
+                                                              composers: [],
+                                                              groups: groups))
   }
   
   func presentComposers(response: Search.ComposerResponse) {
@@ -33,7 +38,9 @@ class SearchPresenter: SearchPresentationLogic
       guard let idString  = cUri.query?.split(separator: "=").last else { return nil }
       return ComposerInfo(id: Int(idString) ?? 0, name: c.handle.label, realName: c.realname, groups: c.groups)
     }
-    viewController?.displayComposers(viewModel: Search.ViewModel(modules: [], composers: composers, groups: []))
+    viewController?.displayResult(viewModel: Search.ViewModel(modules: [],
+                                                              composers: composers,
+                                                              groups: []))
   }
   
   func presentModules(response: Search.ModuleResponse) {
@@ -53,6 +60,13 @@ class SearchPresenter: SearchPresentationLogic
       return mmd
     }
     
-    viewController?.displayModules(viewModel: Search.ViewModel(modules: mods, composers: [], groups: []))
+    viewController?.displayResult(viewModel: Search.ViewModel(modules: mods,
+                                                              composers: [],
+                                                              groups: []))
+  }
+  
+  func presentDownloadProgress(response: Search.ProgressResponse) {
+    let vm = Search.ProgressResponse.ViewModel(progress: response.progress)
+    viewController?.displayDownloadProgress(viewModel: vm)
   }
 }
