@@ -33,7 +33,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   
   @IBOutlet weak var textButton:UIButton!
   @IBOutlet weak var vizButton:UIButton!
-  
+  @IBOutlet weak var playButton: UIButton!
   @IBOutlet weak var vizView:SKView!
   
   var hasUpdatedVisibility:Bool = false
@@ -267,6 +267,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     if modulePlayer.status == .playing {
       startPlaybackTimer()
     }
+    playButton.isSelected = modulePlayer.status == .paused
   }
   
   
@@ -319,6 +320,7 @@ extension VisualizerViewController: ModulePlayerObserver {
   
   func statusChanged(status: PlayerStatus) {
     log.debug("")
+    playButton.isSelected = status == .paused
     if status == .playing {
       startPlaybackTimer()
     }

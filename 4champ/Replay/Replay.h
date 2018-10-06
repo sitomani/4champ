@@ -9,9 +9,23 @@
 
 @protocol ReplayControl <NSObject>
 // Control API
-- (bool) loadModule:(NSString*)path; //loads module from given path. Path extension must identify module format
-- (void) setCurrentPosition: (int)newPosition; //sets current position in current mod.
-- (void) setStereoSeparation:(NSInteger)value; //set stereo separation 0-200
+/**
+ Loads module for playback from given path.
+ @param path identifies the module file. Path extension must identify format
+ */
+- (bool) loadModule:(NSString*)path;
+
+/**
+ Sets current position in the playing module
+ @param newPosition the new position in range 0 - moduleLength
+ */
+- (void) setCurrentPosition: (int)newPosition;
+ 
+/**
+ Sets stereo separation of the module playback
+@param value integer in range 0-200
+ */
+- (void) setStereoSeparation:(NSInteger)value;
 @end
 
 @protocol ReplayInformation <NSObject>
@@ -32,6 +46,10 @@
 @class Replay;
 
 @protocol ReplayStreamDelegate <NSObject>
+/**
+ Called when replay reaches end of the module
+ @param replay identifies the Replay object
+ */
 - (void) reachedEndOfStream:(Replay*)replay;
 @end
 

@@ -23,6 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     Appearance.setup()
     setupLogging()
     setupAVSession()
+    cleanupFiles()
     return true
   }
   
@@ -51,13 +52,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   func applicationDidBecomeActive(_ application: UIApplication) {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    //Start receiving remote control events
+    UIApplication.shared.beginReceivingRemoteControlEvents()
   }
 
   func applicationWillTerminate(_ application: UIApplication) {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
   }
   
+  /// Set up SwiftyBeaver logging
   func setupLogging() {
     let console = ConsoleDestination()  // log to Xcode Console
     // use custom format and set console output to short time, log level & message
@@ -76,6 +79,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     log.info("Logger initialized")
   }
 
-
+  /// Until local module database support has been implemented,
+  /// clean the previous session files
+  func cleanupFiles() {
+    log.debug("")
+    let fileManager = FileManager.default
+    let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    do {
+      let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
+      for url in fileURLs {
+        log.debug(url)
+        do {
+          try FileManager.default.removeItem(at: url)
+        } catch {
+          log.error("Deleting file at \(url) failed, \(error)")
+        }
+      }
+    } catch {
+      print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
+    }
+  }
 }
 

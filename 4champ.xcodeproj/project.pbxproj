@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4535A4642114BB2D005FBB8B /* SearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A45E2114BB2D005FBB8B /* SearchPresenter.swift */; };
+		4535A4662114BB2D005FBB8B /* SearchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A4602114BB2D005FBB8B /* SearchRouter.swift */; };
+		4535A4672114BB2D005FBB8B /* SearchModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A4612114BB2D005FBB8B /* SearchModels.swift */; };
+		4535A4682114BB2D005FBB8B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A4622114BB2D005FBB8B /* SearchViewController.swift */; };
+		4535A4692114BB2D005FBB8B /* SearchInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A4632114BB2D005FBB8B /* SearchInteractor.swift */; };
+		4535A46B2114C335005FBB8B /* ModuleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A46A2114C335005FBB8B /* ModuleCell.swift */; };
 		4543983420D0344F00991ADC /* AboutRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543982E20D0344F00991ADC /* AboutRouter.swift */; };
 		4543983620D0344F00991ADC /* AboutInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543983020D0344F00991ADC /* AboutInteractor.swift */; };
 		4543983720D0344F00991ADC /* AboutModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543983120D0344F00991ADC /* AboutModels.swift */; };
@@ -16,7 +22,14 @@
 		4543984E20D0366E00991ADC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4543983D20D0366E00991ADC /* InfoPlist.strings */; };
 		4543984F20D0366E00991ADC /* String+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543984820D0366E00991ADC /* String+extension.swift */; };
 		4543985120D03C1600991ADC /* AboutHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543985020D03C1500991ADC /* AboutHeaderView.swift */; };
+		454F5205215D20F3007011F3 /* ModuleFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F5204215D20F3007011F3 /* ModuleFetcher.swift */; };
+		454F5207215D3FF1007011F3 /* ComposerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F5206215D3FF1007011F3 /* ComposerCell.swift */; };
+		454F5209215D4587007011F3 /* GroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F5208215D4587007011F3 /* GroupCell.swift */; };
+		454F520C21610E94007011F3 /* ModuleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 454F520B21610E94007011F3 /* ModuleCell.xib */; };
+		454F520E21610F70007011F3 /* GroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 454F520D21610F70007011F3 /* GroupCell.xib */; };
+		454F521021610F83007011F3 /* ComposerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 454F520F21610F83007011F3 /* ComposerCell.xib */; };
 		455CC0A62104A0E20094A5D3 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */; };
+		4569AC8B21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4569AC8A21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift */; };
 		45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */; };
 		45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F420FF2F6600794147 /* RESTRoutes.swift */; };
 		45AA910220FF36C200794147 /* Replay.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F720FF36C200794147 /* Replay.m */; };
@@ -47,6 +60,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4535A45E2114BB2D005FBB8B /* SearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPresenter.swift; sourceTree = "<group>"; };
+		4535A4602114BB2D005FBB8B /* SearchRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRouter.swift; sourceTree = "<group>"; };
+		4535A4612114BB2D005FBB8B /* SearchModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModels.swift; sourceTree = "<group>"; };
+		4535A4622114BB2D005FBB8B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		4535A4632114BB2D005FBB8B /* SearchInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInteractor.swift; sourceTree = "<group>"; };
+		4535A46A2114C335005FBB8B /* ModuleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleCell.swift; sourceTree = "<group>"; };
 		4543982E20D0344F00991ADC /* AboutRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutRouter.swift; sourceTree = "<group>"; };
 		4543983020D0344F00991ADC /* AboutInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutInteractor.swift; sourceTree = "<group>"; };
 		4543983120D0344F00991ADC /* AboutModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutModels.swift; sourceTree = "<group>"; };
@@ -69,7 +88,14 @@
 		4543984B20D0366E00991ADC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4543984C20D0366E00991ADC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4543985020D03C1500991ADC /* AboutHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHeaderView.swift; sourceTree = "<group>"; };
+		454F5204215D20F3007011F3 /* ModuleFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleFetcher.swift; sourceTree = "<group>"; };
+		454F5206215D3FF1007011F3 /* ComposerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerCell.swift; sourceTree = "<group>"; };
+		454F5208215D4587007011F3 /* GroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCell.swift; sourceTree = "<group>"; };
+		454F520B21610E94007011F3 /* ModuleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ModuleCell.xib; sourceTree = "<group>"; };
+		454F520D21610F70007011F3 /* GroupCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupCell.xib; sourceTree = "<group>"; };
+		454F520F21610F83007011F3 /* ComposerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComposerCell.xib; sourceTree = "<group>"; };
 		455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
+		4569AC8A21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchBar+ActivityIndicator.swift"; sourceTree = "<group>"; };
 		45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModulePlayer.swift; sourceTree = "<group>"; };
 		45AA90F420FF2F6600794147 /* RESTRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTRoutes.swift; sourceTree = "<group>"; };
 		45AA90F720FF36C200794147 /* Replay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Replay.m; sourceTree = "<group>"; };
@@ -121,9 +147,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4535A45D2114BB0A005FBB8B /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				4535A45E2114BB2D005FBB8B /* SearchPresenter.swift */,
+				4535A4602114BB2D005FBB8B /* SearchRouter.swift */,
+				4535A4612114BB2D005FBB8B /* SearchModels.swift */,
+				4535A4622114BB2D005FBB8B /* SearchViewController.swift */,
+				4535A4632114BB2D005FBB8B /* SearchInteractor.swift */,
+				4569AC8A21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		4543982C20D0344F00991ADC /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				4569AC8E21654AC6000EDFDC /* SharedUI */,
+				4535A45D2114BB0A005FBB8B /* Search */,
 				45AA91132100ECE600794147 /* Visualizer */,
 				45D61F4A20E1644100869814 /* Radio */,
 				4543982D20D0344F00991ADC /* About */,
@@ -156,10 +197,24 @@
 			path = l13n;
 			sourceTree = "<group>";
 		};
+		4569AC8E21654AC6000EDFDC /* SharedUI */ = {
+			isa = PBXGroup;
+			children = (
+				4535A46A2114C335005FBB8B /* ModuleCell.swift */,
+				454F5206215D3FF1007011F3 /* ComposerCell.swift */,
+				454F5208215D4587007011F3 /* GroupCell.swift */,
+				454F520B21610E94007011F3 /* ModuleCell.xib */,
+				454F520D21610F70007011F3 /* GroupCell.xib */,
+				454F520F21610F83007011F3 /* ComposerCell.xib */,
+			);
+			path = SharedUI;
+			sourceTree = "<group>";
+		};
 		45AA90F320FF2F4200794147 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
 				45AA90F420FF2F6600794147 /* RESTRoutes.swift */,
+				454F5204215D20F3007011F3 /* ModuleFetcher.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -356,8 +411,11 @@
 			files = (
 				45AA910420FF36C200794147 /* LICENSE in Resources */,
 				45D392B120B1DDEE00EEF4E3 /* LaunchScreen.storyboard in Resources */,
+				454F520C21610E94007011F3 /* ModuleCell.xib in Resources */,
+				454F520E21610F70007011F3 /* GroupCell.xib in Resources */,
 				4543984D20D0366E00991ADC /* Localizable.strings in Resources */,
 				45D392AE20B1DDEE00EEF4E3 /* Assets.xcassets in Resources */,
+				454F521021610F83007011F3 /* ComposerCell.xib in Resources */,
 				45D392AC20B1DDEC00EEF4E3 /* Main.storyboard in Resources */,
 				4543984E20D0366E00991ADC /* InfoPlist.strings in Resources */,
 			);
@@ -392,24 +450,34 @@
 				4543984F20D0366E00991ADC /* String+extension.swift in Sources */,
 				45AA91162100ECE600794147 /* VisualizerViewController.swift in Sources */,
 				45AA91102100C48500794147 /* MainViewController.swift in Sources */,
+				4535A4672114BB2D005FBB8B /* SearchModels.swift in Sources */,
 				4543983820D0344F00991ADC /* AboutPresenter.swift in Sources */,
 				45AA910E20FF5E8A00794147 /* Structs.swift in Sources */,
 				45D61F5120E1647300869814 /* RadioPresenter.swift in Sources */,
+				4535A4662114BB2D005FBB8B /* SearchRouter.swift in Sources */,
+				4535A4642114BB2D005FBB8B /* SearchPresenter.swift in Sources */,
+				454F5205215D20F3007011F3 /* ModuleFetcher.swift in Sources */,
 				45D61F5320E1647300869814 /* RadioRouter.swift in Sources */,
+				4535A4682114BB2D005FBB8B /* SearchViewController.swift in Sources */,
 				45D61F5B20E1780D00869814 /* Appearance.swift in Sources */,
 				4543983720D0344F00991ADC /* AboutModels.swift in Sources */,
+				4535A46B2114C335005FBB8B /* ModuleCell.swift in Sources */,
 				4543983420D0344F00991ADC /* AboutRouter.swift in Sources */,
 				4543983920D0344F00991ADC /* AboutViewController.swift in Sources */,
 				45D61F5520E1647300869814 /* RadioViewController.swift in Sources */,
 				45D61F5420E1647300869814 /* RadioModels.swift in Sources */,
 				45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */,
+				4535A4692114BB2D005FBB8B /* SearchInteractor.swift in Sources */,
 				45AA910220FF36C200794147 /* Replay.m in Sources */,
 				45AA911A2100EF1900794147 /* AmpSlider.swift in Sources */,
 				45AA910320FF36C200794147 /* hvl_replay.cpp in Sources */,
 				45D61F5920E1695200869814 /* UIUtils.swift in Sources */,
+				454F5207215D3FF1007011F3 /* ComposerCell.swift in Sources */,
 				4543985120D03C1600991ADC /* AboutHeaderView.swift in Sources */,
 				45D392A520B1DDEC00EEF4E3 /* AppDelegate.swift in Sources */,
+				4569AC8B21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift in Sources */,
 				45AA911B2100EF1900794147 /* AmpVizScene.swift in Sources */,
+				454F5209215D4587007011F3 /* GroupCell.swift in Sources */,
 				45AA91122100D13300794147 /* NowPlayingView.swift in Sources */,
 				45AA910620FF36C200794147 /* MPTReplayer.m in Sources */,
 				4543983620D0344F00991ADC /* AboutInteractor.swift in Sources */,
