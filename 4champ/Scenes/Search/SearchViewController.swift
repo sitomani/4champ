@@ -163,7 +163,7 @@ extension SearchViewController: UISearchBarDelegate {
       tableView?.reloadData()
     } else {
       searchBar?.searching = true
-      perform(#selector(triggerSearch), with: nil, afterDelay: Constants.SearchDelay)
+      perform(#selector(triggerSearch), with: nil, afterDelay: Constants.searchDelay)
     }
   }
   

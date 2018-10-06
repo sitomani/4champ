@@ -133,7 +133,7 @@ class ModulePlayer: NSObject {
     }
     renderer.stop()
     renderer.loadModule(path)
-    renderer.setStereoSeparation(100)
+    renderer.setStereoSeparation(Constants.stereoSeparationDefault)
     currentModule = playlist[at]
     renderer.play()
     status = .playing
@@ -190,6 +190,7 @@ class ModulePlayer: NSObject {
   
   /// Handle audio route change notifications
   @objc func handleRouteChange(notification: Notification) {
+    log.debug("")
     guard let userInfo = notification.userInfo,
       let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
       let reason = AVAudioSessionRouteChangeReason(rawValue:reasonValue) else {
@@ -202,6 +203,7 @@ class ModulePlayer: NSObject {
       if let previousRoute =
         userInfo[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription {
         for output in previousRoute.outputs where output.portType == AVAudioSessionPortHeadphones {
+          log.info("User disconnected headphones")
           pause()
           break
         }
@@ -213,6 +215,7 @@ class ModulePlayer: NSObject {
 
 extension ModulePlayer: ReplayStreamDelegate {
   func reachedEnd(ofStream replay: Replay!) {
+    log.debug("")
     DispatchQueue.main.async {
       self.playNext()
     }

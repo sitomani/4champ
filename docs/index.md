@@ -2,9 +2,11 @@
 
 ### 4 October 2018 Bounty Bear Is Searching...
 
-Over the past weeks I've dedicated a couple of nights for 4champ search, and now it is ready to be shipped. Shipping here means merging from my development branch to master, since I'm still not taking my chances with Apple Review. That day is going to dawn but not yet.
+Over the past weeks I've dedicated a couple of evenings for 4champ, and the search feeature is ready to be shipped. Shipping here means merging from my development branch to master, since I'm still not taking my chances with Apple Review. That day is going to dawn but not yet.
 
 When I originally started working with 4champ in 2012 it only supported search for module by name of the mod. The first AppStore release back in 2013 had  search by module or composer name. Later I added group search. The release 2.1 that did not pass Apple Review introduced search in module texts (i.e. sample / instrument names). All these search options are now available in the 4champ github repo master branch.
+
+In addition to the search support, some minor improvements were made on the playback handling with headphones: The default stereo separation value is set to more headphone-friendly value, and playback is paused now when headphones are disconnected.
 
 ### 23 July 2018 Power on!
 In the scorching heat wave we had in Finland in July 2018 it was too hot to go out, so I sat down near the air conditioning and put together the Radio feature basics. The option to store modules locally is not implemented yet, but you can listen to two 4champ radio channels: *All* plays tunes from the entire collection (as of today 149123 modules). *New* Plays most recently added tunes (which does not mean that they're new - most of the additions are older ones, but often around Demoscene party weekends there is a set of all fresh modules too). In addition to the basic audio playback, you can also now see volume bars visualisation and module internal texts by tapping the now playing area at the bottom of the screen when the radio is on. Yay!

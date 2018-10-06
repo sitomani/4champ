@@ -137,7 +137,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   /// and when current module changes, to keep the buffer populated
   private func fillBuffer() {
     log.debug("buffer length \(modulePlayer.playlist.count)")
-    if Constants.RadioBufferLen > modulePlayer.playlist.count {
+    if Constants.radioBufferLen > modulePlayer.playlist.count {
       let id = getNextModuleId()
       
       let fetcher = ModuleFetcher.init(delegate: self)
