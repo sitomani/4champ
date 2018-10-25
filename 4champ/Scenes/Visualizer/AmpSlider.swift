@@ -37,8 +37,8 @@ class AmpSlider: UISlider {
         maxImage = maxImage.stretchableImage(withLeftCapWidth: 10, topCapHeight: 0)
         
         // Setup the FX slider
-        self.setMinimumTrackImage(minImage, for: UIControlState())
-        self.setMaximumTrackImage(maxImage, for: UIControlState())
+        self.setMinimumTrackImage(minImage, for: UIControl.State())
+        self.setMaximumTrackImage(maxImage, for: UIControl.State())
         self.updatePlayhead("0.00")
         
         let gr:UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(sliderTapped))
@@ -48,7 +48,7 @@ class AmpSlider: UISlider {
     
     func updatePlayhead(_ txt:String) {
         let myString: NSString = txt as NSString
-        let txtSize: CGSize = myString.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12.0)])
+        let txtSize: CGSize = myString.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0)])
         let headSize: CGSize = CGSize(width: txtSize.width+5, height: txtSize.height)
         UIGraphicsBeginImageContextWithOptions(headSize, true, UIScreen.main.scale)
         UIColor(red:0.06, green:0.19, blue:0.25, alpha:1.0).set()
@@ -58,13 +58,13 @@ class AmpSlider: UISlider {
         UIRectFill(CGRect(x: headSize.width-1,y: 4,width: 1,height: headSize.height-6))
         
         let font:UIFont = UIFont.systemFont(ofSize: 11.5)
-        let dict:[NSAttributedStringKey:Any] = [NSAttributedStringKey.font:font, NSAttributedStringKey.foregroundColor:UIColor.white]
+        let dict:[NSAttributedString.Key:Any] = [NSAttributedString.Key.font:font, NSAttributedString.Key.foregroundColor:UIColor.white]
         
         myString.draw(at: CGPoint(x: 3, y: 1), withAttributes: dict)
         let image:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext();
         
-        self.setThumbImage(image, for: UIControlState())
+        self.setThumbImage(image, for: UIControl.State())
         self.setThumbImage(image, for: .highlighted)
     }
     

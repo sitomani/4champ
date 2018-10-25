@@ -79,7 +79,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
     super.viewDidLoad()
     modulePlayer.addPlayerObserver(self)
     registerXibs(in: tableView)
-    tableView?.rowHeight = UITableViewAutomaticDimension
+    tableView?.rowHeight = UITableView.automaticDimension
     tableView?.dataSource = self
     tableView?.delegate = self
     spinner?.isHidden = true
@@ -138,7 +138,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   func displayDownloadProgress(viewModel: Search.ProgressResponse.ViewModel) {
     if viewModel.progress < 1.0 {
       progressBar?.isHidden = false
-      view.bringSubview(toFront: progressBar!)
+      view.bringSubviewToFront(progressBar!)
       progressBar?.progress = viewModel.progress
     } else {
       progressBar?.isHidden = true

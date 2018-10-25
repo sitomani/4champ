@@ -82,7 +82,7 @@ class ModulePlayer: NSObject {
     
     NotificationCenter.default.addObserver(self,
                                    selector: #selector(handleRouteChange),
-                                   name: .AVAudioSessionRouteChange,
+                                   name: AVAudioSession.routeChangeNotification,
                                    object: nil)
   }
   
@@ -193,7 +193,7 @@ class ModulePlayer: NSObject {
     log.debug("")
     guard let userInfo = notification.userInfo,
       let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
-      let reason = AVAudioSessionRouteChangeReason(rawValue:reasonValue) else {
+      let reason = AVAudioSession.RouteChangeReason(rawValue:reasonValue) else {
         return
     }
     
@@ -202,7 +202,7 @@ class ModulePlayer: NSObject {
     case .oldDeviceUnavailable:
       if let previousRoute =
         userInfo[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription {
-        for output in previousRoute.outputs where output.portType == AVAudioSessionPortHeadphones {
+        for output in previousRoute.outputs where output.portType.rawValue == AVAudioSession.Port.headphones.rawValue {
           log.info("User disconnected headphones")
           pause()
           break

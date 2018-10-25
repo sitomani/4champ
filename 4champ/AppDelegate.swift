@@ -17,9 +17,8 @@ let log = SwiftyBeaver.self
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // Override point for customization after application launch.
-    UIApplication.shared.statusBarStyle = .lightContent
     Appearance.setup()
     setupLogging()
     setupAVSession()
@@ -30,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func setupAVSession() {
     let sess = AVAudioSession.sharedInstance()
     do {
-      try sess.setCategory(AVAudioSessionCategoryPlayback)
+      try sess.setCategory(.playback, mode: .default, options: [])
       try sess.setActive(true)
     } catch {
       log.error(error)

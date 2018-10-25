@@ -38,7 +38,7 @@ extension UISearchBar {
           return
         }
         queryField?.clearButtonMode = .never
-        let indicator = UIActivityIndicatorView.init(activityIndicatorStyle: .gray)
+        let indicator = UIActivityIndicatorView.init(style: .gray)
         self.addSubview(indicator)
         indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.rightAnchor.constraint(equalTo: queryField!.rightAnchor, constant: -5).isActive = true

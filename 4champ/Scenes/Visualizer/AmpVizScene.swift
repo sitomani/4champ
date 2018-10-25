@@ -25,7 +25,7 @@ class AmpVolumeBar:SKShapeNode {
         //the drawing stops while a scrollview scrolls
         rlTimer.invalidate()
         rlTimer = Timer.scheduledTimer(timeInterval: 0.017, target: self, selector: #selector(AmpVolumeBar.updateBar), userInfo: nil, repeats: true)
-        RunLoop.current.add(rlTimer, forMode: RunLoopMode.commonModes)
+        RunLoop.current.add(rlTimer, forMode: RunLoop.Mode.common)
     }
     
     func stopDrawing() {

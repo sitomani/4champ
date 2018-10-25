@@ -48,7 +48,7 @@ class MainViewController: UITabBarController {
       self.view.layoutIfNeeded()
     }
     
-    for ctl in self.childViewControllers {
+    for ctl in self.children {
       if let navCtl = ctl as? UINavigationController,
         let firstChild = navCtl.topViewController as? NowPlayingContainer {
         firstChild.toggleNowPlaying(value)

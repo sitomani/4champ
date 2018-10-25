@@ -222,9 +222,9 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     if (favorited) {
       self.saveButton?.isHidden = true;
       animateColLabel(true);
-      self.faveStar?.setImage(UIImage.init(named: "favestar-yellow.png"), for: UIControlState())
+      self.faveStar?.setImage(UIImage.init(named: "favestar-yellow.png"), for: UIControl.State())
     } else {
-      self.faveStar?.setImage(UIImage.init(named: "faves.png"), for: UIControlState())
+      self.faveStar?.setImage(UIImage.init(named: "faves.png"), for: UIControl.State())
     }
   }
   
@@ -234,9 +234,9 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   
   func updateShareStatus(_ shared:Bool) {
     if (shared) {
-      self.shareButton?.setImage(UIImage.init(named: "shareicon_done.png"), for: UIControlState())
+      self.shareButton?.setImage(UIImage.init(named: "shareicon_done.png"), for: UIControl.State())
     } else {
-      self.shareButton?.setImage(UIImage.init(named: "shareicon.png"), for: UIControlState())
+      self.shareButton?.setImage(UIImage.init(named: "shareicon.png"), for: UIControl.State())
     }
   }
   

@@ -73,7 +73,7 @@ class AboutViewController: UIViewController, AboutDisplayLogic
     tableView.dataSource = self
     tableView.delegate = self
     tableView.sectionHeaderHeight = 60
-    tableView.rowHeight = UITableViewAutomaticDimension
+    tableView.rowHeight = UITableView.automaticDimension
     tableView.estimatedRowHeight = 360
     UIUtils.roundCornersInView(tableView)
     navigationItem.title = "AboutView_Title".l13n().uppercased()
