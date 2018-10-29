@@ -49,7 +49,7 @@ class AboutHeaderView: UIButton {
     setTitleColor(UIColor.init(rgb: 0xc6c6c6), for: .normal)
     setTitle("  \(titleKey.l13n())", for: .normal)
     imageView?.contentMode = .scaleAspectFit
-    backgroundColor = UIColor.init(rgb: 0x16538a)
+    backgroundColor = Appearance.ampLightBlueColor
     tintColor = UIColor.init(rgb: 0xc6c6c6);
     if let image = UIImage.init(named: imageKey) {
       
