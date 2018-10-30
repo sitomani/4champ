@@ -15,8 +15,6 @@ class SettingsViewController: UITableViewController, SettingsDisplayLogic {
   var interactor: SettingsBusinessLogic?
   var router: (NSObjectProtocol & SettingsRoutingLogic & SettingsDataPassing)?
 
-  // MARK: Object lifecycle
-  
   override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     setup()
@@ -65,6 +63,11 @@ class SettingsViewController: UITableViewController, SettingsDisplayLogic {
     updateSettings(fetchOnly: true)
   }
   
+  override func viewWillDisappear(_ animated: Bool) {
+    self.updateSettings(fetchOnly: false)
+    super.viewWillDisappear(animated)
+  }
+  
   // MARK: Do something
 
   @IBAction func separationValueChanged(_ sender: UISlider) {
@@ -87,6 +90,8 @@ class SettingsViewController: UITableViewController, SettingsDisplayLogic {
     }
     
     if let stereoCell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 1)) as? SettingsStereoCell {
+      let textFormat = "Settings_StereoSeparation".l13n()
+      stereoCell.title?.text = String.init(format: textFormat, "\(Int(viewModel.stereoSeparation * 100))")
       stereoCell.slider?.value = viewModel.stereoSeparation
     }
   }
@@ -105,5 +110,9 @@ class SettingsViewController: UITableViewController, SettingsDisplayLogic {
     }
     
     return valueBag
+  }
+  
+  override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    view.endEditing(true)
   }
 }

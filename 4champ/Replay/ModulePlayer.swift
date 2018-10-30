@@ -134,7 +134,7 @@ class ModulePlayer: NSObject {
     }
     renderer.stop()
     renderer.loadModule(path)
-    setStereoSeparation(Constants.stereoSeparationDefault)
+    setStereoSeparation(SettingsInteractor().stereoSeparation)
     currentModule = playlist[at]
     renderer.play()
     status = .playing

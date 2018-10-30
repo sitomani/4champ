@@ -344,6 +344,7 @@
                     <tabBarItem key="tabBarItem" title="About" image="about" id="cPa-gy-q4n"/>
                     <navigationItem key="navigationItem" id="VmT-eT-Wn7">
                         <barButtonItem key="rightBarButtonItem" image="settings" id="D9P-ei-TvZ">
+                            <color key="tintColor" red="0.90196078430000004" green="0.90196078430000004" blue="0.90196078430000004" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="Dck-3q-Mtf" kind="show" id="JCZ-OD-tyr"/>
                             </connections>
