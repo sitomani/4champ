@@ -214,7 +214,10 @@ extension SearchViewController: UITableViewDataSource {
     guard let vm = viewModel else { return UITableViewCell() }
     
     let rows = vm.numberOfRows()
-    if pagingRequestActive == false && rows > 30 && indexPath.row > rows - 5 {
+    let pagingIndex = router?.dataStore?.pagingIndex ?? 0
+    if pagingIndex != rows &&
+      pagingRequestActive == false &&
+      rows > 30 && indexPath.row > rows - 5 {
       if let text = searchBar?.text {
         pagingRequestActive = true
         let nextPageRequest = Search.Request(text: text, type: searchScopes[searchBar?.selectedScopeButtonIndex ?? 0], pagingIndex: rows)
