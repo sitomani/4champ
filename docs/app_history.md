@@ -12,7 +12,7 @@ already capable of downloading modules from [amp.dascene.net](amp.dascene.net) a
 
 After getting aqcuianted with Objective-C and iOS I quite promtply got involved a customer project and the development mode 
 for 4champ changed to a leisure time project. Thus it took almost a year to get the 1.0 version published in AppStore in 
-April 2103. By then, I had ditched the Bass library in favor of [libmodplug](https://github.com/Konstanty/libmodplug), as it
+April 2013. By then, I had ditched the Bass library in favor of [libmodplug](https://github.com/Konstanty/libmodplug), as it
 was free and supported more module formats.
 
 During the app development, [Boogie Software Hackfests](https://www.youtube.com/watch?v=FCMmzvXABvY&) have been essential in
