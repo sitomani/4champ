@@ -63,13 +63,13 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
         log.info("\(json.result) \(request.text)")
         self.pagingIndex = request.pagingIndex
         if let modules = try? JSONDecoder().decode(ModuleResult.self, from: json.data!) {
-          self.presenter?.presentModules(response: Search.ModuleResponse(result: modules))
+          self.presenter?.presentModules(response: Search.ModuleResponse(result: modules, text: request.text))
         } else if let composers = try? JSONDecoder().decode(ComposerResult.self, from: json.data!) {
-          self.presenter?.presentComposers(response: Search.ComposerResponse(result: composers))
+          self.presenter?.presentComposers(response: Search.ComposerResponse(result: composers, text: request.text))
         } else if let groups = try? JSONDecoder().decode(GroupResult.self, from: json.data!) {
-          self.presenter?.presentGroups(response: Search.GroupResponse(result: groups))
+          self.presenter?.presentGroups(response: Search.GroupResponse(result: groups, text: request.text))
         } else {
-          self.presenter?.presentModules(response: Search.ModuleResponse(result: []))
+          self.presenter?.presentModules(response: Search.ModuleResponse(result: [], text: request.text))
         }
       } else {
         log.error(String.init(describing: json.error))
@@ -86,7 +86,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
       Alamofire.request(restRequest).validate().responseJSON { (json) in
         if json.result.isSuccess {
           if let modules = try? JSONDecoder().decode(ModuleResult.self, from: json.data!) {
-            self.presenter?.presentModules(response: Search.ModuleResponse(result: modules))
+            self.presenter?.presentModules(response: Search.ModuleResponse(result: modules, text: ""))
           }
         }
       }
@@ -95,7 +95,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
       Alamofire.request(restRequest).validate().responseJSON { json in
         if json.result.isSuccess {
           if let composers = try? JSONDecoder().decode(ComposerResult.self, from: json.data!) {
-            self.presenter?.presentComposers(response: Search.ComposerResponse(result: composers))
+            self.presenter?.presentComposers(response: Search.ComposerResponse(result: composers, text:""))
           }
         }
       }

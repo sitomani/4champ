@@ -23,7 +23,7 @@
  
 /**
  Sets stereo separation of the module playback
-@param value integer in range 0-200
+@param value integer in range 0-100. Actual Replay implementation maps to correct scale
  */
 - (void) setStereoSeparation:(NSInteger)value;
 @end

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -343,7 +342,14 @@
                         <viewLayoutGuide key="safeArea" id="O1u-W8-tvY"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="About" image="about" id="cPa-gy-q4n"/>
-                    <navigationItem key="navigationItem" id="VmT-eT-Wn7"/>
+                    <navigationItem key="navigationItem" id="VmT-eT-Wn7">
+                        <barButtonItem key="rightBarButtonItem" image="settings" id="D9P-ei-TvZ">
+                            <color key="tintColor" red="0.90196078430000004" green="0.90196078430000004" blue="0.90196078430000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <segue destination="Dck-3q-Mtf" kind="show" id="JCZ-OD-tyr"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="bottomAnchor" destination="0vN-Ot-yCg" id="stA-x1-Ojg"/>
                         <outlet property="tableView" destination="NXf-71-v6a" id="qnI-MK-nSr"/>
@@ -352,6 +358,62 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3354" y="422"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="0q9-07-UHx">
+            <objects>
+                <tableViewController id="Dck-3q-Mtf" customClass="SettingsViewController" customModule="ampplayer" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="tj0-zX-ReV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection id="ceT-QF-dBR">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="9qc-Zj-Ufm" customClass="SettingsStereoCell" customModule="ampplayer" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="35" width="375" height="94"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9qc-Zj-Ufm" id="qXY-DG-mHY">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="93.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="30" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="h1h-Vc-B2i">
+                                                    <rect key="frame" x="14" y="53" width="347" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="separationValueChanged:" destination="Dck-3q-Mtf" eventType="valueChanged" id="UFH-Gr-VvA"/>
+                                                    </connections>
+                                                </slider>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stereo separation (70%)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xmM-Qc-cXa">
+                                                    <rect key="frame" x="16" y="16" width="359" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="xmM-Qc-cXa" secondAttribute="trailing" id="7m9-sc-WEd"/>
+                                                <constraint firstItem="xmM-Qc-cXa" firstAttribute="top" secondItem="qXY-DG-mHY" secondAttribute="topMargin" constant="5" id="OYl-Lh-nfv"/>
+                                                <constraint firstItem="xmM-Qc-cXa" firstAttribute="leading" secondItem="qXY-DG-mHY" secondAttribute="leadingMargin" id="brt-tB-k6y"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="slider" destination="h1h-Vc-B2i" id="FB1-tu-d8f"/>
+                                            <outlet property="title" destination="xmM-Qc-cXa" id="8at-Nt-eCD"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="Dck-3q-Mtf" id="1cL-1s-Ufm"/>
+                            <outlet property="delegate" destination="Dck-3q-Mtf" id="I5D-zd-XYD"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tW7-s3-JVP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4236" y="421.43928035982015"/>
         </scene>
         <!--Visualizer-->
         <scene sceneID="ILg-dh-n4D">
@@ -401,7 +463,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eUK-63-JGL">
-                                        <rect key="frame" x="64" y="83" width="60" height="45"/>
+                                        <rect key="frame" x="63.5" y="83" width="60" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="h4i-fk-xr4"/>
                                             <constraint firstAttribute="height" constant="45" id="k3a-72-BJc"/>
@@ -431,7 +493,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="29I-XP-0Th">
-                                        <rect key="frame" x="158" y="83" width="60" height="45"/>
+                                        <rect key="frame" x="157.5" y="83" width="60" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="OBs-YU-MJC"/>
                                             <constraint firstAttribute="height" constant="45" id="RGq-PJ-0xO"/>
@@ -453,7 +515,7 @@
                                         </connections>
                                     </slider>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fef-VO-9Dy">
-                                        <rect key="frame" x="252" y="83" width="60" height="45"/>
+                                        <rect key="frame" x="251.5" y="83" width="60" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="4DT-vu-0JI"/>
                                             <constraint firstAttribute="width" constant="60" id="6pW-sI-IzV"/>
@@ -798,7 +860,7 @@
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </tableView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="8wg-n4-mQe">
-                                <rect key="frame" x="178" y="130" width="20" height="20"/>
+                                <rect key="frame" x="177.5" y="130" width="20" height="20"/>
                             </activityIndicatorView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ymZ-1X-6xh">
                                 <rect key="frame" x="0.0" y="616" width="375" height="2"/>
@@ -855,6 +917,7 @@
         <image name="radio" width="30" height="30"/>
         <image name="radioskip" width="35" height="35"/>
         <image name="search" width="30" height="30"/>
+        <image name="settings" width="22" height="22"/>
         <image name="shareicon" width="20" height="20"/>
         <image name="vizbars" width="22" height="22"/>
         <image name="vizbars_disabled" width="22" height="22"/>

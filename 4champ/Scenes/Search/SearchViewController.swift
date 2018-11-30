@@ -90,6 +90,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
     // Based on the context, either show search bar (root level search) or
     // hide it (subsequent searchs on group/composer)
     if shouldDisplaySearchBar {
+      searchBar?.showsScopeBar = false
       searchBar?.delegate = self
       searchBar?.scopeButtonTitles = [SearchType.module.l13n(), SearchType.composer.l13n(), SearchType.group.l13n(), SearchType.meta.l13n()]
     } else {
@@ -105,12 +106,23 @@ class SearchViewController: UIViewController, SearchDisplayLogic
     super.viewWillAppear(animated)
     if shouldDisplaySearchBar {
       navigationItem.title = "TabBar_Search".l13n()
+      let text = searchBar?.text ?? ""
+      navigationController?.setNavigationBarHidden(text.count != 0, animated: animated)
+    } else {
+      navigationController?.setNavigationBarHidden(false, animated: animated)
     }
-    navigationController?.setNavigationBarHidden(shouldDisplaySearchBar, animated: false)
     self.statusChanged(status: modulePlayer.status)
   }
   
+  override func viewWillDisappear(_ animated: Bool) {
+    if searchBar?.text?.count == 0 {
+      navigationController?.setNavigationBarHidden(false, animated: animated)
+      searchBar?.showsScopeBar = false
+    }
+  }
+  
   deinit {
+    log.verbose("")
     modulePlayer.removePlayerObserver(self)
   }
   
@@ -118,6 +130,11 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   func displayResult(viewModel: Search.ViewModel) {
     log.debug("")
     pagingRequestActive = false
+    if let query = searchBar?.text, shouldDisplaySearchBar, query != viewModel.text {
+      log.info("Search request result in after change in query. Canceling display")
+      return
+    }
+
     if let pi = router?.dataStore?.pagingIndex, pi > 0 {
       log.debug("Appending to model")
       self.viewModel?.composers.append(contentsOf: viewModel.composers)
@@ -152,6 +169,11 @@ extension SearchViewController: UISearchBarDelegate {
     prepareSearch(keyword: searchText)
   }
   
+  func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+    searchBar.showsScopeBar = true
+    navigationController?.setNavigationBarHidden(true, animated: true)
+  }
+  
   func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
     prepareSearch(keyword: searchBar.text ?? "")
   }
@@ -159,7 +181,8 @@ extension SearchViewController: UISearchBarDelegate {
   private func prepareSearch(keyword: String) {
     NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(triggerSearch), object: nil)
     if keyword.count == 0 {
-      viewModel = Search.ViewModel(modules: [], composers: [], groups: [])
+      searchBar?.searching = false
+      viewModel = Search.ViewModel(modules: [], composers: [], groups: [], text:"")
       tableView?.reloadData()
     } else {
       searchBar?.searching = true
@@ -197,7 +220,10 @@ extension SearchViewController: UITableViewDataSource {
     guard let vm = viewModel else { return UITableViewCell() }
     
     let rows = vm.numberOfRows()
-    if pagingRequestActive == false && rows > 30 && indexPath.row > rows - 5 {
+    let pagingIndex = router?.dataStore?.pagingIndex ?? 0
+    if pagingIndex != rows &&
+      pagingRequestActive == false &&
+      rows > 30 && indexPath.row > rows - 5 {
       if let text = searchBar?.text {
         pagingRequestActive = true
         let nextPageRequest = Search.Request(text: text, type: searchScopes[searchBar?.selectedScopeButtonIndex ?? 0], pagingIndex: rows)

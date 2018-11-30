@@ -32,7 +32,8 @@
 }
 
 - (void) setStereoSeparation:(NSInteger)value {
-  openmpt_module_set_render_param(currentOMPTFile, OPENMPT_MODULE_RENDER_STEREOSEPARATION_PERCENT, (int32_t)value);
+  int newValue = (int)value * 2; // (parameter range 0-100, mpt range 0-200)
+  openmpt_module_set_render_param(currentOMPTFile, OPENMPT_MODULE_RENDER_STEREOSEPARATION_PERCENT, (int32_t)newValue);
 }
 
 - (int) currentPosition {

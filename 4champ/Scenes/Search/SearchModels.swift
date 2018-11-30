@@ -36,20 +36,24 @@ enum Search
 
   struct ModuleResponse {
     var result: [SearchResultModule]
+    var text: String
   }
   
   struct ComposerResponse {
     var result: [SearchResultComposer]
+    var text: String
   }
 
   struct GroupResponse {
     var result: [LabelHref]
+    var text: String
   }
   
   struct ViewModel {
     var modules: [MMD]
     var composers: [ComposerInfo]
     var groups: [GroupInfo]
+    var text: String
   }
 }
 

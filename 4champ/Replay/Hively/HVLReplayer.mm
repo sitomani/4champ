@@ -99,7 +99,7 @@ static int iHivelyBufPos = 0;
 }
 
 - (void) setStereoSeparation:(NSInteger)value {
-    int sep = ceil(value/200 * 4);
+    int sep = ceil(value/100 * 4);
     currentHVLtune->ht_defstereo = sep;
     //no effect during playback.
 }

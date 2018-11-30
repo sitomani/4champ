@@ -79,6 +79,7 @@ class ModulePlayer: NSObject {
     super.init()
     renderer.initAudio()
     renderer.streamDelegate = self
+    renderer.setStereoSeparation(SettingsInteractor().stereoSeparation)
     
     NotificationCenter.default.addObserver(self,
                                    selector: #selector(handleRouteChange),
@@ -133,10 +134,19 @@ class ModulePlayer: NSObject {
     }
     renderer.stop()
     renderer.loadModule(path)
-    renderer.setStereoSeparation(Constants.stereoSeparationDefault)
+    setStereoSeparation(SettingsInteractor().stereoSeparation)
     currentModule = playlist[at]
     renderer.play()
     status = .playing
+  }
+  
+  func setStereoSeparation(_ separation: Int) {
+    var newValue = separation
+    if separation < 0 || separation > 100 {
+      log.warning("Separation out of bounds, using default value")
+      newValue = Constants.stereoSeparationDefault
+    }
+    renderer.setStereoSeparation(newValue)
   }
   
   /// Plays the next module in the current playlist. If there are no more modules,

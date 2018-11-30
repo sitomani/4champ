@@ -10,7 +10,7 @@ import Foundation
 struct Constants {
   static let radioBufferLen = 3 // Length of the radio buffer
   static let searchDelay = 0.3  // Type wait delay before search is triggered
-  static let stereoSeparationDefault = 100 // Default stereo separation value for playback (0-200)
+  static let stereoSeparationDefault: Int = 40 // Default stereo separation value for playback (0-100)
 }
 
 struct MMD {
