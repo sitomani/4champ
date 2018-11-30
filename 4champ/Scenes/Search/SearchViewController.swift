@@ -130,6 +130,11 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   func displayResult(viewModel: Search.ViewModel) {
     log.debug("")
     pagingRequestActive = false
+    if let query = searchBar?.text, shouldDisplaySearchBar, query != viewModel.text {
+      log.info("Search request result in after change in query. Canceling display")
+      return
+    }
+
     if let pi = router?.dataStore?.pagingIndex, pi > 0 {
       log.debug("Appending to model")
       self.viewModel?.composers.append(contentsOf: viewModel.composers)
@@ -176,7 +181,8 @@ extension SearchViewController: UISearchBarDelegate {
   private func prepareSearch(keyword: String) {
     NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(triggerSearch), object: nil)
     if keyword.count == 0 {
-      viewModel = Search.ViewModel(modules: [], composers: [], groups: [])
+      searchBar?.searching = false
+      viewModel = Search.ViewModel(modules: [], composers: [], groups: [], text:"")
       tableView?.reloadData()
     } else {
       searchBar?.searching = true

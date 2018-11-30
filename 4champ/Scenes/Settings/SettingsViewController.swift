@@ -85,28 +85,19 @@ class SettingsViewController: UITableViewController, SettingsDisplayLogic {
   }
   
   func displaySettings(viewModel: Settings.Update.ValueBag) {
-    if let domainCell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 0)) as? SettingsDomainCell {
-      domainCell.domainNameField?.text = viewModel.domainName
-    }
-    
-    if let stereoCell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 1)) as? SettingsStereoCell {
+    if let stereoCell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 0)) as? SettingsStereoCell {
       let textFormat = "Settings_StereoSeparation".l13n()
-      stereoCell.title?.text = String.init(format: textFormat, "\(Int(viewModel.stereoSeparation * 100))")
-      stereoCell.slider?.value = viewModel.stereoSeparation
+      stereoCell.title?.text = String.init(format: textFormat, "\(viewModel.stereoSeparation)")
+      stereoCell.slider?.value = Float(viewModel.stereoSeparation)
     }
   }
   
   private func buildValueBag() -> Settings.Update.ValueBag {
-    var valueBag = Settings.Update.ValueBag(domainName: "", stereoSeparation: 0)
-    
-    if let domainCell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 0)) as? SettingsDomainCell,
-      let domainName = domainCell.domainNameField?.text {
-      valueBag.domainName = domainName
-    }
-    
-    if let stereoCell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 1)) as? SettingsStereoCell,
+    var valueBag = Settings.Update.ValueBag(stereoSeparation: 0)
+        
+    if let stereoCell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 0)) as? SettingsStereoCell,
       let separation = stereoCell.slider?.value {
-      valueBag.stereoSeparation = separation
+      valueBag.stereoSeparation = Int(separation)
     }
     
     return valueBag

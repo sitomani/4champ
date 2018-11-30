@@ -368,57 +368,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
-                            <tableViewSection id="WwL-Og-qgH">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="196" id="7Qk-Wy-Xgc" customClass="SettingsDomainCell" customModule="ampplayer" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="35" width="375" height="196"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7Qk-Wy-Xgc" id="H8X-Du-Kch">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="195.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Xl-ff-yph">
-                                                    <rect key="frame" x="16" y="16" width="343" height="122"/>
-                                                    <string key="text">In order to download modules for local playback, you need to type in the domain name of Amiga Music Preservation website below. This indicates that you are agreeing to the rules of the service as specified at http://amp.dascene.net/faq.php</string>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="AMP domain name without protocol prefix" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cPe-dZ-MiE">
-                                                    <rect key="frame" x="16" y="146" width="343" height="34"/>
-                                                    <nil key="textColor"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" smartInsertDeleteType="no" textContentType="url"/>
-                                                </textField>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <constraints>
-                                                <constraint firstItem="cPe-dZ-MiE" firstAttribute="trailing" secondItem="H8X-Du-Kch" secondAttribute="trailingMargin" id="1ly-Ms-9W5"/>
-                                                <constraint firstItem="8Xl-ff-yph" firstAttribute="leading" secondItem="H8X-Du-Kch" secondAttribute="leadingMargin" id="7Mk-96-p2e"/>
-                                                <constraint firstItem="cPe-dZ-MiE" firstAttribute="leading" secondItem="H8X-Du-Kch" secondAttribute="leadingMargin" id="9Cj-F2-ocg"/>
-                                                <constraint firstItem="cPe-dZ-MiE" firstAttribute="top" secondItem="8Xl-ff-yph" secondAttribute="bottom" constant="8" id="Apc-qF-pNv"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="cPe-dZ-MiE" secondAttribute="bottom" constant="5" id="BJW-VA-rAI"/>
-                                                <constraint firstItem="8Xl-ff-yph" firstAttribute="top" secondItem="H8X-Du-Kch" secondAttribute="topMargin" constant="5" id="icy-Id-krO"/>
-                                                <constraint firstItem="8Xl-ff-yph" firstAttribute="trailing" secondItem="H8X-Du-Kch" secondAttribute="trailingMargin" id="tDD-UQ-nMG"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="domainNameField" destination="cPe-dZ-MiE" id="7l7-HL-R2J"/>
-                                            <outlet property="title" destination="8Xl-ff-yph" id="nkc-kj-SHX"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
                             <tableViewSection id="ceT-QF-dBR">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="9qc-Zj-Ufm" customClass="SettingsStereoCell" customModule="ampplayer" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="267" width="375" height="94"/>
+                                        <rect key="frame" x="0.0" y="35" width="375" height="94"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9qc-Zj-Ufm" id="qXY-DG-mHY">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="93.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.69999998807907104" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="h1h-Vc-B2i">
+                                                <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="30" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="h1h-Vc-B2i">
                                                     <rect key="frame" x="14" y="53" width="347" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <connections>

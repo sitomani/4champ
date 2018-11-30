@@ -11,8 +11,7 @@ import UIKit
 enum Settings {
   enum Update {
     struct ValueBag {
-      var domainName: String
-      var stereoSeparation: Float
+      var stereoSeparation: Int
     }
   }
 }

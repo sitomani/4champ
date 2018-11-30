@@ -14,8 +14,7 @@ protocol SettingsBusinessLogic
 
 protocol SettingsDataStore
 {
-  var domain: String { get set }
-  var stereoSeparation: Float { get set }
+  var stereoSeparation: Int { get set }
 }
 
 class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore
@@ -28,23 +27,12 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore
   
   var presenter: SettingsPresentationLogic?
   
-  var domain: String {
-    set {
-      UserDefaults.standard.set(newValue, forKey: SettingKeys.domainName)
-    }
-    get {
-      if let value = UserDefaults.standard.value(forKey: SettingKeys.domainName) as? String {
-        return value
-      }
-      return ""
-    }
-  }
-  var stereoSeparation: Float {
+  var stereoSeparation: Int {
     set {
       UserDefaults.standard.set(newValue, forKey: SettingKeys.stereoSeparation)
     }
     get {
-      if let value = UserDefaults.standard.value(forKey: SettingKeys.stereoSeparation) as? Float {
+      if let value = UserDefaults.standard.value(forKey: SettingKeys.stereoSeparation) as? Int {
         return value
       }
       return Constants.stereoSeparationDefault
@@ -58,10 +46,9 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore
     var response: Settings.Update.ValueBag
     if let request = request {
       response = request
-      domain = request.domainName
       stereoSeparation = request.stereoSeparation
     } else {
-      response = Settings.Update.ValueBag(domainName: domain, stereoSeparation: stereoSeparation)
+      response = Settings.Update.ValueBag(stereoSeparation: stereoSeparation)
     }
     modulePlayer.setStereoSeparation(stereoSeparation)
     presenter?.presentSettings(response: response)

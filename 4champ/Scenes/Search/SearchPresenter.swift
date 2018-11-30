@@ -29,7 +29,8 @@ class SearchPresenter: SearchPresentationLogic
     }
     viewController?.displayResult(viewModel: Search.ViewModel(modules: [],
                                                               composers: [],
-                                                              groups: groups))
+                                                              groups: groups,
+                                                              text: response.text))
   }
   
   func presentComposers(response: Search.ComposerResponse) {
@@ -40,7 +41,8 @@ class SearchPresenter: SearchPresentationLogic
     }
     viewController?.displayResult(viewModel: Search.ViewModel(modules: [],
                                                               composers: composers,
-                                                              groups: []))
+                                                              groups: [],
+                                                              text: response.text))
   }
   
   func presentModules(response: Search.ModuleResponse) {
@@ -62,7 +64,8 @@ class SearchPresenter: SearchPresentationLogic
     
     viewController?.displayResult(viewModel: Search.ViewModel(modules: mods,
                                                               composers: [],
-                                                              groups: []))
+                                                              groups: [],
+                                                              text: response.text))
   }
   
   func presentDownloadProgress(response: Search.ProgressResponse) {

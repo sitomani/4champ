@@ -54,7 +54,6 @@ class AboutViewController: UIViewController, AboutDisplayLogic
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?)
   {
-    segue.destination.hidesBottomBarWhenPushed = true
     if let scene = segue.identifier {
       let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
       if let router = router, router.responds(to: selector) {

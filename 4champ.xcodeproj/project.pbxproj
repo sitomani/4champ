@@ -12,7 +12,6 @@
 		450E506721879347008FB155 /* SettingsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450E506121879347008FB155 /* SettingsModels.swift */; };
 		450E506821879347008FB155 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450E506221879347008FB155 /* SettingsViewController.swift */; };
 		450E506921879347008FB155 /* SettingsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450E506321879347008FB155 /* SettingsInteractor.swift */; };
-		450E506B2187A056008FB155 /* SettingsDomainCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450E506A2187A056008FB155 /* SettingsDomainCell.swift */; };
 		450E506D2187A066008FB155 /* SettingsStereoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450E506C2187A066008FB155 /* SettingsStereoCell.swift */; };
 		4535A4642114BB2D005FBB8B /* SearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A45E2114BB2D005FBB8B /* SearchPresenter.swift */; };
 		4535A4662114BB2D005FBB8B /* SearchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A4602114BB2D005FBB8B /* SearchRouter.swift */; };
@@ -72,7 +71,6 @@
 		450E506121879347008FB155 /* SettingsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModels.swift; sourceTree = "<group>"; };
 		450E506221879347008FB155 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		450E506321879347008FB155 /* SettingsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsInteractor.swift; sourceTree = "<group>"; };
-		450E506A2187A056008FB155 /* SettingsDomainCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDomainCell.swift; sourceTree = "<group>"; };
 		450E506C2187A066008FB155 /* SettingsStereoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStereoCell.swift; sourceTree = "<group>"; };
 		4535A45E2114BB2D005FBB8B /* SearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPresenter.swift; sourceTree = "<group>"; };
 		4535A4602114BB2D005FBB8B /* SearchRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRouter.swift; sourceTree = "<group>"; };
@@ -169,7 +167,6 @@
 				450E506121879347008FB155 /* SettingsModels.swift */,
 				450E506221879347008FB155 /* SettingsViewController.swift */,
 				450E506321879347008FB155 /* SettingsInteractor.swift */,
-				450E506A2187A056008FB155 /* SettingsDomainCell.swift */,
 				450E506C2187A066008FB155 /* SettingsStereoCell.swift */,
 			);
 			path = Settings;
@@ -510,7 +507,6 @@
 				4543985120D03C1600991ADC /* AboutHeaderView.swift in Sources */,
 				450E506421879347008FB155 /* SettingsPresenter.swift in Sources */,
 				45D392A520B1DDEC00EEF4E3 /* AppDelegate.swift in Sources */,
-				450E506B2187A056008FB155 /* SettingsDomainCell.swift in Sources */,
 				4569AC8B21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift in Sources */,
 				45AA911B2100EF1900794147 /* AmpVizScene.swift in Sources */,
 				454F5209215D4587007011F3 /* GroupCell.swift in Sources */,
