@@ -1,5 +1,8 @@
 # 4champ Development Journal
 
+### 30 November 2018 🎧Better headphones experience
+I had the settings branch going for quite a time before merge. My intention was to require user to type in the AMP website domain name before downloading modules, if that would enable me to get the app listed on App Store again, but... no dice with Apple Review 😔. This was to be done through settings UI, which now only has control for stereo separation. 
+
 ### 4 October 2018 Bounty Bear Is Searching...
 
 Over the past weeks I've dedicated a couple of evenings for 4champ, and the search feeature is ready to be shipped. Shipping here means merging from my development branch to master, since I'm still not taking my chances with Apple Review. That day is going to dawn but not yet.
