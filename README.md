@@ -14,7 +14,7 @@ In this repository I'm working on rewriting the app that originally was released
 * Search (search the AMP database by module, composer, group name or sampletexts): Implemented in October 2018.
 * Playlists (build your own playlists): TBD
 * Local Collection (store modules locally): TBD
-* Settings (control stereo separation etc): TBD
+* Settings (control stereo separation etc): Stereo separation setting implemented in November 2018.
 
 ### Dependencies
 
