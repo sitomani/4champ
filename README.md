@@ -47,6 +47,14 @@ To build these, run `carthage bootstrap --platform iOS` in the root folder of th
 
 I plan to have a deeper look at openmpt project file generation with Genie at some point, in order to reduce the number of steps above. For the time being, the project is generated using premake, which does not fit that well when targeting iOS and one must do some housekeeping after premake run in order to build a static lib properly.
 
+### Building the app
+
+After setting up the dependencies you can open 4champ.xcodeproj in Xcode and build the application. On simulator you can run the app without any further changes.
+
+In order to run the app on device, you will need to replace the bundle identifier 'com.boogie.fourchamp' with another id, because Xcode will create a development certificate on the fly for the device build and same bundle identifier cannot be present in multiple certificates.
+
+The Xcode generated developer certificate will only be valid for 7 days, which means that you'll need to reinstall from Xcode every week to use the app. To work around this nuisance, you can create an ad hoc distribution certificate for signing the app in Apple Developer Center if are a member in Apple Developer Program.
+
 ### License
 
 The code in this repository is copyright © Aleksi Sitomaniemi 2018 and licensed under [MIT license](LICENSE), **except** for HivelyTracker replay routine code which is by licenced under [BSD-3](4champ/replay/hively/LICENSE) by [Pete Gordon](https://github.com/pete-gordon).
