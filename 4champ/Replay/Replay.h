@@ -11,9 +11,11 @@
 // Control API
 /**
  Loads module for playback from given path.
- @param path identifies the module file. Path extension must identify format
+ @param path identifies the module file. Path extension can identify format (type)
+ @param type can be passed separately if path does not have extension. If this parameter
+        is given, it will be used to determine the replayer.
  */
-- (bool) loadModule:(NSString*)path;
+- (bool) loadModule:(NSString*)path type:(NSString*)type;
 
 /**
  Sets current position in the playing module

@@ -11,6 +11,7 @@ import AVFoundation
 
 // Global
 let modulePlayer = ModulePlayer()
+let moduleStorage = ModuleStorage()
 let log = SwiftyBeaver.self
 
 @UIApplicationMain
@@ -81,22 +82,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   /// Until local module database support has been implemented,
   /// clean the previous session files
   func cleanupFiles() {
-    log.debug("")
+    
     let fileManager = FileManager.default
     let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
     do {
-      let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
-      for url in fileURLs {
-        log.debug(url)
-        do {
-          try FileManager.default.removeItem(at: url)
-        } catch {
-          log.error("Deleting file at \(url) failed, \(error)")
+        let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
+        _ = fileURLs.map {
+            print($0)
         }
-      }
+        // process files
     } catch {
-      print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
+        print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
     }
+    
+    
+    return
+//    log.debug("")
+//    let fileManager = FileManager.default
+//    let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+//    do {
+//      let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
+//      for url in fileURLs {
+//        log.debug(url)
+//        do {
+//          try FileManager.default.removeItem(at: url)
+//        } catch {
+//          log.error("Deleting file at \(url) failed, \(error)")
+//        }
+//      }
+//    } catch {
+//      print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
+//    }
   }
 }
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -303,6 +303,55 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xum-hX-4Zh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2494" y="423"/>
+        </scene>
+        <!--Item-->
+        <scene sceneID="ZNv-kc-Ufu">
+            <objects>
+                <navigationController id="kPI-s7-4bn" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" image="localMods" id="CIx-VZ-Gjn"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="2vl-pL-OGF">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="5dU-d2-XRZ" kind="relationship" relationship="rootViewController" id="FAw-2v-zV5"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wSi-xz-52g" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2494" y="1231"/>
+        </scene>
+        <!--Local View Controller-->
+        <scene sceneID="Apo-RL-cM9">
+            <objects>
+                <viewController id="5dU-d2-XRZ" customClass="LocalViewController" customModule="ampplayer" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="PJI-np-iYr">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="A1w-Aa-1v1">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="A1w-Aa-1v1" firstAttribute="trailing" secondItem="hFe-Xk-fOh" secondAttribute="trailing" id="Y5j-CB-TNt"/>
+                            <constraint firstItem="hFe-Xk-fOh" firstAttribute="bottom" secondItem="A1w-Aa-1v1" secondAttribute="bottom" id="aaN-61-DgD"/>
+                            <constraint firstItem="A1w-Aa-1v1" firstAttribute="leading" secondItem="hFe-Xk-fOh" secondAttribute="leading" id="fwa-vF-Sxo"/>
+                            <constraint firstItem="A1w-Aa-1v1" firstAttribute="top" secondItem="hFe-Xk-fOh" secondAttribute="top" id="pcH-u2-4od"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="hFe-Xk-fOh"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="D8y-5m-TSQ"/>
+                    <connections>
+                        <outlet property="tableBottomConstraint" destination="aaN-61-DgD" id="E2a-Pk-lBn"/>
+                        <outlet property="tableView" destination="A1w-Aa-1v1" id="GaN-Iq-NRV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NIq-Ur-3jY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3384.8000000000002" y="1229.2353823088456"/>
         </scene>
         <!--About-->
         <scene sceneID="wg7-f3-ORb">
@@ -718,6 +767,7 @@
                     <connections>
                         <outlet property="npView" destination="tLo-MP-5Y5" id="kQG-sS-uKZ"/>
                         <segue destination="twp-s7-Sug" kind="presentation" identifier="ToVisualizer" id="FHS-Ir-Ndk"/>
+                        <segue destination="kPI-s7-4bn" kind="relationship" relationship="viewControllers" id="Xcy-jM-Re1"/>
                         <segue destination="dEJ-4L-TTY" kind="relationship" relationship="viewControllers" id="4XC-vI-oqt"/>
                         <segue destination="gNh-7S-fOz" kind="relationship" relationship="viewControllers" id="Run-gL-a8n"/>
                         <segue destination="EUw-TD-AZa" kind="relationship" relationship="viewControllers" id="KLJ-Kh-eK4"/>
@@ -907,6 +957,7 @@
         <image name="about" width="30" height="30"/>
         <image name="favestar-grey" width="20" height="20"/>
         <image name="favestar-yellow" width="20" height="20"/>
+        <image name="localMods" width="30" height="30"/>
         <image name="modtext" width="22" height="22"/>
         <image name="modtext_disabled" width="22" height="22"/>
         <image name="next-small" width="22" height="22"/>

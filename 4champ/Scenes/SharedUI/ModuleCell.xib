@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,12 +14,12 @@
         <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ModuleCell" rowHeight="75" id="BcZ-iR-uyR" customClass="ModuleCell" customModule="ampplayer" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
             <autoresizingMask key="autoresizingMask"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="BcZ-iR-uyR" id="BzE-xX-GcU">
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="BcZ-iR-uyR" id="BzE-xX-GcU">
                 <rect key="frame" x="0.0" y="0.0" width="375" height="75.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Composer name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="dbw-F4-bMj">
-                        <rect key="frame" x="72" y="31" width="93" height="18"/>
+                        <rect key="frame" x="72" y="30" width="93" height="18"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="18" id="ECT-Z2-6XP"/>
                         </constraints>
@@ -29,7 +28,7 @@
                         <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="33 Kb" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="WVk-wK-Wpa">
-                        <rect key="frame" x="72" y="50" width="34" height="14"/>
+                        <rect key="frame" x="72" y="49" width="34" height="14"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="14" id="MBx-9V-v8a"/>
                         </constraints>
@@ -37,8 +36,8 @@
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="modicon" translatesAutoresizingMaskIntoConstraints="NO" id="9I3-P4-bS8">
-                        <rect key="frame" x="10" y="10" width="52" height="54"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="modicon" translatesAutoresizingMaskIntoConstraints="NO" id="9I3-P4-bS8">
+                        <rect key="frame" x="10" y="11" width="52" height="54"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="54" id="RHJ-6H-ZUb"/>
                             <constraint firstAttribute="width" constant="52" id="Xdx-h1-boS"/>
@@ -55,7 +54,7 @@
                         <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Module name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Inv-mU-1NV">
-                        <rect key="frame" x="72" y="10" width="109.5" height="21"/>
+                        <rect key="frame" x="72" y="9" width="109.5" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="CuT-M8-xiw"/>
                         </constraints>
@@ -67,7 +66,7 @@
                 <constraints>
                     <constraint firstItem="9I3-P4-bS8" firstAttribute="centerY" secondItem="BzE-xX-GcU" secondAttribute="centerY" id="FCc-5d-dMa"/>
                     <constraint firstItem="WVk-wK-Wpa" firstAttribute="top" secondItem="dbw-F4-bMj" secondAttribute="bottom" constant="1" id="MGY-Y5-snB"/>
-                    <constraint firstItem="Inv-mU-1NV" firstAttribute="top" secondItem="BzE-xX-GcU" secondAttribute="top" constant="10" id="OdY-ij-FL9"/>
+                    <constraint firstItem="Inv-mU-1NV" firstAttribute="top" secondItem="BzE-xX-GcU" secondAttribute="top" constant="9" id="OdY-ij-FL9"/>
                     <constraint firstItem="vdj-wX-kpX" firstAttribute="top" secondItem="BzE-xX-GcU" secondAttribute="top" constant="40" id="RNZ-DU-O9M"/>
                     <constraint firstItem="9I3-P4-bS8" firstAttribute="leading" secondItem="BzE-xX-GcU" secondAttribute="leading" constant="10" id="TEH-zS-rzz"/>
                     <constraint firstAttribute="bottomMargin" secondItem="WVk-wK-Wpa" secondAttribute="bottom" constant="1" id="ZQG-MC-X9f"/>

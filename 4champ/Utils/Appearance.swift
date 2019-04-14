@@ -26,6 +26,7 @@ class Appearance {
     let navigationBarAppearace = UINavigationBar.appearance()
     navigationBarAppearace.tintColor = UIColor.white
     navigationBarAppearace.barTintColor = Appearance.tabColor
+    navigationBarAppearace.backgroundColor = darkBlueColor
     navigationBarAppearace.titleTextAttributes = [.foregroundColor: UIColor.init(rgb: 0xc6c6c6),
                                                   .font: UIFont.systemFont(ofSize: 16.0, weight: .heavy)]
     
@@ -35,6 +36,11 @@ class Appearance {
     let switchAppearance = UISwitch.appearance()
     switchAppearance.onTintColor = successColor
     
+    
+    let barButtonFont = UIFont.systemFont(ofSize: 12.0, weight: .heavy)
+    UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: barButtonFont], for: .normal)
+    UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: barButtonFont], for: .highlighted)
+
     let indicatorAppearance = NowPlayingView.appearance()
     indicatorAppearance.backgroundColor = Appearance.tabColor
     
@@ -51,6 +57,10 @@ class Appearance {
     
     let sclabelAppearance = UILabel.appearance(whenContainedInInstancesOf: [SettingsCell.self])
     sclabelAppearance.textColor = UIColor.white
+    
+    let sbAppearance = UISearchBar.appearance()
+    sbAppearance.barTintColor = darkBlueColor
+    
     }
 }
 

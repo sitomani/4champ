@@ -118,9 +118,11 @@ static SInt16* bufRight;
   checkStatus(status);
 }
 
-- (bool) loadModule:(NSString *)path
+- (bool) loadModule:(NSString *)path type:(NSString*)type
 {
-  NSString* type = [[path pathExtension] uppercaseString];
+  if (type == nil) {
+    type = [[path pathExtension] uppercaseString];
+  }
   Class replayerClass;
   if ([self.replayerMap.allKeys containsObject:type]) {
     replayerClass = [self.replayerMap objectForKey:type];
@@ -134,7 +136,7 @@ static SInt16* bufRight;
     renderer = [[replayerClass alloc] init];
   }
   
-  return [renderer loadModule:path];
+  return [renderer loadModule:path type:type];
 }
 
 - (NSInteger) volumeOnChannel:(NSInteger)channel

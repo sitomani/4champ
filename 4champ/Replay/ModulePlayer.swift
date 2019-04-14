@@ -133,7 +133,7 @@ class ModulePlayer: NSObject {
       return
     }
     renderer.stop()
-    renderer.loadModule(path)
+    renderer.loadModule(path, type:playlist[at].type)
     setStereoSeparation(SettingsInteractor().stereoSeparation)
     currentModule = playlist[at]
     renderer.play()
