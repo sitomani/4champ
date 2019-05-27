@@ -10,11 +10,22 @@ import Foundation
 import CoreData
 
 protocol ModuleStorageInterface {
+  var observer: ModuleStorageObserver? { get set }
+  
   func addModule(module: MMD)
+  func toggleFavorite(module: MMD) -> MMD?
+  func getModuleById(_ id: Int) -> MMD?
+  func getRandomModule() -> MMD?
+  func deleteModule(module: MMD)
 }
 
+protocol ModuleStorageObserver {
+  func metadataChange(_ mmd: MMD)
+}
 
 class ModuleStorage {
+  var observer: ModuleStorageObserver?
+  
     // MARK: Core Data lazy initialisers
   private lazy var managedObjectModel: NSManagedObjectModel = {
     let modelURL = Bundle.main.url(forResource: "AmpCDModel", withExtension: "momd")!
@@ -78,13 +89,99 @@ class ModuleStorage {
     var _ = persistentStoreCoordinator
     let name = managedObjectContext.name
     log.info(name ?? "noname")
-    addModule(module: MMD.init())
   }
 }
 
 extension ModuleStorage: ModuleStorageInterface {
   func addModule(module: MMD) {
-    log.info(managedObjectModel.entities.first?.properties)
+    log.debug("")
+    guard getModuleById(module.id!) == nil else {
+      return // already saved
+    }
+    
+    let cdModule = ModuleInfo.init(entity: NSEntityDescription.entity(forEntityName: "ModuleInfo", in:managedObjectContext)!, insertInto: managedObjectContext)
+    cdModule.modAuthor = module.composer
+    cdModule.modName = module.name
+    cdModule.modId = NSNumber.init(value: module.id!)
+    cdModule.modURL = module.downloadPath?.absoluteString
+    cdModule.modSize = NSNumber.init(value: module.size!)
+    cdModule.modType = module.type
+    cdModule.modLocalPath = module.localPath?.lastPathComponent
+    cdModule.added = NSDate.init(timeIntervalSinceNow: 0)
+    cdModule.lastPlayed = NSDate.init(timeIntervalSinceNow: 0)
+    cdModule.playCount = 1
+    cdModule.modDLStatus = 0
+    cdModule.preview = 0
+    cdModule.radioOnly = 0
+    cdModule.shared = nil
+    saveContext()
+  }
+  
+  func deleteModule(module: MMD) {
+    if let moduleInfo = fetchModuleInfo(module.id!) {
+      managedObjectContext.delete(moduleInfo)
+      saveContext()
+    }
+  }
+  
+  func getRandomModule() -> MMD? {
+    guard let allModules = try? managedObjectContext.fetch(NSFetchRequest.init(entityName: "ModuleInfo")),
+    allModules.count > 0 else {
+      return nil
+    }
+    let index = Int.random(in: 0 ..< allModules.count)
+    if let cdi = allModules[index] as? ModuleInfo {
+      return MMD.init(cdi: cdi)
+    }
+    return nil
+  }
+  
+  func getModuleById(_ id: Int) -> MMD? {
+    if let moduleInfo = fetchModuleInfo(id) {
+      return MMD.init(cdi: moduleInfo)
+    }
+    return nil
+  }
+  
+  func toggleFavorite(module: MMD) -> MMD? {
+    addModule(module: module)
+    if let cdModule = fetchModuleInfo(module.id!),
+      let favorite = cdModule.modFavorite?.boolValue {
+      if favorite {
+        cdModule.modFavorite = 0
+      } else {
+        cdModule.modFavorite = 1
+      }
+      saveContext()
+      let mmd = MMD.init(cdi: cdModule)
+      observer?.metadataChange(mmd)
+      return mmd
+    }
+    return nil
+  }
+  
+  private func saveContext() {
+    do {
+      try managedObjectContext.save()
+    } catch {
+      log.error(error)
+    }
+  }
+  
+  private func fetchModuleInfo(_ id: Int) -> ModuleInfo? {
+    let fetchRequest = NSFetchRequest<ModuleInfo>.init(entityName: "ModuleInfo")
+    let predicate = NSPredicate.init(format: "modId == \(id)")
+    fetchRequest.predicate = predicate
+    
+    do {
+      let match = try managedObjectContext.fetch(fetchRequest)
+      if let module = match.first {
+        return module
+      }
+    } catch {
+      log.error(error)
+    }
+    return nil
   }
 }
 

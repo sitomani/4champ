@@ -18,7 +18,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   var interactor: SearchBusinessLogic?
   var router: (NSObjectProtocol & SearchRoutingLogic & SearchDataPassing)?
 
-  var searchScopes = [SearchType.module, SearchType.composer, SearchType.group, SearchType.meta]
+  var searchScopes = [SearchType.composer, SearchType.module, SearchType.group, SearchType.meta]
 
   var shouldDisplaySearchBar: Bool = true
   
@@ -92,7 +92,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
     if shouldDisplaySearchBar {
       searchBar?.showsScopeBar = false
       searchBar?.delegate = self
-      searchBar?.scopeButtonTitles = [SearchType.module.l13n(), SearchType.composer.l13n(), SearchType.group.l13n(), SearchType.meta.l13n()]
+        searchBar?.scopeButtonTitles = searchScopes.map { $0.l13n() }
     } else {
       searchBar?.removeFromSuperview()
       navigationItem.title = router?.dataStore?.autoListTitle
@@ -230,7 +230,11 @@ extension SearchViewController: UITableViewDataSource {
         interactor?.search(nextPageRequest)
       }
     }
-    return vm.dequeueCell(for: tableView, at: indexPath.row)
+    let cell = vm.dequeueCell(for: tableView, at: indexPath.row)
+    if let modCell = (cell as? ModuleCell) {
+        modCell.delegate = self
+    }
+    return cell
   }
 }
 
@@ -279,6 +283,10 @@ extension SearchViewController: ModulePlayerObserver {
     }
     tableView?.reloadData()
   }
+  
+  func errorOccurred(error: PlayerError) {
+    //nop at the moment
+  }
 }
 
 // MARK: ViewModel extensions for tableview
@@ -322,4 +330,14 @@ extension Search.ViewModel {
     }
     return 0
   }
+}
+
+extension SearchViewController: ModuleCellDelegate {
+    func saveTapped(cell: ModuleCell) {
+        guard let ip = tableView?.indexPath(for: cell),
+            let module = viewModel?.modules[ip.row] else {
+                return
+        }
+        moduleStorage.addModule(module: module)
+    }
 }

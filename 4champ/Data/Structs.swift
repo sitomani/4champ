@@ -16,6 +16,20 @@ struct Constants {
 struct MMD {
   init() {
   }
+    
+  init(cdi: ModuleInfo) {
+    self.init()
+    self.composer = cdi.modAuthor
+    if let urlString = cdi.modURL {
+      self.downloadPath = URL.init(string: urlString)
+    }
+    self.id = cdi.modId?.intValue ?? 0
+    self.localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(cdi.modLocalPath!)
+    self.name = cdi.modName
+    self.size = cdi.modSize?.intValue
+    self.type = cdi.modType
+    self.favorite = cdi.modFavorite?.boolValue ?? false
+  }
   
   init(path: String, modId: Int) {
     self.init()
@@ -42,6 +56,19 @@ struct MMD {
   var size: Int?
   var localPath: URL?
   var downloadPath: URL?
+  var favorite: Bool = false
+  
+  func fileExists() -> Bool {
+    if let path = localPath?.path {
+      return FileManager.default.fileExists(atPath: path)
+    }
+    return false
+  }
+  
+  func hasBeenSaved() -> Bool {
+    let saved = moduleStorage.getModuleById(id!)
+    return saved != nil
+  }
 }
 
 extension MMD: Equatable {}

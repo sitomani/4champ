@@ -10,6 +10,7 @@ import UIKit
 protocol LocalPresentationLogic
 {
   func presentSomething(response: Local.Something.Response)
+  func presentPlayerError(_ error: PlayerError)
 }
 
 class LocalPresenter: LocalPresentationLogic
@@ -22,5 +23,11 @@ class LocalPresenter: LocalPresentationLogic
   {
     let viewModel = Local.Something.ViewModel()
     viewController?.displaySomething(viewModel: viewModel)
+  }
+  
+  func presentPlayerError(_ error: PlayerError) {
+    DispatchQueue.main.async {
+      self.viewController?.displayPlayerError(message: "Search_DownloadFailed".l13n())
+    }
   }
 }

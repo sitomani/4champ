@@ -25,7 +25,7 @@ protocol LocalDataStore
   //var name: String { get set }
 }
 
-class LocalInteractor: LocalBusinessLogic, LocalDataStore
+class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
 {
   var presenter: LocalPresentationLogic?
   var worker: LocalWorker?
@@ -56,6 +56,7 @@ class LocalInteractor: LocalBusinessLogic, LocalDataStore
     worker = LocalWorker()
     worker?.doSomeWork()
     do {
+      localFRC.delegate = self
       try localFRC.performFetch()
     } catch {
       log.error(error)
@@ -102,6 +103,7 @@ class LocalInteractor: LocalBusinessLogic, LocalDataStore
       module.name = mi.modName ?? ""
       module.size = mi.modSize?.intValue ?? 0
       module.composer = mi.modAuthor ?? ""
+      module.favorite = mi.modFavorite?.boolValue ?? false
       return module
     }
     return MMD()
@@ -109,6 +111,23 @@ class LocalInteractor: LocalBusinessLogic, LocalDataStore
   
   func playModule(at: IndexPath) {
     let mmd = getModule(at: at)
-    modulePlayer.play(mmd: mmd)
+    
+    if mmd.fileExists() {
+        modulePlayer.play(mmd: mmd)
+    } else {
+      presenter?.presentPlayerError(.fileNotFound(mmd: mmd))
+      moduleStorage.deleteModule(module: mmd)
+    }
+  }
+}
+
+extension LocalInteractor: NSFetchedResultsControllerDelegate {
+  func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    presenter?.presentSomething(response: Local.Something.Response())
+  }
+  
+  func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+    presenter?.presentSomething(response: Local.Something.Response())
+
   }
 }

@@ -20,6 +20,7 @@ class Appearance {
 //  static var ampLightBlueColor = UIColor.init(rgb: 0x36679A)
   static var ampLightBlueColor = UIColor.init(rgb: 0x16538a)
   static var separatorColor = UIColor.init(rgb: 0x485675)
+  static var barTitleColor = UIColor.init(rgb: 0xc0c0c0)
   static var cellColor = UIColor.clear
   
   class func setup() {
@@ -27,7 +28,7 @@ class Appearance {
     navigationBarAppearace.tintColor = UIColor.white
     navigationBarAppearace.barTintColor = Appearance.tabColor
     navigationBarAppearace.backgroundColor = darkBlueColor
-    navigationBarAppearace.titleTextAttributes = [.foregroundColor: UIColor.init(rgb: 0xc6c6c6),
+    navigationBarAppearace.titleTextAttributes = [.foregroundColor: barTitleColor,
                                                   .font: UIFont.systemFont(ofSize: 16.0, weight: .heavy)]
     
     let tabBarAppearance = UITabBar.appearance()

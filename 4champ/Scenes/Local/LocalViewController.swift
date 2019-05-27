@@ -12,6 +12,7 @@ import CoreData
 protocol LocalDisplayLogic: class
 {
   func displaySomething(viewModel: Local.Something.ViewModel)
+  func displayPlayerError(message: String)
 }
 
 class LocalViewController: UIViewController, LocalDisplayLogic
@@ -83,7 +84,6 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     super.viewDidLoad()
     tableView.dataSource = self
     tableView.delegate = self
-    moduleStorage.addModule(module: MMD())
     tableView.register(UINib(nibName: "ModuleCell", bundle: nil), forCellReuseIdentifier: "ModuleCell")
     doSomething()
     modulePlayer.addPlayerObserver(self)
@@ -95,6 +95,26 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     tableView.backgroundColor = Appearance.ampBgColor
     tableView.contentOffset = CGPoint.init(x: 0, y: 44)
     //    let btn1 = UIBarButtonItem.init(image: UIImage.init(named: "modicon")?.resizeImageWith(newSize: CGSize.init(width: 30, height: 30)), style: .plain, target: nil, action: nil)
+    updateBarButtons()
+  }
+  
+  deinit {
+    modulePlayer.removePlayerObserver(self)
+  }
+  
+  @objc func handleBarButtonPress(sender: UIBarButtonItem) {
+    if let key = LocalSortKey.init(rawValue: sender.tag) {
+      log.debug(key)
+      sortKey = key
+      let req = Local.SortFilter.Request.init(sortKey: sortKey, filterText: searchBar?.text, ascending: false)
+      interactor?.sortAndFilter(request:req)
+    } else {
+      tableView.setContentOffset(CGPoint.zero, animated: true)
+    }
+    updateBarButtons()
+  }
+  
+  func updateBarButtons() {
     let btn1 = UIBarButtonItem.init(title: "Type", style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn1.tag = LocalSortKey.type.rawValue
     let btn2 = UIBarButtonItem.init(title: "Module", style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
@@ -107,29 +127,21 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     btn5.tag = LocalSortKey.favorite.rawValue
     let btn6 = UIBarButtonItem.init(title: "Filter", style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn6.tag = -1 //No sort key for filter
+
+    _ = [btn1, btn2, btn3, btn4, btn5, btn6].map {
+      if $0.tag == sortKey.rawValue {
+        $0.tintColor = UIColor.white
+        $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
+        $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .highlighted)
+      } else {
+        $0.tintColor = Appearance.barTitleColor
+        $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: Appearance.barTitleColor], for: .normal)
+        $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: Appearance.barTitleColor], for: .highlighted)
+      }
+    }
+    
     self.navigationItem.leftBarButtonItems = [btn1, btn2, btn3]
     self.navigationItem.rightBarButtonItems = [btn6, btn5, btn4]
-    
-  }
-  
-  deinit {
-    modulePlayer.removePlayerObserver(self)
-  }
-  
-  @objc func handleBarButtonPress(sender: UIBarButtonItem) {
-    if let key = LocalSortKey.init(rawValue: sender.tag) {
-      if let view = sender.value(forKey: "view") as? UIView {
-        view.layer.cornerRadius = 3.0
-        view.backgroundColor = UIColor.init(white: 1, alpha: 0.2)
-      }
-      
-      log.debug(key)
-      sortKey = key
-      let req = Local.SortFilter.Request.init(sortKey: sortKey, filterText: searchBar?.text, ascending: false)
-      interactor?.sortAndFilter(request:req)
-    } else {
-      tableView.setContentOffset(CGPoint.zero, animated: true)
-    }
   }
   
   // MARK: Do something
@@ -144,6 +156,14 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   func displaySomething(viewModel: Local.Something.ViewModel)
   {
     tableView.reloadData()
+  }
+  
+  func displayPlayerError(message: String) {
+    let av = UIAlertController.init(title: nil, message: message, preferredStyle: .alert)
+    self.present(av, animated: true)
+    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 4.0) {
+        av.dismiss(animated: true, completion: nil)
+    }
   }
 }
 
@@ -212,6 +232,10 @@ extension LocalViewController: ModulePlayerObserver {
       tableBottomConstraint?.constant = 50.0
     }
     tableView?.reloadData()
+  }
+  
+  func errorOccurred(error: PlayerError) {
+    //nop at the moment
   }
 }
 

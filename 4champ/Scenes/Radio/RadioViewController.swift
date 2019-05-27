@@ -93,8 +93,6 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     UIUtils.roundCornersInView(currentModuleView)
     navigationItem.title = "RadioView_Title".l13n().uppercased()
 
-    //Until further implementation, disable new / local segments and other stuff
-    channelSegments?.removeSegment(at: 2, animated: false)
     localLabel?.isHidden = true
     shareButton?.isHidden = true
     faveButton?.isHidden = true
@@ -114,6 +112,8 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       nextUpTitle?.text = ""
       switchTitle?.textColor = UIColor.white
       radioSwitch?.onTintColor = Appearance.successColor
+    case .noModulesAvailable:
+        fallthrough
     case .failure:
       switchTitle?.text = "Radio_FetchFailed".l13n()
       switchTitle?.textColor = Appearance.errorColor
@@ -138,9 +138,11 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       composerLabel?.text = current.composer ?? ""
       nameLabel?.text = current.name ?? ""
       sizeLabel?.text = "\(current.size ?? 0) kb"
+      localLabel?.isHidden = !current.hasBeenSaved()
     } else {
       currentModuleView?.alpha = 0.8
       downloadProgress?.progress = 0
+      localLabel?.isHidden = true
       composerLabel?.text = "Radio_StatusOff".l13n()
       nameLabel?.text = "..."
       sizeLabel?.text = "0 kb"

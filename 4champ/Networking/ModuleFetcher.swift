@@ -60,12 +60,19 @@ class ModuleFetcher {
   }
   
   /**
-  fetches a module based on Amiga Music Preservation module id
+  Fetches a module based on Amiga Music Preservation module id. In case the module
+     is available in local storage, will complete immediately through state change to `FetcherState.done`.
     - parameters:
         - ampId: Identifier of the module to download.
   */
   func fetchModule(ampId: Int) {
     state = .resolvingPath
+
+    if let mmd = moduleStorage.getModuleById(ampId) {
+        state = .done(mmd: mmd)
+        return
+    }
+    
     let req = RESTRoutes.modulePath(id: ampId)
     currentRequest = Alamofire.request(req).validate().responseString { resp in
       guard resp.result.isSuccess else {
@@ -113,6 +120,13 @@ class ModuleFetcher {
           var mmd = MMD.init(path: modUrl.path, modId: id)
           mmd.size = Int(moduleDataUnzipped.count / 1024)
           do {
+            //store to file and make sure it's not writing over an existing mod
+            var numberExt = 0
+            while FileManager.default.fileExists(atPath: mmd.localPath!.absoluteString) {
+                numberExt += 1
+                let filename = mmd.name! + "_‰(numberExt)"
+                mmd.localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
+            }
             try moduleDataUnzipped.write(to: mmd.localPath!, options: .atomic)
           } catch {
             log.error("Could not write module data to file: \(error)")
@@ -155,7 +169,7 @@ extension ModuleFetcher: Hashable {
     return left === right
   }
   
-  var hashValue: Int {
-    return ObjectIdentifier(self).hashValue
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(ObjectIdentifier(self).hashValue)
   }
 }

@@ -130,6 +130,12 @@ extension SearchInteractor: ModuleFetcherDelegate {
   private func removeBufferHead() {
     guard modulePlayer.playlist.count > Constants.radioBufferLen else { return }
     let current = modulePlayer.playlist.removeFirst()
+    
+    guard moduleStorage.getModuleById(current.id!) == nil else {
+        // Not removing modules in local storage
+        return
+    }
+    
     if let url = current.localPath {
       log.info("Deleting module \(url.lastPathComponent)")
       do {

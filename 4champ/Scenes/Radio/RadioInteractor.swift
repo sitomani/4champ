@@ -123,6 +123,12 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   private func removeBufferHead() {
     log.debug("")
     let current = modulePlayer.playlist.removeFirst()
+    
+    guard moduleStorage.getModuleById(current.id!) == nil else {
+        // Not removing modules in local storage
+        return
+    }
+    
     if let url = current.localPath {
       log.info("Deleting module \(url.lastPathComponent)")
       do {
@@ -139,7 +145,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     log.debug("buffer length \(modulePlayer.playlist.count)")
     if Constants.radioBufferLen > modulePlayer.playlist.count {
       let id = getNextModuleId()
-      
+      if id < 0 { return } // failed to determine next module id
       let fetcher = ModuleFetcher.init(delegate: self)
       fetcher.fetchModule(ampId: id)
     }
@@ -160,8 +166,12 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
         latestPlayed = latestPlayed - 1
       }
       return latestPlayed
-    default:
-      fatalError("other channels not implemented yet")
+    case .local:
+      guard let mod = moduleStorage.getRandomModule() else {
+        presenter?.presentControlStatus(status: .noModulesAvailable)
+        return -1
+      }
+      return mod.id!
     }
   }
   
@@ -208,7 +218,7 @@ extension RadioInteractor: ModuleFetcherDelegate {
 extension RadioInteractor: ModulePlayerObserver {
   func moduleChanged(module: MMD) {
     log.debug("")
-    if let index = modulePlayer.playlist.index(of: module), index > 0 {
+    if let index = modulePlayer.playlist.firstIndex(of: module), index > 0 {
       removeBufferHead()
     }
     fillBuffer()
@@ -216,6 +226,10 @@ extension RadioInteractor: ModulePlayerObserver {
   }
   
   func statusChanged(status: PlayerStatus) {
+    //nop at the moment
+  }
+  
+  func errorOccurred(error: PlayerError) {
     //nop at the moment
   }
 }

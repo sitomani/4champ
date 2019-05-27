@@ -36,7 +36,7 @@ class MainViewController: UITabBarController {
     
     self.becomeFirstResponder()
     modulePlayer.addPlayerObserver(self)
-    
+    moduleStorage.observer = self
   }
   
   func toggleNowPlaying(_ value: Bool) {
@@ -93,6 +93,27 @@ class MainViewController: UITabBarController {
       performSegue(withIdentifier: "ToVisualizer", sender: self)
     }
   }
+  
+  @IBAction func saveModule(_ sender: UIButton) {
+    log.debug("")
+    guard let mod = modulePlayer.currentModule else {
+      log.error("no current module => cannot save")
+      return
+    }
+    moduleStorage.addModule(module: mod)
+    npView.setModule(mod)
+  }
+  
+  @IBAction func faveModule(_ sender: UIButton) {
+    guard let mod = modulePlayer.currentModule else {
+      log.error("no current module => cannot toggle favorite")
+      return
+    }
+    if let updated = moduleStorage.toggleFavorite(module: mod) {
+      npView.setModule(updated)
+    }
+  }
+  
 }
 
 extension MainViewController: ModulePlayerObserver {
@@ -108,6 +129,18 @@ extension MainViewController: ModulePlayerObserver {
     DispatchQueue.main.async {
       self.toggleNowPlaying(status == .playing || status == .paused)
       self.npView.playPauseButton?.isSelected = (status == .paused)
+    }
+  }
+  
+  func errorOccurred(error: PlayerError) {
+    //nop at the moment
+  }
+}
+
+extension MainViewController: ModuleStorageObserver {
+  func metadataChange(_ mmd: MMD) {
+    if modulePlayer.currentModule?.id == mmd.id {
+      npView.setModule(mmd)
     }
   }
 }

@@ -199,8 +199,11 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   }
   
   @IBAction func toggleFavorite() {
-    //        let fav:Bool = modPlayer.toggleFavorite()
-    //        self.updateFaveStar(fav)
+    guard let mod = modulePlayer.currentModule,
+          let updated = moduleStorage.toggleFavorite(module: mod) else {
+            return
+    }
+    updateFaveStar(updated.favorite)
   }
   
   
@@ -222,9 +225,9 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     if (favorited) {
       self.saveButton?.isHidden = true;
       animateColLabel(true);
-      self.faveStar?.setImage(UIImage.init(named: "favestar-yellow.png"), for: UIControl.State())
+      self.faveStar.isSelected = true
     } else {
-      self.faveStar?.setImage(UIImage.init(named: "faves.png"), for: UIControl.State())
+      self.faveStar.isSelected = false
     }
   }
   
@@ -260,7 +263,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     collectionLabel.text = NSLocalizedString("Radio_InLocalCollection", comment: "")
     collectionLabel.isHidden = true
     saveButton.isHidden = true
-    faveStar.isHidden = true
+    faveStar.isHidden = false
     shareButton.isHidden = true
 
     updateView(module: modulePlayer.currentModule)
@@ -331,6 +334,10 @@ extension VisualizerViewController: ModulePlayerObserver {
         }
       }
     }
+  }
+    
+  func errorOccurred(error: PlayerError) {
+    //nop at the moment
   }
   
   func startPlaybackTimer() {

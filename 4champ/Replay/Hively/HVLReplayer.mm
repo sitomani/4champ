@@ -68,6 +68,9 @@ static int iHivelyBufPos = 0;
 }
 
 - (int) readFrames:(size_t)count bufLeft:(int16_t*)bufLeft bufRight:(int16_t*)bufRight {
+    if (!currentHVLtune) {
+        return 0;
+    }
 
     if (currentHVLtune->ht_SongEndReached) {
         return 0; //return zero to trigger mod change, hvl+ahx loop forever
@@ -99,12 +102,18 @@ static int iHivelyBufPos = 0;
 }
 
 - (void) setStereoSeparation:(NSInteger)value {
+    if (currentHVLtune == nil) {
+        return;
+    }
     int sep = ceil(value/100 * 4);
     currentHVLtune->ht_defstereo = sep;
     //no effect during playback.
 }
 
 - (int) currentPosition {
+    if (!currentHVLtune) {
+        return 0;
+    }
     int playtime = currentHVLtune->ht_PlayingTime;
     curpos = CGFloat(playtime) / currentHVLtune->ht_SpeedMultiplier / 50;
     return curpos;
@@ -115,6 +124,9 @@ static int iHivelyBufPos = 0;
 }
 
 - (void) setCurrentPosition:(int)newPosition {
+    if (!currentHVLtune) {
+        return;
+    }
     curpos = hvl_Seek(currentHVLtune, newPosition * 1000);
 }
 
@@ -149,10 +161,16 @@ static int iHivelyBufPos = 0;
 }
 
 - (NSInteger) numberOfChannels {
+    if (!currentHVLtune) {
+        return 4;
+    }
     return currentHVLtune->ht_Channels;
 }
 
 - (NSInteger) volumeOnChannel:(NSInteger)channel {
+    if (!currentHVLtune) {
+        return 0;
+    }
     CGFloat floatGain = CGFloat(currentHVLtune->ht_Voices[channel].vc_AudioVolume);
     
     //map the gain to 0-100 scale to match with what openMPT does
