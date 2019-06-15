@@ -17,6 +17,7 @@ enum RadioStatus {
   case off
   case fetching(progress:Float)
   case failure
+  case noModulesAvailable
   case on
 }
 

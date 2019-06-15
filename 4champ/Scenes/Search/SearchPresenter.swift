@@ -26,6 +26,8 @@ class SearchPresenter: SearchPresentationLogic
       guard let gUri = URL.init(string: g.href),
         let idString = gUri.query?.split(separator: "=").last else { return nil }
       return GroupInfo(id: Int(idString) ?? 0, name: g.label)
+        }.sorted { (a, b) -> Bool in
+            return a.name.compare(b.name, options: .caseInsensitive) == .orderedAscending
     }
     viewController?.displayResult(viewModel: Search.ViewModel(modules: [],
                                                               composers: [],
@@ -38,6 +40,8 @@ class SearchPresenter: SearchPresentationLogic
       guard let cUri = URL.init(string: c.handle.href) else { return nil }
       guard let idString  = cUri.query?.split(separator: "=").last else { return nil }
       return ComposerInfo(id: Int(idString) ?? 0, name: c.handle.label, realName: c.realname, groups: c.groups)
+        }.sorted { (a, b) -> Bool in
+            return a.name.compare(b.name, options: .caseInsensitive) == .orderedAscending
     }
     viewController?.displayResult(viewModel: Search.ViewModel(modules: [],
                                                               composers: composers,
@@ -60,6 +64,8 @@ class SearchPresenter: SearchPresentationLogic
       mmd.type = $0.format
       mmd.composer = $0.composer.label
       return mmd
+        }.sorted { (a, b) -> Bool in
+        return a.name!.compare(b.name!, options: .caseInsensitive) == .orderedAscending
     }
     
     viewController?.displayResult(viewModel: Search.ViewModel(modules: mods,

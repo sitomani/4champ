@@ -20,13 +20,15 @@ class Appearance {
 //  static var ampLightBlueColor = UIColor.init(rgb: 0x36679A)
   static var ampLightBlueColor = UIColor.init(rgb: 0x16538a)
   static var separatorColor = UIColor.init(rgb: 0x485675)
+  static var barTitleColor = UIColor.init(rgb: 0xc0c0c0)
   static var cellColor = UIColor.clear
   
   class func setup() {
     let navigationBarAppearace = UINavigationBar.appearance()
     navigationBarAppearace.tintColor = UIColor.white
     navigationBarAppearace.barTintColor = Appearance.tabColor
-    navigationBarAppearace.titleTextAttributes = [.foregroundColor: UIColor.init(rgb: 0xc6c6c6),
+    navigationBarAppearace.backgroundColor = darkBlueColor
+    navigationBarAppearace.titleTextAttributes = [.foregroundColor: barTitleColor,
                                                   .font: UIFont.systemFont(ofSize: 16.0, weight: .heavy)]
     
     let tabBarAppearance = UITabBar.appearance()
@@ -35,6 +37,11 @@ class Appearance {
     let switchAppearance = UISwitch.appearance()
     switchAppearance.onTintColor = successColor
     
+    
+    let barButtonFont = UIFont.systemFont(ofSize: 12.0, weight: .heavy)
+    UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: barButtonFont], for: .normal)
+    UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: barButtonFont], for: .highlighted)
+
     let indicatorAppearance = NowPlayingView.appearance()
     indicatorAppearance.backgroundColor = Appearance.tabColor
     
@@ -51,6 +58,10 @@ class Appearance {
     
     let sclabelAppearance = UILabel.appearance(whenContainedInInstancesOf: [SettingsCell.self])
     sclabelAppearance.textColor = UIColor.white
+    
+    let sbAppearance = UISearchBar.appearance()
+    sbAppearance.barTintColor = darkBlueColor
+    
     }
 }
 

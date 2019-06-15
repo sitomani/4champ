@@ -8,6 +8,11 @@
 import Foundation
 import MediaPlayer
 
+enum PlayerError: Error {
+  case fileNotFound(mmd: MMD)
+  case unknown
+}
+
 /// possible states of a ModulePlayer
 enum PlayerStatus:Int {
   case initialised
@@ -30,9 +35,15 @@ protocol ModulePlayerObserver: class {
   /// - parameters:
   ///     - module: module that player changed to
   func moduleChanged(module: MMD)
+  
+  /// called if there is an error in the modulePlayer
+  /// - parameters:
+  ///    - error: Error that occurred
+  func errorOccurred(error: PlayerError)
 }
 
 class ModulePlayer: NSObject {
+  var radioOn: Bool = false
   var playlist: [MMD] = [] 
   let renderer = Replay()
   let mpImage = UIImage.init(named: "albumart")!
@@ -77,6 +88,8 @@ class ModulePlayer: NSObject {
   
   override init() {
     super.init()
+    moduleStorage.addStorageObserver(self) //listen to metadata changes
+    
     renderer.initAudio()
     renderer.streamDelegate = self
     renderer.setStereoSeparation(SettingsInteractor().stereoSeparation)
@@ -99,7 +112,7 @@ class ModulePlayer: NSObject {
   /// - parameters:
   ///    - observer: Object implementing ModulePlayerObserver` protocol
   func removePlayerObserver(_ observer: ModulePlayerObserver) {
-    if let index = observers.index(where: { mp -> Bool in
+    if let index = observers.firstIndex(where: { mp -> Bool in
       return mp === observer
     }) {
       observers.remove(at: index)
@@ -112,7 +125,12 @@ class ModulePlayer: NSObject {
   /// - parameters:
   ///    - mmd: Module metadata object identifying the module to play
   func play(mmd: MMD) {
-    if let mod = currentModule, var index = playlist.index(of: mod) {
+    if let mod = currentModule, var index = playlist.firstIndex(of: mod) {
+      guard mod != mmd else {
+        // This is a restart of play for a module, don't mess with playlist
+        play(at: index)
+        return
+      }
       if playlist.count > (index + 1) {
         index += 1
       }
@@ -133,11 +151,17 @@ class ModulePlayer: NSObject {
       return
     }
     renderer.stop()
-    renderer.loadModule(path)
-    setStereoSeparation(SettingsInteractor().stereoSeparation)
-    currentModule = playlist[at]
-    renderer.play()
-    status = .playing
+    if renderer.loadModule(path, type:playlist[at].type) {
+        setStereoSeparation(SettingsInteractor().stereoSeparation)
+        currentModule = playlist[at]
+        renderer.play()
+        status = .playing
+    } else {
+      log.error("Could not load tune: \(path)")
+        _ = observers.map {
+          $0.errorOccurred(error: .fileNotFound(mmd: playlist[at]))
+        }
+    }
   }
   
   func setStereoSeparation(_ separation: Int) {
@@ -156,8 +180,12 @@ class ModulePlayer: NSObject {
       return
     }
     var nextIndex = 0
-    if let index = playlist.index(of: current) {
+    if let index = playlist.firstIndex(of: current) {
       nextIndex = (index + 1) % playlist.count
+    }
+    // make sure we can move on in playlist even if there's same mod multiple times
+    while playlist[nextIndex] == currentModule && nextIndex < playlist.count-1 {
+      nextIndex += 1
     }
     play(at: nextIndex)
   }
@@ -169,7 +197,7 @@ class ModulePlayer: NSObject {
       return
     }
     var prevIndex = 0
-    if let index = playlist.index(of: current) {
+    if let index = playlist.firstIndex(of: current) {
       if index > 0 {
         prevIndex = index - 1
       }
@@ -228,6 +256,23 @@ extension ModulePlayer: ReplayStreamDelegate {
     log.debug("")
     DispatchQueue.main.async {
       self.playNext()
+    }
+  }
+}
+
+extension ModulePlayer: ModuleStorageObserver {
+  // At metadata change, update currentMod and playlist MMD instances
+  // for favorite status update
+  
+  func metadataChange(_ mmd: MMD) {
+    if currentModule == mmd {
+      currentModule?.favorite = mmd.favorite
+    }
+    if playlist.count == 0 { return }
+    for i in 0...playlist.count-1 {
+      if playlist[i] == mmd {
+        playlist[i].favorite = mmd.favorite
+      }
     }
   }
 }

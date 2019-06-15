@@ -93,15 +93,14 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     UIUtils.roundCornersInView(currentModuleView)
     navigationItem.title = "RadioView_Title".l13n().uppercased()
 
-    //Until further implementation, disable new / local segments and other stuff
-    channelSegments?.removeSegment(at: 2, animated: false)
     localLabel?.isHidden = true
     shareButton?.isHidden = true
-    faveButton?.isHidden = true
+    faveButton?.isHidden = false
     saveButton?.isHidden = true
     notifyButton?.isHidden = true
     
     interactor?.updateLatest()
+    displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel(nowPlaying: nil, nextUp: nil))
   }
   
   // MARK: Do something
@@ -114,6 +113,8 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       nextUpTitle?.text = ""
       switchTitle?.textColor = UIColor.white
       radioSwitch?.onTintColor = Appearance.successColor
+    case .noModulesAvailable:
+        fallthrough
     case .failure:
       switchTitle?.text = "Radio_FetchFailed".l13n()
       switchTitle?.textColor = Appearance.errorColor
@@ -138,12 +139,16 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       composerLabel?.text = current.composer ?? ""
       nameLabel?.text = current.name ?? ""
       sizeLabel?.text = "\(current.size ?? 0) kb"
+      localLabel?.isHidden = !current.hasBeenSaved()
+      faveButton?.isSelected = current.favorite
     } else {
       currentModuleView?.alpha = 0.8
       downloadProgress?.progress = 0
+      localLabel?.isHidden = true
       composerLabel?.text = "Radio_StatusOff".l13n()
       nameLabel?.text = "..."
       sizeLabel?.text = "0 kb"
+      faveButton?.isSelected = false
     }
   }
   
@@ -162,6 +167,10 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       let req = Radio.Control.Request(powerOn: sender.isOn, channel: channelSelection)
       interactor?.controlRadio(request: req)
     }
+  }
+  
+  @IBAction private func faveTapped(_ sender: UIButton) {
+    interactor?.toggleFavorite()
   }
   
   @IBAction private func segmentChanged(_ sender: UISegmentedControl) {

@@ -17,8 +17,6 @@ struct ViewElement {
 
 class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate {
   
-  weak var modPlayer:Replay!
-  
   @IBOutlet weak var titleLabel: UILabel!
   @IBOutlet weak var composerLabel: UILabel!
   @IBOutlet weak var samplesLabel: UILabel!
@@ -178,7 +176,10 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     
     titleLabel.text = info.name! + " (" + info.type! + ")"
     sizeLabel.text = "\(info.size!) Kb"
-    composerLabel.text = info.composer! + " | " + "Radio"
+    
+    let playlistName = modulePlayer.radioOn ? " | Radio" : ""
+    composerLabel.text = info.composer! + playlistName
+    faveStar.isSelected = info.favorite
 
     var samples:Array<String>
     samples = modulePlayer.renderer.getInstruments()
@@ -199,8 +200,11 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   }
   
   @IBAction func toggleFavorite() {
-    //        let fav:Bool = modPlayer.toggleFavorite()
-    //        self.updateFaveStar(fav)
+    guard let mod = modulePlayer.currentModule,
+          let updated = moduleStorage.toggleFavorite(module: mod) else {
+            return
+    }
+    updateFaveStar(updated.favorite)
   }
   
   
@@ -222,9 +226,9 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     if (favorited) {
       self.saveButton?.isHidden = true;
       animateColLabel(true);
-      self.faveStar?.setImage(UIImage.init(named: "favestar-yellow.png"), for: UIControl.State())
+      self.faveStar.isSelected = true
     } else {
-      self.faveStar?.setImage(UIImage.init(named: "faves.png"), for: UIControl.State())
+      self.faveStar.isSelected = false
     }
   }
   
@@ -260,7 +264,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     collectionLabel.text = NSLocalizedString("Radio_InLocalCollection", comment: "")
     collectionLabel.isHidden = true
     saveButton.isHidden = true
-    faveStar.isHidden = true
+    faveStar.isHidden = false
     shareButton.isHidden = true
 
     updateView(module: modulePlayer.currentModule)
@@ -331,6 +335,10 @@ extension VisualizerViewController: ModulePlayerObserver {
         }
       }
     }
+  }
+    
+  func errorOccurred(error: PlayerError) {
+    //nop at the moment
   }
   
   func startPlaybackTimer() {

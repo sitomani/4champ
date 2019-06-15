@@ -21,6 +21,10 @@ enum FetcherState {
   case done(mmd: MMD)
 }
 
+enum FetcherError:Error {
+  case unsupportedFormat
+}
+
 /**
  ModuleFetcher state delegate.
  Implemented in classes that use a fetcher to download modules, e.g. RadioInteractor and SearchInteractor
@@ -60,12 +64,19 @@ class ModuleFetcher {
   }
   
   /**
-  fetches a module based on Amiga Music Preservation module id
+  Fetches a module based on Amiga Music Preservation module id. In case the module
+     is available in local storage, will complete immediately through state change to `FetcherState.done`.
     - parameters:
         - ampId: Identifier of the module to download.
   */
   func fetchModule(ampId: Int) {
     state = .resolvingPath
+
+    if let mmd = moduleStorage.getModuleById(ampId) {
+        state = .done(mmd: mmd)
+        return
+    }
+    
     let req = RESTRoutes.modulePath(id: ampId)
     currentRequest = Alamofire.request(req).validate().responseString { resp in
       guard resp.result.isSuccess else {
@@ -93,7 +104,8 @@ class ModuleFetcher {
   /**
   private function that fetches the module from the identified download link,
   unpacks it and saves to disk. After completion, reports the module metadata on the
-  downloaded module through a state change to `FetcherState.done(mmd)`
+  downloaded module through a state change to `FetcherState.done(mmd)`. In case
+  of an error, a state change to `FetcherState.failed(error)` will be propagated.
    - parameters:
       - modUrl: URL of the module to download
       - id: numeric identifier of the module (needed for the module metadata object)
@@ -112,7 +124,20 @@ class ModuleFetcher {
         if let moduleDataUnzipped = self.gzipInflate(data: moduleData) {
           var mmd = MMD.init(path: modUrl.path, modId: id)
           mmd.size = Int(moduleDataUnzipped.count / 1024)
+
+          // Make sure that we only process supported mods further
+          guard mmd.supported() else {
+            self.state = .failed(err: FetcherError.unsupportedFormat)
+            return
+          }
           do {
+            //store to file and make sure it's not writing over an existing mod
+            var numberExt = 0
+            while FileManager.default.fileExists(atPath: mmd.localPath!.absoluteString) {
+                numberExt += 1
+                let filename = mmd.name! + "_‰(numberExt)"
+                mmd.localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
+            }
             try moduleDataUnzipped.write(to: mmd.localPath!, options: .atomic)
           } catch {
             log.error("Could not write module data to file: \(error)")
@@ -155,7 +180,7 @@ extension ModuleFetcher: Hashable {
     return left === right
   }
   
-  var hashValue: Int {
-    return ObjectIdentifier(self).hashValue
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(ObjectIdentifier(self).hashValue)
   }
 }

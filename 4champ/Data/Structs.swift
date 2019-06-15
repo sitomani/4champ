@@ -17,6 +17,22 @@ struct MMD {
   init() {
   }
   
+  static let supportedTypes: [String] = "669, AMF, AMS, DBM, DIGI, DMF, DSM, FAR, IT, GDM, ST26, IMF, J2B, M15, MED, MDL, MOD, MTM, NST, OCT, OKT, OSS, PTM, PSM, S3M, STM, SFX, SFX2, ULT, UMX, WOW, XM, FST, STK, MMCMP, MMS, MO3, MPTM, PLM, PPM, PT36, AHX, THX, HVL".split(separator: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+    
+  init(cdi: ModuleInfo) {
+    self.init()
+    self.composer = cdi.modAuthor
+    if let urlString = cdi.modURL {
+      self.downloadPath = URL.init(string: urlString)
+    }
+    self.id = cdi.modId?.intValue ?? 0
+    self.localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(cdi.modLocalPath!)
+    self.name = cdi.modName
+    self.size = cdi.modSize?.intValue
+    self.type = cdi.modType
+    self.favorite = cdi.modFavorite?.boolValue ?? false
+  }
+  
   init(path: String, modId: Int) {
     self.init()
     downloadPath = URL.init(string: path)
@@ -42,6 +58,23 @@ struct MMD {
   var size: Int?
   var localPath: URL?
   var downloadPath: URL?
+  var favorite: Bool = false
+  
+  func fileExists() -> Bool {
+    if let path = localPath?.path {
+      return FileManager.default.fileExists(atPath: path)
+    }
+    return false
+  }
+  
+  func hasBeenSaved() -> Bool {
+    let saved = moduleStorage.getModuleById(id!)
+    return saved != nil
+  }
+  
+  func supported() -> Bool {
+    return MMD.supportedTypes.contains(self.type ?? "")
+  }
 }
 
 extension MMD: Equatable {}

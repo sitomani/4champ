@@ -12,7 +12,7 @@
   openmpt_module* currentOMPTFile;
 }
 
-- (bool) loadModule:(NSString *)path {
+- (bool) loadModule:(NSString *)path type:(NSString*)type {
   NSData* data = [[NSFileManager defaultManager] contentsAtPath:path];
   if (!data) return false;
   
