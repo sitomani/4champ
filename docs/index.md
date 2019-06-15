@@ -1,5 +1,17 @@
 # 4champ Development Journal
 
+### 15 June 2019 Local Collection view implementation
+
+Ok so it took half a year but I finally got the time to squeeze the local collection implementation in. There are no fancy bells / whistles but when you search for mods or listen to 4champ radio, you can now mark modules for keeping by tapping the ⭐ button next to the module name in the "Now playing" area, Visualizer view or the Radio display. If you choose to unfavorite the module later, it will still be kept in the local collection until deleted.
+
+While implementing this, I forgot that I had a cleanup function in the app that would delete all module files from application's documents directory at launch, to prevent unnecessary accumulation of files. When I ran the app first time with the original bundle identifier on my iPhone, the cleanup code wiped my whole collection (~5000 modules, about 1G of data). It was a moment of 🤯.  Now the implementation is safe, even if you install on top of the appstore version.
+
+If you look carefully to the codebase, you'll notice that there is some indications of features that are not available, e.g. sharing. Most of the stuff is coming, and some might be dropped from the Swift version. 
+
+The most notable feature yet to come is the support for playlists. After getting that done, the app is for most parts on par with the old AppStore Objective-C app. No promises, but I'm setting the end of year as deadline for that.
+
+The Github project is now hooked up in [Codebeat](https://codebeat.co) static analysis platform, and every pull request (also my own) will get a scan for issues before it gets merged.  
+
 ### 30 November 2018 🎧Better headphones experience
 I had the settings branch going for quite a time before merge. My intention was to require user to type in the AMP website domain name before downloading modules, if that would enable me to get the app listed on App Store again, but... no dice with Apple Review 😔. This was to be done through settings UI, which now only has control for stereo separation. 
 
