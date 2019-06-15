@@ -150,7 +150,7 @@
 		45AA91182100EF1900794147 /* AmpSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmpSlider.swift; sourceTree = "<group>"; };
 		45AA91192100EF1900794147 /* AmpVizScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmpVizScene.swift; sourceTree = "<group>"; };
 		45D392A120B1DDEC00EEF4E3 /* ampplayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ampplayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		45D392A420B1DDEC00EEF4E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		45D392A420B1DDEC00EEF4E3 /* AppDelegate.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45D392AB20B1DDEC00EEF4E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		45D392AD20B1DDEE00EEF4E3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		45D392B020B1DDEE00EEF4E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -416,7 +416,6 @@
 				45D3929D20B1DDEC00EEF4E3 /* Sources */,
 				45D3929E20B1DDEC00EEF4E3 /* Frameworks */,
 				45D3929F20B1DDEC00EEF4E3 /* Resources */,
-				45D9FE1922257EAD00A82070 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -508,23 +507,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
-		};
-		45D9FE1922257EAD00A82070 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Running CPD\npmd cpd --files ${EXECUTABLE_NAME} --minimum-tokens 50 --language swift --encoding UTF-8 --format net.sourceforge.pmd.cpd.XMLRenderer > cpd-output.xml --failOnViolation true\n# Running script\nphp ./cpd_script.php -cpd-xml cpd-output.xml\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

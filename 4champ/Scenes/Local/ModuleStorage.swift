@@ -141,6 +141,15 @@ extension ModuleStorage: ModuleStorageInterface {
   
   func deleteModule(module: MMD) {
     if let moduleInfo = fetchModuleInfo(module.id!) {
+      if let localPath = moduleInfo.modLocalPath {
+        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(localPath)
+        log.info("Deleting module \(url.lastPathComponent)")
+        do {
+          try FileManager.default.removeItem(at: url)
+        } catch {
+          log.error("\(error)")
+        }
+      }
       managedObjectContext.delete(moduleInfo)
       saveContext()
     }

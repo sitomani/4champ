@@ -261,6 +261,9 @@ extension ModulePlayer: ReplayStreamDelegate {
 }
 
 extension ModulePlayer: ModuleStorageObserver {
+  // At metadata change, update currentMod and playlist MMD instances
+  // for favorite status update
+  
   func metadataChange(_ mmd: MMD) {
     if currentModule == mmd {
       currentModule?.favorite = mmd.favorite
