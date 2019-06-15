@@ -43,6 +43,7 @@ protocol ModulePlayerObserver: class {
 }
 
 class ModulePlayer: NSObject {
+  var radioOn: Bool = false
   var playlist: [MMD] = [] 
   let renderer = Replay()
   let mpImage = UIImage.init(named: "albumart")!
@@ -87,6 +88,8 @@ class ModulePlayer: NSObject {
   
   override init() {
     super.init()
+    moduleStorage.addStorageObserver(self) //listen to metadata changes
+    
     renderer.initAudio()
     renderer.streamDelegate = self
     renderer.setStereoSeparation(SettingsInteractor().stereoSeparation)
@@ -123,7 +126,12 @@ class ModulePlayer: NSObject {
   ///    - mmd: Module metadata object identifying the module to play
   func play(mmd: MMD) {
     if let mod = currentModule, var index = playlist.firstIndex(of: mod) {
-        if playlist.count > (index + 1) {
+      guard mod != mmd else {
+        // This is a restart of play for a module, don't mess with playlist
+        play(at: index)
+        return
+      }
+      if playlist.count > (index + 1) {
         index += 1
       }
       playlist.insert(mmd, at: index)
@@ -174,6 +182,10 @@ class ModulePlayer: NSObject {
     var nextIndex = 0
     if let index = playlist.firstIndex(of: current) {
       nextIndex = (index + 1) % playlist.count
+    }
+    // make sure we can move on in playlist even if there's same mod multiple times
+    while playlist[nextIndex] == currentModule && nextIndex < playlist.count-1 {
+      nextIndex += 1
     }
     play(at: nextIndex)
   }
@@ -244,6 +256,20 @@ extension ModulePlayer: ReplayStreamDelegate {
     log.debug("")
     DispatchQueue.main.async {
       self.playNext()
+    }
+  }
+}
+
+extension ModulePlayer: ModuleStorageObserver {
+  func metadataChange(_ mmd: MMD) {
+    if currentModule == mmd {
+      currentModule?.favorite = mmd.favorite
+    }
+    if playlist.count == 0 { return }
+    for i in 0...playlist.count-1 {
+      if playlist[i] == mmd {
+        playlist[i].favorite = mmd.favorite
+      }
     }
   }
 }

@@ -9,25 +9,38 @@ import UIKit
 
 protocol LocalPresentationLogic
 {
-  func presentSomething(response: Local.Something.Response)
+  func presentModules(response: Local.SortFilter.Response)
   func presentPlayerError(_ error: PlayerError)
+  func presentDeletion(_ indexPath: IndexPath)
+  func presentUpdate(_ indexPath: IndexPath)
+  func presentInsert(_ indexPath: IndexPath)
 }
 
 class LocalPresenter: LocalPresentationLogic
 {
   weak var viewController: LocalDisplayLogic?
   
-  // MARK: Do something
-  
-  func presentSomething(response: Local.Something.Response)
+  func presentModules(response: Local.SortFilter.Response)
   {
-    let viewModel = Local.Something.ViewModel()
-    viewController?.displaySomething(viewModel: viewModel)
+    let viewModel = Local.SortFilter.ViewModel()
+    viewController?.displayModules(viewModel: viewModel)
   }
   
   func presentPlayerError(_ error: PlayerError) {
     DispatchQueue.main.async {
       self.viewController?.displayPlayerError(message: "Search_DownloadFailed".l13n())
     }
+  }
+  
+  func presentDeletion(_ indexPath: IndexPath) {
+    self.viewController?.displayRowDeletion(indexPath: indexPath)
+  }
+  
+  func presentUpdate(_ indexPath: IndexPath) {
+    viewController?.displayRowUpdate(indexPath: indexPath)
+  }
+  
+  func presentInsert(_ indexPath: IndexPath) {
+    viewController?.displayRowInsert(indexPath: indexPath)
   }
 }

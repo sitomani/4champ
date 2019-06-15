@@ -11,16 +11,17 @@ import CoreData
 
 protocol LocalDisplayLogic: class
 {
-  func displaySomething(viewModel: Local.Something.ViewModel)
+  func displayModules(viewModel: Local.SortFilter.ViewModel)
   func displayPlayerError(message: String)
+  func displayRowDeletion(indexPath: IndexPath)
+  func displayRowUpdate(indexPath: IndexPath)
+  func displayRowInsert(indexPath: IndexPath)
 }
 
 class LocalViewController: UIViewController, LocalDisplayLogic
 {
   var interactor: LocalBusinessLogic?
   var router: (NSObjectProtocol & LocalRoutingLogic & LocalDataPassing)?
-  
-  var ms = ModuleStorage()
   
   @IBOutlet var tableView: UITableView!
   @IBOutlet var tableBottomConstraint: NSLayoutConstraint!
@@ -76,7 +77,6 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   // MARK: View lifecycle
   override func viewDidAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    doSomething()
   }
   
   override func viewDidLoad()
@@ -85,9 +85,9 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     tableView.dataSource = self
     tableView.delegate = self
     tableView.register(UINib(nibName: "ModuleCell", bundle: nil), forCellReuseIdentifier: "ModuleCell")
-    doSomething()
     modulePlayer.addPlayerObserver(self)
-    
+    prepareView()
+
     searchBar = UISearchBar.init(frame: CGRect.init(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
     self.tableView.tableHeaderView = searchBar
     searchBar?.delegate = self
@@ -109,7 +109,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
       let req = Local.SortFilter.Request.init(sortKey: sortKey, filterText: searchBar?.text, ascending: false)
       interactor?.sortAndFilter(request:req)
     } else {
-      tableView.setContentOffset(CGPoint.zero, animated: true)
+      tableView.setContentOffset(CGPoint.zero, animated: false)
     }
     updateBarButtons()
   }
@@ -145,15 +145,13 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   }
   
   // MARK: Do something
-  
-  
-  func doSomething()
+  func prepareView()
   {
-    let request = Local.Something.Request()
-    interactor?.doSomething(request: request)
+    let request = Local.SortFilter.Request(sortKey: .module, filterText: nil, ascending: true)
+    interactor?.sortAndFilter(request: request)
   }
   
-  func displaySomething(viewModel: Local.Something.ViewModel)
+  func displayModules(viewModel: Local.SortFilter.ViewModel)
   {
     tableView.reloadData()
   }
@@ -165,26 +163,17 @@ class LocalViewController: UIViewController, LocalDisplayLogic
         av.dismiss(animated: true, completion: nil)
     }
   }
-}
-
-extension LocalViewController: NSFetchedResultsControllerDelegate {
-  func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    tableView.endUpdates()
+  
+  func displayRowDeletion(indexPath: IndexPath) {
+    tableView.deleteRows(at: [indexPath], with: .fade)
   }
   
-  func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    tableView.beginUpdates()
+  func displayRowUpdate(indexPath: IndexPath) {
+    tableView.reloadRows(at: [indexPath], with: .automatic)
   }
   
-  func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-  }
-  
-  func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, sectionIndexTitleForSectionName sectionName: String) -> String? {
-    return ""
-  }
-  
-  func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-    
+  func displayRowInsert(indexPath: IndexPath) {
+    tableView.insertRows(at: [indexPath], with: .automatic)
   }
 }
 
@@ -211,10 +200,23 @@ extension LocalViewController: UITableViewDataSource {
         cell.composerLabel?.text = module.composer
         cell.typeLabel?.text = module.type
         cell.sizeLabel?.text = "\(module.size ?? 0) Kb"
+        cell.faveButton?.isSelected = module.favorite
+        cell.stopImage?.isHidden = true
+        cell.delegate = self
       }
       return cell
     }
     return UITableViewCell()
+  }
+  
+  func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+    return "Dialog_Delete".l13n()
+  }
+  
+  func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    if editingStyle == .delete {
+      interactor?.deleteModule(at: indexPath)
+    }
   }
 }
 
@@ -222,7 +224,7 @@ extension LocalViewController: UITableViewDataSource {
 // MARK: Module Player Observer
 extension LocalViewController: ModulePlayerObserver {
   func moduleChanged(module: MMD) {
-    tableView?.reloadData()
+//    tableView?.reloadData()
   }
   
   func statusChanged(status: PlayerStatus) {
@@ -243,5 +245,14 @@ extension LocalViewController: UISearchBarDelegate {
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     let req = Local.SortFilter.Request.init(sortKey: sortKey, filterText: searchText, ascending: false)
     interactor?.sortAndFilter(request: req)
+  }
+}
+
+extension LocalViewController: ModuleCellDelegate {
+  func faveTapped(cell: ModuleCell) {
+    guard let ip = tableView.indexPath(for: cell) else {
+      return
+    }
+    interactor?.toggleFavorite(at: ip)
   }
 }

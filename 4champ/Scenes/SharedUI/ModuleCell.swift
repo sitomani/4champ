@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ModuleCellDelegate: class {
-    func saveTapped(cell: ModuleCell)
+  func faveTapped(cell: ModuleCell)
 }
 
 /**
@@ -21,4 +21,10 @@ class ModuleCell: UITableViewCell {
   @IBOutlet weak var composerLabel: UILabel?
   @IBOutlet weak var sizeLabel: UILabel?
   @IBOutlet weak var typeLabel: UILabel?
+  @IBOutlet weak var faveButton: UIButton?
+  @IBOutlet weak var stopImage: UIImageView?
+  
+  @IBAction func faveTapped(_ sender: UIButton) {
+    delegate?.faveTapped(cell: self)
+  }
 }

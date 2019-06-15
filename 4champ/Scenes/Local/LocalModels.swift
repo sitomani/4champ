@@ -22,19 +22,6 @@ enum LocalSortKey: Int {
 enum Local
 {
   // MARK: Use cases
-  enum Something
-  {
-    struct Request
-    {
-    }
-    struct Response
-    {
-    }
-    struct ViewModel
-    {
-    }
-  }
-  
   enum SortFilter {
     struct Request {
       let sortKey: LocalSortKey

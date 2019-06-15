@@ -18,7 +18,6 @@
 		450E506921879347008FB155 /* SettingsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450E506321879347008FB155 /* SettingsInteractor.swift */; };
 		450E506D2187A066008FB155 /* SettingsStereoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450E506C2187A066008FB155 /* SettingsStereoCell.swift */; };
 		451B6AA02204B6CC001848FA /* LocalPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B6A9A2204B6CC001848FA /* LocalPresenter.swift */; };
-		451B6AA12204B6CC001848FA /* LocalWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B6A9B2204B6CC001848FA /* LocalWorker.swift */; };
 		451B6AA22204B6CC001848FA /* LocalRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B6A9C2204B6CC001848FA /* LocalRouter.swift */; };
 		451B6AA32204B6CC001848FA /* LocalModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B6A9D2204B6CC001848FA /* LocalModels.swift */; };
 		451B6AA42204B6CC001848FA /* LocalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B6A9E2204B6CC001848FA /* LocalViewController.swift */; };
@@ -89,7 +88,6 @@
 		450E506321879347008FB155 /* SettingsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsInteractor.swift; sourceTree = "<group>"; };
 		450E506C2187A066008FB155 /* SettingsStereoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStereoCell.swift; sourceTree = "<group>"; };
 		451B6A9A2204B6CC001848FA /* LocalPresenter.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = LocalPresenter.swift; sourceTree = "<group>"; tabWidth = 2; };
-		451B6A9B2204B6CC001848FA /* LocalWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWorker.swift; sourceTree = "<group>"; };
 		451B6A9C2204B6CC001848FA /* LocalRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalRouter.swift; sourceTree = "<group>"; };
 		451B6A9D2204B6CC001848FA /* LocalModels.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = LocalModels.swift; sourceTree = "<group>"; tabWidth = 2; };
 		451B6A9E2204B6CC001848FA /* LocalViewController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = LocalViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
@@ -200,7 +198,6 @@
 			isa = PBXGroup;
 			children = (
 				451B6A9A2204B6CC001848FA /* LocalPresenter.swift */,
-				451B6A9B2204B6CC001848FA /* LocalWorker.swift */,
 				451B6A9C2204B6CC001848FA /* LocalRouter.swift */,
 				451B6A9D2204B6CC001848FA /* LocalModels.swift */,
 				451B6A9E2204B6CC001848FA /* LocalViewController.swift */,
@@ -560,7 +557,6 @@
 				4543983420D0344F00991ADC /* AboutRouter.swift in Sources */,
 				4543983920D0344F00991ADC /* AboutViewController.swift in Sources */,
 				45D61F5520E1647300869814 /* RadioViewController.swift in Sources */,
-				451B6AA12204B6CC001848FA /* LocalWorker.swift in Sources */,
 				454D1ADA22035D87006ABA85 /* AmpCDModel.xcdatamodeld in Sources */,
 				45D61F5420E1647300869814 /* RadioModels.swift in Sources */,
 				45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */,

@@ -23,9 +23,9 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" red="0.043137254899999998" green="0.14901960780000001" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <items>
-                                    <tabBarItem image="radio" id="uE8-dT-sqc"/>
                                     <tabBarItem title="" image="localMods" id="YFX-c8-bgI"/>
                                     <tabBarItem title="" image="search" id="LmS-5h-GdI"/>
+                                    <tabBarItem image="radio" id="uE8-dT-sqc"/>
                                     <tabBarItem image="about" id="c95-Gd-oNq"/>
                                 </items>
                             </tabBar>

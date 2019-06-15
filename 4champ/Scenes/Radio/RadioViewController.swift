@@ -95,11 +95,12 @@ class RadioViewController: UIViewController, RadioDisplayLogic
 
     localLabel?.isHidden = true
     shareButton?.isHidden = true
-    faveButton?.isHidden = true
+    faveButton?.isHidden = false
     saveButton?.isHidden = true
     notifyButton?.isHidden = true
     
     interactor?.updateLatest()
+    displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel(nowPlaying: nil, nextUp: nil))
   }
   
   // MARK: Do something
@@ -139,6 +140,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       nameLabel?.text = current.name ?? ""
       sizeLabel?.text = "\(current.size ?? 0) kb"
       localLabel?.isHidden = !current.hasBeenSaved()
+      faveButton?.isSelected = current.favorite
     } else {
       currentModuleView?.alpha = 0.8
       downloadProgress?.progress = 0
@@ -146,6 +148,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       composerLabel?.text = "Radio_StatusOff".l13n()
       nameLabel?.text = "..."
       sizeLabel?.text = "0 kb"
+      faveButton?.isSelected = false
     }
   }
   
@@ -164,6 +167,10 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       let req = Radio.Control.Request(powerOn: sender.isOn, channel: channelSelection)
       interactor?.controlRadio(request: req)
     }
+  }
+  
+  @IBAction private func faveTapped(_ sender: UIButton) {
+    interactor?.toggleFavorite()
   }
   
   @IBAction private func segmentChanged(_ sender: UISegmentedControl) {

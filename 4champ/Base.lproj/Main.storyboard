@@ -138,6 +138,9 @@
                                         <state key="highlighted">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="faveTapped:" destination="9pv-A4-QxB" eventType="touchUpInside" id="vXm-7A-B5r"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -768,9 +771,9 @@
                     <connections>
                         <outlet property="npView" destination="tLo-MP-5Y5" id="kQG-sS-uKZ"/>
                         <segue destination="twp-s7-Sug" kind="presentation" identifier="ToVisualizer" id="FHS-Ir-Ndk"/>
-                        <segue destination="dEJ-4L-TTY" kind="relationship" relationship="viewControllers" id="4XC-vI-oqt"/>
                         <segue destination="kPI-s7-4bn" kind="relationship" relationship="viewControllers" id="Xcy-jM-Re1"/>
                         <segue destination="gNh-7S-fOz" kind="relationship" relationship="viewControllers" id="Run-gL-a8n"/>
+                        <segue destination="dEJ-4L-TTY" kind="relationship" relationship="viewControllers" id="4XC-vI-oqt"/>
                         <segue destination="EUw-TD-AZa" kind="relationship" relationship="viewControllers" id="KLJ-Kh-eK4"/>
                     </connections>
                 </tabBarController>

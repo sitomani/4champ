@@ -17,6 +17,9 @@ protocol RadioBusinessLogic
   ///   - request: Control parameters (on/off/channel) in a `Radio.Control.Request` struct
   func controlRadio(request: Radio.Control.Request)
   
+  /// Set current playing song favorite status
+  func toggleFavorite()
+  
   /// Updates the most recently added module id by querying 4champ.net REST interface
   /// called currently only once when radio view is displayed the first time in a session.
   func updateLatest()
@@ -36,17 +39,32 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
 {
   var presenter: RadioPresentationLogic?
   
-  private var latestId: Int = 140000 // latest id in the AMP database (updated when NEW channel used)
+  private var latestId: Int = 152506 // latest id in the AMP database (updated when NEW channel used)
   private var latestPlayed: Int = 0 // identifier of the latest module id played (used in New channel)
   
   private var activeRequest: Alamofire.DataRequest?
   private var playbackTimer: Timer?
 
+  private var radioOn: Bool {
+    switch status {
+    case .off:
+      return false
+    default:
+      return true
+    }
+  }
+  
   var channel: RadioChannel = .all
   var status: RadioStatus = .off {
     didSet {
       presenter?.presentControlStatus(status: status)
+      modulePlayer.radioOn = self.radioOn
     }
+  }
+  
+  override init() {
+    super.init()
+    moduleStorage.addStorageObserver(self)
   }
   
   // MARK: Request handling
@@ -54,6 +72,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     log.debug(request)
     stopPlayback()
     guard request.powerOn == true else {
+      presenter?.presentChannelBuffer(buffer: [])
       return
     }
 
@@ -67,9 +86,17 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     fillBuffer()
   }
   
+  func toggleFavorite() {
+
+    guard let mod = modulePlayer.currentModule else {
+      log.error("no current module => cannot toggle favorite")
+      return
+    }
+    _ = moduleStorage.toggleFavorite(module: mod)
+  }
+  
   func updateLatest() {
     log.debug("")
-    triggerBufferPresentation()
     let req = RESTRoutes.latestId
     activeRequest = Alamofire.request(req).validate().responseString { resp in
       if let value = resp.result.value, let intValue = Int(value) {
@@ -79,13 +106,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   }
   
   func playNext() {
-    log.debug("")
-    switch status {
-    case .off:
-      return
-    default:
-      if modulePlayer.playlist.count == 0 { return }
-    }
+    guard radioOn && modulePlayer.playlist.count > 0 else { return }
     modulePlayer.playNext()
   }
   
@@ -114,9 +135,11 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   /// Triggers current radio playlist presentation
   private func triggerBufferPresentation() {
     log.debug("")
-    DispatchQueue.main.async {
-      self.presenter?.presentChannelBuffer(buffer: modulePlayer.playlist)
+    guard radioOn else {
+      self.presenter?.presentChannelBuffer(buffer: [])
+      return
     }
+    self.presenter?.presentChannelBuffer(buffer: modulePlayer.playlist)
   }
 
   /// Removes the first module in current playlist and deletes the related local file
@@ -190,14 +213,17 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
 extension RadioInteractor: ModuleFetcherDelegate {
   func fetcherStateChanged(_ fetcher: ModuleFetcher, state: FetcherState) {
     switch state {
-    case .failed:
-      switch status {
-      case .off:
-        log.info("no status change on failure if status already off")
-      default:
+    case .failed(let err):
+      if let fetcherErr = err as? FetcherError {
+        if fetcherErr == .unsupportedFormat {
+          //keep on loading mods
+          fillBuffer()
+          return
+        }
+      }
+      if radioOn {
         status = .failure
       }
-      
     case .downloading(let progress):
       status = .fetching(progress: progress)
       
@@ -217,6 +243,7 @@ extension RadioInteractor: ModuleFetcherDelegate {
 
 extension RadioInteractor: ModulePlayerObserver {
   func moduleChanged(module: MMD) {
+    guard radioOn else { return }
     log.debug("")
     if let index = modulePlayer.playlist.firstIndex(of: module), index > 0 {
       removeBufferHead()
@@ -231,5 +258,12 @@ extension RadioInteractor: ModulePlayerObserver {
   
   func errorOccurred(error: PlayerError) {
     //nop at the moment
+  }
+}
+
+extension RadioInteractor: ModuleStorageObserver {
+  func metadataChange(_ mmd: MMD) {
+    guard radioOn else { return }
+    triggerBufferPresentation()
   }
 }

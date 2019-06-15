@@ -21,6 +21,10 @@ enum FetcherState {
   case done(mmd: MMD)
 }
 
+enum FetcherError:Error {
+  case unsupportedFormat
+}
+
 /**
  ModuleFetcher state delegate.
  Implemented in classes that use a fetcher to download modules, e.g. RadioInteractor and SearchInteractor
@@ -100,7 +104,8 @@ class ModuleFetcher {
   /**
   private function that fetches the module from the identified download link,
   unpacks it and saves to disk. After completion, reports the module metadata on the
-  downloaded module through a state change to `FetcherState.done(mmd)`
+  downloaded module through a state change to `FetcherState.done(mmd)`. In case
+  of an error, a state change to `FetcherState.failed(error)` will be propagated.
    - parameters:
       - modUrl: URL of the module to download
       - id: numeric identifier of the module (needed for the module metadata object)
@@ -119,6 +124,12 @@ class ModuleFetcher {
         if let moduleDataUnzipped = self.gzipInflate(data: moduleData) {
           var mmd = MMD.init(path: modUrl.path, modId: id)
           mmd.size = Int(moduleDataUnzipped.count / 1024)
+
+          // Make sure that we only process supported mods further
+          guard mmd.supported() else {
+            self.state = .failed(err: FetcherError.unsupportedFormat)
+            return
+          }
           do {
             //store to file and make sure it's not writing over an existing mod
             var numberExt = 0

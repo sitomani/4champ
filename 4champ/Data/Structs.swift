@@ -16,6 +16,8 @@ struct Constants {
 struct MMD {
   init() {
   }
+  
+  static let supportedTypes: [String] = "669, AMF, AMS, DBM, DIGI, DMF, DSM, FAR, IT, GDM, ST26, IMF, J2B, M15, MED, MDL, MOD, MTM, NST, OCT, OKT, OSS, PTM, PSM, S3M, STM, SFX, SFX2, ULT, UMX, WOW, XM, FST, STK, MMCMP, MMS, MO3, MPTM, PLM, PPM, PT36, AHX, THX, HVL".split(separator: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
     
   init(cdi: ModuleInfo) {
     self.init()
@@ -68,6 +70,10 @@ struct MMD {
   func hasBeenSaved() -> Bool {
     let saved = moduleStorage.getModuleById(id!)
     return saved != nil
+  }
+  
+  func supported() -> Bool {
+    return MMD.supportedTypes.contains(self.type ?? "")
   }
 }
 

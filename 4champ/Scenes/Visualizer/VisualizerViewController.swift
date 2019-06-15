@@ -17,8 +17,6 @@ struct ViewElement {
 
 class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate {
   
-  weak var modPlayer:Replay!
-  
   @IBOutlet weak var titleLabel: UILabel!
   @IBOutlet weak var composerLabel: UILabel!
   @IBOutlet weak var samplesLabel: UILabel!
@@ -178,7 +176,10 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     
     titleLabel.text = info.name! + " (" + info.type! + ")"
     sizeLabel.text = "\(info.size!) Kb"
-    composerLabel.text = info.composer! + " | " + "Radio"
+    
+    let playlistName = modulePlayer.radioOn ? " | Radio" : ""
+    composerLabel.text = info.composer! + playlistName
+    faveStar.isSelected = info.favorite
 
     var samples:Array<String>
     samples = modulePlayer.renderer.getInstruments()

@@ -11,9 +11,10 @@ import CoreData
 
 protocol LocalBusinessLogic
 {
-  func doSomething(request: Local.Something.Request)
   func playModule(at: IndexPath)
   func sortAndFilter(request: Local.SortFilter.Request)
+  func deleteModule(at: IndexPath)
+  func toggleFavorite(at: IndexPath)
   // Direct getters
   func moduleCount() -> Int
   func getModule(at: IndexPath) -> MMD
@@ -21,50 +22,15 @@ protocol LocalBusinessLogic
 
 protocol LocalDataStore
 {
-  var localFRC: NSFetchedResultsController<ModuleInfo> { get }
-  //var name: String { get set }
+  var frc: NSFetchedResultsController<ModuleInfo>? { get }
 }
 
 class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
 {
   var presenter: LocalPresentationLogic?
-  var worker: LocalWorker?
-  //var name: String = ""
+  var frc: NSFetchedResultsController<ModuleInfo>?
   
-  private var moduleStorage: ModuleStorage = ModuleStorage()
-
-  lazy var localFRC: NSFetchedResultsController<ModuleInfo> = {
-    // Initialize Fetch Request
-    let fetchRequest = NSFetchRequest<ModuleInfo>(entityName: "ModuleInfo")
-    fetchRequest.fetchBatchSize = 20
-    
-    // Add Sort Descriptors
-    let sortDescriptor = NSSortDescriptor(key: "modName", ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
-    fetchRequest.sortDescriptors = [sortDescriptor]
-    
-    //      NSString* flt = [NSString stringWithFormat:@"(radioOnly == NO OR radioOnly == NULL)"];
-    fetchRequest.predicate = NSPredicate.init(format: "(radioOnly == NO OR radioOnly == NULL)")
-    // Initialize Fetched Results Controller
-    let fetchedResultsController = NSFetchedResultsController<ModuleInfo>(fetchRequest: fetchRequest, managedObjectContext: moduleStorage.managedObjectContext , sectionNameKeyPath: nil, cacheName: nil)
-    
-    return fetchedResultsController
-  }()
-  
-  // MARK: Do something
-  func doSomething(request: Local.Something.Request)
-  {
-    worker = LocalWorker()
-    worker?.doSomeWork()
-    do {
-      localFRC.delegate = self
-      try localFRC.performFetch()
-    } catch {
-      log.error(error)
-    }
-    let response = Local.Something.Response()
-    presenter?.presentSomething(response: response)
-  }
-  
+  // MARK: API
   func sortAndFilter(request: Local.SortFilter.Request) {
     var sortkey = "modName"
     switch request.sortKey {
@@ -78,24 +44,33 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
       sortkey = "modName"
     }
     // Add Sort Descriptors
-    let sortDescriptor = NSSortDescriptor(key: sortkey, ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
-    localFRC.fetchRequest.sortDescriptors = [sortDescriptor]
+    let sortDescriptor: NSSortDescriptor
+    if request.sortKey == .favorite {
+      sortDescriptor = NSSortDescriptor(key: sortkey, ascending: false)
+    } else {
+      sortDescriptor = NSSortDescriptor(key: sortkey, ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
+    }
+    
+    let fetchRequest = NSFetchRequest<ModuleInfo>.init(entityName: "ModuleInfo")
+    fetchRequest.sortDescriptors = [sortDescriptor]
 
     var filterString = "(radioOnly == NO OR radioOnly == NULL)"
     if let filterText = request.filterText, filterText.count > 0 {
       filterString += " AND (modName like[cd] '*\(filterText)*' OR modAuthor like[cd] '*\(filterText)*')"
     }
-    localFRC.fetchRequest.predicate = NSPredicate.init(format: filterString)
-    try! localFRC.performFetch()
-    presenter?.presentSomething(response: Local.Something.Response())
+    fetchRequest.predicate = NSPredicate.init(format: filterString)
+    frc = moduleStorage.createFRC(fetchRequest: fetchRequest, entityName: "ModuleInfo")
+    frc?.delegate = self
+    try! frc?.performFetch()
+    presenter?.presentModules(response: Local.SortFilter.Response())
   }
   
   func moduleCount() -> Int {
-    return localFRC.fetchedObjects?.count ?? 0
+    return frc?.fetchedObjects?.count ?? 0
   }
   
   func getModule(at: IndexPath) -> MMD {
-    if let mi = localFRC.fetchedObjects?[at.row] {
+    if let mi = frc?.fetchedObjects?[at.row] {
       var module = MMD()
       module.type = mi.modType ?? ""
       module.id = mi.modId?.intValue ?? 0
@@ -119,15 +94,46 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
       moduleStorage.deleteModule(module: mmd)
     }
   }
+  
+  func deleteModule(at: IndexPath) {
+    let mmd = getModule(at: at)
+    if mmd.fileExists() {
+      moduleStorage.deleteModule(module: mmd)
+    }
+  }
+  
+  func toggleFavorite(at: IndexPath) {
+    let mmd = getModule(at: at)
+    if mmd.fileExists() {
+      _ = moduleStorage.toggleFavorite(module: mmd)
+    }
+  }
 }
 
 extension LocalInteractor: NSFetchedResultsControllerDelegate {
+  func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    
+  }
+  
   func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    presenter?.presentSomething(response: Local.Something.Response())
+//    presenter?.presentModules(response: Local.SortFilter.Response())
+  }
+  
+  func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+
+    switch type {
+    case .insert:
+      presenter?.presentInsert(newIndexPath!)
+    case .delete:
+      presenter?.presentDeletion(indexPath!)
+    case .update:
+      presenter?.presentUpdate(indexPath!)
+    default:
+      presenter?.presentModules(response: Local.SortFilter.Response())
+    }
   }
   
   func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-    presenter?.presentSomething(response: Local.Something.Response())
-
+//    presenter?.presentModules(response: Local.SortFilter.Response())
   }
 }

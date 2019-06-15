@@ -36,7 +36,7 @@ class MainViewController: UITabBarController {
     
     self.becomeFirstResponder()
     modulePlayer.addPlayerObserver(self)
-    moduleStorage.observer = self
+    moduleStorage.addStorageObserver(self)
   }
   
   func toggleNowPlaying(_ value: Bool) {

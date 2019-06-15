@@ -10,8 +10,9 @@ import Foundation
 import CoreData
 
 protocol ModuleStorageInterface {
-  var observer: ModuleStorageObserver? { get set }
-  
+  func createFRC<T: NSManagedObject>(fetchRequest:NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T>
+  func addStorageObserver(_ observer: ModuleStorageObserver)
+  func removeStorageObserver(_ observer: ModuleStorageObserver)
   func addModule(module: MMD)
   func toggleFavorite(module: MMD) -> MMD?
   func getModuleById(_ id: Int) -> MMD?
@@ -19,12 +20,12 @@ protocol ModuleStorageInterface {
   func deleteModule(module: MMD)
 }
 
-protocol ModuleStorageObserver {
+protocol ModuleStorageObserver: class {
   func metadataChange(_ mmd: MMD)
 }
 
-class ModuleStorage {
-  var observer: ModuleStorageObserver?
+class ModuleStorage: NSObject {
+  private var observers: [ModuleStorageObserver] = []
   
     // MARK: Core Data lazy initialisers
   private lazy var managedObjectModel: NSManagedObjectModel = {
@@ -46,7 +47,7 @@ class ModuleStorage {
 //    } else {
       let coordinator = self.persistentStoreCoordinator
       moc = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-      moc?.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+//      moc?.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
       moc?.persistentStoreCoordinator = coordinator
 //    }
     return moc!
@@ -85,7 +86,8 @@ class ModuleStorage {
   }()
     
     
-  init() {
+  override init() {
+    super.init()
     var _ = persistentStoreCoordinator
     let name = managedObjectContext.name
     log.info(name ?? "noname")
@@ -93,6 +95,26 @@ class ModuleStorage {
 }
 
 extension ModuleStorage: ModuleStorageInterface {
+  func createFRC<T>(fetchRequest: NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T> where T : NSManagedObject {
+
+    // Initialize Fetch Request
+    let fetchedResultsController = NSFetchedResultsController<T>(fetchRequest: fetchRequest, managedObjectContext: managedObjectContext , sectionNameKeyPath: nil, cacheName: nil)
+      
+    return fetchedResultsController
+  }
+  
+  func addStorageObserver(_ observer: ModuleStorageObserver) {
+    observers.append(observer)
+  }
+  
+  func removeStorageObserver(_ observer: ModuleStorageObserver) {
+    if let index = observers.firstIndex(where: { mso -> Bool in
+      return mso === observer
+    }) {
+      observers.remove(at: index)
+    }
+  }
+  
   func addModule(module: MMD) {
     log.debug("")
     guard getModuleById(module.id!) == nil else {
@@ -154,7 +176,9 @@ extension ModuleStorage: ModuleStorageInterface {
       }
       saveContext()
       let mmd = MMD.init(cdi: cdModule)
-      observer?.metadataChange(mmd)
+      _ = observers.map {
+        $0.metadataChange(mmd)
+      }
       return mmd
     }
     return nil

@@ -233,6 +233,7 @@ extension SearchViewController: UITableViewDataSource {
     let cell = vm.dequeueCell(for: tableView, at: indexPath.row)
     if let modCell = (cell as? ModuleCell) {
         modCell.delegate = self
+        modCell.faveButton?.isHidden = true
     }
     return cell
   }
@@ -251,7 +252,7 @@ extension SearchViewController: UITableViewDelegate {
       }
     }
     if ds.modules.count > 0 {
-      guard let id = ds.modules[indexPath.row].id else { return }
+      guard let id = ds.modules[indexPath.row].id, ds.modules[indexPath.row].supported() else { return }
       interactor?.download(moduleId: id)
     } else if ds.groups.count > 0 {
       let id = ds.groups[indexPath.row].id
@@ -299,6 +300,7 @@ extension Search.ViewModel {
         cell.composerLabel?.text = module.composer!
         cell.sizeLabel?.text = "\(module.size!) Kb"
         cell.typeLabel?.text = module.type!
+        cell.stopImage?.isHidden = module.supported()
         return cell
       }
     } else if composers.count > row {
@@ -333,11 +335,11 @@ extension Search.ViewModel {
 }
 
 extension SearchViewController: ModuleCellDelegate {
-    func saveTapped(cell: ModuleCell) {
+    func faveTapped(cell: ModuleCell) {
         guard let ip = tableView?.indexPath(for: cell),
             let module = viewModel?.modules[ip.row] else {
                 return
         }
-        moduleStorage.addModule(module: module)
+      _ = moduleStorage.toggleFavorite(module: module)
     }
 }
