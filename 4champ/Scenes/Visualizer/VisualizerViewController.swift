@@ -341,6 +341,10 @@ extension VisualizerViewController: ModulePlayerObserver {
     //nop at the moment
   }
   
+  func playlistChanged() {
+    //nop at the moment
+  }
+  
   func startPlaybackTimer() {
     playbackTimer?.invalidate()
     playbackTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in

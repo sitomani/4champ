@@ -40,6 +40,9 @@ protocol ModulePlayerObserver: class {
   /// - parameters:
   ///    - error: Error that occurred
   func errorOccurred(error: PlayerError)
+  
+  /// called when playlist changes (e.g. due to metadata changes)
+  func playlistChanged()
 }
 
 class ModulePlayer: NSObject {
@@ -273,6 +276,9 @@ extension ModulePlayer: ModuleStorageObserver {
       if playlist[i] == mmd {
         playlist[i].favorite = mmd.favorite
       }
+    }
+    _ = observers.map {
+      $0.playlistChanged()
     }
   }
 }

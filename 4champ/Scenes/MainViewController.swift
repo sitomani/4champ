@@ -135,6 +135,10 @@ extension MainViewController: ModulePlayerObserver {
   func errorOccurred(error: PlayerError) {
     //nop at the moment
   }
+  
+  func playlistChanged() {
+    //nop at the moment
+  }
 }
 
 extension MainViewController: ModuleStorageObserver {

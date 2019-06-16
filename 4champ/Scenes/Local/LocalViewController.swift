@@ -239,6 +239,9 @@ extension LocalViewController: ModulePlayerObserver {
   func errorOccurred(error: PlayerError) {
     //nop at the moment
   }
+  
+  func playlistChanged() {
+  }
 }
 
 extension LocalViewController: UISearchBarDelegate {

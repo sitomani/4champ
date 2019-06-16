@@ -64,7 +64,6 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   
   override init() {
     super.init()
-    moduleStorage.addStorageObserver(self)
   }
   
   // MARK: Request handling
@@ -115,7 +114,6 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   /// Stops current playback when radio is turned off, or channel is changed
   private func stopPlayback() {
     log.debug("")
-    UIApplication.shared.endReceivingRemoteControlEvents()
     playbackTimer?.invalidate()
     Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
       tasks.forEach{ $0.cancel() }
@@ -259,11 +257,8 @@ extension RadioInteractor: ModulePlayerObserver {
   func errorOccurred(error: PlayerError) {
     //nop at the moment
   }
-}
-
-extension RadioInteractor: ModuleStorageObserver {
-  func metadataChange(_ mmd: MMD) {
-    guard radioOn else { return }
+  
+  func playlistChanged() {
     triggerBufferPresentation()
   }
 }

@@ -288,6 +288,9 @@ extension SearchViewController: ModulePlayerObserver {
   func errorOccurred(error: PlayerError) {
     //nop at the moment
   }
+  
+  func playlistChanged() {
+  }
 }
 
 // MARK: ViewModel extensions for tableview
