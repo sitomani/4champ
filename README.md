@@ -10,7 +10,7 @@ project that collects anything related to Amiga music production. AMP database b
 In this repository I'm working on rewriting the app that originally was released in AppStore in 2012, and since late 2017 not available in AppStore any more 😞. You can read more about the history of the app and follow the rewrite process on the development journal that I created for this project: [sitomani.github.io/4champ](https://sitomani.github.io/4champ).
 
 ### Main Features and their current status in this repository
-* Radio: You can listen to a random set of tunes from the whole collection of almost 150000 modules, or stream from the head, i.e. the most recently added ones. Implemented, except for the local modules radio for offline use.
+* Radio: You can listen to a random set of tunes from the whole collection of over 150000 modules, or stream from the head, i.e. the most recently added ones. You can also play from the local collection from set of modules that you've selected to keep for offline mode.
 * Search (search the AMP database by module, composer, group name or sampletexts): Implemented in October 2018.
 * Playlists (build your own playlists): TBD
 * Local Collection (store modules locally): Persistent storage for off-line listening of modules implemented June 2019.
