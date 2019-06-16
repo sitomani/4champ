@@ -13,7 +13,7 @@ In this repository I'm working on rewriting the app that originally was released
 * Radio: You can listen to a random set of tunes from the whole collection of almost 150000 modules, or stream from the head, i.e. the most recently added ones. Implemented, except for the local modules radio for offline use.
 * Search (search the AMP database by module, composer, group name or sampletexts): Implemented in October 2018.
 * Playlists (build your own playlists): TBD
-* Local Collection (store modules locally): TBD
+* Local Collection (store modules locally): Persistent storage for off-line listening of modules implemented June 2019.
 * Settings (control stereo separation etc): Stereo separation setting implemented in November 2018.
 
 ### Dependencies
