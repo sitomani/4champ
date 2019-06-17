@@ -3,7 +3,7 @@
 
 Many of us who grew up with computers in the 80's and early 90's remember Amiga and particularly its mind-blowing audio capabilities which were unrivaled at the era. Amiga inspired a lot of musicians to 
 produce a vast amount of compositions, or modules as they were called. [Amiga Music Preservation](http://amp.dascene.net) is a non-profit 
-project that collects anything related to Amiga music production. AMP database boasts almost 150 000 modules, 4champ app is your direct access to all that goodness.
+project that collects anything related to Amiga music production. AMP database boasts over 150 000 modules, 4champ app is your direct access to all that goodness.
 
 ### Development journal
 
@@ -53,7 +53,7 @@ After setting up the dependencies you can open 4champ.xcodeproj in Xcode and bui
 
 In order to run the app on device, you will need to replace the bundle identifier 'com.boogie.fourchamp' with another id, because Xcode will create a development certificate on the fly for the device build and same bundle identifier cannot be present in multiple certificates.
 
-The Xcode generated developer certificate will only be valid for 7 days, which means that you'll need to reinstall from Xcode every week to use the app. To work around this nuisance, you can create an ad hoc distribution certificate for signing the app in Apple Developer Center if are a member in Apple Developer Program.
+The Xcode generated developer certificate will only be valid for 7 days, which means that you'll need to reinstall from Xcode every week to use the app. To work around this nuisance, you can create an ad hoc distribution certificate for signing the app in Apple Developer Center if you are a member of the Apple Developer Program.
 
 ### License
 
