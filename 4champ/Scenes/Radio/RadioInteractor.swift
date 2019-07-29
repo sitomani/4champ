@@ -99,6 +99,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     let req = RESTRoutes.latestId
     activeRequest = Alamofire.request(req).validate().responseString { resp in
       if let value = resp.result.value, let intValue = Int(value) {
+        self.latestPlayed = 0
         self.latestId = intValue
       }
     }
@@ -116,7 +117,11 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     log.debug("")
     playbackTimer?.invalidate()
     Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
-      tasks.forEach{ $0.cancel() }
+      tasks.forEach {
+        if !$0.currentRequest!.url!.absoluteString.contains("get_latest") {
+          $0.cancel()
+        }
+      }
     }
     
     status = .off
