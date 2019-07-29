@@ -41,7 +41,9 @@ static SInt16* bufRight;
   if (self) {
     //Map AHX and HVL to HVLReplayer, everything else plays with OpenMPT
     self.replayerMap = @{@"AHX": [HVLReplayer class],
-                         @"HVL": [HVLReplayer class]};
+                         @"HVL": [HVLReplayer class],
+                         @"THX": [HVLReplayer class]
+                         };
   }
   return self;
 }
