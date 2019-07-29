@@ -1,5 +1,11 @@
 # 4champ Development Journal
 
+### 29 July 2019 Notification on new modules
+
+One of the most useful features that I had on the AppStore version was the notification on new modules. It's always nice to check what's the latest additions in the database. Majority of the additions are new old stock that has been found, but every now and then there's also modern day tunes coming in from a demoscene event. 
+
+The notification support is built using UserNotifications library, and is based on the app performing a background fetch to check for new items in database. In the event of new mods it will put up a local notification, and you can see the number of new mods in the badge on the app icon and on Radio tab in the 4champ UI.
+
 ### 15 June 2019 Local Collection view implementation
 
 Ok so it took half a year but I finally got the time to squeeze the local collection implementation in. There are no fancy bells / whistles but when you search for mods or listen to 4champ radio, you can now mark modules for keeping by tapping the ⭐ button next to the module name in the "Now playing" area, Visualizer view or the Radio display. If you choose to unfavorite the module later, it will still be kept in the local collection until deleted.
