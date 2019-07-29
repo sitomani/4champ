@@ -213,6 +213,9 @@
                                     <constraint firstAttribute="height" constant="30" id="Mk3-si-qe9"/>
                                 </constraints>
                                 <state key="normal" title="Notify me on new mods"/>
+                                <connections>
+                                    <action selector="ntfButtonTapped:" destination="9pv-A4-QxB" eventType="touchUpInside" id="9OF-SI-ydB"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.073797307908535004" green="0.2040666937828064" blue="0.33733105659484863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -19,12 +19,15 @@ protocol SettingsDataStore
 
 class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore
 {
+
   private enum SettingKeys {
     static let domainName = "DomainName"
     static let stereoSeparation = "StereoSeparation"
+    static let collectionSize = "collectionSize"
+    static let newestPlayed = "newestPlayed"
+    static let prevCollectionSize = "prevCollectionSize"
   }
 
-  
   var presenter: SettingsPresentationLogic?
   
   var stereoSeparation: Int {
@@ -38,6 +41,55 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore
       return Constants.stereoSeparationDefault
     }
   }
+    
+    var collectionSize: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: SettingKeys.collectionSize)
+            updateBadge()
+            NotificationCenter.default.post(Notification.init(name: Notifications.badgeUpdate))
+        }
+        get {
+            if let value = UserDefaults.standard.value(forKey: SettingKeys.collectionSize) as? Int {
+                return value
+            }
+            return Constants.latestDummy
+        }
+    }
+    
+    var newestPlayed: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: SettingKeys.newestPlayed)
+            updateBadge()
+            NotificationCenter.default.post(Notification.init(name: Notifications.badgeUpdate))
+        }
+        get {
+            if let value = UserDefaults.standard.value(forKey: SettingKeys.newestPlayed) as? Int {
+                return value
+            }
+            return 0
+        }
+    }
+    
+    var prevCollectionSize: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: SettingKeys.prevCollectionSize)
+        }
+        get {
+            if let value = UserDefaults.standard.value(forKey: SettingKeys.prevCollectionSize) as? Int {
+                return value
+            }
+            return 0
+        }
+    }
+    
+    var badgeCount: Int {
+        if newestPlayed < collectionSize {
+            var diff = collectionSize - newestPlayed
+            diff = diff > Constants.maxBadgeValue ? Constants.maxBadgeValue : diff
+            return diff
+        }
+        return 0
+    }
   
   // MARK: Do something
   
@@ -53,4 +105,8 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore
     modulePlayer.setStereoSeparation(stereoSeparation)
     presenter?.presentSettings(response: response)
   }
+    
+    private func updateBadge() {
+        UIApplication.shared.applicationIconBadgeNumber = badgeCount
+    }
 }

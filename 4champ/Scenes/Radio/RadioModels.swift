@@ -62,4 +62,23 @@ enum Radio
       var nextUp: String?
     }
   }
+  
+  enum LocalNotifications {
+    struct Request {}
+    struct Response {
+      var notificationsEnabled: Bool
+    }
+    struct ViewModel {
+      var buttonTitle: String
+    }
+  }
+  
+  enum NewModules {
+    struct Response {
+      let badgeValue: Int
+    }
+    struct ViewModel {
+      let badgeText: String?
+    }
+  }
 }

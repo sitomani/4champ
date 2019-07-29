@@ -7,7 +7,7 @@
 
 import UIKit
 import Alamofire
-
+import UserNotifications
 
 /// Radio Interactor business logic protocol
 protocol RadioBusinessLogic
@@ -20,12 +20,17 @@ protocol RadioBusinessLogic
   /// Set current playing song favorite status
   func toggleFavorite()
   
-  /// Updates the most recently added module id by querying 4champ.net REST interface
-  /// called currently only once when radio view is displayed the first time in a session.
-  func updateLatest()
-  
   /// Skips current module and starts playing the next one
   func playNext()
+  
+  /// Refresh the new module notifications status
+  func refreshLocalNotificationsStatus()
+  
+  /// Request local notifications
+  func requestLocalNotifications()
+  
+  /// Refresh badge
+  func refreshBadge()
 }
 
 /// Radio datastore for keeping currently selected channel and status
@@ -39,9 +44,9 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
 {
   var presenter: RadioPresentationLogic?
   
-  private var latestId: Int = 152506 // latest id in the AMP database (updated when NEW channel used)
-  private var latestPlayed: Int = 0 // identifier of the latest module id played (used in New channel)
+  private var lastPlayed: Int = 0 // identifier of the last module id played (used in New channel)
   
+  private var ntfAuthorization: UNAuthorizationStatus = .notDetermined
   private var activeRequest: Alamofire.DataRequest?
   private var playbackTimer: Timer?
 
@@ -64,6 +69,11 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   
   override init() {
     super.init()
+    NotificationCenter.default.addObserver(self, selector: #selector(doBadgeUpdate(_:)), name: Notifications.badgeUpdate, object: nil)
+  }
+  
+  @objc func doBadgeUpdate(_ notification: Notification?) {
+    self.presenter?.presentNewModules(response: Radio.NewModules.Response(badgeValue: settings.badgeCount))
   }
   
   // MARK: Request handling
@@ -74,7 +84,6 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
       presenter?.presentChannelBuffer(buffer: [])
       return
     }
-
     modulePlayer.addPlayerObserver(self)
     playbackTimer?.invalidate()
     playbackTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
@@ -94,20 +103,37 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     _ = moduleStorage.toggleFavorite(module: mod)
   }
   
-  func updateLatest() {
-    log.debug("")
-    let req = RESTRoutes.latestId
-    activeRequest = Alamofire.request(req).validate().responseString { resp in
-      if let value = resp.result.value, let intValue = Int(value) {
-        self.latestPlayed = 0
-        self.latestId = intValue
-      }
-    }
-  }
-  
   func playNext() {
     guard radioOn && modulePlayer.playlist.count > 0 else { return }
     modulePlayer.playNext()
+  }
+  
+  func refreshLocalNotificationsStatus() {
+    log.debug("")
+    let un = UNUserNotificationCenter.current()
+    un.getNotificationSettings { (settings) in
+      self.ntfAuthorization = settings.authorizationStatus
+      let response = Radio.LocalNotifications.Response(
+        notificationsEnabled: self.ntfAuthorization == .authorized)
+      self.presenter?.presentNotificationStatus(response: response)
+    }
+  }
+  
+  func requestLocalNotifications() {
+    if self.ntfAuthorization == .authorized || self.ntfAuthorization == .denied {
+      UIApplication.shared.open(URL.init(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
+      return
+    }
+    
+    let un = UNUserNotificationCenter.current()
+    un.requestAuthorization(options: [.badge, .sound, .alert]) { (granted, error) in
+      self.refreshLocalNotificationsStatus()
+    }
+  }
+  
+  func refreshBadge() {
+    log.debug("")
+    doBadgeUpdate(nil)
   }
   
   // MARK: private functions
@@ -125,7 +151,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     }
     
     status = .off
-    latestPlayed = 0
+    lastPlayed = 0
     while modulePlayer.playlist.count > 0 {
       removeBufferHead()
     }
@@ -183,15 +209,16 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     log.debug("")
     switch channel {
     case .all:
-      let id = arc4random_uniform(UInt32(latestId))
+      let id = arc4random_uniform(UInt32(settings.collectionSize))
       return Int(id)
     case .new:
-      if latestPlayed == 0 {
-        latestPlayed = latestId
+      if lastPlayed == 0 {
+        lastPlayed = settings.collectionSize
+        settings.newestPlayed = lastPlayed
       } else {
-        latestPlayed = latestPlayed - 1
+        lastPlayed = lastPlayed - 1
       }
-      return latestPlayed
+      return lastPlayed
     case .local:
       guard let mod = moduleStorage.getRandomModule() else {
         presenter?.presentControlStatus(status: .noModulesAvailable)

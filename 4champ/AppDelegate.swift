@@ -8,14 +8,19 @@
 import UIKit
 import SwiftyBeaver
 import AVFoundation
+import Alamofire
+import UserNotifications
 
 // Global
 let modulePlayer = ModulePlayer()
 let moduleStorage = ModuleStorage()
 let log = SwiftyBeaver.self
+let settings = SettingsInteractor()
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+  
+  private var _bgFetchCallback: ((UIBackgroundFetchResult) -> Void)?
   
   var window: UIWindow?
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -24,7 +29,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     setupLogging()
     setupAVSession()
     cleanupFiles()
+// UNCOMMENT BELOW TWO LINES TO TEST LOCAL NOTIFICATIONS
+//    settings.prevCollectionSize = 0
+//    settings.newestPlayed = 152890
+
+    updateLatest()
     UIApplication.shared.beginReceivingRemoteControlEvents()
+    application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
     return true
   }
   
@@ -58,6 +69,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
   }
   
+  func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    log.debug("performFetch")
+    _bgFetchCallback = completionHandler
+    updateLatest()
+  }
+  
   /// Set up SwiftyBeaver logging
   func setupLogging() {
     let console = ConsoleDestination()  // log to Xcode Console
@@ -89,6 +106,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     } catch {
       print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
     }
+  }
+  
+  func updateLatest() {
+    log.debug("")
+    let req = RESTRoutes.latestId
+    Alamofire.request(req).validate().responseString { resp in
+      if let value = resp.result.value, let intValue = Int(value) {
+        log.info("Collection Size: \(intValue)")
+        self.updateCollectionSize(size: intValue)
+      } else {
+        self._bgFetchCallback?(.noData)
+        self._bgFetchCallback = nil
+      }
+    }
+  }
+  
+  func updateCollectionSize(size: Int) {
+    log.debug("")
+    settings.collectionSize = size
+    let prevSize = settings.prevCollectionSize
+    
+    // Only fire the request once per a given collectionSize/diff
+    if prevSize < size && settings.badgeCount < Constants.maxBadgeValue {
+      let fmt = "Radio_Notification".l13n()
+      let content = UNMutableNotificationContent()
+      content.body = String.init(format: fmt, "\(settings.badgeCount)")
+      content.categoryIdentifier = "newmodules"
+      let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 0.1, repeats: false)
+      let req = UNNotificationRequest.init(identifier: "newmodules-usernotif", content: content, trigger: trigger)
+      UNUserNotificationCenter.current().add(req, withCompletionHandler: nil)
+      settings.prevCollectionSize = settings.collectionSize
+      _bgFetchCallback?(.newData)
+    } else {
+      _bgFetchCallback?(.noData)
+    }
+    _bgFetchCallback = nil
   }
 }
 

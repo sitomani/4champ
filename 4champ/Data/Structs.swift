@@ -11,6 +11,12 @@ struct Constants {
   static let radioBufferLen = 3 // Length of the radio buffer
   static let searchDelay = 0.3  // Type wait delay before search is triggered
   static let stereoSeparationDefault: Int = 40 // Default stereo separation value for playback (0-100)
+  static let latestDummy: Int = 152506 // Initial newest module id in case update fails
+  static let maxBadgeValue = 999 // maximum badge value for new mods
+}
+
+struct Notifications {
+  static let badgeUpdate = Notification.Name("badge_update")
 }
 
 struct MMD {

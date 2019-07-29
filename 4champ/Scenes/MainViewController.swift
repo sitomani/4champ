@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 protocol NowPlayingContainer {
   func toggleNowPlaying(_ value: Bool)
@@ -37,6 +38,7 @@ class MainViewController: UITabBarController {
     self.becomeFirstResponder()
     modulePlayer.addPlayerObserver(self)
     moduleStorage.addStorageObserver(self)
+    UNUserNotificationCenter.current().delegate = self
   }
   
   func toggleNowPlaying(_ value: Bool) {
@@ -146,5 +148,16 @@ extension MainViewController: ModuleStorageObserver {
     if modulePlayer.currentModule?.id == mmd.id {
       npView.setModule(mmd)
     }
+  }
+}
+
+extension MainViewController: UNUserNotificationCenterDelegate {
+  func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    completionHandler([.alert, .badge, .sound])
+  }
+  
+  func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+    selectedIndex = 2 // go to radio tab
+    completionHandler()
   }
 }

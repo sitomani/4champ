@@ -155,7 +155,7 @@
 		45D392AD20B1DDEE00EEF4E3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		45D392B020B1DDEE00EEF4E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		45D392B220B1DDEE00EEF4E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		45D61F4B20E1647300869814 /* RadioPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioPresenter.swift; sourceTree = "<group>"; };
+		45D61F4B20E1647300869814 /* RadioPresenter.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = RadioPresenter.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45D61F4D20E1647300869814 /* RadioRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioRouter.swift; sourceTree = "<group>"; };
 		45D61F4E20E1647300869814 /* RadioModels.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = RadioModels.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45D61F4F20E1647300869814 /* RadioViewController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = RadioViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
@@ -752,6 +752,7 @@
 				);
 				HEADER_SEARCH_PATHS = ../openmpt/libopenmpt;
 				INFOPLIST_FILE = "$(SRCROOT)/4champ/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -778,6 +779,7 @@
 				);
 				HEADER_SEARCH_PATHS = ../openmpt/libopenmpt;
 				INFOPLIST_FILE = "$(SRCROOT)/4champ/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

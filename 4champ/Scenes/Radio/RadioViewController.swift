@@ -12,6 +12,8 @@ protocol RadioDisplayLogic: class
   func displayControlStatus(viewModel: Radio.Control.ViewModel)
   func displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel)
   func displayPlaybackTime(viewModel: Radio.Playback.ViewModel)
+  func displayLocalNotificationStatus(viewModel: Radio.LocalNotifications.ViewModel)
+  func displayNewModules(viewModel: Radio.NewModules.ViewModel)
 }
 
 class RadioViewController: UIViewController, RadioDisplayLogic
@@ -67,6 +69,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     presenter.viewController = viewController
     router.viewController = viewController
     router.dataStore = interactor
+    interactor.refreshBadge()
   }
   
   // MARK: Routing
@@ -98,9 +101,18 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     faveButton?.isHidden = false
     saveButton?.isHidden = true
     notifyButton?.isHidden = true
-    
-    interactor?.updateLatest()
+
+    channelSegments?.setTitle("Radio_All".l13n(), forSegmentAt: 0)
+    channelSegments?.setTitle("Radio_New".l13n(), forSegmentAt: 1)
+    channelSegments?.setTitle("Radio_Local".l13n(), forSegmentAt: 2)
+
+    interactor?.refreshLocalNotificationsStatus()
+    interactor?.refreshBadge()
     displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel(nowPlaying: nil, nextUp: nil))
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
   }
   
   // MARK: Do something
@@ -156,7 +168,30 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     timeLabel?.text = viewModel.timeLeft
   }
   
-  //@IBOutlet weak var nameTextField: UITextField!
+  func displayLocalNotificationStatus(viewModel: Radio.LocalNotifications.ViewModel) {
+    log.debug("")
+    notifyButton?.setTitle(viewModel.buttonTitle, for: .normal)
+    notifyButton?.isHidden = false
+  }
+
+  func displayNewModules(viewModel: Radio.NewModules.ViewModel) {
+    log.debug("")
+    
+    if let text = viewModel.badgeText {
+      navigationController?.tabBarItem.badgeValue = viewModel.badgeText
+      let fmt = "Radio_New_Count".l13n()
+      let title = String.init(format: fmt, text)
+      channelSegments?.setTitle(title, forSegmentAt: 1)
+    } else {
+      channelSegments?.setTitle("Radio_New".l13n(), forSegmentAt: 1)
+      navigationController?.tabBarItem.badgeValue = nil
+    }
+  }
+  
+  @IBAction private func ntfButtonTapped(_ sender: UIButton) {
+    interactor?.requestLocalNotifications()
+  }
+  
   @IBAction private func nextTapped(_ sender: UIButton) {
     interactor?.playNext()
   }
