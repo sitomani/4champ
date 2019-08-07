@@ -2,7 +2,7 @@
 //  SearchInteractor.swift
 //  4champ Amiga Music Player
 //
-//  Copyright (c) 2018 Aleksi Sitomaniem. All rights reserved.
+//  Copyright (c) 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
 import UIKit
@@ -24,6 +24,15 @@ protocol SearchBusinessLogic
   /// - parameters:
   ///    - moduleId: id of the module to download
   func download(moduleId: Int)
+  
+  /// Starts download of a set of modules to persistent storage. Progress will be indicated
+  /// through presentDownloadProgress
+  /// - parameters:
+  ///    - request: BatchDownload request containing the ids to download
+  func downloadModules(_ request: Search.BatchDownload.Request)
+    
+  /// Cancels an ongoing multiple module fetch
+  func cancelDownload()
 }
 
 /// Search Interactor datastore
@@ -46,6 +55,9 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
   var pagingIndex: Int = 0
   
   private var currentRequest: Alamofire.DataRequest?
+  private var downloadQueue: [Int] = []
+  private var originalQueueLenght: Int = 0
+  private var fetcher: ModuleFetcher?
   
   func search(_ request: Search.Request) {
     log.debug("keyword: \(request.text), type: \(request.type), pagingIndex: \(request.pagingIndex)")
@@ -105,9 +117,42 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
   }
   
   func download(moduleId: Int) {
-    let fetcher = ModuleFetcher.init(delegate: self)
-    fetcher.fetchModule(ampId: moduleId)
+    //reset the download queue if single downloads are triggered
+    originalQueueLenght = 0
+    downloadQueue = []
+    doDownload(moduleId: moduleId)
   }
+  
+  private func doDownload(moduleId: Int) {
+    // Always create a new fetcher. Fetchers will be released
+    // Once the fetch is complete
+    fetcher = ModuleFetcher.init(delegate: self)
+    fetcher?.fetchModule(ampId: moduleId)
+  }
+    
+  func downloadModules(_ request: Search.BatchDownload.Request) {
+    downloadQueue = request.moduleIds
+    originalQueueLenght = request.moduleIds.count
+    fetchNextQueuedModule()
+  }
+  
+  func cancelDownload() {
+    downloadQueue = []
+    fetcher?.cancel()
+  }
+  
+  private func fetchNextQueuedModule() {
+    var resp = Search.BatchDownload.Response(originalQueueLength: originalQueueLenght, queueLength: downloadQueue.count, complete: false)
+    guard downloadQueue.count > 0 else {
+      resp.complete = true
+      presenter?.presentBatchProgress(response: resp)
+      return
+    }
+    let nextId = downloadQueue.removeFirst()
+    presenter?.presentBatchProgress(response: resp)
+    doDownload(moduleId: nextId)
+  }
+  
 }
 
 extension SearchInteractor: ModuleFetcherDelegate {
@@ -116,11 +161,19 @@ extension SearchInteractor: ModuleFetcherDelegate {
     switch state {
     case .done(let mmd):
       presenter?.presentDownloadProgress(response: Search.ProgressResponse(progress: 1.0))
-      modulePlayer.play(mmd: mmd)
-      removeBufferHead()
+      if originalQueueLenght == 0 {
+        modulePlayer.play(mmd: mmd)
+        removeBufferHead()
+      } else {
+        moduleStorage.addModule(module: mmd)
+        fetchNextQueuedModule()
+      }
     case .downloading(let progress):
       log.debug(progress)
       presenter?.presentDownloadProgress(response: Search.ProgressResponse(progress: progress))
+    case .failed(let err):
+      log.error(err.debugDescription)
+      fetchNextQueuedModule()
     default:
       log.verbose("noop")
     }

@@ -11,6 +11,7 @@ protocol SearchDisplayLogic: class
 {
   func displayResult(viewModel: Search.ViewModel)
   func displayDownloadProgress(viewModel: Search.ProgressResponse.ViewModel)
+  func displayBatchProgress(viewModel: Search.BatchDownload.ViewModel)
 }
 
 class SearchViewController: UIViewController, SearchDisplayLogic
@@ -28,6 +29,11 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   
   var viewModel: Search.ViewModel?
   private var pagingRequestActive: Bool = false
+  private var batchProgressView: UIAlertController?
+  
+  private let progressMarks = ["◐","◓","◑","◒"]
+  private var progressMarkIndex = 0
+  private var spinnerTimer: Timer?
   
   @IBOutlet weak var searchBar: UISearchBar?
   
@@ -150,6 +156,19 @@ class SearchViewController: UIViewController, SearchDisplayLogic
     DispatchQueue.main.async {
       self.tableView?.reloadData()
     }
+    
+    if viewModel.modules.count > 0 && viewModel.text.count == 0 {
+      let dlbutton = UIButton.init(type: .system)
+      dlbutton.setImage(UIImage.init(named: "downloadall"), for: .normal)
+      dlbutton.layoutMargins = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
+      dlbutton.setTitle("\(viewModel.modules.count) ", for: .normal)
+      dlbutton.sizeToFit()
+      dlbutton.addTarget(self, action: #selector(triggerDownloadAll(_:)), for: .touchUpInside)
+      dlbutton.semanticContentAttribute = UIApplication.shared
+        .userInterfaceLayoutDirection == .rightToLeft ? .forceLeftToRight : .forceRightToLeft
+      navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: dlbutton)
+    }
+    
   }
   
   func displayDownloadProgress(viewModel: Search.ProgressResponse.ViewModel) {
@@ -160,6 +179,45 @@ class SearchViewController: UIViewController, SearchDisplayLogic
     } else {
       progressBar?.isHidden = true
     }
+  }
+  
+  func displayBatchProgress(viewModel: Search.BatchDownload.ViewModel) {
+    batchProgressView?.message = "(\(viewModel.processed) / \(viewModel.batchSize))"
+    if viewModel.complete {
+      batchProgressView?.dismiss(animated: true, completion: nil)
+      stopBatchSpinner()
+      progressBar?.progress = 0
+      progressBar?.isHidden = true
+    }
+  }
+  
+  @objc private func triggerDownloadAll(_ sender: UIBarButtonItem) {
+    guard let vm = viewModel else { return }
+    
+    // dismiss first just in case
+    batchProgressView?.dismiss(animated: false, completion: nil)
+    batchProgressView = UIAlertController.init(title: "Search_Downloading".l13n(), message: "()", preferredStyle: .alert)
+    batchProgressView?.addAction(UIAlertAction.init(title: "G_Cancel".l13n(), style: .cancel, handler: { _ in
+      self.interactor?.cancelDownload()
+    }))
+    present(batchProgressView!, animated: true, completion: nil)
+    startBatchSpinner()
+    let modids = vm.modules.map { $0.id! }
+    let request = Search.BatchDownload.Request(moduleIds: modids)
+    interactor?.downloadModules(request)
+  }
+  
+  private func startBatchSpinner() {
+    spinnerTimer?.invalidate()
+    spinnerTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { (timer) in
+      let nextMark = self.progressMarks[self.progressMarkIndex]
+      self.batchProgressView?.title = "Search_Downloading".l13n() + nextMark
+      self.progressMarkIndex = (self.progressMarkIndex + 1) % self.progressMarks.count
+    })
+  }
+  
+  private func stopBatchSpinner() {
+    
   }
 }
 
@@ -198,6 +256,7 @@ extension SearchViewController: UISearchBarDelegate {
     }
     interactor?.search(Search.Request(text: text, type: searchScopes[searchBar?.selectedScopeButtonIndex ?? 0], pagingIndex: 0))
   }
+
 }
 
 // MARK: Datasource

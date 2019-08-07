@@ -93,11 +93,11 @@
 		451B6A9E2204B6CC001848FA /* LocalViewController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = LocalViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
 		451B6A9F2204B6CC001848FA /* LocalInteractor.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = LocalInteractor.swift; sourceTree = "<group>"; tabWidth = 2; };
 		451B6AA62204BBBB001848FA /* ModuleStorage.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModuleStorage.swift; sourceTree = "<group>"; tabWidth = 2; };
-		4535A45E2114BB2D005FBB8B /* SearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPresenter.swift; sourceTree = "<group>"; };
+		4535A45E2114BB2D005FBB8B /* SearchPresenter.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SearchPresenter.swift; sourceTree = "<group>"; tabWidth = 2; };
 		4535A4602114BB2D005FBB8B /* SearchRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRouter.swift; sourceTree = "<group>"; };
-		4535A4612114BB2D005FBB8B /* SearchModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModels.swift; sourceTree = "<group>"; };
+		4535A4612114BB2D005FBB8B /* SearchModels.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SearchModels.swift; sourceTree = "<group>"; tabWidth = 2; };
 		4535A4622114BB2D005FBB8B /* SearchViewController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
-		4535A4632114BB2D005FBB8B /* SearchInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInteractor.swift; sourceTree = "<group>"; };
+		4535A4632114BB2D005FBB8B /* SearchInteractor.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SearchInteractor.swift; sourceTree = "<group>"; tabWidth = 2; };
 		4535A46A2114C335005FBB8B /* ModuleCell.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModuleCell.swift; sourceTree = "<group>"; tabWidth = 2; };
 		4543982E20D0344F00991ADC /* AboutRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutRouter.swift; sourceTree = "<group>"; };
 		4543983020D0344F00991ADC /* AboutInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutInteractor.swift; sourceTree = "<group>"; };

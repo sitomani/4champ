@@ -33,7 +33,23 @@ enum Search
       var progress: Float
     }
   }
-
+  
+  struct BatchDownload {
+    struct Request {
+      var moduleIds: [Int]
+    }
+    struct Response {
+      var originalQueueLength: Int
+      var queueLength: Int
+      var complete: Bool
+    }
+    struct ViewModel {
+      var batchSize: Int
+      var processed: Int
+      var complete: Bool
+    }
+  }
+  
   struct ModuleResponse {
     var result: [SearchResultModule]
     var text: String

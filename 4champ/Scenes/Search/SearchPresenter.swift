@@ -13,6 +13,7 @@ protocol SearchPresentationLogic
   func presentGroups(response: Search.GroupResponse)
   func presentComposers(response: Search.ComposerResponse)
   func presentDownloadProgress(response: Search.ProgressResponse)
+  func presentBatchProgress(response: Search.BatchDownload.Response)
 }
 
 /// Search result presentation class. Presenter wraps the json originating
@@ -77,5 +78,14 @@ class SearchPresenter: SearchPresentationLogic
   func presentDownloadProgress(response: Search.ProgressResponse) {
     let vm = Search.ProgressResponse.ViewModel(progress: response.progress)
     viewController?.displayDownloadProgress(viewModel: vm)
+  }
+  
+  func presentBatchProgress(response: Search.BatchDownload.Response) {
+    log.debug("")
+    let processedCount = response.originalQueueLength - response.queueLength + (response.queueLength > 0 ? 1 : 0)
+    let vm = Search.BatchDownload.ViewModel(batchSize: response.originalQueueLength, processed:processedCount, complete: response.complete)
+    DispatchQueue.main.async {
+      self.viewController?.displayBatchProgress(viewModel: vm)
+    }
   }
 }
