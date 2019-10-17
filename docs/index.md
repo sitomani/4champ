@@ -1,5 +1,11 @@
 # 4champ Development Journal
 
+### 13 August 2019 Download all mods by a composer
+
+I attended [Datastorm 2019](https://datastorm.party) this year in the beginning of August, and during the party I managed to push a small new update to the repository. Now it is possible to download all modules by a composer on the Search view when you've selected a single Composer. By downloading the modules, you get to listen them in offline mode too, and in later updates it will be possible to build playlists of your local modules.
+
+![alt Download All](images/download_all.jpeg "Download all modules by a composer")
+
 ### 29 July 2019 Notification on new modules
 
 One of the most useful features that I had on the AppStore version was the notification on new modules. It's always nice to check what's the latest additions in the database. Majority of the additions are new old stock that has been found, but every now and then there's also modern day tunes coming in from a demoscene event. 
