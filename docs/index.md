@@ -1,5 +1,8 @@
 # 4champ Development Journal
 
+### 17 October 2019 Happy Hacktoberfest!
+I attended a local [Hacktoberfest](https://hacktoberfest.digitalocean.com) event hosted by [Electrobit Automotive](https://www.elektrobit.com) where I fixed a crash bug that emerged with iOS13 on the 4champ build. I was using a custom UISearchBar textfield access routine that iOS13 renders obsolete, as it now supports access to the search field in the SDK. In addition to the crash fix I corrected some style issues that iOS13 brought along. The dark mode support thing is TBD if I'll support it at all; the app is quite dark as it is.
+
 ### 13 August 2019 Download all mods by a composer
 
 I attended [Datastorm 2019](https://datastorm.party) this year in the beginning of August, and during the party I managed to push a small new update to the repository. Now it is possible to download all modules by a composer on the Search view when you've selected a single Composer. By downloading the modules, you get to listen them in offline mode too, and in later updates it will be possible to build playlists of your local modules.
