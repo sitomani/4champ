@@ -22,9 +22,7 @@ extension UISearchBar {
   }
   
   public var queryField: UITextField? {
-    return subviews.first?.subviews.compactMap {
-      $0 as? UITextField
-      }.first
+    return self.searchTextField
   }
   
   /// Property that controls whether the search spinner is shown or not
