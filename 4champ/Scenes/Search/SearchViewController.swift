@@ -98,7 +98,10 @@ class SearchViewController: UIViewController, SearchDisplayLogic
     if shouldDisplaySearchBar {
       searchBar?.showsScopeBar = false
       searchBar?.delegate = self
-        searchBar?.scopeButtonTitles = searchScopes.map { $0.l13n() }
+      searchBar?.setScopeBarButtonTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
+      searchBar?.setScopeBarButtonTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
+
+      searchBar?.scopeButtonTitles = searchScopes.map { $0.l13n() }
     } else {
       searchBar?.removeFromSuperview()
       navigationItem.title = router?.dataStore?.autoListTitle

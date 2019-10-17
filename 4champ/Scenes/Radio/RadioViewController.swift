@@ -105,6 +105,9 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     channelSegments?.setTitle("Radio_All".l13n(), forSegmentAt: 0)
     channelSegments?.setTitle("Radio_New".l13n(), forSegmentAt: 1)
     channelSegments?.setTitle("Radio_Local".l13n(), forSegmentAt: 2)
+    
+    channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
+    channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
 
     interactor?.refreshLocalNotificationsStatus()
     interactor?.refreshBadge()
