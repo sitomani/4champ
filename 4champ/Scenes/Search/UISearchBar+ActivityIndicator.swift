@@ -22,6 +22,9 @@ extension UISearchBar {
   }
   
   public var queryField: UITextField? {
+    if #available(iOS 13, *) {
+        return self.searchTextField
+    }
     return subviews.first?.subviews.compactMap {
       $0 as? UITextField
       }.first
