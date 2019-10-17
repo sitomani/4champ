@@ -22,7 +22,12 @@ extension UISearchBar {
   }
   
   public var queryField: UITextField? {
-    return self.searchTextField
+    if #available(iOS 13, *) {
+        return self.searchTextField
+    }
+    return subviews.first?.subviews.compactMap {
+      $0 as? UITextField
+      }.first
   }
   
   /// Property that controls whether the search spinner is shown or not
