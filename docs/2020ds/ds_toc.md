@@ -1,6 +1,6 @@
 ## 4champ DataScience 
 
-This is a series of data analytics related posts that focus on the
+This is a series of data analytics observations on the
 [Amiga Music Preservation](https://amp.dascene.net) tracker music database.
 
 ### Table of Contents
