@@ -1,5 +1,13 @@
 # 4champ Development Journal
 
+### 04 Jan 2020 Brilliant New Year!
+
+To kick off 2020 with something a bit different, I've added a data science section
+under the Github pages area along with this development journal. I will be posting
+observations and analytics on the 4champ / Amiga Music Preservation database along
+the way in the [DataScience Section](2020ds/ds_toc.md). To get notified on updates,
+star this repository for notifications, or follow [@4champ](https://twitter.com/4champ_app) in Twitter.
+
 ### 17 October 2019 Happy Hacktoberfest!
 I attended a local [Hacktoberfest](https://hacktoberfest.digitalocean.com) event hosted by [Electrobit Automotive](https://www.elektrobit.com) where I fixed a crash bug that emerged with iOS13 on the 4champ build. I was using a custom UISearchBar textfield access routine that iOS13 renders obsolete, as it now supports access to the search field in the SDK. In addition to the crash fix I corrected some style issues that iOS13 brought along. The dark mode support thing is TBD if I'll support it at all; the app is quite dark as it is.
 

@@ -1,4 +1,4 @@
-## 4champ DataScience 
+## 4champ DataScience Section
 
 This is a series of data analytics observations on the
 [Amiga Music Preservation](https://amp.dascene.net) tracker music database.
