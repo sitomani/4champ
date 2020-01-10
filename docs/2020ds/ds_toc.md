@@ -6,4 +6,6 @@ This is a series of data analytics observations on the
 ### Table of Contents
 
 **01** [Module Format Distribution](ds_01.md)<br/>
-**02** [Composer versatility](ds_02.md)
+**02** [Composer versatility](ds_02.md)<br/>
+**03** [Composer productivity distribution](ds_03.md)<br/>
+
