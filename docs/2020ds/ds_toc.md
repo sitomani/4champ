@@ -9,4 +9,5 @@ This is a series of data analytics observations on the
 **02** [Composer versatility](ds_02.md)<br/>
 **03** [Composer productivity distribution](ds_03.md)<br/>
 **04** [Top 10 most productive composers](ds_04.md)<br/>
+**05** [Module format size distribution](ds_05.md)<br/>
 
