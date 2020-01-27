@@ -10,5 +10,6 @@ This is a series of data analytics observations on the
 **03** [Composer productivity distribution](ds_03.md)<br/>
 **04** [Top 10 most productive composers](ds_04.md)<br/>
 **05** [Module format size distribution](ds_05.md)<br/>
-**06** [Race for the smallest MOD](ds_06.md)<br/>
+**06** [The race for the smallest MOD](ds_06.md)<br/>
+**07** [The race(?) for the largest MOD](ds_07.md)<br/>
 
