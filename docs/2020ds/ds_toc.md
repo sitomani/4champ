@@ -12,4 +12,4 @@ This is a series of data analytics observations on the
 **05** [Module format size distribution](ds_05.md)<br/>
 **06** [The race for the smallest MOD](ds_06.md)<br/>
 **07** [The race(?) for the largest MOD](ds_07.md)<br/>
-
+**08** [Smallest modules by format](ds_08.md)<bf/>
