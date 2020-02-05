@@ -1,5 +1,11 @@
 # 4champ Development Journal
 
+### 05 Feb 2020 New formats for free
+
+While working on the datascience section of the 4champ project, I noticed that the OpenMPT player can replay 
+OK (alternate extension for OKT) and DTM (Digital Tracker/Digital Home Studio). Added these formats to
+the supported formats list, and now there's 28 more modules that you can listen to on 4champ. Cheers!
+
 ### 04 Jan 2020 Brilliant New Year!
 
 To kick off 2020 with something a bit different, I've added a data science section
