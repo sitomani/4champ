@@ -14,3 +14,4 @@ This is a series of data analytics observations on the
 **07** [The race(?) for the largest MOD](ds_07.md)<br/>
 **08** [Smallest modules by format](ds_08.md)<br/>
 **09** [Largest modules by format](ds_09.md)<br/>
+**10** [A view to the module names](ds_10.md)<br>
