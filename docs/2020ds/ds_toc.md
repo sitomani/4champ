@@ -15,3 +15,4 @@ This is a series of data analytics observations on the
 **08** [Smallest modules by format](ds_08.md)<br/>
 **09** [Largest modules by format](ds_09.md)<br/>
 **10** [A view to the module names](ds_10.md)<br>
+**11** [Module name lengths](ds_11.md)<br/>
