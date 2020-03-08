@@ -112,6 +112,15 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     interactor?.refreshLocalNotificationsStatus()
     interactor?.refreshBadge()
     displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel(nowPlaying: nil, nextUp: nil))
+    
+    let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
+    currentModuleView?.addGestureRecognizer(longPressRecognizer)
+  }
+  
+  @objc func longPressed(sender: UILongPressGestureRecognizer) {
+    if sender.state == UIGestureRecognizer.State.began {
+      log.info("Long tapped on currentmod area")
+    }
   }
   
   override func viewDidAppear(_ animated: Bool) {

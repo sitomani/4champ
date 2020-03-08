@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 protocol SearchDisplayLogic: class
 {
@@ -92,12 +93,12 @@ class SearchViewController: UIViewController, SearchDisplayLogic
     progressBar?.isHidden = true
     view.backgroundColor = Appearance.darkBlueColor
     tableView?.backgroundColor = Appearance.ampBgColor
-    
     // Based on the context, either show search bar (root level search) or
     // hide it (subsequent searchs on group/composer)
     if shouldDisplaySearchBar {
       searchBar?.showsScopeBar = false
       searchBar?.delegate = self
+      searchBar?.searchTextField.textColor = .white
       searchBar?.setScopeBarButtonTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
       searchBar?.setScopeBarButtonTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
 
@@ -109,6 +110,9 @@ class SearchViewController: UIViewController, SearchDisplayLogic
       spinner?.startAnimating()
       interactor?.triggerAutoFetchList()
     }
+    
+    let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
+    self.view.addGestureRecognizer(longPressRecognizer)
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -208,6 +212,18 @@ class SearchViewController: UIViewController, SearchDisplayLogic
     let modids = vm.modules.map { $0.id! }
     let request = Search.BatchDownload.Request(moduleIds: modids)
     interactor?.downloadModules(request)
+  }
+  
+  @objc func longPressed(sender: UILongPressGestureRecognizer) {
+    if sender.state == UIGestureRecognizer.State.began {
+        let touchPoint = sender.location(in: self.tableView)
+        if let indexPath = tableView?.indexPathForRow(at: touchPoint) {
+            print("Long pressed row: \(indexPath.row)")
+          if let cell = tableView?.cellForRow(at: indexPath) as? ModuleCell {
+            longTap(cell: cell )
+          }
+        }
+    }
   }
   
   private func startBatchSpinner() {
@@ -407,4 +423,17 @@ extension SearchViewController: ModuleCellDelegate {
         }
       _ = moduleStorage.toggleFavorite(module: module)
     }
+  
+  func longTap(cell: ModuleCell) {
+    
+    guard let ip = tableView?.indexPath(for: cell),
+      let mod = interactor?.getModuleInfo(at: ip) else {
+        return
+    }
+    
+    let contentView = PlaylistPickerView(dismissAction: {self.dismiss( animated: true, completion: nil )}, module: mod).environment(\.managedObjectContext, moduleStorage.managedObjectContext)
+    let vc = UIHostingController(rootView: contentView)
+    vc.view.backgroundColor = .clear
+    present(vc, animated: true)
+  }
 }

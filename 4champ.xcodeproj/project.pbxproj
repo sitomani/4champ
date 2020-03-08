@@ -47,6 +47,7 @@
 		454F521021610F83007011F3 /* ComposerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 454F520F21610F83007011F3 /* ComposerCell.xib */; };
 		455CC0A62104A0E20094A5D3 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */; };
 		4569AC8B21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4569AC8A21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift */; };
+		456E6F2E240A5FAF0034BDA2 /* PlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456E6F2D240A5FAF0034BDA2 /* PlaylistViewController.swift */; };
 		45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */; };
 		45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F420FF2F6600794147 /* RESTRoutes.swift */; };
 		45AA910220FF36C200794147 /* Replay.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F720FF36C200794147 /* Replay.m */; };
@@ -61,6 +62,9 @@
 		45AA91162100ECE600794147 /* VisualizerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA91142100ECE600794147 /* VisualizerViewController.swift */; };
 		45AA911A2100EF1900794147 /* AmpSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA91182100EF1900794147 /* AmpSlider.swift */; };
 		45AA911B2100EF1900794147 /* AmpVizScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA91192100EF1900794147 /* AmpVizScene.swift */; };
+		45CEA1DF2413C8E300930A72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA1DE2413C8E300930A72 /* SceneDelegate.swift */; };
+		45CEA1E12415005E00930A72 /* SelectPlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA1E02415005E00930A72 /* SelectPlaylistView.swift */; };
+		45CEA1E32415065700930A72 /* PlaylistPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA1E22415065700930A72 /* PlaylistPicker.swift */; };
 		45D392A520B1DDEC00EEF4E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D392A420B1DDEC00EEF4E3 /* AppDelegate.swift */; };
 		45D392AC20B1DDEC00EEF4E3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45D392AA20B1DDEC00EEF4E3 /* Main.storyboard */; };
 		45D392AE20B1DDEE00EEF4E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45D392AD20B1DDEE00EEF4E3 /* Assets.xcassets */; };
@@ -130,6 +134,7 @@
 		454F520F21610F83007011F3 /* ComposerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComposerCell.xib; sourceTree = "<group>"; };
 		455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
 		4569AC8A21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchBar+ActivityIndicator.swift"; sourceTree = "<group>"; };
+		456E6F2D240A5FAF0034BDA2 /* PlaylistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistViewController.swift; sourceTree = "<group>"; };
 		45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModulePlayer.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45AA90F420FF2F6600794147 /* RESTRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTRoutes.swift; sourceTree = "<group>"; };
 		45AA90F720FF36C200794147 /* Replay.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = Replay.m; sourceTree = "<group>"; tabWidth = 2; };
@@ -149,6 +154,9 @@
 		45AA91142100ECE600794147 /* VisualizerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = VisualizerViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45AA91182100EF1900794147 /* AmpSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmpSlider.swift; sourceTree = "<group>"; };
 		45AA91192100EF1900794147 /* AmpVizScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmpVizScene.swift; sourceTree = "<group>"; };
+		45CEA1DE2413C8E300930A72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		45CEA1E02415005E00930A72 /* SelectPlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPlaylistView.swift; sourceTree = "<group>"; };
+		45CEA1E22415065700930A72 /* PlaylistPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistPicker.swift; sourceTree = "<group>"; };
 		45D392A120B1DDEC00EEF4E3 /* ampplayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ampplayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45D392A420B1DDEC00EEF4E3 /* AppDelegate.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45D392AB20B1DDEC00EEF4E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -223,6 +231,7 @@
 		4543982C20D0344F00991ADC /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				456E6F2A2409BC2C0034BDA2 /* Playlist */,
 				451B6A992204B506001848FA /* Local */,
 				450E505D2187932F008FB155 /* Settings */,
 				4569AC8E21654AC6000EDFDC /* SharedUI */,
@@ -270,6 +279,16 @@
 				454F520F21610F83007011F3 /* ComposerCell.xib */,
 			);
 			path = SharedUI;
+			sourceTree = "<group>";
+		};
+		456E6F2A2409BC2C0034BDA2 /* Playlist */ = {
+			isa = PBXGroup;
+			children = (
+				456E6F2D240A5FAF0034BDA2 /* PlaylistViewController.swift */,
+				45CEA1E02415005E00930A72 /* SelectPlaylistView.swift */,
+				45CEA1E22415065700930A72 /* PlaylistPicker.swift */,
+			);
+			path = Playlist;
 			sourceTree = "<group>";
 		};
 		45AA90F320FF2F4200794147 /* Networking */ = {
@@ -369,6 +388,7 @@
 				45D392AD20B1DDEE00EEF4E3 /* Assets.xcassets */,
 				45D392AF20B1DDEE00EEF4E3 /* LaunchScreen.storyboard */,
 				45D392B220B1DDEE00EEF4E3 /* Info.plist */,
+				45CEA1DE2413C8E300930A72 /* SceneDelegate.swift */,
 			);
 			path = 4champ;
 			sourceTree = "<group>";
@@ -517,6 +537,7 @@
 			files = (
 				4543984F20D0366E00991ADC /* String+extension.swift in Sources */,
 				45AA91162100ECE600794147 /* VisualizerViewController.swift in Sources */,
+				45CEA1E12415005E00930A72 /* SelectPlaylistView.swift in Sources */,
 				45AA91102100C48500794147 /* MainViewController.swift in Sources */,
 				4535A4672114BB2D005FBB8B /* SearchModels.swift in Sources */,
 				4543983820D0344F00991ADC /* AboutPresenter.swift in Sources */,
@@ -530,6 +551,7 @@
 				451B6AA42204B6CC001848FA /* LocalViewController.swift in Sources */,
 				454F5205215D20F3007011F3 /* ModuleFetcher.swift in Sources */,
 				45D61F5320E1647300869814 /* RadioRouter.swift in Sources */,
+				45CEA1DF2413C8E300930A72 /* SceneDelegate.swift in Sources */,
 				4535A4682114BB2D005FBB8B /* SearchViewController.swift in Sources */,
 				4509EA47226251EF0031408D /* ModuleInfo+CoreDataClass.swift in Sources */,
 				450E506D2187A066008FB155 /* SettingsStereoCell.swift in Sources */,
@@ -562,10 +584,12 @@
 				454F5209215D4587007011F3 /* GroupCell.swift in Sources */,
 				45AA91122100D13300794147 /* NowPlayingView.swift in Sources */,
 				45AA910620FF36C200794147 /* MPTReplayer.m in Sources */,
+				45CEA1E32415065700930A72 /* PlaylistPicker.swift in Sources */,
 				451B6AA72204BBBB001848FA /* ModuleStorage.swift in Sources */,
 				4543983620D0344F00991ADC /* AboutInteractor.swift in Sources */,
 				451B6AA32204B6CC001848FA /* LocalModels.swift in Sources */,
 				45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */,
+				456E6F2E240A5FAF0034BDA2 /* PlaylistViewController.swift in Sources */,
 				45AA910520FF36C200794147 /* HVLReplayer.mm in Sources */,
 				45D61F5620E1647300869814 /* RadioInteractor.swift in Sources */,
 				450E506921879347008FB155 /* SettingsInteractor.swift in Sources */,
@@ -675,7 +699,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -730,7 +754,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -752,7 +776,7 @@
 				);
 				HEADER_SEARCH_PATHS = ../openmpt/libopenmpt;
 				INFOPLIST_FILE = "$(SRCROOT)/4champ/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -779,7 +803,7 @@
 				);
 				HEADER_SEARCH_PATHS = ../openmpt/libopenmpt;
 				INFOPLIST_FILE = "$(SRCROOT)/4champ/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

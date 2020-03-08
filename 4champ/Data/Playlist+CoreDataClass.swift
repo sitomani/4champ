@@ -3,7 +3,6 @@
 //  ampplayer
 //
 //  Created by Aleksi Sitomaniemi on 13/04/2019.
-//  Copyright © 2019 boogie. All rights reserved.
 //
 //
 
@@ -14,3 +13,4 @@ import CoreData
 public class Playlist: NSManagedObject {
 
 }
+

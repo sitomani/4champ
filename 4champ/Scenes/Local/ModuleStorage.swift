@@ -18,6 +18,8 @@ protocol ModuleStorageInterface {
   func getModuleById(_ id: Int) -> MMD?
   func getRandomModule() -> MMD?
   func deleteModule(module: MMD)
+  
+  func createPlaylist(name: String)
 }
 
 protocol ModuleStorageObserver: class {
@@ -191,6 +193,15 @@ extension ModuleStorage: ModuleStorageInterface {
       return mmd
     }
     return nil
+  }
+  
+  func createPlaylist(name: String) {
+    let cdPlaylist = Playlist.init(entity: NSEntityDescription.entity(forEntityName: "Playlist", in: managedObjectContext)!, insertInto: managedObjectContext)
+    
+    cdPlaylist.plName = name
+    cdPlaylist.locked = false
+
+    saveContext()
   }
   
   private func saveContext() {

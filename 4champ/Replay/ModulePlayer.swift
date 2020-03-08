@@ -51,6 +51,8 @@ class ModulePlayer: NSObject {
   let renderer = Replay()
   let mpImage = UIImage.init(named: "albumart")!
   
+  var currentPlaylist: Playlist?
+  
   var currentModule: MMD? {
     // on currentModule change, post info on MPNowPlayingInfoCenter
     didSet {

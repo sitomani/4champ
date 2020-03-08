@@ -9,6 +9,7 @@ import UIKit
 
 protocol ModuleCellDelegate: class {
   func faveTapped(cell: ModuleCell)
+  func longTap(cell: ModuleCell)
 }
 
 /**

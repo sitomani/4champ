@@ -32,6 +32,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 // UNCOMMENT BELOW TWO LINES TO TEST LOCAL NOTIFICATIONS
 //    settings.prevCollectionSize = 0
 //    settings.newestPlayed = 152890
+    
+//    moduleStorage.createPlaylist(name: "Crusaders: Mi-Cro Con-Cept")
+//    moduleStorage.createPlaylist(name: "Wizzcat: Pentti muzaks")
 
     updateLatest()
     UIApplication.shared.beginReceivingRemoteControlEvents()

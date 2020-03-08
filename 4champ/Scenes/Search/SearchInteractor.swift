@@ -33,6 +33,8 @@ protocol SearchBusinessLogic
     
   /// Cancels an ongoing multiple module fetch
   func cancelDownload()
+  
+  func getModuleInfo(at: IndexPath) -> ModuleInfo?
 }
 
 /// Search Interactor datastore
@@ -121,6 +123,10 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
     originalQueueLenght = 0
     downloadQueue = []
     doDownload(moduleId: moduleId)
+  }
+  
+  func getModuleInfo(at: IndexPath) -> ModuleInfo? {
+    return nil
   }
   
   private func doDownload(moduleId: Int) {

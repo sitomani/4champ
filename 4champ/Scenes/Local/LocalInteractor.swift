@@ -18,6 +18,7 @@ protocol LocalBusinessLogic
   // Direct getters
   func moduleCount() -> Int
   func getModule(at: IndexPath) -> MMD
+  func getModuleInfo(at: IndexPath) -> ModuleInfo?
 }
 
 protocol LocalDataStore
@@ -82,6 +83,13 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
       return module
     }
     return MMD()
+  }
+  
+  func getModuleInfo(at: IndexPath) -> ModuleInfo? {
+     if let mi = frc?.fetchedObjects?[at.row] {
+      return mi
+    }
+    return nil
   }
   
   func playModule(at: IndexPath) {

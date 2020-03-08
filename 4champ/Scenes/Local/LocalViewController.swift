@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import SwiftUI
 
 protocol LocalDisplayLogic: class
 {
@@ -96,10 +97,25 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     tableView.contentOffset = CGPoint.init(x: 0, y: 44)
     //    let btn1 = UIBarButtonItem.init(image: UIImage.init(named: "modicon")?.resizeImageWith(newSize: CGSize.init(width: 30, height: 30)), style: .plain, target: nil, action: nil)
     updateBarButtons()
+    
+    let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
+    self.view.addGestureRecognizer(longPressRecognizer)
   }
   
   deinit {
     modulePlayer.removePlayerObserver(self)
+  }
+  
+  @objc func longPressed(sender: UILongPressGestureRecognizer) {
+    if sender.state == UIGestureRecognizer.State.began {
+        let touchPoint = sender.location(in: self.tableView)
+        if let indexPath = tableView.indexPathForRow(at: touchPoint) {
+            print("Long pressed row: \(indexPath.row)")
+          if let cell = tableView.cellForRow(at: indexPath) as? ModuleCell {
+            longTap(cell: cell )
+          }
+        }
+    }
   }
   
   @objc func handleBarButtonPress(sender: UIBarButtonItem) {
@@ -257,5 +273,17 @@ extension LocalViewController: ModuleCellDelegate {
       return
     }
     interactor?.toggleFavorite(at: ip)
+  }
+  func longTap(cell: ModuleCell) {
+    
+    guard let ip = tableView.indexPath(for: cell),
+      let mod = interactor?.getModuleInfo(at: ip) else {
+        return
+    }
+    
+    let contentView = PlaylistPickerView(dismissAction: {self.dismiss( animated: true, completion: nil )}, module: mod).environment(\.managedObjectContext, moduleStorage.managedObjectContext)
+    let vc = UIHostingController(rootView: contentView)
+    vc.view.backgroundColor = .clear
+    present(vc, animated: true)
   }
 }

@@ -3,7 +3,6 @@
 //  ampplayer
 //
 //  Created by Aleksi Sitomaniemi on 13/04/2019.
-//  Copyright © 2019 boogie. All rights reserved.
 //
 //
 
@@ -11,7 +10,7 @@ import Foundation
 import CoreData
 
 
-extension ModuleInfo {
+extension ModuleInfo: Identifiable {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<ModuleInfo> {
         return NSFetchRequest<ModuleInfo>(entityName: "ModuleInfo")
@@ -34,6 +33,9 @@ extension ModuleInfo {
     @NSManaged public var shared: NSDate?
     @NSManaged public var playlists: NSSet?
 
+    public var id: Int {
+        return modId?.intValue ?? 0
+    }
 }
 
 // MARK: Generated accessors for playlists
