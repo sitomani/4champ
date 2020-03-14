@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct PlaylistPickerView: View {
+struct PlaylistPickerView2: View {
     var dismissAction: (() -> Void)
     var module: ModuleInfo?
     @State var selectedPlaylist = 0
@@ -48,7 +48,7 @@ struct PlaylistPickerView: View {
                 Text("PlaylistSelector_Title").foregroundColor(.black)
                 Picker(selection: $selectedPlaylist, label: Text("")) {
                     ForEach(0..<self.playlists.count) {
-                        Text(self.buildPlaylistString(self.playlists[$0]))
+                            Text(self.buildPlaylistString(self.playlists[$0]))
                     }
                 }.labelsHidden().background(Color.white)
                 HStack {
@@ -66,11 +66,4 @@ struct PlaylistPickerView: View {
     }
 }
 
-#if DEBUG
-struct Pickerview_Previews : PreviewProvider {
-    static var previews: some View {
-        PlaylistPickerView(dismissAction: {}, module:nil)
-    }
-}
-#endif
 

@@ -19,9 +19,9 @@ class SearchViewController: UIViewController, SearchDisplayLogic
 {
   var interactor: SearchBusinessLogic?
   var router: (NSObjectProtocol & SearchRoutingLogic & SearchDataPassing)?
-
+  
   var searchScopes = [SearchType.composer, SearchType.module, SearchType.group, SearchType.meta]
-
+  
   var shouldDisplaySearchBar: Bool = true
   
   @IBOutlet weak var tableBottomConstraint: NSLayoutConstraint?
@@ -101,7 +101,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
       searchBar?.searchTextField.textColor = .white
       searchBar?.setScopeBarButtonTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
       searchBar?.setScopeBarButtonTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
-
+      
       searchBar?.scopeButtonTitles = searchScopes.map { $0.l13n() }
     } else {
       searchBar?.removeFromSuperview()
@@ -147,7 +147,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
       log.info("Search request result in after change in query. Canceling display")
       return
     }
-
+    
     if let pi = router?.dataStore?.pagingIndex, pi > 0 {
       log.debug("Appending to model")
       self.viewModel?.composers.append(contentsOf: viewModel.composers)
@@ -216,13 +216,13 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   
   @objc func longPressed(sender: UILongPressGestureRecognizer) {
     if sender.state == UIGestureRecognizer.State.began {
-        let touchPoint = sender.location(in: self.tableView)
-        if let indexPath = tableView?.indexPathForRow(at: touchPoint) {
-            print("Long pressed row: \(indexPath.row)")
-          if let cell = tableView?.cellForRow(at: indexPath) as? ModuleCell {
-            longTap(cell: cell )
-          }
+      let touchPoint = sender.location(in: self.tableView)
+      if let indexPath = tableView?.indexPathForRow(at: touchPoint) {
+        print("Long pressed row: \(indexPath.row)")
+        if let cell = tableView?.cellForRow(at: indexPath) as? ModuleCell {
+          longTap(cell: cell )
         }
+      }
     }
   }
   
@@ -275,7 +275,7 @@ extension SearchViewController: UISearchBarDelegate {
     }
     interactor?.search(Search.Request(text: text, type: searchScopes[searchBar?.selectedScopeButtonIndex ?? 0], pagingIndex: 0))
   }
-
+  
 }
 
 // MARK: Datasource
@@ -310,8 +310,8 @@ extension SearchViewController: UITableViewDataSource {
     }
     let cell = vm.dequeueCell(for: tableView, at: indexPath.row)
     if let modCell = (cell as? ModuleCell) {
-        modCell.delegate = self
-        modCell.faveButton?.isHidden = true
+      modCell.delegate = self
+      modCell.faveButton?.isHidden = true
     }
     return cell
   }
@@ -382,6 +382,12 @@ extension Search.ViewModel {
         cell.sizeLabel?.text = "\(module.size!) Kb"
         cell.typeLabel?.text = module.type!
         cell.stopImage?.isHidden = module.supported()
+        cell.progressVeil?.isHidden = true
+        //        if let _ = module.localPath {
+        //          cell.progressVeil?.isHidden = true
+        //        } else {
+        //          cell.progressVeil?.isHidden = false
+        //        }
         return cell
       }
     } else if composers.count > row {
@@ -398,7 +404,7 @@ extension Search.ViewModel {
         cell.nameLabel?.text = group.name
         return cell
       }
-
+      
     }
     return UITableViewCell()
   }
@@ -416,24 +422,33 @@ extension Search.ViewModel {
 }
 
 extension SearchViewController: ModuleCellDelegate {
-    func faveTapped(cell: ModuleCell) {
-        guard let ip = tableView?.indexPath(for: cell),
-            let module = viewModel?.modules[ip.row] else {
-                return
-        }
-      _ = moduleStorage.toggleFavorite(module: module)
-    }
-  
-  func longTap(cell: ModuleCell) {
-    
+  func faveTapped(cell: ModuleCell) {
     guard let ip = tableView?.indexPath(for: cell),
-      let mod = interactor?.getModuleInfo(at: ip) else {
+      let module = viewModel?.modules[ip.row] else {
         return
     }
-    
-    let contentView = PlaylistPickerView(dismissAction: {self.dismiss( animated: true, completion: nil )}, module: mod).environment(\.managedObjectContext, moduleStorage.managedObjectContext)
-    let vc = UIHostingController(rootView: contentView)
-    vc.view.backgroundColor = .clear
-    present(vc, animated: true)
+    _ = moduleStorage.toggleFavorite(module: module)
+  }
+  
+  func longTap(cell: ModuleCell) {
+    if let ip = tableView?.indexPath(for: cell),
+      let mmd = viewModel?.modules[ip.row] {
+      router?.toPlaylistSelector(module: mmd)
+
+      
+//      let contentView = PlaylistPickerView2(dismissAction: dismissAction, module: mod).environment(\.managedObjectContext, moduleStorage.managedObjectContext)
+//      let vc = UIHostingController(rootView: contentView)
+//      vc.view.backgroundColor = .clear
+//      present(vc, animated: true)
+    }
+  }
+  
+  func dismissAction() {
+    self.dismiss( animated: true, completion: nil )
+  }
+  
+  func addAction(moduleId: Int, playlistId: String) {
+    log.error("addAction")
+    // TODO: Add the module to playlist
   }
 }

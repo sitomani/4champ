@@ -7,10 +7,11 @@
 
 
 import UIKit
+import SwiftUI
 
-@objc protocol LocalRoutingLogic
+protocol LocalRoutingLogic
 {
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
+    func routeToPlaylistSelector(module: MMD)
 }
 
 protocol LocalDataPassing
@@ -25,32 +26,15 @@ class LocalRouter: NSObject, LocalRoutingLogic, LocalDataPassing
   
   // MARK: Routing
   
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
-  //{
-  //  if let segue = segue {
-  //    let destinationVC = segue.destination as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //  } else {
-  //    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-  //    let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //    navigateToSomewhere(source: viewController!, destination: destinationVC)
-  //  }
-  //}
-
-  // MARK: Navigation
-  
-  //func navigateToSomewhere(source: LocalViewController, destination: SomewhereViewController)
-  //{
-  //  source.show(destination, sender: nil)
-  //}
-  
-  // MARK: Passing data
-  
-  //func passDataToSomewhere(source: LocalDataStore, destination: inout SomewhereDataStore)
-  //{
-  //  destination.name = source.name
-  //}
+    func routeToPlaylistSelector(module: MMD) {
+        let pls = PlaylistSelectorStore()
+        var contentView = PlaylistPickerView(dismissAction: { self.viewController?.dismiss(animated: true, completion: nil)}, store: pls)
+        pls.setup()
+        pls.doPrepare(mod: module)
+        contentView.addToPlaylistAction = { b in
+            pls.addToPlaylist(playlistIndex: b)
+        }
+        let hvc = UIHostingController(rootView: contentView)
+        viewController?.present(hvc, animated: true, completion: nil)
+    }
 }

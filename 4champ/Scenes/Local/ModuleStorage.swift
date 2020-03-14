@@ -20,6 +20,7 @@ protocol ModuleStorageInterface {
   func deleteModule(module: MMD)
   
   func createPlaylist(name: String)
+  func fetchModuleInfo(_ id: Int) -> ModuleInfo?
 }
 
 protocol ModuleStorageObserver: class {
@@ -212,7 +213,7 @@ extension ModuleStorage: ModuleStorageInterface {
     }
   }
   
-  private func fetchModuleInfo(_ id: Int) -> ModuleInfo? {
+  func fetchModuleInfo(_ id: Int) -> ModuleInfo? {
     let fetchRequest = NSFetchRequest<ModuleInfo>.init(entityName: "ModuleInfo")
     let predicate = NSPredicate.init(format: "modId == \(id)")
     fetchRequest.predicate = predicate

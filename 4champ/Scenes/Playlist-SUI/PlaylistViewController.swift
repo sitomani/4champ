@@ -53,7 +53,7 @@ struct PlaylistView: View {
             }) {
                 Text("Playlist Name")
             }.sheet(isPresented: self.$show_modal) {
-                PlaylistSelector(show_modal: self.$show_modal).environment(\.managedObjectContext,self.managedObjectContext)
+                PlaylistSelectorSUI(show_modal: self.$show_modal).environment(\.managedObjectContext,self.managedObjectContext)
             }
             List {
                 ForEach(mods) { mod in

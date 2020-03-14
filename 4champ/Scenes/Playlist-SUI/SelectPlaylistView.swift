@@ -18,7 +18,7 @@ struct PlaylistCell: View {
     }
 }
 
-struct PlaylistSelector: View {
+struct PlaylistSelectorSUI: View {
     @Binding var show_modal:Bool
     @Environment(\.managedObjectContext) var managedObjectContext
     @FetchRequest(entity: Playlist.entity(),

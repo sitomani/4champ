@@ -88,7 +88,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     tableView.register(UINib(nibName: "ModuleCell", bundle: nil), forCellReuseIdentifier: "ModuleCell")
     modulePlayer.addPlayerObserver(self)
     prepareView()
-
+    
     searchBar = UISearchBar.init(frame: CGRect.init(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
     self.tableView.tableHeaderView = searchBar
     searchBar?.delegate = self
@@ -108,13 +108,13 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   
   @objc func longPressed(sender: UILongPressGestureRecognizer) {
     if sender.state == UIGestureRecognizer.State.began {
-        let touchPoint = sender.location(in: self.tableView)
-        if let indexPath = tableView.indexPathForRow(at: touchPoint) {
-            print("Long pressed row: \(indexPath.row)")
-          if let cell = tableView.cellForRow(at: indexPath) as? ModuleCell {
-            longTap(cell: cell )
-          }
+      let touchPoint = sender.location(in: self.tableView)
+      if let indexPath = tableView.indexPathForRow(at: touchPoint) {
+        print("Long pressed row: \(indexPath.row)")
+        if let cell = tableView.cellForRow(at: indexPath) as? ModuleCell {
+          longTap(cell: cell )
         }
+      }
     }
   }
   
@@ -143,7 +143,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     btn5.tag = LocalSortKey.favorite.rawValue
     let btn6 = UIBarButtonItem.init(title: "Filter", style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn6.tag = -1 //No sort key for filter
-
+    
     _ = [btn1, btn2, btn3, btn4, btn5, btn6].map {
       if $0.tag == sortKey.rawValue {
         $0.tintColor = UIColor.white
@@ -176,7 +176,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     let av = UIAlertController.init(title: nil, message: message, preferredStyle: .alert)
     self.present(av, animated: true)
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 4.0) {
-        av.dismiss(animated: true, completion: nil)
+      av.dismiss(animated: true, completion: nil)
     }
   }
   
@@ -196,7 +196,10 @@ class LocalViewController: UIViewController, LocalDisplayLogic
 extension LocalViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     view.endEditing(true)
-    interactor?.playModule(at: indexPath)
+    //    interactor?.playModule(at: indexPath)
+    if let mmd = interactor?.getModule(at: indexPath) {
+      router?.routeToPlaylistSelector(module: mmd)
+    }
   }
 }
 
@@ -218,6 +221,9 @@ extension LocalViewController: UITableViewDataSource {
         cell.sizeLabel?.text = "\(module.size ?? 0) Kb"
         cell.faveButton?.isSelected = module.favorite
         cell.stopImage?.isHidden = true
+        if let uri = module.localPath {
+          cell.progressVeil?.isHidden = true
+        }
         cell.delegate = self
       }
       return cell
@@ -240,7 +246,7 @@ extension LocalViewController: UITableViewDataSource {
 // MARK: Module Player Observer
 extension LocalViewController: ModulePlayerObserver {
   func moduleChanged(module: MMD) {
-//    tableView?.reloadData()
+    //    tableView?.reloadData()
   }
   
   func statusChanged(status: PlayerStatus) {
@@ -277,13 +283,9 @@ extension LocalViewController: ModuleCellDelegate {
   func longTap(cell: ModuleCell) {
     
     guard let ip = tableView.indexPath(for: cell),
-      let mod = interactor?.getModuleInfo(at: ip) else {
+      let mod = interactor?.getModule(at:ip) else {
         return
     }
-    
-    let contentView = PlaylistPickerView(dismissAction: {self.dismiss( animated: true, completion: nil )}, module: mod).environment(\.managedObjectContext, moduleStorage.managedObjectContext)
-    let vc = UIHostingController(rootView: contentView)
-    vc.view.backgroundColor = .clear
-    present(vc, animated: true)
+    router?.routeToPlaylistSelector(module: mod)
   }
 }

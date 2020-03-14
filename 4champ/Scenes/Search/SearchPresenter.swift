@@ -64,6 +64,9 @@ class SearchPresenter: SearchPresentationLogic
       mmd.size = Int($0.size.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
       mmd.type = $0.format
       mmd.composer = $0.composer.label
+      if let localCopy = moduleStorage.getModuleById(id) {
+        mmd.localPath = localCopy.localPath
+      }
       return mmd
         }.sorted { (a, b) -> Bool in
         return a.name!.compare(b.name!, options: .caseInsensitive) == .orderedAscending
