@@ -22,13 +22,28 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
 {
   var interactor: PlaylistSelectorBusinessLogic?
   var router: (NSObjectProtocol & PlaylistSelectorRoutingLogic & PlaylistSelectorDataPassing)?
+  weak var hostingController: UIHostingController<PlaylistPickerView>?
   
   @Published var viewModel: PlaylistSelector.PrepareSelection.ViewModel
-  
+
   init() {
-    self.viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: "<rnd>", playlistOptions: [])
-    
+    self.viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: "<rnd>", playlistOptions: [], status: .unknown)
   }
+  
+  public static func buildPicker(module: MMD) -> UIHostingController<PlaylistPickerView> {
+    let pls = PlaylistSelectorStore()
+    var contentView = PlaylistPickerView(dismissAction: { pls.hostingController?.dismiss(animated: true, completion: nil)}, store: pls)
+    pls.setup()
+    pls.doPrepare(mod: module)
+    contentView.addToPlaylistAction = { b in
+        pls.addToPlaylist(playlistIndex: b)
+    }
+    let hvc = UIHostingController(rootView: contentView)
+    pls.hostingController = hvc
+    hvc.view.backgroundColor = .clear
+    return hvc
+  }
+  
   
   // MARK: Setup
   func setup()
@@ -56,8 +71,11 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
   }
   
   func displayAppend(viewModel: PlaylistSelector.Append.ViewModel) {
-    self.viewModel.progress = viewModel.progress
-    self.viewModel.success = viewModel.success
+    self.viewModel.status = viewModel.status
+    
+    if viewModel.status == .complete {
+      hostingController?.dismiss(animated: true, completion: nil)
+    }
   }
   
   func addToPlaylist(playlistIndex: Int) {

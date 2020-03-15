@@ -19,6 +19,28 @@ struct PLMD: Identifiable {
     var modules: [Int]
 }
 
+enum DownloadStatus: Equatable {
+    static func == (lhs: DownloadStatus, rhs: DownloadStatus) -> Bool {
+        switch (lhs, rhs) {
+        case (.unknown, .unknown):
+            return true
+        case (.complete, .complete):
+            return true
+        case (.downloading(_), .downloading(_)):
+            return true
+        case (.failed(_), .failed(_)):
+            return true
+        default:
+            return false
+        }
+    }
+    
+    case unknown
+    case downloading(progress: Int)
+    case complete
+    case failed(error: Error)
+}
+
 enum PlaylistSelector
 {
   enum PrepareSelection
@@ -36,8 +58,7 @@ enum PlaylistSelector
     {
         var module: String
         var playlistOptions: [String]
-        var progress: Float = 1
-        var success: Bool = true
+        var status: DownloadStatus
     }
   }
     
@@ -47,12 +68,10 @@ enum PlaylistSelector
             let playlistIndex: Int
         }
         struct Response {
-            let progress: Float
-            var error: Error?
+            var status: DownloadStatus
         }
         struct ViewModel {
-            let progress: Float
-            let success: Bool
+            let status: DownloadStatus
         }
     }
 }

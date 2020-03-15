@@ -21,6 +21,8 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   var interactor: RadioBusinessLogic?
   var router: (NSObjectProtocol & RadioRoutingLogic & RadioDataPassing)?
 
+  private var currentModule: MMD?
+  
   @IBOutlet weak var currentModuleView: UIView?
   @IBOutlet weak var channelSegments: UISegmentedControl?
   @IBOutlet weak var downloadProgress: UIProgressView?
@@ -119,7 +121,9 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   
   @objc func longPressed(sender: UILongPressGestureRecognizer) {
     if sender.state == UIGestureRecognizer.State.began {
-      log.info("Long tapped on currentmod area")
+      if let mod = currentModule {
+        router?.toPlaylistSelector(module: mod)
+      }
     }
   }
   
@@ -159,6 +163,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     }
     
     if let current = viewModel.nowPlaying {
+      currentModule = current
       currentModuleView?.alpha = 1
       composerLabel?.text = current.composer ?? ""
       nameLabel?.text = current.name ?? ""
@@ -166,6 +171,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       localLabel?.isHidden = !current.hasBeenSaved()
       faveButton?.isSelected = current.favorite
     } else {
+      currentModule = nil
       currentModuleView?.alpha = 0.8
       downloadProgress?.progress = 0
       localLabel?.isHidden = true

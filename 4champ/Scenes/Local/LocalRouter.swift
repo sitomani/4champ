@@ -27,14 +27,7 @@ class LocalRouter: NSObject, LocalRoutingLogic, LocalDataPassing
   // MARK: Routing
   
     func routeToPlaylistSelector(module: MMD) {
-        let pls = PlaylistSelectorStore()
-        var contentView = PlaylistPickerView(dismissAction: { self.viewController?.dismiss(animated: true, completion: nil)}, store: pls)
-        pls.setup()
-        pls.doPrepare(mod: module)
-        contentView.addToPlaylistAction = { b in
-            pls.addToPlaylist(playlistIndex: b)
-        }
-        let hvc = UIHostingController(rootView: contentView)
+        let hvc = PlaylistSelectorStore.buildPicker(module: module)
         viewController?.present(hvc, animated: true, completion: nil)
     }
 }

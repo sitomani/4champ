@@ -196,10 +196,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
 extension LocalViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     view.endEditing(true)
-    //    interactor?.playModule(at: indexPath)
-    if let mmd = interactor?.getModule(at: indexPath) {
-      router?.routeToPlaylistSelector(module: mmd)
-    }
+    interactor?.playModule(at: indexPath)
   }
 }
 

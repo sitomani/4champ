@@ -7,6 +7,7 @@
 
 import UIKit
 import UserNotifications
+import SwiftUI
 
 protocol NowPlayingContainer {
   func toggleNowPlaying(_ value: Bool)
@@ -39,6 +40,12 @@ class MainViewController: UITabBarController {
     modulePlayer.addPlayerObserver(self)
     moduleStorage.addStorageObserver(self)
     UNUserNotificationCenter.current().delegate = self
+    
+//    let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(showPlaylistPicker(_:))
+    
+    let lpr = UILongPressGestureRecognizer(target: self, action: #selector(showPlaylistPicker(_:)))
+    npView?.addGestureRecognizer(lpr)
+//    npView?.addGestureRecognizer(longPressRecognizer)
   }
   
   func toggleNowPlaying(_ value: Bool) {
@@ -94,6 +101,15 @@ class MainViewController: UITabBarController {
     if self.presentedViewController == nil {
       performSegue(withIdentifier: "ToVisualizer", sender: self)
     }
+  }
+  
+  @objc func showPlaylistPicker(_ sender: UIGestureRecognizer) {
+    guard sender.state == UIGestureRecognizer.State.began, let mmd = modulePlayer.currentModule else {
+      return
+    }
+    
+    let hvc = PlaylistSelectorStore.buildPicker(module: mmd)
+    present(hvc, animated: true, completion: nil)
   }
   
   @IBAction func saveModule(_ sender: UIButton) {

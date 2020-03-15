@@ -34,6 +34,8 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   @IBOutlet weak var playButton: UIButton!
   @IBOutlet weak var vizView:SKView!
   
+  @IBOutlet weak var playerView: UIView!
+  
   var hasUpdatedVisibility:Bool = false
   
   private var playbackTimer: Timer?
@@ -272,8 +274,19 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
       startPlaybackTimer()
     }
     playButton.isSelected = modulePlayer.status == .paused
+    
+    let lpr = UILongPressGestureRecognizer(target: self, action: #selector(showPlaylistPicker(_:)))
+    playerView?.addGestureRecognizer(lpr)
   }
   
+  @objc func showPlaylistPicker(_ sender: UIGestureRecognizer) {
+    guard sender.state == UIGestureRecognizer.State.began, let mmd = modulePlayer.currentModule else {
+      return
+    }
+    
+    let hvc = PlaylistSelectorStore.buildPicker(module: mmd)
+    present(hvc, animated: true, completion: nil)
+  }
   
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     if (scrollView.contentOffset.y < -60) {

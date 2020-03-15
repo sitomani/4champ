@@ -23,6 +23,7 @@
 		451B6AA42204B6CC001848FA /* LocalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B6A9E2204B6CC001848FA /* LocalViewController.swift */; };
 		451B6AA52204B6CC001848FA /* LocalInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B6A9F2204B6CC001848FA /* LocalInteractor.swift */; };
 		451B6AA72204BBBB001848FA /* ModuleStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B6AA62204BBBB001848FA /* ModuleStorage.swift */; };
+		451ED0A6241E6AA6006CE4E8 /* SwiftUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451ED0A5241E6AA6006CE4E8 /* SwiftUITest.swift */; };
 		4535A4642114BB2D005FBB8B /* SearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A45E2114BB2D005FBB8B /* SearchPresenter.swift */; };
 		4535A4662114BB2D005FBB8B /* SearchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A4602114BB2D005FBB8B /* SearchRouter.swift */; };
 		4535A4672114BB2D005FBB8B /* SearchModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4535A4612114BB2D005FBB8B /* SearchModels.swift */; };
@@ -103,6 +104,7 @@
 		451B6A9E2204B6CC001848FA /* LocalViewController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = LocalViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
 		451B6A9F2204B6CC001848FA /* LocalInteractor.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = LocalInteractor.swift; sourceTree = "<group>"; tabWidth = 2; };
 		451B6AA62204BBBB001848FA /* ModuleStorage.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModuleStorage.swift; sourceTree = "<group>"; tabWidth = 2; };
+		451ED0A5241E6AA6006CE4E8 /* SwiftUITest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUITest.swift; sourceTree = "<group>"; };
 		4535A45E2114BB2D005FBB8B /* SearchPresenter.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SearchPresenter.swift; sourceTree = "<group>"; tabWidth = 2; };
 		4535A4602114BB2D005FBB8B /* SearchRouter.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SearchRouter.swift; sourceTree = "<group>"; tabWidth = 2; };
 		4535A4612114BB2D005FBB8B /* SearchModels.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SearchModels.swift; sourceTree = "<group>"; tabWidth = 2; };
@@ -227,6 +229,14 @@
 			path = Local;
 			sourceTree = "<group>";
 		};
+		451ED0A4241E6A92006CE4E8 /* SwiftUITest */ = {
+			isa = PBXGroup;
+			children = (
+				451ED0A5241E6AA6006CE4E8 /* SwiftUITest.swift */,
+			);
+			path = SwiftUITest;
+			sourceTree = "<group>";
+		};
 		4535A45D2114BB0A005FBB8B /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -256,6 +266,7 @@
 		4543982C20D0344F00991ADC /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				451ED0A4241E6A92006CE4E8 /* SwiftUITest */,
 				453D9BB1241BF1FD002EEBAB /* PlaylistSelector */,
 				456E6F2A2409BC2C0034BDA2 /* Playlist-SUI */,
 				451B6A992204B506001848FA /* Local */,
@@ -603,6 +614,7 @@
 				453D9BB8241BF286002EEBAB /* PlaylistSelectorPresenter.swift in Sources */,
 				45AA910320FF36C200794147 /* hvl_replay.cpp in Sources */,
 				45D61F5920E1695200869814 /* UIUtils.swift in Sources */,
+				451ED0A6241E6AA6006CE4E8 /* SwiftUITest.swift in Sources */,
 				451B6AA22204B6CC001848FA /* LocalRouter.swift in Sources */,
 				454F5207215D3FF1007011F3 /* ComposerCell.swift in Sources */,
 				4543985120D03C1600991ADC /* AboutHeaderView.swift in Sources */,

@@ -87,10 +87,10 @@ class PlaylistHostingViewController: UIHostingController<AnyView> {
     }
 }
 
-#if DEBUG
-struct ContentView_Previews : PreviewProvider {
-    static var previews: some View {
-        PlaylistView()
-    }
-}
-#endif
+//#if DEBUG
+//struct ContentView_Previews : PreviewProvider {
+//    static var previews: some View {
+//        PlaylistView()
+//    }
+//}
+//#endif

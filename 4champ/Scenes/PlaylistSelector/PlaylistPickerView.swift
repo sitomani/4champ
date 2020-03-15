@@ -9,6 +9,16 @@
 import Foundation
 import SwiftUI
 
+extension Spacer {
+    /// https://stackoverflow.com/a/57416760/3393964
+    public func onTapGesture(count: Int = 1, perform action: @escaping () -> Void) -> some View {
+        ZStack {
+            Color.black.opacity(0.001).onTapGesture(count: count, perform: action)
+            self
+        }
+    }
+}
+
 struct PlaylistPickerView: View {
     var dismissAction: (() -> Void)
     var addToPlaylistAction: ((Int) -> Void)?
@@ -22,9 +32,12 @@ struct PlaylistPickerView: View {
     
     var body: some View {
         ZStack {
+            Color.clear
             VStack {
                 Color.clear
-                Spacer()
+                Spacer().onTapGesture {
+                    self.dismissAction()
+                }
                 VStack {
                     Spacer()
                     Color.white
@@ -36,23 +49,34 @@ struct PlaylistPickerView: View {
                         }
                     }.labelsHidden().background(Color.white)
                     HStack {
+                        Spacer()
                         Button(action: addModuleToPlaylist) {
                             Text("PlaylistSelector_Add")
-                        }.padding(5)
+                        }.padding(25)
                         Spacer()
                         Button(action: { self.dismissAction() }) {
                             Text("G_Cancel")
-                        }.padding(5)
-                        
-                    }.padding()
+                        }.padding(25)
+                        Spacer()
+                    }.background(Color.black.opacity(0.1))
                 }.background(Color.white)
             }
-            if self.store.viewModel.progress != 1.0 {
-                Text("\(Int(self.store.viewModel.progress*100))")
-                    .background(Color.red)
-                    .padding(.all, 10)
-                    .frame(width:200, height: 42)
+            
+            if self.store.viewModel.status == .downloading(progress: 0) {
+                Text("Downloading...")
+            } else if self.store.viewModel.status == .complete {
+                //self.presentationMode.wrappedValue.dismiss()
             }
         }
     }
 }
+
+#if DEBUG
+struct PlaylistPickerView_Previews : PreviewProvider {
+    static var store = PlaylistSelectorStore()
+    
+    static var previews: some View {
+        PlaylistPickerView(dismissAction: {}, store: store)
+    }
+}
+#endif

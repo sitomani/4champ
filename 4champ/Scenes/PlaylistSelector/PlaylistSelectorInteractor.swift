@@ -79,18 +79,21 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
     
     let target = playlists[request.playlistIndex].id ?? "default"
     let pl = getPlaylist(with: target)
+    let completed = PlaylistSelector.Append.Response(status: DownloadStatus.complete)
     
     selectedPlaylist = pl
     // Three scenarios:
     if let modInfo = moduleStorage.fetchModuleInfo(modId) {
       // 1. Module is already in the database, just append to the selected playlist
       pl?.addToModules(modInfo)
+      presenter?.presentAppend(response: completed)
     } else {
       if let _ = module?.localPath {
         // 2. Module is downloaded (radio/search) but not yet in database
         moduleStorage.addModule(module: module!)
         if let modInfo = moduleStorage.fetchModuleInfo(modId) {
           pl?.addToModules(modInfo)
+          presenter?.presentAppend(response: completed)
         }
       } else {
         // 3. Module is not yet downloaded
@@ -119,14 +122,16 @@ extension PlaylistSelectorInteractor: ModuleFetcherDelegate {
       moduleStorage.addModule(module: mmd)
       if let added = moduleStorage.fetchModuleInfo(mmd.id!) {
         selectedPlaylist?.addToModules(added)
+        let resp = PlaylistSelector.Append.Response(status: DownloadStatus.complete)
+        presenter?.presentAppend(response: resp)
       }
     case .downloading(let progress):
       log.debug(progress)
-      let resp = PlaylistSelector.Append.Response(progress: progress, error: nil)
+      let resp = PlaylistSelector.Append.Response(status: DownloadStatus.downloading(progress: Int(progress*100)))
       presenter?.presentAppend(response: resp)
     case .failed(let err):
       log.error(err.debugDescription)
-      let resp = PlaylistSelector.Append.Response(progress: 1, error: err)
+      let resp = PlaylistSelector.Append.Response(status: DownloadStatus.failed(error: err!))
       presenter?.presentAppend(response: resp)
     default:
       log.verbose("noop")

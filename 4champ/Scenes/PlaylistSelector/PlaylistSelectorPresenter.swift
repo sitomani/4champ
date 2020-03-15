@@ -41,12 +41,12 @@ class PlaylistSelectorPresenter: PlaylistSelectorPresentationLogic
         
         let moduleName = String.init(format: "LockScreen_Playing".l13n(), response.module.name ?? "", response.module.composer ?? "")
         
-        let viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: moduleName, playlistOptions: options)
+        let viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: moduleName, playlistOptions: options, status: .unknown)
         viewController?.displaySelector(viewModel: viewModel)
     }
     
     func presentAppend(response: PlaylistSelector.Append.Response) {
-        let viewModel = PlaylistSelector.Append.ViewModel(progress: response.progress, success: response.error == nil)
+        let viewModel = PlaylistSelector.Append.ViewModel(status: response.status)
         viewController?.displayAppend(viewModel: viewModel)
     }
 }

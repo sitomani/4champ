@@ -42,6 +42,7 @@ class SearchRouter: NSObject, SearchRoutingLogic, SearchDataPassing
       pls.addToPlaylist(playlistIndex: b)
     }
     let hvc = UIHostingController(rootView: contentView)
+    pls.hostingController = hvc
     viewController?.present(hvc, animated: true, completion: nil)
   }
   
