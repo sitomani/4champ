@@ -105,9 +105,13 @@ struct PlaylistSelectorSUI: View {
             List {
                 ForEach(self.playlists) { pl in
                     if pl.plName != "radioList" {
-                        PlaylistCell(pl: pl).onLongPressGesture {
-                            self.edit(pl: pl)
+                        PlaylistCell(pl: pl).onTapGesture {
+                            modulePlayer.currentPlaylist = pl
+                            self.show_modal.toggle()
                         }
+                        //onLongPressGesture {
+                        //    self.edit(pl: pl)
+                        //}.
                     }
                 }.onDelete(perform: delete)
             }

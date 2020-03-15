@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             let managedObjectContext = moduleStorage.managedObjectContext
-            let contentView = PlaylistView()
+            let contentView = PlaylistView(store: PlaylistStore())
                 .environment(\.managedObjectContext, managedObjectContext)
             
             window.rootViewController = UIHostingController(rootView: contentView)

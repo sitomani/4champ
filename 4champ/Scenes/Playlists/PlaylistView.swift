@@ -1,5 +1,5 @@
 //
-//  PlaylistViewController.swift
+//  PlaylistView.swift
 //  ampplayer
 //
 //  Created by Aleksi Sitomaniemi on 29.2.2020.
@@ -34,7 +34,12 @@ struct SUIModule: View {
                     .foregroundColor(.white)
             }
             Spacer()
-            Image("favestar-yellow").padding(8)
+            Image("favestar-yellow").padding(8).onTapGesture {
+                print("faved")
+            }
+//            Button(action: {print("faved")}) {
+//                Image("favestar-yellow").padding(8)
+//            }
         }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
     }
 }
@@ -44,46 +49,58 @@ struct SUIModule: View {
 struct PlaylistView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @State private var show_modal: Bool = false
-
-    var mods: [MMD] = [MMD()]
+    @State var showNowPlaying: Bool = false
+    @State var selectedPlaylistId: String = "default" {
+        didSet {
+            store.interactor?.selectPlaylist(request: Playlists.Select.Request(playlistId: self.selectedPlaylistId))
+        }
+    }
+    @ObservedObject var store: PlaylistStore
+    
     var body: some View {
         VStack {
             Button(action: {
                 self.show_modal = true
             }) {
-                Text("Playlist Name")
+                Text("Playlist Name:" + store.viewModel.playlistName)
             }.sheet(isPresented: self.$show_modal) {
                 PlaylistSelectorSUI(show_modal: self.$show_modal).environment(\.managedObjectContext,self.managedObjectContext)
             }
             List {
-                ForEach(mods) { mod in
+                ForEach(store.viewModel.modules) { mod in
                     SUIModule(module: mod)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            modulePlayer.play(mmd: mod)
+                        }
+                }
+            }
+            if store.nowPlaying {
+                VStack {
+                    Text("").frame(height:50)
                 }
             }
         }
-    }
-    
-    mutating func updateMods() {
-        mods[0].name = "FOO"
     }
 }
 
 class PlaylistHostingViewController: UIHostingController<AnyView> {
     required init?(coder: NSCoder) {
-        
-        let contentView = PlaylistView().environment(\.managedObjectContext, moduleStorage.managedObjectContext)
+        let store = PlaylistStore()
+        let contentView = PlaylistView(store: store).environment(\.managedObjectContext, moduleStorage.managedObjectContext)
+        store.setup()
         super.init(coder: coder, rootView:AnyView(contentView))
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var lbi:[UIBarButtonItem] = [UIBarButtonItem.init(barButtonSystemItem: .organize, target: self, action: nil)]
-        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .rewind, target: self, action: nil))
-        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .play, target: self, action: nil))
-        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .fastForward, target: self, action: nil))
-        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .trash, target: self, action: nil))
-        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .stop, target: self, action: nil))
-        navigationItem.leftBarButtonItems = lbi
+//        var lbi:[UIBarButtonItem] = [UIBarButtonItem.init(barButtonSystemItem: .organize, target: self, action: nil)]
+//        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .rewind, target: self, action: nil))
+//        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .play, target: self, action: nil))
+//        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .fastForward, target: self, action: nil))
+//        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .trash, target: self, action: nil))
+//        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .stop, target: self, action: nil))
+//        navigationItem.leftBarButtonItems = lbi
     }
 }
 
