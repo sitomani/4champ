@@ -42,4 +42,26 @@ enum Playlists
             var modules: [MMD]
         }
     }
+    
+    enum Remove {
+        struct Request {
+            let modIndex: Int
+        }
+    }
+    
+    enum Move {
+        struct Request {
+            let modIndex: Int
+            let newIndex: Int
+        }
+        struct Response {
+            let modIndex: Int
+            let newIndex: Int
+        }
+        struct ViewModel {
+            let modIndex: Int
+            let newIndex: Int
+        }
+    }
+    
 }

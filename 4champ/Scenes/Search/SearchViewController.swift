@@ -367,7 +367,8 @@ extension SearchViewController: ModulePlayerObserver {
     //nop at the moment
   }
   
-  func playlistChanged() {
+  func queueChanged() {
+    // nop
   }
 }
 

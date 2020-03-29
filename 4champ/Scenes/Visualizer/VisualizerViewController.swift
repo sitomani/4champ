@@ -342,7 +342,7 @@ extension VisualizerViewController: ModulePlayerObserver {
       startPlaybackTimer()
     }
     if status == .stopped {
-      if modulePlayer.playlist.count == 0 {
+      if modulePlayer.playQueue.count == 0 {
         DispatchQueue.main.async {
           self.dismissMe(self.vizButton!)
         }
@@ -354,7 +354,7 @@ extension VisualizerViewController: ModulePlayerObserver {
     //nop at the moment
   }
   
-  func playlistChanged() {
+  func queueChanged() {
     //nop at the moment
   }
   

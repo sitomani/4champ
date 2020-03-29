@@ -104,7 +104,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   }
   
   func playNext() {
-    guard radioOn && modulePlayer.playlist.count > 0 else { return }
+    guard radioOn && modulePlayer.playQueue.count > 0 else { return }
     modulePlayer.playNext()
   }
   
@@ -152,7 +152,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
     
     status = .off
     lastPlayed = 0
-    while modulePlayer.playlist.count > 0 {
+    while modulePlayer.playQueue.count > 0 {
       removeBufferHead()
     }
     modulePlayer.stop()
@@ -168,13 +168,13 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
       self.presenter?.presentChannelBuffer(buffer: [])
       return
     }
-    self.presenter?.presentChannelBuffer(buffer: modulePlayer.playlist)
+    self.presenter?.presentChannelBuffer(buffer: modulePlayer.playQueue)
   }
 
   /// Removes the first module in current playlist and deletes the related local file
   private func removeBufferHead() {
     log.debug("")
-    let current = modulePlayer.playlist.removeFirst()
+    let current = modulePlayer.playQueue.removeFirst()
     
     guard moduleStorage.getModuleById(current.id!) == nil else {
         // Not removing modules in local storage
@@ -194,8 +194,8 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   /// Fills the radio buffer as needed (called when radio is turned on
   /// and when current module changes, to keep the buffer populated
   private func fillBuffer() {
-    log.debug("buffer length \(modulePlayer.playlist.count)")
-    if Constants.radioBufferLen > modulePlayer.playlist.count {
+    log.debug("buffer length \(modulePlayer.playQueue.count)")
+    if Constants.radioBufferLen > modulePlayer.playQueue.count {
       let id = getNextModuleId()
       if id < 0 { return } // failed to determine next module id
       let fetcher = ModuleFetcher.init(delegate: self)
@@ -258,9 +258,9 @@ extension RadioInteractor: ModuleFetcherDelegate {
       status = .fetching(progress: progress)
       
     case .done(let mmd):
-      modulePlayer.playlist.append(mmd)
+      modulePlayer.playQueue.append(mmd)
       self.triggerBufferPresentation()
-      if let first = modulePlayer.playlist.first, first == mmd {
+      if let first = modulePlayer.playQueue.first, first == mmd {
         modulePlayer.play(at: 0)
       }
       self.fillBuffer()
@@ -275,7 +275,7 @@ extension RadioInteractor: ModulePlayerObserver {
   func moduleChanged(module: MMD) {
     guard radioOn else { return }
     log.debug("")
-    if let index = modulePlayer.playlist.firstIndex(of: module), index > 0 {
+    if let index = modulePlayer.playQueue.firstIndex(of: module), index > 0 {
       removeBufferHead()
     }
     fillBuffer()
@@ -290,7 +290,7 @@ extension RadioInteractor: ModulePlayerObserver {
     //nop at the moment
   }
   
-  func playlistChanged() {
+  func queueChanged() {
     triggerBufferPresentation()
   }
 }

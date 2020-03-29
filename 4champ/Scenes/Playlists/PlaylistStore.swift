@@ -15,6 +15,7 @@ import SwiftUI
 protocol PlaylistDisplayLogic: class
 {
   func displayPlaylist(viewModel: Playlists.Select.ViewModel)
+  func displayModeChange(shuffled: Bool)
 }
 
 class PlaylistStore: ObservableObject, PlaylistDisplayLogic
@@ -33,10 +34,17 @@ class PlaylistStore: ObservableObject, PlaylistDisplayLogic
     viewModel = Playlists.Select.ViewModel(playlistName: "", shuffle: false, modules: [])
     nowPlaying = false
     modulePlayer.addPlayerObserver(self)
+    moduleStorage.addStorageObserver(self)
+  }
+  
+  init(viewModel: Playlists.Select.ViewModel) {
+    nowPlaying = false
+    self.viewModel = viewModel
   }
   
   deinit {
     modulePlayer.removePlayerObserver(self)
+    moduleStorage.removeStorageObserver(self)
   }
   
   func setup()
@@ -55,6 +63,10 @@ class PlaylistStore: ObservableObject, PlaylistDisplayLogic
   
   func displayPlaylist(viewModel: Playlists.Select.ViewModel) {
     self.viewModel = viewModel
+  }
+  
+  func displayModeChange(shuffled: Bool) {
+    self.viewModel.shuffle = shuffled
   }
 }
 
@@ -75,8 +87,19 @@ extension PlaylistStore: ModulePlayerObserver {
     //nop at the moment
   }
   
-  func playlistChanged() {
-    let req = Playlists.Select.Request(playlistId: modulePlayer.currentPlaylist?.plId ?? "default")
+  func queueChanged() {
+//    let req = Playlists.Select.Request(playlistId: moduleStorage.currentPlaylist?.plId ?? "default")
+//    interactor?.selectPlaylist(request: req)
+  }
+}
+
+extension PlaylistStore: ModuleStorageObserver {
+  func metadataChange(_ mmd: MMD) {
+    //NOP
+  }
+  
+  func playlistChange() {
+    let req = Playlists.Select.Request(playlistId: moduleStorage.currentPlaylist?.plId ?? "default")
     interactor?.selectPlaylist(request: req)
   }
 }

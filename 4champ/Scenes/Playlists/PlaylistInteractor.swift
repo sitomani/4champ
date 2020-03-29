@@ -16,6 +16,9 @@ import CoreData
 protocol PlaylistBusinessLogic
 {
   func selectPlaylist(request: Playlists.Select.Request)
+  func removeModule(request: Playlists.Remove.Request)
+  func moveModule(request: Playlists.Move.Request)
+  func toggleShuffle()
 }
 
 protocol PlaylistDataStore
@@ -53,6 +56,40 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore
       selectedPlaylistId = request.playlistId
     }
     doPresent()
+  }
+  
+  func removeModule(request: Playlists.Remove.Request) {
+    if let pl = frc?.fetchedObjects?.first(where: { ($0 as Playlist).plId == selectedPlaylistId }) {
+      pl.removeFromModules(at: request.modIndex)
+      moduleStorage.saveContext()
+      let resp = Playlists.Select.Response(selectedPlaylist: pl)
+      presenter?.presentPlaylist(response: resp)
+    }
+  }
+  
+  func moveModule(request: Playlists.Move.Request) {
+    if let pl = frc?.fetchedObjects?.first(where: { ($0 as Playlist).plId == selectedPlaylistId }) {
+      
+      let modSet = pl.modules?.mutableCopy() as? NSMutableOrderedSet
+      
+      var targetIndex = request.newIndex
+      if targetIndex > request.modIndex {
+        targetIndex -= 1
+      }
+      
+      modSet?.moveObjects(at: IndexSet.init([request.modIndex]), to: targetIndex)
+      pl.modules = modSet
+      moduleStorage.saveContext()
+      let resp = Playlists.Select.Response(selectedPlaylist: pl)
+      presenter?.presentPlaylist(response: resp)
+    }
+  }
+  
+  func toggleShuffle() {
+    var currentMode: Bool = moduleStorage.currentPlaylist?.playmode?.boolValue ?? false
+    currentMode.toggle()
+    moduleStorage.currentPlaylist?.playmode = NSNumber.init(value: currentMode)
+    moduleStorage.saveContext()
   }
   
   private func doPresent() {

@@ -18,7 +18,7 @@ struct ContentView: View {
             List {
                 // 2.
                 ForEach(numbers, id: \.self) { number in
-                    Text(number).foregroundColor(Color.white)
+                    Text(number)
                 }
                 // 3.
                 .onMove { (indexSet, index) in
@@ -26,7 +26,7 @@ struct ContentView: View {
                                     toOffset: index)
                 }
             
-                .navigationBarTitle(Text("Numbers").foregroundColor(Color.white))
+            .navigationBarTitle(Text("Numbers"))
             }
             // 4.
             .navigationBarItems(trailing: EditButton())

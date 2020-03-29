@@ -204,8 +204,8 @@ extension SearchInteractor: ModuleFetcherDelegate {
   
   /// Keeps the playlist short so that the disk is not flooded with modules
   private func removeBufferHead() {
-    guard modulePlayer.playlist.count > Constants.radioBufferLen else { return }
-    let current = modulePlayer.playlist.removeFirst()
+    guard modulePlayer.playQueue.count > Constants.radioBufferLen else { return }
+    let current = modulePlayer.playQueue.removeFirst()
     
     guard moduleStorage.getModuleById(current.id!) == nil else {
         // Not removing modules in local storage

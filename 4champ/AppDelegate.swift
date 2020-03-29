@@ -33,10 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    settings.prevCollectionSize = 0
 //    settings.newestPlayed = 152890
     
-//    moduleStorage.createPlaylist(name: "Crusaders: Mi-Cro Con-Cept")
-//    moduleStorage.createPlaylist(name: "Wizzcat: Pentti muzaks")
-
-    updateLatest()
+      updateLatest()
     UIApplication.shared.beginReceivingRemoteControlEvents()
     application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
     return true

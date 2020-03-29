@@ -259,7 +259,7 @@ extension LocalViewController: ModulePlayerObserver {
     //nop at the moment
   }
   
-  func playlistChanged() {
+  func queueChanged() {
   }
 }
 
@@ -283,6 +283,6 @@ extension LocalViewController: ModuleCellDelegate {
       let mod = interactor?.getModule(at:ip) else {
         return
     }
-    router?.routeToPlaylistSelector(module: mod)
+    router?.toPlaylistSelector(module: mod)
   }
 }

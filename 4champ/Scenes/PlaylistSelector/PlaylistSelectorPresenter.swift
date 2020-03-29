@@ -25,11 +25,18 @@ class PlaylistSelectorPresenter: PlaylistSelectorPresentationLogic
     {
         var defaultString = ""
         var options:[String] = []
+        var plIndex = 0
         for pl in response.playlistOptions {
             
-                let modTick = pl.modules.contains(response.module.id ?? 0) ? "✓" : ""
-                let modPlay = (pl.id == modulePlayer.currentPlaylist?.plId) ? "▶️" : ""
-                let plstring = "\(modTick)\(modPlay) \(pl.name!) (\(pl.modules.count))"
+            let modTick = pl.modules.contains(response.module.id ?? 0) ? "✓" : ""
+            let modPlay: String
+            if pl.id == moduleStorage.currentPlaylist?.plId {
+                modPlay = "▶️"
+                plIndex = response.playlistOptions.firstIndex { $0.id == pl.id } ?? 0
+            } else {
+                modPlay = ""
+            }
+            let plstring = "\(modTick)\(modPlay) \(pl.name!) (\(pl.modules.count))"
             
             if pl.id == "default" {
                 defaultString = "\(modTick)\(modPlay) \("PlaylistView_DefaultPlaylist".l13n()) (\(pl.modules.count))"
@@ -41,7 +48,7 @@ class PlaylistSelectorPresenter: PlaylistSelectorPresentationLogic
         
         let moduleName = String.init(format: "LockScreen_Playing".l13n(), response.module.name ?? "", response.module.composer ?? "")
         
-        let viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: moduleName, playlistOptions: options, status: .unknown)
+        let viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: moduleName, currentPlaylistIndex: plIndex, playlistOptions: options, status: .unknown)
         viewController?.displaySelector(viewModel: viewModel)
     }
     

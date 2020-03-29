@@ -37,9 +37,6 @@ struct SUIModule: View {
             Image("favestar-yellow").padding(8).onTapGesture {
                 print("faved")
             }
-//            Button(action: {print("faved")}) {
-//                Image("favestar-yellow").padding(8)
-//            }
         }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
     }
 }
@@ -50,6 +47,7 @@ struct PlaylistView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @State private var show_modal: Bool = false
     @State var showNowPlaying: Bool = false
+    @State var isEditing: Bool = false
     @State var selectedPlaylistId: String = "default" {
         didSet {
             store.interactor?.selectPlaylist(request: Playlists.Select.Request(playlistId: self.selectedPlaylistId))
@@ -57,30 +55,56 @@ struct PlaylistView: View {
     }
     @ObservedObject var store: PlaylistStore
     
-    var body: some View {
-        VStack {
-            Button(action: {
-                self.show_modal = true
-            }) {
-                Text("Playlist Name:" + store.viewModel.playlistName)
-            }.sheet(isPresented: self.$show_modal) {
-                PlaylistSelectorSUI(show_modal: self.$show_modal).environment(\.managedObjectContext,self.managedObjectContext)
-            }
-            List {
-                ForEach(store.viewModel.modules) { mod in
-                    SUIModule(module: mod)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            modulePlayer.play(mmd: mod)
-                        }
-                }
-            }
-            if store.nowPlaying {
-                VStack {
-                    Text("").frame(height:50)
-                }
-            }
+    func move(from source: IndexSet, to destination: Int) {
+        guard let sourceIndex:Int = source.first else {
+            return
         }
+        
+        let req = Playlists.Move.Request(modIndex: sourceIndex, newIndex: destination)
+        store.interactor?.moveModule(request: req)
+        
+    }
+    
+    func deleteItems(at offsets: IndexSet) {
+        guard let index:Int = offsets.first else {
+            return
+        }
+        store.interactor?.removeModule(request: Playlists.Remove.Request(modIndex: index))
+    }
+    
+    func toggleShuffle() {
+        store.interactor?.toggleShuffle()
+    }
+    
+    var body: some View {
+            VStack {
+                Button(action: {
+                    self.show_modal = true
+                }) {
+                Text(store.viewModel.playlistName).underline()
+                    .foregroundColor(Color(.white))
+                    .padding(EdgeInsets.init(top: 5, leading: 0, bottom: -5, trailing: 0))
+                }.sheet(isPresented: self.$show_modal) {
+                    PlaylistSelectorSUI(show_modal: self.$show_modal).environment(\.managedObjectContext,self.managedObjectContext)
+                }
+                List {
+                    ForEach(store.viewModel.modules) { mod in
+                        SUIModule(module: mod)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                modulePlayer.play(mmd: mod)
+                        }
+                    }.onMove(perform: move)
+                    .onDelete(perform: deleteItems)
+                }.navigationBarTitle(Text("TabBar_Playlist".l13n().uppercased()), displayMode: .inline)
+                    .navigationBarItems(leading: Button(action: {self.toggleShuffle()}) {Image(store.viewModel.shuffle ? "shuffled" : "sequential")}, trailing: EditButton())
+                
+                if store.nowPlaying {
+                    VStack {
+                        Text("").frame(height:50)
+                    }
+                }
+            }.background(Color(Appearance.darkBlueColor))
     }
 }
 
@@ -94,20 +118,26 @@ class PlaylistHostingViewController: UIHostingController<AnyView> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        var lbi:[UIBarButtonItem] = [UIBarButtonItem.init(barButtonSystemItem: .organize, target: self, action: nil)]
-//        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .rewind, target: self, action: nil))
-//        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .play, target: self, action: nil))
-//        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .fastForward, target: self, action: nil))
-//        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .trash, target: self, action: nil))
-//        lbi.append(UIBarButtonItem.init(barButtonSystemItem: .stop, target: self, action: nil))
-//        navigationItem.leftBarButtonItems = lbi
     }
 }
 
-//#if DEBUG
-//struct ContentView_Previews : PreviewProvider {
-//    static var previews: some View {
-//        PlaylistView()
-//    }
-//}
-//#endif
+#if DEBUG
+
+func randomMMD() -> MMD {
+    var mmd = MMD()
+    mmd.composer = "foo"
+    mmd.name = "bar"
+    return mmd
+}
+
+var st = PlaylistStore(viewModel:         Playlists.Select.ViewModel(playlistName: "foo", shuffle: false, modules: [randomMMD(), randomMMD(), randomMMD()])
+)
+
+struct Playlist_Preview : PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            PlaylistView(store: st)
+        }
+    }
+}
+#endif

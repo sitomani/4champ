@@ -57,6 +57,7 @@ enum PlaylistSelector
     struct ViewModel
     {
         var module: String
+        var currentPlaylistIndex: Int
         var playlistOptions: [String]
         var status: DownloadStatus
     }

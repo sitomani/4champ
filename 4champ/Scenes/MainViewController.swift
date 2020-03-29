@@ -154,7 +154,7 @@ extension MainViewController: ModulePlayerObserver {
     //nop at the moment
   }
   
-  func playlistChanged() {
+  func queueChanged() {
     //nop at the moment
   }
 }
@@ -164,6 +164,10 @@ extension MainViewController: ModuleStorageObserver {
     if modulePlayer.currentModule?.id == mmd.id {
       npView.setModule(mmd)
     }
+  }
+  
+  func playlistChange() {
+    //NOP
   }
 }
 

@@ -27,7 +27,7 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
   @Published var viewModel: PlaylistSelector.PrepareSelection.ViewModel
 
   init() {
-    self.viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: "<rnd>", playlistOptions: [], status: .unknown)
+    self.viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: "<rnd>", currentPlaylistIndex: 0, playlistOptions: [], status: .unknown)
   }
   
   public static func buildPicker(module: MMD) -> UIHostingController<PlaylistPickerView> {
@@ -43,7 +43,6 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
     hvc.view.backgroundColor = .clear
     return hvc
   }
-  
   
   // MARK: Setup
   func setup()

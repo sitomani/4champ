@@ -23,11 +23,10 @@ struct PlaylistPickerView: View {
     var dismissAction: (() -> Void)
     var addToPlaylistAction: ((Int) -> Void)?
     @ObservedObject var store: PlaylistSelectorStore
-    @State var selectedPlaylist = 0
     @Environment(\.presentationMode) var presentationMode
     
     func addModuleToPlaylist() {
-        addToPlaylistAction?(selectedPlaylist)
+        addToPlaylistAction?(store.viewModel.currentPlaylistIndex)
     }
     
     var body: some View {
@@ -43,7 +42,7 @@ struct PlaylistPickerView: View {
                     Color.white
                     Text(self.store.viewModel.module)
                     Text("PlaylistSelector_Title")
-                    Picker(selection: $selectedPlaylist, label: Text("")) {
+                    Picker(selection: $store.viewModel.currentPlaylistIndex, label: Text("")) {
                         ForEach(0..<self.store.viewModel.playlistOptions.count) {
                             Text(self.store.viewModel.playlistOptions[$0])
                         }

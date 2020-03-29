@@ -13,7 +13,7 @@ struct PlaylistCell: View {
     var body: some View {
         HStack {
             Image(uiImage: UIImage.init(named: (self.pl.plName ?? "") == "default" ? "playlist_default" : "playlist")!)
-            Text("\(pl.plName ?? "") (\(pl.modules?.count ?? 0))").foregroundColor(.white)
+            Text("\(pl.getDisplayName()) (\(pl.modules?.count ?? 0))").foregroundColor(.white)
         }
     }
 }
@@ -106,7 +106,7 @@ struct PlaylistSelectorSUI: View {
                 ForEach(self.playlists) { pl in
                     if pl.plName != "radioList" {
                         PlaylistCell(pl: pl).onTapGesture {
-                            modulePlayer.currentPlaylist = pl
+                            moduleStorage.currentPlaylist = pl
                             self.show_modal.toggle()
                         }
                         //onLongPressGesture {

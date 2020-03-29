@@ -11,7 +11,7 @@ import SwiftUI
 
 protocol LocalRoutingLogic
 {
-    func routeToPlaylistSelector(module: MMD)
+    func toPlaylistSelector(module: MMD)
 }
 
 protocol LocalDataPassing
@@ -26,7 +26,7 @@ class LocalRouter: NSObject, LocalRoutingLogic, LocalDataPassing
   
   // MARK: Routing
   
-    func routeToPlaylistSelector(module: MMD) {
+    func toPlaylistSelector(module: MMD) {
         let hvc = PlaylistSelectorStore.buildPicker(module: module)
         viewController?.present(hvc, animated: true, completion: nil)
     }

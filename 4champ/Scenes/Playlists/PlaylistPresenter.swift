@@ -15,6 +15,7 @@ import UIKit
 protocol PlaylistPresentationLogic
 {
   func presentPlaylist(response: Playlists.Select.Response)
+  func presentModeChange(shuffled: Bool)
 }
 
 class PlaylistPresenter: PlaylistPresentationLogic
@@ -41,5 +42,9 @@ class PlaylistPresenter: PlaylistPresentationLogic
     
     let vm = Playlists.Select.ViewModel(playlistName: name, shuffle: shuffle, modules: mods)
     viewController?.displayPlaylist(viewModel: vm)
+  }
+  
+  func presentModeChange(shuffled: Bool) {
+    viewController?.displayModeChange(shuffled: shuffled)
   }
 }

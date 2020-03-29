@@ -34,16 +34,20 @@ class SearchRouter: NSObject, SearchRoutingLogic, SearchDataPassing
   }
   
   func toPlaylistSelector(module: MMD) {
-    let pls = PlaylistSelectorStore()
-    var contentView = PlaylistPickerView(dismissAction: { self.viewController?.dismiss(animated: true, completion: nil)}, store: pls)
-    pls.setup()
-    pls.doPrepare(mod: module)
-    contentView.addToPlaylistAction = { b in
-      pls.addToPlaylist(playlistIndex: b)
-    }
-    let hvc = UIHostingController(rootView: contentView)
-    pls.hostingController = hvc
+    
+    let hvc = PlaylistSelectorStore.buildPicker(module: module)
     viewController?.present(hvc, animated: true, completion: nil)
+    
+//    let pls = PlaylistSelectorStore()
+//    var contentView = PlaylistPickerView(dismissAction: { self.viewController?.dismiss(animated: true, completion: nil)}, store: pls)
+//    pls.setup()
+//    pls.doPrepare(mod: module)
+//    contentView.addToPlaylistAction = { b in
+//      pls.addToPlaylist(playlistIndex: b)
+//    }
+//    let hvc = UIHostingController(rootView: contentView)
+//    pls.hostingController = hvc
+//    viewController?.present(hvc, animated: true, completion: nil)
   }
   
   /// Instantiate another SearchViewController and prepare it for
