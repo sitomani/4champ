@@ -48,6 +48,7 @@ struct PlaylistView: View {
     @State private var show_modal: Bool = false
     @State var showNowPlaying: Bool = false
     @State var isEditing: Bool = false
+    @State private var navigationButtonID = UUID()
     @State var selectedPlaylistId: String = "default" {
         didSet {
             store.interactor?.selectPlaylist(request: Playlists.Select.Request(playlistId: self.selectedPlaylistId))
@@ -85,7 +86,9 @@ struct PlaylistView: View {
                     .foregroundColor(Color(.white))
                     .padding(EdgeInsets.init(top: 5, leading: 0, bottom: -5, trailing: 0))
                 }.sheet(isPresented: self.$show_modal) {
-                    PlaylistSelectorSUI(show_modal: self.$show_modal).environment(\.managedObjectContext,self.managedObjectContext)
+                    PlaylistSelectorSUI(show_modal: self.$show_modal).environment(\.managedObjectContext,self.managedObjectContext).onDisappear {
+                        self.navigationButtonID = UUID()
+                    }
                 }
                 List {
                     ForEach(store.viewModel.modules) { mod in
@@ -97,7 +100,7 @@ struct PlaylistView: View {
                     }.onMove(perform: move)
                     .onDelete(perform: deleteItems)
                 }.navigationBarTitle(Text("TabBar_Playlist".l13n().uppercased()), displayMode: .inline)
-                    .navigationBarItems(leading: Button(action: {self.toggleShuffle()}) {Image(store.viewModel.shuffle ? "shuffled" : "sequential")}, trailing: EditButton())
+                    .navigationBarItems(leading: Button(action: {self.toggleShuffle()}) {Image(store.viewModel.shuffle ? "shuffled" : "sequential")}, trailing: EditButton()).id(self.navigationButtonID)
                 
                 if store.nowPlaying {
                     VStack {
