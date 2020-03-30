@@ -19,6 +19,7 @@ protocol PlaylistBusinessLogic
   func removeModule(request: Playlists.Remove.Request)
   func moveModule(request: Playlists.Move.Request)
   func toggleShuffle()
+  func toggleFavorite(request: Playlists.Favorite.Request)
 }
 
 protocol PlaylistDataStore
@@ -48,6 +49,9 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore
     if selectedPlaylistId == nil {
       selectedPlaylistId = "default"
     }
+    
+    moduleStorage.addStorageObserver(self)
+    
   }
   
   // MARK: Interactions
@@ -92,6 +96,13 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore
     moduleStorage.saveContext()
   }
   
+  func toggleFavorite(request: Playlists.Favorite.Request) {
+    if let mod = moduleStorage.getModuleById(request.modId) {
+      _ = moduleStorage.toggleFavorite(module: mod)
+    }
+    doPresent()
+  }
+  
   private func doPresent() {
     if let pl = frc?.fetchedObjects?.first(where: { ($0 as Playlist).plId == selectedPlaylistId }) {
       let resp = Playlists.Select.Response(selectedPlaylist: pl)
@@ -108,5 +119,14 @@ extension PlaylistInteractor: NSFetchedResultsControllerDelegate {
   func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
     print("Controller did change content")
     doPresent()
+  }
+}
+
+extension PlaylistInteractor: ModuleStorageObserver {
+  func metadataChange(_ mmd: MMD) {
+    doPresent()
+  }
+  
+  func playlistChange() {
   }
 }

@@ -12,31 +12,34 @@ import SwiftUI
 
 struct SUIModule: View {
     let module: MMD
+    let faveCallback: ((MMD) -> Void)?
     var body: some View {
         HStack {
             ZStack {
-                Image(uiImage: UIImage.init(named: "modicon")!)
-                Text("MOD")
+                Image(uiImage: UIImage.init(named: "modicon")!).resizable().frame(width: 50, height: 50)
+                Text(module.type?.uppercased() ?? "MOD")
                     .foregroundColor(Color.black)
                     .font(.system(size:12))
-                    .offset(y:12)
+                    .offset(y:13)
+                if module.supported() == false {
                 Image(uiImage: UIImage.init(named:"stopicon")!)
                     .resizable()
                     .frame(width:30, height:30).offset(x:-15)
-            }.padding(8)
+                }
+            }.padding(EdgeInsets(top: 8, leading: -5, bottom: 8, trailing: 0))
             VStack(alignment: .leading) {
                 Text("\(module.name ?? "no name")")
                     .font(.system(size: 18))
-                    .foregroundColor(.white)
-                Text("Artist").font(.system(size: 12))
-                    .foregroundColor(.white)
-                Text("Size").font(.system(size: 12))
-                    .foregroundColor(.white)
+                    .foregroundColor(.white).padding(EdgeInsets(top: 0, leading: 0, bottom: 1, trailing: 0))
+                Text(module.composer ?? "no name").font(.system(size: 12))
+                    .foregroundColor(.white).padding(EdgeInsets(top: 1, leading: 0, bottom: 1, trailing: 0))
+                Text("\(module.size ?? 0) kb").font(.system(size: 12))
+                    .foregroundColor(.white).padding(EdgeInsets(top: 1, leading: 0, bottom: 1, trailing: 0))
             }
             Spacer()
-            Image("favestar-yellow").padding(8).onTapGesture {
-                print("faved")
-            }
+            Image(module.favorite ? "favestar-yellow" : "favestar-grey").padding(8).onTapGesture {
+                self.faveCallback?(self.module)
+            }.padding(-10)
         }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
     }
 }
@@ -63,7 +66,6 @@ struct PlaylistView: View {
         
         let req = Playlists.Move.Request(modIndex: sourceIndex, newIndex: destination)
         store.interactor?.moveModule(request: req)
-        
     }
     
     func deleteItems(at offsets: IndexSet) {
@@ -75,6 +77,10 @@ struct PlaylistView: View {
     
     func toggleShuffle() {
         store.interactor?.toggleShuffle()
+    }
+    
+    func favorite(module: MMD) {
+        store.interactor?.toggleFavorite(request: Playlists.Favorite.Request(modId: module.id!))
     }
     
     var body: some View {
@@ -92,7 +98,7 @@ struct PlaylistView: View {
                 }
                 List {
                     ForEach(store.viewModel.modules) { mod in
-                        SUIModule(module: mod)
+                        SUIModule(module: mod, faveCallback: self.favorite(module:))
                             .contentShape(Rectangle())
                             .onTapGesture {
                                 modulePlayer.play(mmd: mod)
@@ -130,6 +136,7 @@ func randomMMD() -> MMD {
     var mmd = MMD()
     mmd.composer = "foo"
     mmd.name = "bar"
+    mmd.type = "MOD"
     return mmd
 }
 

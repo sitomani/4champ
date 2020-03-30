@@ -16,18 +16,15 @@ enum Playlists
 {
   // MARK: Use cases
   
-  enum Something
-  {
-    struct Request
-    {
+    enum Favorite {
+        struct Request {
+            let modId: Int
+        }
+        struct Response {
+        }
+        struct ViewModel {
+        }
     }
-    struct Response
-    {
-    }
-    struct ViewModel
-    {
-    }
-  }
     
     enum Select {
         struct Request {

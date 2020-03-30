@@ -86,6 +86,7 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
     if let modInfo = moduleStorage.fetchModuleInfo(modId) {
       // 1. Module is already in the database, just append to the selected playlist
       pl?.addToModules(modInfo)
+      moduleStorage.saveContext()
       presenter?.presentAppend(response: completed)
     } else {
       if let _ = module?.localPath {
@@ -93,6 +94,7 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
         moduleStorage.addModule(module: module!)
         if let modInfo = moduleStorage.fetchModuleInfo(modId) {
           pl?.addToModules(modInfo)
+          moduleStorage.saveContext()
           presenter?.presentAppend(response: completed)
         }
       } else {
@@ -122,6 +124,7 @@ extension PlaylistSelectorInteractor: ModuleFetcherDelegate {
       moduleStorage.addModule(module: mmd)
       if let added = moduleStorage.fetchModuleInfo(mmd.id!) {
         selectedPlaylist?.addToModules(added)
+        moduleStorage.saveContext()
         let resp = PlaylistSelector.Append.Response(status: DownloadStatus.complete)
         presenter?.presentAppend(response: resp)
       }

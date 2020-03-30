@@ -97,6 +97,9 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     tableView.contentOffset = CGPoint.init(x: 0, y: 44)
     //    let btn1 = UIBarButtonItem.init(image: UIImage.init(named: "modicon")?.resizeImageWith(newSize: CGSize.init(width: 30, height: 30)), style: .plain, target: nil, action: nil)
     updateBarButtons()
+    tableView.rowHeight = UITableView.automaticDimension
+    tableView.estimatedRowHeight = 76
+    
     
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
     self.view.addGestureRecognizer(longPressRecognizer)
