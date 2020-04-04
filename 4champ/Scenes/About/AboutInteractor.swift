@@ -32,8 +32,8 @@ class AboutInteractor: AboutBusinessLogic, AboutDataStore
     } else {
       aboutTitle = "0.0"
     }
-    let titleKeys = [aboutTitle, "Twitter","About_Copyrights", "TabBar_Local", "TabBar_Search", /*"TabBar_Playlist",*/ "TabBar_Radio", "About_Licenses"]
-    let contentKeys = ["AboutView_Info", "AboutView_Twitter", "AboutView_Legal", "AboutView_Local", "AboutView_Search", /*"AboutView_Playlists",*/ "AboutView_Radio"]
+    let titleKeys = [aboutTitle, "Twitter","About_Copyrights", "TabBar_Local", "TabBar_Playlist", "TabBar_Search", "TabBar_Radio", "About_Licenses"]
+    let contentKeys = ["AboutView_Info", "AboutView_Twitter", "AboutView_Legal", "AboutView_Local","AboutView_Playlists", "AboutView_Search", "AboutView_Radio"]
     let imageKeys = ["about", "twitter_small", "legal", "localMods", "search", /*"playlist", */ "radio", "about"]
     let lics = ["Alamofire", "GzipSwift", "HivelyTracker", "LibOpenMPT"]
     let licUrls = ["https://github.com/Alamofire/Alamofire/blob/master/LICENSE",

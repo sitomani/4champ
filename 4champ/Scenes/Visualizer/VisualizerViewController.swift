@@ -215,6 +215,11 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   }
   
   @IBAction func saveTapped() {
+    guard let mod = modulePlayer.currentModule else {
+      return
+    }
+    moduleStorage.addModule(module: mod)
+    saveButton.isHidden = true
   }
   
   func animateColLabel(_ visible:Bool) {
@@ -265,7 +270,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     //Hide UI elements that are currently not supported
     collectionLabel.text = NSLocalizedString("Radio_InLocalCollection", comment: "")
     collectionLabel.isHidden = true
-    saveButton.isHidden = true
+    saveButton.isHidden = false
     faveStar.isHidden = false
     shareButton.isHidden = true
 

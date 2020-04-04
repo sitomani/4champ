@@ -26,7 +26,7 @@ struct SUIModule: View {
                     .resizable()
                     .frame(width:30, height:30).offset(x:-15)
                 }
-            }.padding(EdgeInsets(top: 8, leading: -5, bottom: 8, trailing: 0))
+            }.padding(EdgeInsets(top: 7, leading: -5, bottom: 7, trailing: 0))
             VStack(alignment: .leading) {
                 Text("\(module.name ?? "no name")")
                     .font(.system(size: 18))
@@ -94,7 +94,7 @@ struct PlaylistView: View {
                 }.sheet(isPresented: self.$show_modal) {
                     PlaylistSelectorSUI(show_modal: self.$show_modal).environment(\.managedObjectContext,self.managedObjectContext).onDisappear {
                         self.navigationButtonID = UUID()
-                    }
+                    }.background(Color(Appearance.darkBlueColor))
                 }
                 List {
                     ForEach(store.viewModel.modules) { mod in
@@ -127,6 +127,7 @@ class PlaylistHostingViewController: UIHostingController<AnyView> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = Appearance.darkBlueColor
     }
 }
 

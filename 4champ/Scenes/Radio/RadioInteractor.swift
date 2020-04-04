@@ -79,7 +79,9 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   // MARK: Request handling
   func controlRadio(request: Radio.Control.Request) {
     log.debug(request)
-    stopPlayback()
+    if modulePlayer.radioOn || request.powerOn {
+      stopPlayback()
+    }
     guard request.powerOn == true else {
       presenter?.presentChannelBuffer(buffer: [])
       return

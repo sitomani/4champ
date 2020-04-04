@@ -101,6 +101,10 @@ class SearchViewController: UIViewController, SearchDisplayLogic
       searchBar?.searchTextField.textColor = .white
       searchBar?.setScopeBarButtonTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
       searchBar?.setScopeBarButtonTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
+      if let tf = searchBar?.searchTextField {
+        tf.leftView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
+        tf.leftView?.tintColor = .lightGray
+      }
       
       searchBar?.scopeButtonTitles = searchScopes.map { $0.l13n() }
     } else {

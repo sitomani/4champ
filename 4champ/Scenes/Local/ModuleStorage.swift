@@ -175,6 +175,11 @@ extension ModuleStorage: ModuleStorageInterface {
     cdModule.radioOnly = 0
     cdModule.shared = nil
     saveContext()
+    
+    let mmd = MMD.init(cdi: cdModule)
+    _ = observers.map {
+      $0.metadataChange(mmd)
+    }
   }
   
   func deleteModule(module: MMD) {
@@ -190,6 +195,9 @@ extension ModuleStorage: ModuleStorageInterface {
       }
       managedObjectContext.delete(moduleInfo)
       saveContext()
+      _ = observers.map {
+        $0.metadataChange(module)
+      }
     }
   }
   

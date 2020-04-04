@@ -90,6 +90,11 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     prepareView()
     
     searchBar = UISearchBar.init(frame: CGRect.init(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
+    searchBar?.searchTextField.textColor = .white
+    if let tf = searchBar?.searchTextField {
+      tf.leftView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
+      tf.leftView?.tintColor = .lightGray
+    }
     self.tableView.tableHeaderView = searchBar
     searchBar?.delegate = self
     

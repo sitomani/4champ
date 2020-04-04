@@ -62,9 +62,11 @@ struct PlaylistPickerView: View {
             }
             
             if self.store.viewModel.status == .downloading(progress: 0) {
-                Text("Downloading...")
-            } else if self.store.viewModel.status == .complete {
-                //self.presentationMode.wrappedValue.dismiss()
+                withAnimation {
+            ZStack {
+                Text("Search_Downloading".l13n())
+            }.frame(maxWidth:.infinity, minHeight: 80).background(Color(.white))
+                }.transition(.opacity)
             }
         }
     }
@@ -73,7 +75,6 @@ struct PlaylistPickerView: View {
 #if DEBUG
 struct PlaylistPickerView_Previews : PreviewProvider {
     static var store = PlaylistSelectorStore()
-    
     static var previews: some View {
         PlaylistPickerView(dismissAction: {}, store: store)
     }
