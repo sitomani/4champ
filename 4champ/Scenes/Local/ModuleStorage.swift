@@ -10,6 +10,8 @@ import Foundation
 import CoreData
 
 protocol ModuleStorageInterface {
+  var currentPlaylist: Playlist? { get set }
+  
   func createFRC<T: NSManagedObject>(fetchRequest:NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T>
   func addStorageObserver(_ observer: ModuleStorageObserver)
   func removeStorageObserver(_ observer: ModuleStorageObserver)
@@ -18,14 +20,20 @@ protocol ModuleStorageInterface {
   func getModuleById(_ id: Int) -> MMD?
   func getRandomModule() -> MMD?
   func deleteModule(module: MMD)
+  
+  func createPlaylist(name: String, id: String?) -> Playlist
+  func saveContext()
+  func fetchModuleInfo(_ id: Int) -> ModuleInfo?
 }
 
 protocol ModuleStorageObserver: class {
   func metadataChange(_ mmd: MMD)
+  func playlistChange()
 }
 
 class ModuleStorage: NSObject {
   private var observers: [ModuleStorageObserver] = []
+  private var _currentPlaylist: Playlist?
   
     // MARK: Core Data lazy initialisers
   private lazy var managedObjectModel: NSManagedObjectModel = {
@@ -91,10 +99,40 @@ class ModuleStorage: NSObject {
     var _ = persistentStoreCoordinator
     let name = managedObjectContext.name
     log.info(name ?? "noname")
+    
+    setCurrentPlaylist(playlist: getDefaultPlaylist())
+  }
+  
+  private func getDefaultPlaylist() -> Playlist {
+    let fetchRequest = NSFetchRequest<Playlist>.init(entityName: "Playlist")
+    fetchRequest.sortDescriptors = []
+    let filterString = "plId == 'default'"
+    fetchRequest.predicate = NSPredicate.init(format: filterString)
+    let frc = createFRC(fetchRequest: fetchRequest, entityName: "Playlist")
+    try! frc.performFetch()
+    guard let defaultPl = frc.fetchedObjects?.first else {
+      // No Default playlist yet, must create it
+      return createPlaylist(name: "default", id: "default")
+    }
+    return defaultPl
+  }
+  
+  private func setCurrentPlaylist(playlist: Playlist?) {
+    _currentPlaylist = playlist
+    _ = observers.map { $0.playlistChange() }
   }
 }
 
 extension ModuleStorage: ModuleStorageInterface {
+  var currentPlaylist: Playlist? {
+    get {
+      return _currentPlaylist
+    }
+    set {
+      setCurrentPlaylist(playlist: newValue)
+    }
+  }
+  
   func createFRC<T>(fetchRequest: NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T> where T : NSManagedObject {
 
     // Initialize Fetch Request
@@ -137,6 +175,11 @@ extension ModuleStorage: ModuleStorageInterface {
     cdModule.radioOnly = 0
     cdModule.shared = nil
     saveContext()
+    
+    let mmd = MMD.init(cdi: cdModule)
+    _ = observers.map {
+      $0.metadataChange(mmd)
+    }
   }
   
   func deleteModule(module: MMD) {
@@ -152,6 +195,9 @@ extension ModuleStorage: ModuleStorageInterface {
       }
       managedObjectContext.delete(moduleInfo)
       saveContext()
+      _ = observers.map {
+        $0.metadataChange(module)
+      }
     }
   }
   
@@ -193,7 +239,20 @@ extension ModuleStorage: ModuleStorageInterface {
     return nil
   }
   
-  private func saveContext() {
+  func createPlaylist(name: String, id: String?) -> Playlist {
+    let cdPlaylist = Playlist.init(entity: NSEntityDescription.entity(forEntityName: "Playlist", in: managedObjectContext)!, insertInto: managedObjectContext)
+    
+    let plId = id ?? UUID().uuidString
+    cdPlaylist.plId = plId
+    cdPlaylist.plName = name
+    cdPlaylist.locked = false
+
+    saveContext()
+    
+    return cdPlaylist
+  }
+  
+  func saveContext() {
     do {
       try managedObjectContext.save()
     } catch {
@@ -201,7 +260,7 @@ extension ModuleStorage: ModuleStorageInterface {
     }
   }
   
-  private func fetchModuleInfo(_ id: Int) -> ModuleInfo? {
+  func fetchModuleInfo(_ id: Int) -> ModuleInfo? {
     let fetchRequest = NSFetchRequest<ModuleInfo>.init(entityName: "ModuleInfo")
     let predicate = NSPredicate.init(format: "modId == \(id)")
     fetchRequest.predicate = predicate

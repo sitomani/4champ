@@ -34,6 +34,8 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   @IBOutlet weak var playButton: UIButton!
   @IBOutlet weak var vizView:SKView!
   
+  @IBOutlet weak var playerView: UIView!
+  
   var hasUpdatedVisibility:Bool = false
   
   private var playbackTimer: Timer?
@@ -213,6 +215,11 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   }
   
   @IBAction func saveTapped() {
+    guard let mod = modulePlayer.currentModule else {
+      return
+    }
+    moduleStorage.addModule(module: mod)
+    saveButton.isHidden = true
   }
   
   func animateColLabel(_ visible:Bool) {
@@ -263,7 +270,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     //Hide UI elements that are currently not supported
     collectionLabel.text = NSLocalizedString("Radio_InLocalCollection", comment: "")
     collectionLabel.isHidden = true
-    saveButton.isHidden = true
+    saveButton.isHidden = false
     faveStar.isHidden = false
     shareButton.isHidden = true
 
@@ -272,8 +279,19 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
       startPlaybackTimer()
     }
     playButton.isSelected = modulePlayer.status == .paused
+    
+    let lpr = UILongPressGestureRecognizer(target: self, action: #selector(showPlaylistPicker(_:)))
+    playerView?.addGestureRecognizer(lpr)
   }
   
+  @objc func showPlaylistPicker(_ sender: UIGestureRecognizer) {
+    guard sender.state == UIGestureRecognizer.State.began, let mmd = modulePlayer.currentModule else {
+      return
+    }
+    
+    let hvc = PlaylistSelectorStore.buildPicker(module: mmd)
+    present(hvc, animated: true, completion: nil)
+  }
   
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     if (scrollView.contentOffset.y < -60) {
@@ -329,7 +347,7 @@ extension VisualizerViewController: ModulePlayerObserver {
       startPlaybackTimer()
     }
     if status == .stopped {
-      if modulePlayer.playlist.count == 0 {
+      if modulePlayer.playQueue.count == 0 {
         DispatchQueue.main.async {
           self.dismissMe(self.vizButton!)
         }
@@ -341,7 +359,7 @@ extension VisualizerViewController: ModulePlayerObserver {
     //nop at the moment
   }
   
-  func playlistChanged() {
+  func queueChanged() {
     //nop at the moment
   }
   

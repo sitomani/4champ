@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import SwiftUI
 
 protocol LocalDisplayLogic: class
 {
@@ -87,8 +88,13 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     tableView.register(UINib(nibName: "ModuleCell", bundle: nil), forCellReuseIdentifier: "ModuleCell")
     modulePlayer.addPlayerObserver(self)
     prepareView()
-
+    
     searchBar = UISearchBar.init(frame: CGRect.init(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
+    searchBar?.searchTextField.textColor = .white
+    if let tf = searchBar?.searchTextField {
+      tf.leftView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
+      tf.leftView?.tintColor = .lightGray
+    }
     self.tableView.tableHeaderView = searchBar
     searchBar?.delegate = self
     
@@ -96,10 +102,28 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     tableView.contentOffset = CGPoint.init(x: 0, y: 44)
     //    let btn1 = UIBarButtonItem.init(image: UIImage.init(named: "modicon")?.resizeImageWith(newSize: CGSize.init(width: 30, height: 30)), style: .plain, target: nil, action: nil)
     updateBarButtons()
+    tableView.rowHeight = UITableView.automaticDimension
+    tableView.estimatedRowHeight = 76
+    
+    
+    let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
+    self.view.addGestureRecognizer(longPressRecognizer)
   }
   
   deinit {
     modulePlayer.removePlayerObserver(self)
+  }
+  
+  @objc func longPressed(sender: UILongPressGestureRecognizer) {
+    if sender.state == UIGestureRecognizer.State.began {
+      let touchPoint = sender.location(in: self.tableView)
+      if let indexPath = tableView.indexPathForRow(at: touchPoint) {
+        print("Long pressed row: \(indexPath.row)")
+        if let cell = tableView.cellForRow(at: indexPath) as? ModuleCell {
+          longTap(cell: cell )
+        }
+      }
+    }
   }
   
   @objc func handleBarButtonPress(sender: UIBarButtonItem) {
@@ -127,7 +151,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     btn5.tag = LocalSortKey.favorite.rawValue
     let btn6 = UIBarButtonItem.init(title: "Filter", style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn6.tag = -1 //No sort key for filter
-
+    
     _ = [btn1, btn2, btn3, btn4, btn5, btn6].map {
       if $0.tag == sortKey.rawValue {
         $0.tintColor = UIColor.white
@@ -160,7 +184,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     let av = UIAlertController.init(title: nil, message: message, preferredStyle: .alert)
     self.present(av, animated: true)
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 4.0) {
-        av.dismiss(animated: true, completion: nil)
+      av.dismiss(animated: true, completion: nil)
     }
   }
   
@@ -202,6 +226,9 @@ extension LocalViewController: UITableViewDataSource {
         cell.sizeLabel?.text = "\(module.size ?? 0) Kb"
         cell.faveButton?.isSelected = module.favorite
         cell.stopImage?.isHidden = true
+        if let uri = module.localPath {
+          cell.progressVeil?.isHidden = true
+        }
         cell.delegate = self
       }
       return cell
@@ -224,7 +251,7 @@ extension LocalViewController: UITableViewDataSource {
 // MARK: Module Player Observer
 extension LocalViewController: ModulePlayerObserver {
   func moduleChanged(module: MMD) {
-//    tableView?.reloadData()
+    //    tableView?.reloadData()
   }
   
   func statusChanged(status: PlayerStatus) {
@@ -240,7 +267,7 @@ extension LocalViewController: ModulePlayerObserver {
     //nop at the moment
   }
   
-  func playlistChanged() {
+  func queueChanged() {
   }
 }
 
@@ -257,5 +284,13 @@ extension LocalViewController: ModuleCellDelegate {
       return
     }
     interactor?.toggleFavorite(at: ip)
+  }
+  func longTap(cell: ModuleCell) {
+    
+    guard let ip = tableView.indexPath(for: cell),
+      let mod = interactor?.getModule(at:ip) else {
+        return
+    }
+    router?.toPlaylistSelector(module: mod)
   }
 }

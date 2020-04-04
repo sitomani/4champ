@@ -3,7 +3,6 @@
 //  ampplayer
 //
 //  Created by Aleksi Sitomaniemi on 13/04/2019.
-//  Copyright © 2019 boogie. All rights reserved.
 //
 //
 
@@ -11,12 +10,12 @@ import Foundation
 import CoreData
 
 
-extension Playlist {
+extension Playlist: Identifiable {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Playlist> {
         return NSFetchRequest<Playlist>(entityName: "Playlist")
     }
-
+    
     @NSManaged public var locked: NSNumber?
     @NSManaged public var playhead: NSNumber?
     @NSManaged public var playmode: NSNumber?
@@ -25,6 +24,9 @@ extension Playlist {
     @NSManaged public var position: NSNumber?
     @NSManaged public var modules: NSOrderedSet?
 
+    public var id: String {
+        return plId ?? UUID().uuidString
+    }
 }
 
 // MARK: Generated accessors for modules

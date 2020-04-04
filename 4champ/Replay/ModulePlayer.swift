@@ -41,13 +41,13 @@ protocol ModulePlayerObserver: class {
   ///    - error: Error that occurred
   func errorOccurred(error: PlayerError)
   
-  /// called when playlist changes (e.g. due to metadata changes)
-  func playlistChanged()
+  /// called when play queue changes (e.g. due to playlist change, or when modules are added to queue by user)
+  func queueChanged()
 }
 
 class ModulePlayer: NSObject {
   var radioOn: Bool = false
-  var playlist: [MMD] = [] 
+  var playQueue: [MMD] = [] 
   let renderer = Replay()
   let mpImage = UIImage.init(named: "albumart")!
   
@@ -101,6 +101,7 @@ class ModulePlayer: NSObject {
                                    selector: #selector(handleRouteChange),
                                    name: AVAudioSession.routeChangeNotification,
                                    object: nil)
+    
   }
   
   /// Adds an status change observer to ModulePlayer. Object registering as observer
@@ -128,20 +129,20 @@ class ModulePlayer: NSObject {
   /// - parameters:
   ///    - mmd: Module metadata object identifying the module to play
   func play(mmd: MMD) {
-    if let mod = currentModule, var index = playlist.firstIndex(of: mod) {
+    if let mod = currentModule, var index = playQueue.firstIndex(of: mod) {
       guard mod != mmd else {
         // This is a restart of play for a module, don't mess with playlist
         play(at: index)
         return
       }
-      if playlist.count > (index + 1) {
+      if playQueue.count > (index + 1) {
         index += 1
       }
-      playlist.insert(mmd, at: index)
+      playQueue.insert(mmd, at: index)
       play(at: index)
     } else {
-      playlist.append(mmd)
-      play(at: playlist.count-1)
+      playQueue.append(mmd)
+      play(at: playQueue.count-1)
     }
   }
   
@@ -150,19 +151,19 @@ class ModulePlayer: NSObject {
   ///    - at: index of the module to play in the playlist.
   ///          Invalid index will result in no change in playback.
   func play(at: Int) {
-    guard at < playlist.count, let path = playlist[at].localPath?.path else {
+    guard at < playQueue.count, let path = playQueue[at].localPath?.path else {
       return
     }
     renderer.stop()
-    if renderer.loadModule(path, type:playlist[at].type) {
+    if renderer.loadModule(path, type:playQueue[at].type) {
         setStereoSeparation(SettingsInteractor().stereoSeparation)
-        currentModule = playlist[at]
+        currentModule = playQueue[at]
         renderer.play()
         status = .playing
     } else {
       log.error("Could not load tune: \(path)")
         _ = observers.map {
-          $0.errorOccurred(error: .fileNotFound(mmd: playlist[at]))
+          $0.errorOccurred(error: .fileNotFound(mmd: playQueue[at]))
         }
     }
   }
@@ -179,15 +180,15 @@ class ModulePlayer: NSObject {
   /// Plays the next module in the current playlist. If there are no more modules,
   /// the playback will wrap to the first module in the playlist
   func playNext() {
-    guard let current = currentModule, playlist.count > 0 else {
+    guard let current = currentModule, playQueue.count > 0 else {
       return
     }
     var nextIndex = 0
-    if let index = playlist.firstIndex(of: current) {
-      nextIndex = (index + 1) % playlist.count
+    if let index = playQueue.firstIndex(of: current) {
+      nextIndex = (index + 1) % playQueue.count
     }
     // make sure we can move on in playlist even if there's same mod multiple times
-    while playlist[nextIndex] == currentModule && nextIndex < playlist.count-1 {
+    while playQueue[nextIndex] == currentModule && nextIndex < playQueue.count-1 {
       nextIndex += 1
     }
     play(at: nextIndex)
@@ -196,11 +197,11 @@ class ModulePlayer: NSObject {
   /// Plays the previous module in the current playlist. The playlist index
   /// will not wrap from start to end when using `playPrev()` function
   func playPrev() {
-    guard let current = currentModule, playlist.count > 0 else {
+    guard let current = currentModule, playQueue.count > 0 else {
       return
     }
     var prevIndex = 0
-    if let index = playlist.firstIndex(of: current) {
+    if let index = playQueue.firstIndex(of: current) {
       if index > 0 {
         prevIndex = index - 1
       }
@@ -266,19 +267,43 @@ extension ModulePlayer: ReplayStreamDelegate {
 extension ModulePlayer: ModuleStorageObserver {
   // At metadata change, update currentMod and playlist MMD instances
   // for favorite status update
-  
   func metadataChange(_ mmd: MMD) {
     if currentModule == mmd {
       currentModule?.favorite = mmd.favorite
     }
-    if playlist.count == 0 { return }
-    for i in 0...playlist.count-1 {
-      if playlist[i] == mmd {
-        playlist[i].favorite = mmd.favorite
+    if playQueue.count == 0 { return }
+    for i in 0...playQueue.count-1 {
+      if playQueue[i] == mmd {
+        playQueue[i].favorite = mmd.favorite
       }
     }
     _ = observers.map {
-      $0.playlistChanged()
+      $0.queueChanged()
+    }
+  }
+  
+  // At playlist change, load the new queue and start playing
+  func playlistChange() {
+    if let pl = moduleStorage.currentPlaylist, let plMods = pl.modules {
+      playQueue.removeAll()
+      for item in plMods {
+        if let mod = item as? ModuleInfo {
+          playQueue.append(MMD(cdi: mod))
+        }
+      }
+      _ = observers.map {
+        $0.queueChanged()
+      }
+      
+      let shuffle = (pl.playmode?.intValue ?? 0) == 1
+      if shuffle {
+        playQueue.shuffle()
+      }
+      play(at: 0)
+    }
+    
+    _ = observers.map {
+      $0.queueChanged()
     }
   }
 }

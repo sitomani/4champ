@@ -53,6 +53,12 @@ enum Search
   struct ModuleResponse {
     var result: [SearchResultModule]
     var text: String
+    func sortedResult() -> [SearchResultModule] {
+      let r = result.sorted { (a, b) -> Bool in
+        return a.name.label.compare(b.name.label, options: .caseInsensitive) == .orderedAscending
+      }
+      return r
+    }
   }
   
   struct ComposerResponse {
@@ -81,6 +87,14 @@ struct SearchResultModule: Codable {
   let format: String
   let size, downloadCount: String
   let infos: String
+  func getId() -> Int {
+    let modUri = URL.init(string: name.href)
+    var id: Int = 0
+    if let idString = modUri?.query?.split(separator: "=").last {
+        id = Int(idString) ?? 0
+    }
+    return id
+  }
 }
 
 struct LabelHref: Codable {

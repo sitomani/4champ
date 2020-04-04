@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import SwiftUI
 
 protocol SearchRoutingLogic
 {
   func toComposerList(title: String, groupId: Int)
   func toModulesList(title: String, composerId: Int)
+  func toPlaylistSelector(module: MMD)
 }
 
 protocol SearchDataPassing
@@ -29,6 +31,23 @@ class SearchRouter: NSObject, SearchRoutingLogic, SearchDataPassing
   }
   func toModulesList(title: String, composerId: Int) {
     spawnSearch(title: title, type: .composer, id: composerId)
+  }
+  
+  func toPlaylistSelector(module: MMD) {
+    
+    let hvc = PlaylistSelectorStore.buildPicker(module: module)
+    viewController?.present(hvc, animated: true, completion: nil)
+    
+//    let pls = PlaylistSelectorStore()
+//    var contentView = PlaylistPickerView(dismissAction: { self.viewController?.dismiss(animated: true, completion: nil)}, store: pls)
+//    pls.setup()
+//    pls.doPrepare(mod: module)
+//    contentView.addToPlaylistAction = { b in
+//      pls.addToPlaylist(playlistIndex: b)
+//    }
+//    let hvc = UIHostingController(rootView: contentView)
+//    pls.hostingController = hvc
+//    viewController?.present(hvc, animated: true, completion: nil)
   }
   
   /// Instantiate another SearchViewController and prepare it for

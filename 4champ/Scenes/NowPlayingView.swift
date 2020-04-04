@@ -17,7 +17,7 @@ class NowPlayingView: UIView {
   func setModule(_ module:MMD) {
     titleLabel?.text = "\(module.name!) (\(module.type!))"
     composerLabel?.text = module.composer!
-    saveButton?.isSelected = module.hasBeenSaved()
+    saveButton?.isHidden = module.hasBeenSaved()
     faveButton?.isSelected = module.favorite
   }
 }

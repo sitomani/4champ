@@ -9,6 +9,7 @@ import UIKit
 
 protocol ModuleCellDelegate: class {
   func faveTapped(cell: ModuleCell)
+  func longTap(cell: ModuleCell)
 }
 
 /**
@@ -23,6 +24,7 @@ class ModuleCell: UITableViewCell {
   @IBOutlet weak var typeLabel: UILabel?
   @IBOutlet weak var faveButton: UIButton?
   @IBOutlet weak var stopImage: UIImageView?
+  @IBOutlet weak var progressVeil: UILabel?
   
   @IBAction func faveTapped(_ sender: UIButton) {
     delegate?.faveTapped(cell: self)

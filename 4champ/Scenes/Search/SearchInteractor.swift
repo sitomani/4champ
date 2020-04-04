@@ -33,6 +33,10 @@ protocol SearchBusinessLogic
     
   /// Cancels an ongoing multiple module fetch
   func cancelDownload()
+  
+  func getModuleInfo(at: IndexPath) -> ModuleInfo?
+  
+  func addToPlaylist(moduleId: Int, playlistId: String)
 }
 
 /// Search Interactor datastore
@@ -58,6 +62,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
   private var downloadQueue: [Int] = []
   private var originalQueueLenght: Int = 0
   private var fetcher: ModuleFetcher?
+  private var latestModuleResponse: Search.ModuleResponse = Search.ModuleResponse(result: [], text: "")
   
   func search(_ request: Search.Request) {
     log.debug("keyword: \(request.text), type: \(request.type), pagingIndex: \(request.pagingIndex)")
@@ -75,13 +80,15 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
         log.info("\(json.result) \(request.text)")
         self.pagingIndex = request.pagingIndex
         if let modules = try? JSONDecoder().decode(ModuleResult.self, from: json.data!) {
-          self.presenter?.presentModules(response: Search.ModuleResponse(result: modules, text: request.text))
+          self.latestModuleResponse = Search.ModuleResponse(result: modules, text: request.text)
+          self.presenter?.presentModules(response: self.latestModuleResponse)
         } else if let composers = try? JSONDecoder().decode(ComposerResult.self, from: json.data!) {
           self.presenter?.presentComposers(response: Search.ComposerResponse(result: composers, text: request.text))
         } else if let groups = try? JSONDecoder().decode(GroupResult.self, from: json.data!) {
           self.presenter?.presentGroups(response: Search.GroupResponse(result: groups, text: request.text))
         } else {
-          self.presenter?.presentModules(response: Search.ModuleResponse(result: [], text: request.text))
+          self.latestModuleResponse = Search.ModuleResponse(result: [], text: request.text)
+          self.presenter?.presentModules(response: self.latestModuleResponse)
         }
       } else {
         log.error(String.init(describing: json.error))
@@ -98,7 +105,8 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
       Alamofire.request(restRequest).validate().responseJSON { (json) in
         if json.result.isSuccess {
           if let modules = try? JSONDecoder().decode(ModuleResult.self, from: json.data!) {
-            self.presenter?.presentModules(response: Search.ModuleResponse(result: modules, text: ""))
+            self.latestModuleResponse = Search.ModuleResponse(result: modules, text: "")
+            self.presenter?.presentModules(response: self.latestModuleResponse)
           }
         }
       }
@@ -123,6 +131,17 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
     doDownload(moduleId: moduleId)
   }
   
+  func getModuleInfo(at: IndexPath) -> ModuleInfo? {
+    guard latestModuleResponse.result.count > at.row else {
+      return nil
+    }
+    let msr = latestModuleResponse.sortedResult()[at.row]
+    if let modInfo = moduleStorage.fetchModuleInfo(msr.getId()) {
+      return modInfo
+    }
+    return nil
+  }
+  
   private func doDownload(moduleId: Int) {
     // Always create a new fetcher. Fetchers will be released
     // Once the fetch is complete
@@ -139,6 +158,10 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
   func cancelDownload() {
     downloadQueue = []
     fetcher?.cancel()
+  }
+  
+  func addToPlaylist(moduleId: Int, playlistId: String) {
+    
   }
   
   private func fetchNextQueuedModule() {
@@ -181,8 +204,8 @@ extension SearchInteractor: ModuleFetcherDelegate {
   
   /// Keeps the playlist short so that the disk is not flooded with modules
   private func removeBufferHead() {
-    guard modulePlayer.playlist.count > Constants.radioBufferLen else { return }
-    let current = modulePlayer.playlist.removeFirst()
+    guard modulePlayer.playQueue.count > Constants.radioBufferLen else { return }
+    let current = modulePlayer.playQueue.removeFirst()
     
     guard moduleStorage.getModuleById(current.id!) == nil else {
         // Not removing modules in local storage

@@ -19,7 +19,7 @@ struct Notifications {
   static let badgeUpdate = Notification.Name("badge_update")
 }
 
-struct MMD {
+struct MMD: Identifiable {
   init() {
   }
   
@@ -88,3 +88,5 @@ func ==(lhs: MMD, rhs: MMD) -> Bool {
   let eq = lhs.id == rhs.id && lhs.id != nil
   return eq
 }
+
+

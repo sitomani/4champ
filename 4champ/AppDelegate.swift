@@ -32,8 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 // UNCOMMENT BELOW TWO LINES TO TEST LOCAL NOTIFICATIONS
 //    settings.prevCollectionSize = 0
 //    settings.newestPlayed = 152890
-
-    updateLatest()
+    
+      updateLatest()
     UIApplication.shared.beginReceivingRemoteControlEvents()
     application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
     return true
