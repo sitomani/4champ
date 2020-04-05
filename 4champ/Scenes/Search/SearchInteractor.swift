@@ -186,7 +186,7 @@ extension SearchInteractor: ModuleFetcherDelegate {
       presenter?.presentDownloadProgress(response: Search.ProgressResponse(progress: 1.0))
       if originalQueueLenght == 0 {
         modulePlayer.play(mmd: mmd)
-        removeBufferHead()
+        // removeBufferHead()
       } else {
         moduleStorage.addModule(module: mmd)
         fetchNextQueuedModule()

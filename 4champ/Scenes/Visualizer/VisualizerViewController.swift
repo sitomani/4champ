@@ -182,7 +182,8 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     let playlistName = modulePlayer.radioOn ? " | Radio" : ""
     composerLabel.text = info.composer! + playlistName
     faveStar.isSelected = info.favorite
-
+    saveButton.isHidden = info.hasBeenSaved()
+    
     var samples:Array<String>
     samples = modulePlayer.renderer.getInstruments()
     if (samples.count == 0) {

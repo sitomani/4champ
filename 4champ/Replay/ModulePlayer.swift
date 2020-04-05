@@ -230,6 +230,24 @@ class ModulePlayer: NSObject {
     MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
   }
   
+  /// called when app resigns to clear non-stored modules
+  func cleanup() {
+    for mod in playQueue {
+      if mod.hasBeenSaved() == false {
+        if let url = mod.localPath {
+          log.info("Deleting module \(url.lastPathComponent)")
+          do {
+            try FileManager.default.removeItem(at: url)
+          } catch {
+            log.error("Deleting file at \(url) failed, \(error)")
+          }
+        }
+      }
+    }
+    playQueue.removeAll()
+  }
+
+  
   /// Handle audio route change notifications
   @objc func handleRouteChange(notification: Notification) {
     log.debug("")
@@ -264,7 +282,7 @@ extension ModulePlayer: ReplayStreamDelegate {
   }
 }
 
-extension ModulePlayer: ModuleStorageObserver {
+extension ModulePlayer: ModuleStorageObserver {  
   // At metadata change, update currentMod and playlist MMD instances
   // for favorite status update
   func metadataChange(_ mmd: MMD) {
@@ -284,8 +302,9 @@ extension ModulePlayer: ModuleStorageObserver {
   
   // At playlist change, load the new queue and start playing
   func playlistChange() {
+    // Cleanup current queue first
     if let pl = moduleStorage.currentPlaylist, let plMods = pl.modules {
-      playQueue.removeAll()
+      cleanup()
       for item in plMods {
         if let mod = item as? ModuleInfo {
           playQueue.append(MMD(cdi: mod))
