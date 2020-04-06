@@ -142,7 +142,9 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       switchTitle?.textColor = UIColor.white
       radioSwitch?.onTintColor = Appearance.successColor
     case .noModulesAvailable:
-        fallthrough
+      switchTitle?.text = "Radio_NoLocalModules".l13n()
+      switchTitle?.textColor = Appearance.errorColor
+      radioSwitch?.onTintColor = Appearance.errorColor
     case .failure:
       switchTitle?.text = "Radio_FetchFailed".l13n()
       switchTitle?.textColor = Appearance.errorColor

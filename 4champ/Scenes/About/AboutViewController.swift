@@ -113,6 +113,13 @@ extension AboutViewController: UITableViewDataSource {
       return interactor?.details.licenseNames.count ?? 0
     }
   }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 && indexPath.section == 1 {
+            let twitterUrl = URL(string: "https://twitter.com/4champ_app")!
+            UIApplication.shared.open(twitterUrl)
+        }
+    }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = UITableViewCell()
@@ -147,6 +154,16 @@ extension AboutViewController: UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
     guard indexPath.row < interactor?.details.licenseLinks.count ?? 0 else { return }
-    //router?.toLicenseScene(licenseIndex: indexPath.row)
+    
+    if let licUrls = interactor?.details.licenseLinks {
+        let urlString = licUrls[indexPath.row]
+        if let targetUrl = URL.init(string: urlString) {
+            UIApplication.shared.open(targetUrl)
+        } else {
+            let ac = UIAlertController.init(title: "About_Licenses".l13n(), message: urlString, preferredStyle: .alert)
+            ac.addAction(UIAlertAction.init(title: "G_OK".l13n(), style: .default, handler: nil))
+            present(ac, animated: false)
+        }
+    }
   }
 }
