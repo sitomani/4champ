@@ -17,8 +17,10 @@ class Appearance {
   static var darkBlueColor = UIColor.init(rgb: 0x0C263D)
   static var tabColor = UIColor.init(rgb: 0x0C263D)
   static var ampBgColor = UIColor.init(rgb: 0x123456)
+  static var segmentBg = UIColor.init(rgb: 0x1A2F4B)
 //  static var ampLightBlueColor = UIColor.init(rgb: 0x36679A)
   static var ampLightBlueColor = UIColor.init(rgb: 0x16538a)
+  static var ampTextfieldBgColor = UIColor.init(rgb: 0x1f3044)
   static var separatorColor = UIColor.init(rgb: 0x485675)
   static var barTitleColor = UIColor.init(rgb: 0xc0c0c0)
   static var cellColor = UIColor.clear
@@ -26,6 +28,7 @@ class Appearance {
   class func setup() {
     let navigationBarAppearace = UINavigationBar.appearance()
     navigationBarAppearace.tintColor = UIColor.white
+//    navigationBarAppearace.isTranslucent = false
     navigationBarAppearace.barTintColor = Appearance.tabColor
     navigationBarAppearace.backgroundColor = darkBlueColor
     navigationBarAppearace.titleTextAttributes = [.foregroundColor: barTitleColor,
@@ -61,6 +64,10 @@ class Appearance {
     
     let sbAppearance = UISearchBar.appearance()
     sbAppearance.barTintColor = darkBlueColor
+    
+    let sgAppearance = UISegmentedControl.appearance()
+    sgAppearance.tintColor = .white
+    sgAppearance.selectedSegmentTintColor = .white
     
     }
 }

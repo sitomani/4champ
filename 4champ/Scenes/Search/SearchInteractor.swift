@@ -64,6 +64,14 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
   private var fetcher: ModuleFetcher?
   private var latestModuleResponse: Search.ModuleResponse = Search.ModuleResponse(result: [], text: "")
   
+  init() {
+    moduleStorage.addStorageObserver(self)
+  }
+  
+  deinit {
+    moduleStorage.removeStorageObserver(self)
+  }
+  
   func search(_ request: Search.Request) {
     log.debug("keyword: \(request.text), type: \(request.type), pagingIndex: \(request.pagingIndex)")
     if currentRequest != nil {
@@ -220,5 +228,13 @@ extension SearchInteractor: ModuleFetcherDelegate {
         log.error("Deleting file at \(url) failed, \(error)")
       }
     }
+  }
+}
+
+extension SearchInteractor: ModuleStorageObserver {
+  func metadataChange(_ mmd: MMD) {
+  }
+  
+  func playlistChange() {
   }
 }

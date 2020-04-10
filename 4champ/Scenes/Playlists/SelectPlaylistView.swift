@@ -14,6 +14,22 @@ extension View {
     }
 }
 
+// from https://stackoverflow.com/questions/56505528/swiftui-update-navigation-bar-title-color
+// would work if translucency was possible
+struct NavigationConfigurator: UIViewControllerRepresentable {
+    var configure: (UINavigationController) -> Void = { _ in }
+
+    func makeUIViewController(context: UIViewControllerRepresentableContext<NavigationConfigurator>) -> UIViewController {
+        UIViewController()
+    }
+    func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<NavigationConfigurator>) {
+        if let nc = uiViewController.navigationController {
+            self.configure(nc)
+        }
+    }
+
+}
+
 struct PlaylistCell: View {
     let pl: Playlist
     var body: some View {
@@ -79,20 +95,30 @@ struct PlaylistSelectorSUI: View {
             VStack {
                 if editingName {
                     HStack {
-                        TextField("Playlist name", text:$name).textFieldStyle(RoundedBorderTextFieldStyle()).padding(EdgeInsets(top: 8, leading: 4, bottom: 2, trailing: 0))
+                        TextField("PlaylistView_PlaylistName".l13n(), text:$name)
+                            .foregroundColor(Color(.white))
+                            .background(RoundedRectangle(cornerRadius:5)
+                                .foregroundColor(Color(Appearance.ampTextfieldBgColor))
+                                .frame(minHeight:32)
+                                .padding(EdgeInsets(top: 0, leading: -10, bottom: 0, trailing: 8)))
+                            .padding(EdgeInsets(top: 8, leading: 20, bottom: 2, trailing: 0)).frame(minHeight: 44)
                         Button(action: {
                                 self.upsertPlaylist(name: self.name, playlist: self.editedPlaylist)
-                        }) {
+                            }) {
                             Image(uiImage: UIImage(named: "save_playlist")!)
                         }.accentColor(Color(Appearance.successColor))
+                            .disabled(self.name.count == 0)
                         Button(action: {
+                            self.name = ""
+                            self.editedPlaylist = nil
+                            self.endEditing()
                             withAnimation {
                                 self.editingName = false
-                                self.editedPlaylist = nil
                             }
-                        }) {
+                            }) {
                             Image(uiImage: UIImage(named: "cancel_save")!)
                             }.accentColor(Color(Appearance.errorColor)).padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 4))
+                        .contentShape(Rectangle())
                     }.background(Color(Appearance.darkBlueColor)).transition(.slide)
                 }
                 List {
@@ -108,8 +134,8 @@ struct PlaylistSelectorSUI: View {
                         }
                     }.onDelete(perform: delete)
                 }.contentShape(Rectangle()).id(listId)
-            }.navigationBarTitle("Select playlist", displayMode: .inline).navigationBarItems(trailing: Button(action: {
-                print("User icon pressed...")
+            }.navigationBarTitle("PlaylistView_Playlists", displayMode: .inline)
+                .navigationBarItems(trailing: Button(action: {
                 withAnimation {
                     self.editedPlaylist = nil
                     self.name = ""

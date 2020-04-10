@@ -41,11 +41,15 @@ class MainViewController: UITabBarController {
     moduleStorage.addStorageObserver(self)
     UNUserNotificationCenter.current().delegate = self
     
-//    let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(showPlaylistPicker(_:))
-    
     let lpr = UILongPressGestureRecognizer(target: self, action: #selector(showPlaylistPicker(_:)))
     npView?.addGestureRecognizer(lpr)
-//    npView?.addGestureRecognizer(longPressRecognizer)
+
+    let titles = ["TabBar_Local", "TabBar_Playlist", "TabBar_Search", "TabBar_Radio", "TabBar_About"]
+    for t in tabBar.items! {
+      if let index = tabBar.items!.index(of: t) {
+        t.title = titles[index].l13n()
+      }
+    }
   }
   
   func toggleNowPlaying(_ value: Bool) {

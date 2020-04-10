@@ -139,17 +139,17 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   }
   
   func updateBarButtons() {
-    let btn1 = UIBarButtonItem.init(title: "Type", style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
+    let btn1 = UIBarButtonItem.init(title: "ModuleInfo_Type".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn1.tag = LocalSortKey.type.rawValue
-    let btn2 = UIBarButtonItem.init(title: "Module", style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
+    let btn2 = UIBarButtonItem.init(title: "G_Module".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn2.tag = LocalSortKey.module.rawValue
-    let btn3 = UIBarButtonItem.init(title: "Composer", style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
+    let btn3 = UIBarButtonItem.init(title: "ModuleInfo_Handle".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn3.tag = LocalSortKey.composer.rawValue
-    let btn4 = UIBarButtonItem.init(title: "Size", style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
+    let btn4 = UIBarButtonItem.init(title: "ModuleInfo_Size".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn4.tag = LocalSortKey.size.rawValue
     let btn5 = UIBarButtonItem.init(image: UIImage.init(named: "favestar-yellow"), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn5.tag = LocalSortKey.favorite.rawValue
-    let btn6 = UIBarButtonItem.init(title: "Filter", style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
+    let btn6 = UIBarButtonItem.init(title: "ModulesView_Filter".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn6.tag = -1 //No sort key for filter
     
     _ = [btn1, btn2, btn3, btn4, btn5, btn6].map {

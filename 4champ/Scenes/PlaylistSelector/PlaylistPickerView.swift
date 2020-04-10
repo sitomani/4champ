@@ -40,11 +40,11 @@ struct PlaylistPickerView: View {
                 VStack {
                     Spacer()
                     Color.white
-                    Text(self.store.viewModel.module)
-                    Text("PlaylistSelector_Title")
+                    Text(self.store.viewModel.module).foregroundColor(Color(.black))
+                    Text("PlaylistSelector_Title").foregroundColor(Color(.black))
                     Picker(selection: $store.viewModel.currentPlaylistIndex, label: Text("")) {
                         ForEach(0..<self.store.viewModel.playlistOptions.count) {
-                            Text(self.store.viewModel.playlistOptions[$0])
+                            Text(self.store.viewModel.playlistOptions[$0]).foregroundColor(Color(.black))
                         }
                     }.labelsHidden().background(Color.white)
                     HStack {
@@ -64,7 +64,7 @@ struct PlaylistPickerView: View {
             if self.store.viewModel.status == .downloading(progress: 0) {
                 withAnimation {
             ZStack {
-                Text("Search_Downloading".l13n())
+                Text("Search_Downloading".l13n()).foregroundColor(Color(.black))
             }.frame(maxWidth:.infinity, minHeight: 80).background(Color(.white))
                 }.transition(.opacity)
             }

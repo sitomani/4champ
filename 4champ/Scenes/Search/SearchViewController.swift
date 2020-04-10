@@ -167,19 +167,34 @@ class SearchViewController: UIViewController, SearchDisplayLogic
     DispatchQueue.main.async {
       self.tableView?.reloadData()
     }
-    
-    if viewModel.modules.count > 0 && viewModel.text.count == 0 {
+    updateDownloadAllButton()
+  }
+  
+  func updateDownloadAllButton() {
+    guard let vm = self.viewModel else {
+      return
+    }
+
+    if vm.modules.count > 0 && vm.text.count == 0 {
+      var onlineOnly = vm.modules.count
+      for mod in vm.modules {
+        if mod.hasBeenSaved() || mod.supported() == false {
+          onlineOnly = onlineOnly - 1
+        }
+      }
+      
       let dlbutton = UIButton.init(type: .system)
       dlbutton.setImage(UIImage.init(named: "downloadall"), for: .normal)
       dlbutton.layoutMargins = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
-      dlbutton.setTitle("\(viewModel.modules.count) ", for: .normal)
+      dlbutton.setTitle("\(onlineOnly)", for: .normal)
       dlbutton.sizeToFit()
       dlbutton.addTarget(self, action: #selector(triggerDownloadAll(_:)), for: .touchUpInside)
       dlbutton.semanticContentAttribute = UIApplication.shared
         .userInterfaceLayoutDirection == .rightToLeft ? .forceLeftToRight : .forceRightToLeft
       navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: dlbutton)
+      
+      dlbutton.isHidden = onlineOnly <= 0
     }
-    
   }
   
   func displayDownloadProgress(viewModel: Search.ProgressResponse.ViewModel) {
@@ -200,6 +215,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
       progressBar?.progress = 0
       progressBar?.isHidden = true
     }
+    updateDownloadAllButton()
   }
   
   @objc private func triggerDownloadAll(_ sender: UIBarButtonItem) {
