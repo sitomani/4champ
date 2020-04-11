@@ -351,7 +351,10 @@ extension SearchViewController: UITableViewDataSource {
   }
 
   func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-    if (viewModel?.modules[indexPath.row].hasBeenSaved()) ?? false {
+    guard let modules = viewModel?.modules, modules.count > indexPath.row else {
+      return .none
+    }
+    if modules[indexPath.row].hasBeenSaved() {
       return .delete
     } else {
       return .none
