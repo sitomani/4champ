@@ -14,6 +14,7 @@ protocol SearchPresentationLogic
   func presentComposers(response: Search.ComposerResponse)
   func presentDownloadProgress(response: Search.ProgressResponse)
   func presentBatchProgress(response: Search.BatchDownload.Response)
+  func presentMetadataChange(response: Search.MetaDataChange.Response)
 }
 
 /// Search result presentation class. Presenter wraps the json originating
@@ -86,9 +87,19 @@ class SearchPresenter: SearchPresentationLogic
   func presentBatchProgress(response: Search.BatchDownload.Response) {
     log.debug("")
     let processedCount = response.originalQueueLength - response.queueLength + (response.queueLength > 0 ? 1 : 0)
-    let vm = Search.BatchDownload.ViewModel(batchSize: response.originalQueueLength, processed:processedCount, complete: response.complete)
+    let vm = Search.BatchDownload.ViewModel(batchSize: response.originalQueueLength,
+                                            processed:processedCount,
+                                            complete: response.complete,
+                                            favoritedModuleId: response.favoritedModuleId)
     DispatchQueue.main.async {
       self.viewController?.displayBatchProgress(viewModel: vm)
+    }
+  }
+  
+  func presentMetadataChange(response: Search.MetaDataChange.Response) {
+    let vm = Search.MetaDataChange.ViewModel(module: response.module)
+    DispatchQueue.main.async {
+      self.viewController?.displayMetaDataChange(viewModel: vm)
     }
   }
 }

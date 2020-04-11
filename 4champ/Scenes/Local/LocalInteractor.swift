@@ -75,7 +75,11 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
       var module = MMD()
       module.type = mi.modType ?? ""
       module.id = mi.modId?.intValue ?? 0
-      module.localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(mi.modLocalPath!)
+      if let path = mi.modLocalPath {
+        module.localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(path)
+      } else {
+        log.error("file not available for module \(module.name ?? "no name available")")
+      }
       module.name = mi.modName ?? ""
       module.size = mi.modSize?.intValue ?? 0
       module.composer = mi.modAuthor ?? ""
@@ -105,9 +109,7 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
   
   func deleteModule(at: IndexPath) {
     let mmd = getModule(at: at)
-    if mmd.fileExists() {
-      moduleStorage.deleteModule(module: mmd)
-    }
+    moduleStorage.deleteModule(module: mmd)
   }
   
   func toggleFavorite(at: IndexPath) {

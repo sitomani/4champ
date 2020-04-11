@@ -102,6 +102,8 @@ struct PlaylistView: View {
                             .contentShape(Rectangle())
                             .onTapGesture {
                                 modulePlayer.play(mmd: mod)
+                        }.onLongPressGesture {
+                            self.store.router?.toPlaylistSelector(module: mod)
                         }
                     }.onMove(perform: move)
                     .onDelete(perform: deleteItems)
@@ -118,14 +120,17 @@ struct PlaylistView: View {
 }
 
 class PlaylistHostingViewController: UIHostingController<AnyView> {
+    
+    let store: PlaylistStore
     required init?(coder: NSCoder) {
-        let store = PlaylistStore()
+        store = PlaylistStore()
         let contentView = PlaylistView(store: store).environment(\.managedObjectContext, moduleStorage.managedObjectContext)
         store.setup()
         super.init(coder: coder, rootView:AnyView(contentView))
     }
     
     override func viewDidLoad() {
+        store.router?.viewController = self
         super.viewDidLoad()
         self.view.backgroundColor = Appearance.darkBlueColor
     }

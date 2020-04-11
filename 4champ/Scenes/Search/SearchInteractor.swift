@@ -37,6 +37,8 @@ protocol SearchBusinessLogic
   func getModuleInfo(at: IndexPath) -> ModuleInfo?
   
   func addToPlaylist(moduleId: Int, playlistId: String)
+  
+  func deleteModule(at indexPath: IndexPath)
 }
 
 /// Search Interactor datastore
@@ -60,6 +62,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
   
   private var currentRequest: Alamofire.DataRequest?
   private var downloadQueue: [Int] = []
+  private var favoritedModuleId: Int = 0
   private var originalQueueLenght: Int = 0
   private var fetcher: ModuleFetcher?
   private var latestModuleResponse: Search.ModuleResponse = Search.ModuleResponse(result: [], text: "")
@@ -150,16 +153,37 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
     return nil
   }
   
+  func deleteModule(at: IndexPath) {
+    if let cdi = getModuleInfo(at: at) {
+      let mod = MMD(cdi: cdi)
+      moduleStorage.deleteModule(module: mod)
+      presenter?.presentMetadataChange(response: Search.MetaDataChange.Response(module: mod))
+    }
+  }
+  
   private func doDownload(moduleId: Int) {
     // Always create a new fetcher. Fetchers will be released
     // Once the fetch is complete
     fetcher = ModuleFetcher.init(delegate: self)
+
+    // First check if the mod is already downloaded to play queue => in the case, bypass fetch
+    // and go directly to done state.
+    if let mod = (modulePlayer.playQueue.first { $0.id == moduleId }), mod.localPath != nil {
+      fetcherStateChanged(fetcher!, state: .done(mmd: mod))
+      return
+    }
+
     fetcher?.fetchModule(ampId: moduleId)
   }
     
   func downloadModules(_ request: Search.BatchDownload.Request) {
     downloadQueue = request.moduleIds
     originalQueueLenght = request.moduleIds.count
+    if request.favorite {
+      favoritedModuleId = request.moduleIds.first ?? 0
+    } else {
+      favoritedModuleId = 0
+    }
     fetchNextQueuedModule()
   }
   
@@ -173,7 +197,10 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
   }
   
   private func fetchNextQueuedModule() {
-    var resp = Search.BatchDownload.Response(originalQueueLength: originalQueueLenght, queueLength: downloadQueue.count, complete: false)
+    var resp = Search.BatchDownload.Response(originalQueueLength: originalQueueLenght,
+                                             queueLength: downloadQueue.count,
+                                             complete: false,
+                                             favoritedModuleId: favoritedModuleId)
     guard downloadQueue.count > 0 else {
       resp.complete = true
       presenter?.presentBatchProgress(response: resp)
@@ -190,13 +217,17 @@ extension SearchInteractor: ModuleFetcherDelegate {
   func fetcherStateChanged(_ fetcher: ModuleFetcher, state: FetcherState) {
     log.debug(state)
     switch state {
-    case .done(let mmd):
+    case .done(var mmd):
       presenter?.presentDownloadProgress(response: Search.ProgressResponse(progress: 1.0))
       if originalQueueLenght == 0 {
         modulePlayer.play(mmd: mmd)
         // removeBufferHead()
       } else {
+        if favoritedModuleId == mmd.id {
+          mmd.favorite = true
+        }
         moduleStorage.addModule(module: mmd)
+        presenter?.presentMetadataChange(response: Search.MetaDataChange.Response(module: mmd))
         fetchNextQueuedModule()
       }
     case .downloading(let progress):
@@ -233,8 +264,11 @@ extension SearchInteractor: ModuleFetcherDelegate {
 
 extension SearchInteractor: ModuleStorageObserver {
   func metadataChange(_ mmd: MMD) {
+    presenter?.presentMetadataChange(response: Search.MetaDataChange.Response(module: mmd))
+    log.debug("")
   }
   
   func playlistChange() {
+    log.debug("")
   }
 }

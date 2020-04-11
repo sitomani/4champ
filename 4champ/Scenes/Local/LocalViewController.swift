@@ -220,15 +220,7 @@ extension LocalViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     if let cell = tableView.dequeueReusableCell(withIdentifier: "ModuleCell") as? ModuleCell {
       if let module = interactor?.getModule(at: indexPath) {
-        cell.nameLabel?.text = module.name
-        cell.composerLabel?.text = module.composer
-        cell.typeLabel?.text = module.type
-        cell.sizeLabel?.text = "\(module.size ?? 0) Kb"
-        cell.faveButton?.isSelected = module.favorite
-        cell.stopImage?.isHidden = true
-        if let uri = module.localPath {
-          cell.progressVeil?.isHidden = true
-        }
+        cell.configure(with: module)
         cell.delegate = self
       }
       return cell
@@ -237,7 +229,7 @@ extension LocalViewController: UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-    return "Dialog_Delete".l13n()
+    return "ModulesView_Delete".l13n()
   }
   
   func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -285,6 +277,11 @@ extension LocalViewController: ModuleCellDelegate {
     }
     interactor?.toggleFavorite(at: ip)
   }
+  
+  func saveTapped(cell: ModuleCell) {
+    
+  }
+  
   func longTap(cell: ModuleCell) {
     
     guard let ip = tableView.indexPath(for: cell),

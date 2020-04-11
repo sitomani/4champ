@@ -37,16 +37,19 @@ enum Search
   struct BatchDownload {
     struct Request {
       var moduleIds: [Int]
+      var favorite: Bool = false
     }
     struct Response {
       var originalQueueLength: Int
       var queueLength: Int
       var complete: Bool
+      var favoritedModuleId: Int
     }
     struct ViewModel {
       var batchSize: Int
       var processed: Int
       var complete: Bool
+      var favoritedModuleId: Int
     }
   }
   
@@ -77,7 +80,19 @@ enum Search
     var groups: [GroupInfo]
     var text: String
   }
+  
+  enum MetaDataChange {
+    struct Response {
+      var module: MMD
+    }
+    
+    struct ViewModel {
+      var module: MMD
+    }
+  }
 }
+
+
 
 // MARK: 4champ.net JSON interface objects
 typealias ModuleResult = [SearchResultModule]

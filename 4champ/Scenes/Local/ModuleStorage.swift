@@ -169,6 +169,7 @@ extension ModuleStorage: ModuleStorageInterface {
     cdModule.modLocalPath = module.localPath?.lastPathComponent
     cdModule.added = NSDate.init(timeIntervalSinceNow: 0)
     cdModule.lastPlayed = NSDate.init(timeIntervalSinceNow: 0)
+    cdModule.modFavorite = NSNumber.init(value: module.favorite)
     cdModule.playCount = 1
     cdModule.modDLStatus = 0
     cdModule.preview = 0

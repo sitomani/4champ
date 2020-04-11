@@ -13,6 +13,7 @@ protocol SearchDisplayLogic: class
   func displayResult(viewModel: Search.ViewModel)
   func displayDownloadProgress(viewModel: Search.ProgressResponse.ViewModel)
   func displayBatchProgress(viewModel: Search.BatchDownload.ViewModel)
+  func displayMetaDataChange(viewModel: Search.MetaDataChange.ViewModel)
 }
 
 class SearchViewController: UIViewController, SearchDisplayLogic
@@ -214,8 +215,14 @@ class SearchViewController: UIViewController, SearchDisplayLogic
       stopBatchSpinner()
       progressBar?.progress = 0
       progressBar?.isHidden = true
+      tableView?.reloadData()
     }
     updateDownloadAllButton()
+  }
+  
+  func displayMetaDataChange(viewModel: Search.MetaDataChange.ViewModel) {
+    self.viewModel?.updateModule(module: viewModel.module)
+    tableView?.reloadData()
   }
   
   @objc private func triggerDownloadAll(_ sender: UIBarButtonItem) {
@@ -331,10 +338,36 @@ extension SearchViewController: UITableViewDataSource {
     let cell = vm.dequeueCell(for: tableView, at: indexPath.row)
     if let modCell = (cell as? ModuleCell) {
       modCell.delegate = self
-      modCell.faveButton?.isHidden = true
+//      modCell.faveButton?.isHidden = true
     }
     return cell
   }
+  
+  func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+    guard (viewModel?.modules.count ?? 0) > 0 else {
+      return nil
+    }
+    return "SearchView_Remove".l13n()
+  }
+
+  func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+    if (viewModel?.modules[indexPath.row].hasBeenSaved()) ?? false {
+      return .delete
+    } else {
+      return .none
+    }
+  }
+
+  func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    guard (viewModel?.modules.count ?? 0) > 0 else {
+      return
+    }
+    
+    if editingStyle == .delete {
+      interactor?.deleteModule(at: indexPath)
+    }
+  }
+  
 }
 
 // MARK: Table view delegate
@@ -398,17 +431,7 @@ extension Search.ViewModel {
     if modules.count > row {
       if let cell = tableView.dequeueReusableCell(withIdentifier: "ModuleCell") as? ModuleCell {
         let module = modules[row]
-        cell.nameLabel?.text = module.name!
-        cell.composerLabel?.text = module.composer!
-        cell.sizeLabel?.text = "\(module.size!) Kb"
-        cell.typeLabel?.text = module.type!
-        cell.stopImage?.isHidden = module.supported()
-        cell.progressVeil?.isHidden = true
-        //        if let _ = module.localPath {
-        //          cell.progressVeil?.isHidden = true
-        //        } else {
-        //          cell.progressVeil?.isHidden = false
-        //        }
+        cell.configure(with: module)
         return cell
       }
     } else if composers.count > row {
@@ -440,15 +463,38 @@ extension Search.ViewModel {
     }
     return 0
   }
+  
+  mutating func updateModule(module: MMD) {
+    if let index = self.modules.firstIndex(where: { (mmd) -> Bool in
+      mmd.id == module.id
+    }) {
+      modules[index] = module
+    }
+  }
 }
 
 extension SearchViewController: ModuleCellDelegate {
   func faveTapped(cell: ModuleCell) {
     guard let ip = tableView?.indexPath(for: cell),
-      let module = viewModel?.modules[ip.row] else {
+      let module = viewModel?.modules[ip.row], let modId = module.id else {
         return
     }
-    _ = moduleStorage.toggleFavorite(module: module)
+    
+    if module.hasBeenSaved() {
+      _ = moduleStorage.toggleFavorite(module: module)
+    } else {
+      let request = Search.BatchDownload.Request(moduleIds: [modId], favorite: true)
+      interactor?.downloadModules(request)
+    }
+  }
+  
+  func saveTapped(cell: ModuleCell) {
+    guard let ip = tableView?.indexPath(for: cell),
+      let module = viewModel?.modules[ip.row], let modId = module.id else {
+        return
+    }
+    let request = Search.BatchDownload.Request(moduleIds: [modId])
+    interactor?.downloadModules(request)
   }
   
   func longTap(cell: ModuleCell) {
@@ -456,7 +502,6 @@ extension SearchViewController: ModuleCellDelegate {
       let mmd = viewModel?.modules[ip.row] {
       router?.toPlaylistSelector(module: mmd)
 
-      
 //      let contentView = PlaylistPickerView2(dismissAction: dismissAction, module: mod).environment(\.managedObjectContext, moduleStorage.managedObjectContext)
 //      let vc = UIHostingController(rootView: contentView)
 //      vc.view.backgroundColor = .clear

@@ -32,7 +32,11 @@ struct MMD: Identifiable {
       self.downloadPath = URL.init(string: urlString)
     }
     self.id = cdi.modId?.intValue ?? 0
-    self.localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(cdi.modLocalPath!)
+    if let path = cdi.modLocalPath {
+      self.localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(path)
+    } else {
+      log.error("Module \(cdi.modName) file not available")
+    }
     self.name = cdi.modName
     self.size = cdi.modSize?.intValue
     self.type = cdi.modType
@@ -49,7 +53,7 @@ struct MMD: Identifiable {
       composer = components[components.count - 2].removingPercentEncoding
       if let modNameParts = components.last?.components(separatedBy: ".") {
         type = modNameParts.first ?? "MOD"
-        name = modNameParts[1...modNameParts.count - 2].joined()
+        name = modNameParts[1...modNameParts.count - 2].joined(separator: ".")
         name = name?.replacingOccurrences(of: "%", with: "%25") //replace percent signs with encoding
         name = name?.removingPercentEncoding //before removing the encoding
         localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(name!).appendingPathExtension(type!)
