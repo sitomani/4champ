@@ -155,8 +155,15 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
   
   func deleteModule(at: IndexPath) {
     if let cdi = getModuleInfo(at: at) {
-      let mod = MMD(cdi: cdi)
+      var mod = MMD(cdi: cdi)
       moduleStorage.deleteModule(module: mod)
+      mod.favorite = false
+      
+      // Remove deleted module from play queue
+      if let queueIndex = modulePlayer.playQueue.firstIndex(of: mod) {
+        modulePlayer.playQueue.remove(at: queueIndex)
+      }
+      
       presenter?.presentMetadataChange(response: Search.MetaDataChange.Response(module: mod))
     }
   }
