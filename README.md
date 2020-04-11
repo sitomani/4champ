@@ -7,12 +7,16 @@ project that collects anything related to Amiga music production. AMP database b
 
 ### Development journal
 
-In this repository I'm working on rewriting the app that originally was released in AppStore in 2012, and since late 2017 not available in AppStore any more 😞. You can read more about the history of the app and follow the rewrite process on the development journal that I created for this project: [sitomani.github.io/4champ](https://sitomani.github.io/4champ).
+In this repository I'm working on rewriting the app that originally was released in AppStore in 2012. It was available in the store until late 2017, when I decided to remove the app from there as I could not release updates any more due to missing third party content license.
+
+In early 2020 I have set up a Sole Proprietor developer account in App Store and the third party content licensing issue has been resolved. The app is now in TestFlight beta, and if you're interested to test it before I get it finalised to official App Store release, drop me a message with your email address on my Twitter account at https://twitter.com/4champ_app.
+
+You can read more about the history of the app and follow the rewrite process on the development journal that I created for this project: [sitomani.github.io/4champ](https://sitomani.github.io/4champ).
 
 ### Main Features and their current status in this repository
 * Radio: You can listen to a random set of tunes from the whole collection of over 150000 modules, or stream from the head, i.e. the most recently added ones. You can also play from the local collection from set of modules that you've selected to keep for offline mode.
 * Search (search the AMP database by module, composer, group name or sampletexts): Implemented in October 2018.
-* Playlists (build your own playlists): TBD
+* Playlists (build your own playlists): Playlists implemented in April 2020.
 * Local Collection (store modules locally): Persistent storage for off-line listening of modules implemented June 2019.
 * Settings (control stereo separation etc): Stereo separation setting implemented in November 2018.
 

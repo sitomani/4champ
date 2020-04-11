@@ -78,3 +78,12 @@ team what was going on, and got a response that there's some issues yet to be ch
 they did, with a <font color='red'>rejection</font>. A lengthy correspondence with Apple Review and Amiga Music Preservation staff
 followed, but eventually I decided to give it a rest and removed the app from store. Read the whole story: 
 [Why I removed 4champ from AppStore](appstore_removal.md).
+
+### Version 3.0 BETA Apr 2020 
+
+In the year 2020 I have managed to finalise two things needed to get the app back into App Store.
+
+1. Rewrite the whole app in Swift. That's more or less done in April 2020, and its a Swift/SwiftUI hybrid.
+2. Get the third party content licensing issues solved. This is also done as of March 2020.
+
+The application is in Testflight Beta as of Easter 2020. I'm anticipating an app store within a couple of weeks.

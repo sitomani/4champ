@@ -1,5 +1,13 @@
 # 4champ Development Journal
 
+### 11 Apr 2020 Easter Eggs Anyone?
+
+Thanks to the 2020 coronavirus pandemic and isolation I've been fighting boredom by finally writing the last missing big feature for the app, the playlists support. The playlist handling came out a bit differently as compared to the original app release where all modules got added to a playlist when listened once, which resulted in a number of clunky features to counteract the behaviour. In my opinion, it's now more in line with common sense.
+
+With the playlists, I also had the chance to experiment a bit with SwiftUI. The playlists related views are implemented mostly in SwiftUI, but as I went on to learn the ropes with the new descriptive UI language, I noticed that it's not quite ready for full showtime yet. Refer to my Twitter feed for some specific findings behind this opinion.  
+
+And yes, the build from this repository is also now in Testflight Beta! The nice folks from Amiga Music Preservation have helped me out get the Apple third party content usage issue solved, and I'm anticipating an official AppStore release in the forthcoming weeks. Stay tuned, and if you'd like to have a go with the beta version, drop me a pm in Twitter (https://twitter.com/4champ_app).
+
 ### 05 Feb 2020 New formats for free
 
 While working on the datascience section of the 4champ project, I noticed that the OpenMPT player can replay 

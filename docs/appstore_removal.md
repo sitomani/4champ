@@ -56,25 +56,19 @@ signed would be considered solid permission for my app to use amp.dascene.net re
 
 Meanwhile, I was also having a tight correspondence with the AMP team about the topic. Once I got a draft agreement
 about use of amp.dascene.net module database in my app done, I posted that for screening to AMP, but eventually it got
-turned down. In the end, it came down to Apple requiring a volunteer based online service administrator to sign an agreement 
-with publisher of an app that makes use of their service in order to keep the app (that is not directly in relation with 
-AMP) in the AppStore - it just did not click.
+turned down. In the end, it came down to Apple requiring a volunteer based online service administrator to sign an agreement with publisher of an app that makes use of their service in order to keep the app (that is not directly in relation with AMP) in the AppStore - it just did not click.
 
 I can relate to both Apple and AMP team here. Apple's interest is to keep out of any legal disputes that might arise from
 potentially copyright-infringing apps on their platform - hence the need to document the permission, and it's the app 
 developer's response to provide sufficient material. AMP team on the other hand are a bunch of demosceners who maintain 
-perhaps the largest tracker music database in the net, just for the common good. I really appreciate their work and effort, 
-and could not blame them a bit for not signing an agreement just for the sake of Apple and my app that is not part of AMP, 
-even though it is practically dependent of the service.
+perhaps the largest tracker music database in the net, just for the common good. I really appreciate their work and effort, and could not blame them a bit for not signing an agreement just for the sake of Apple and my app that is not part of AMP, even though it is practically dependent of the service.
 
 
 ## Plan B: Open Sourcing the app
 
 Clearly I was at a dead end with 4champ. It seemed impossible to get the Apple Review dispute sorted out by any means 
 that I could think of, and the agreement plan had gone off too. At this point, around September 2017 I decided to pull 
-4champ from AppStore altogether. It did not feel right to keep the app available, if I could not release any updates to it. 
-As a matter of fact, it was a nice policy from Apple to let the version 2.0 stay in during the lengthy conversations, but I 
-did not want to push my luck on that any further.
+4champ from AppStore altogether. It did not feel right to keep the app available, if I could not release any updates to it. As a matter of fact, it was a nice policy from Apple to let the version 2.0 stay in during the lengthy conversations, but I did not want to push my luck on that any further.
 
 So I set up this github repository, and added just a license and readme files back in September 2017, as a placeholder for
 releasing the app as open source project. If I could not get it listed in AppStore, anybody with Xcode could build it from
@@ -85,3 +79,6 @@ By the time of writing this, I have done some initial moves towards getting the 
 release pause there's some OS updates for me to catch up with, and I also plan to do somewhat major rewrite in Swift 
 before uploading the app sources. You can follow the [index](index.md) page for updates as I proceed with these actions.
 
+## Footnote 2020
+
+Looks like I'm pretty close to having the cake and eating it. Thanks to the really nice folks at Amiga Music Preservation, I've got a written license agreement to download modules from AMP database to play back in 4champ app. The app is now in Testflight Beta, and the full source code is also released here at GitHub - all systems go!
