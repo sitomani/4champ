@@ -158,6 +158,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
       var mod = MMD(cdi: cdi)
       moduleStorage.deleteModule(module: mod)
       mod.favorite = false
+      mod.localPath = nil
       
       // Remove deleted module from play queue
       if let queueIndex = modulePlayer.playQueue.firstIndex(of: mod) {
@@ -175,7 +176,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
 
     // First check if the mod is already downloaded to play queue => in the case, bypass fetch
     // and go directly to done state.
-    if let mod = (modulePlayer.playQueue.first { $0.id == moduleId }), mod.localPath != nil {
+    if let mod = (modulePlayer.playQueue.first { $0.id == moduleId }), mod.localPath != nil, FileManager.default.fileExists(atPath: mod.localPath!.path) {
       fetcherStateChanged(fetcher!, state: .done(mmd: mod))
       return
     }

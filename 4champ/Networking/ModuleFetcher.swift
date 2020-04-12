@@ -133,11 +133,13 @@ class ModuleFetcher {
           do {
             //store to file and make sure it's not writing over an existing mod
             var numberExt = 0
-            while FileManager.default.fileExists(atPath: mmd.localPath!.absoluteString) {
+            var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(mmd.name!).appendingPathExtension(mmd.type!)
+            while FileManager.default.fileExists(atPath: localPath.path) {
                 numberExt += 1
-                let filename = mmd.name! + "_‰(numberExt)"
-                mmd.localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
+                let filename = mmd.name! + "_\(numberExt)"
+                localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
             }
+            mmd.localPath = localPath
             try moduleDataUnzipped.write(to: mmd.localPath!, options: .atomic)
           } catch {
             log.error("Could not write module data to file: \(error)")
