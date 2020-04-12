@@ -42,13 +42,16 @@ extension ModuleCell {
     composerLabel?.text = module.composer!
     typeLabel?.text = module.type!
     stopImage?.isHidden = module.supported()
-    if module.hasBeenSaved() {
+    
+    if module.hasBeenSaved() || module.supported() == false {
       sizeLabel?.text = "\(module.size!) Kb"
       saveButton?.isHidden = true
     } else {
       saveButton?.isHidden = false
       sizeLabel?.text = "\(module.size!) Kb"
     }
+    
     faveButton?.isSelected = module.favorite
+    faveButton?.isHidden = !module.supported()
   }
 }

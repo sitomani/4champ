@@ -15,6 +15,7 @@ protocol SearchPresentationLogic
   func presentDownloadProgress(response: Search.ProgressResponse)
   func presentBatchProgress(response: Search.BatchDownload.Response)
   func presentMetadataChange(response: Search.MetaDataChange.Response)
+  func presentDeletion(response: Search.MetaDataChange.Response)
 }
 
 /// Search result presentation class. Presenter wraps the json originating
@@ -100,6 +101,13 @@ class SearchPresenter: SearchPresentationLogic
     let vm = Search.MetaDataChange.ViewModel(module: response.module)
     DispatchQueue.main.async {
       self.viewController?.displayMetaDataChange(viewModel: vm)
+    }
+  }
+  
+  func presentDeletion(response: Search.MetaDataChange.Response) {
+    let vm = Search.MetaDataChange.ViewModel(module: response.module)
+    DispatchQueue.main.async {
+      self.viewController?.displayDeletion(viewModel: vm)
     }
   }
 }

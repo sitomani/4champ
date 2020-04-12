@@ -14,6 +14,7 @@ protocol SearchDisplayLogic: class
   func displayDownloadProgress(viewModel: Search.ProgressResponse.ViewModel)
   func displayBatchProgress(viewModel: Search.BatchDownload.ViewModel)
   func displayMetaDataChange(viewModel: Search.MetaDataChange.ViewModel)
+  func displayDeletion(viewModel: Search.MetaDataChange.ViewModel)
 }
 
 class SearchViewController: UIViewController, SearchDisplayLogic
@@ -222,7 +223,20 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   
   func displayMetaDataChange(viewModel: Search.MetaDataChange.ViewModel) {
     self.viewModel?.updateModule(module: viewModel.module)
-    tableView?.reloadData()
+    if let modIndex = self.viewModel?.modules.index(of: viewModel.module) {
+      tableView?.reloadRows(at: [IndexPath(row: modIndex, section: 0)], with: .fade)
+    } else {
+      tableView?.reloadData()
+    }
+  }
+  
+  func displayDeletion(viewModel: Search.MetaDataChange.ViewModel) {
+    self.viewModel?.updateModule(module: viewModel.module)
+    if let modIndex = self.viewModel?.modules.index(of: viewModel.module) {
+      tableView?.reloadRows(at: [IndexPath(row: modIndex, section: 0)], with: .left)
+    } else {
+      tableView?.reloadData()
+    }
   }
   
   @objc private func triggerDownloadAll(_ sender: UIBarButtonItem) {
@@ -479,7 +493,7 @@ extension Search.ViewModel {
 extension SearchViewController: ModuleCellDelegate {
   func faveTapped(cell: ModuleCell) {
     guard let ip = tableView?.indexPath(for: cell),
-      let module = viewModel?.modules[ip.row], let modId = module.id else {
+      let module = viewModel?.modules[ip.row], let modId = module.id, module.supported() else {
         return
     }
     
@@ -493,7 +507,7 @@ extension SearchViewController: ModuleCellDelegate {
   
   func saveTapped(cell: ModuleCell) {
     guard let ip = tableView?.indexPath(for: cell),
-      let module = viewModel?.modules[ip.row], let modId = module.id else {
+      let module = viewModel?.modules[ip.row], let modId = module.id, module.supported() else {
         return
     }
     let request = Search.BatchDownload.Request(moduleIds: [modId])

@@ -165,7 +165,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
         modulePlayer.playQueue.remove(at: queueIndex)
       }
       
-      presenter?.presentMetadataChange(response: Search.MetaDataChange.Response(module: mod))
+      presenter?.presentDeletion(response: Search.MetaDataChange.Response(module: mod))
     }
   }
   
