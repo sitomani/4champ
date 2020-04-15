@@ -9,9 +9,11 @@ project that collects anything related to Amiga music production. AMP database b
 
 In this repository I'm working on rewriting the app that originally was released in AppStore in 2012. It was available in the store until late 2017, when I decided to remove the app from there as I could not release updates any more due to missing third party content license.
 
-In early 2020 I have set up a Sole Proprietor developer account in App Store and the third party content licensing issue has been resolved. The app is now in TestFlight beta, and if you're interested to test it before I get it finalised to official App Store release, drop me a message with your email address on my Twitter account at https://twitter.com/4champ_app.
+In early 2020 I have set up a Sole Proprietor developer account in App Store and the third party content licensing issue has been resolved. The app is now in TestFlight beta, and if you're interested to test it before I get it finalised to official App Store release, you can install the app by joining the beta program at https://testflight.apple.com/join/j1yhaJQ1.
 
 You can read more about the history of the app and follow the rewrite process on the development journal that I created for this project: [sitomani.github.io/4champ](https://sitomani.github.io/4champ).
+
+You can also follow the [@4champ_app](https://twitter.com/4champ_app) Twitter account to stay up to date on what's happening with the app.
 
 ### Main Features and their current status in this repository
 * Radio: You can listen to a random set of tunes from the whole collection of over 150000 modules, or stream from the head, i.e. the most recently added ones. You can also play from the local collection from set of modules that you've selected to keep for offline mode.
@@ -55,7 +57,7 @@ I plan to have a deeper look at openmpt project file generation with Genie at so
 
 After setting up the dependencies you can open 4champ.xcodeproj in Xcode and build the application. On simulator you can run the app without any further changes.
 
-In order to run the app on device, you will need to replace the bundle identifier 'com.boogie.fourchamp' with another id, because Xcode will create a development certificate on the fly for the device build and same bundle identifier cannot be present in multiple certificates.
+In order to run the app on device, you will need to replace the bundle identifier with another id, because Xcode will create a development certificate on the fly for the device build and same bundle identifier cannot be present in multiple certificates.
 
 The Xcode generated developer certificate will only be valid for 7 days, which means that you'll need to reinstall from Xcode every week to use the app. To work around this nuisance, you can create an ad hoc distribution certificate for signing the app in Apple Developer Center if you are a member of the Apple Developer Program.
 
