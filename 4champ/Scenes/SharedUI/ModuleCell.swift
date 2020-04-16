@@ -10,6 +10,7 @@ import UIKit
 protocol ModuleCellDelegate: class {
   func faveTapped(cell: ModuleCell)
   func saveTapped(cell: ModuleCell)
+  func shareTapped(cell: ModuleCell)
   func longTap(cell: ModuleCell)
 }
 
@@ -26,6 +27,7 @@ class ModuleCell: UITableViewCell {
   @IBOutlet weak var faveButton: UIButton?
   @IBOutlet weak var stopImage: UIImageView?
   @IBOutlet weak var saveButton: UIButton?
+  @IBOutlet weak var shareButton: UIButton?
   
   @IBAction func faveTapped(_ sender: UIButton) {
     delegate?.faveTapped(cell: self)
@@ -33,6 +35,10 @@ class ModuleCell: UITableViewCell {
   
   @IBAction func saveTapped(_ sender: UIButton) {
     delegate?.saveTapped(cell: self)
+  }
+  
+  @IBAction func shareTapped(_ sender: UIButton) {
+    delegate?.shareTapped(cell: self)
   }
 }
 
@@ -50,7 +56,10 @@ extension ModuleCell {
       saveButton?.isHidden = false
       sizeLabel?.text = "\(module.size!) Kb"
     }
-    
+
+    // For now, hide the share button (sharing through the long-tap menu)
+    shareButton?.isHidden = true
+
     faveButton?.isSelected = module.favorite
     faveButton?.isHidden = !module.supported()
   }

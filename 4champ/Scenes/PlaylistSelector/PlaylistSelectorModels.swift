@@ -75,4 +75,10 @@ enum PlaylistSelector
             let status: DownloadStatus
         }
     }
+    
+    enum Delete {
+        struct Request {
+            let module: MMD
+        }
+    }
 }

@@ -101,7 +101,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     localLabel?.isHidden = true
     shareButton?.isHidden = true
     faveButton?.isHidden = false
-    saveButton?.isHidden = true
+//    saveButton?.isHidden = true
     notifyButton?.isHidden = true
 
     channelSegments?.setTitle("Radio_All".l13n(), forSegmentAt: 0)
@@ -172,6 +172,9 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       sizeLabel?.text = "\(current.size ?? 0) kb"
       localLabel?.isHidden = !current.hasBeenSaved()
       faveButton?.isSelected = current.favorite
+      saveButton?.isHidden = current.hasBeenSaved()
+      // For now, hide the share button (sharing through the long-tap menu)
+      shareButton?.isHidden = true
     } else {
       currentModule = nil
       currentModuleView?.alpha = 0.8
@@ -181,6 +184,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       nameLabel?.text = "..."
       sizeLabel?.text = "0 kb"
       faveButton?.isSelected = false
+      shareButton?.isHidden = true
     }
   }
   
@@ -206,6 +210,14 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       channelSegments?.setTitle("Radio_New".l13n(), forSegmentAt: 1)
       navigationController?.tabBarItem.badgeValue = nil
     }
+  }
+  
+  @IBAction private func saveTapped(_ sender: UIButton) {
+    interactor?.saveCurrentModule()
+  }
+  
+  @IBAction private func shareTapped(_ sender: UIButton) {
+    interactor?.shareCurrentModule()
   }
   
   @IBAction private func ntfButtonTapped(_ sender: UIButton) {

@@ -282,6 +282,14 @@ extension LocalViewController: ModuleCellDelegate {
     
   }
   
+  func shareTapped(cell: ModuleCell) {
+    guard let ip = tableView.indexPath(for: cell),
+      let mod = interactor?.getModule(at:ip) else {
+        return
+    }
+    shareUtil.shareMod(mod: mod)
+  }
+  
   func longTap(cell: ModuleCell) {
     
     guard let ip = tableView.indexPath(for: cell),

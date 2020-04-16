@@ -136,6 +136,14 @@ class MainViewController: UITabBarController {
     }
   }
   
+  @IBAction func shareModule(_ sender: UIButton) {
+    guard let mod = modulePlayer.currentModule else {
+      log.error("no current module => cannot toggle favorite")
+      return
+    }
+    shareUtil.shareMod(mod: mod)
+  }
+  
 }
 
 extension MainViewController: ModulePlayerObserver {

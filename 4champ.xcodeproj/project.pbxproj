@@ -60,6 +60,9 @@
 		455CC0A62104A0E20094A5D3 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */; };
 		4569AC8B21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4569AC8A21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift */; };
 		456E6F2E240A5FAF0034BDA2 /* PlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456E6F2D240A5FAF0034BDA2 /* PlaylistView.swift */; };
+		45855FC9244467420079C767 /* DownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45855FC8244467420079C767 /* DownloadView.swift */; };
+		45855FCB244475050079C767 /* DownloadHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45855FCA244475050079C767 /* DownloadHostingController.swift */; };
+		45855FCD2444AC6B0079C767 /* ModuleSharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45855FCC2444AC6B0079C767 /* ModuleSharing.swift */; };
 		45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */; };
 		45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F420FF2F6600794147 /* RESTRoutes.swift */; };
 		45AA910220FF36C200794147 /* Replay.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F720FF36C200794147 /* Replay.m */; };
@@ -158,6 +161,10 @@
 		455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
 		4569AC8A21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchBar+ActivityIndicator.swift"; sourceTree = "<group>"; };
 		456E6F2D240A5FAF0034BDA2 /* PlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistView.swift; sourceTree = "<group>"; };
+		45855FC624444C9B0079C767 /* ampplayer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ampplayer.entitlements; sourceTree = "<group>"; };
+		45855FC8244467420079C767 /* DownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadView.swift; sourceTree = "<group>"; };
+		45855FCA244475050079C767 /* DownloadHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadHostingController.swift; sourceTree = "<group>"; };
+		45855FCC2444AC6B0079C767 /* ModuleSharing.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModuleSharing.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45A080E424327ED500AEA85F /* Entitlements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModulePlayer.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45AA90F420FF2F6600794147 /* RESTRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTRoutes.swift; sourceTree = "<group>"; };
@@ -275,6 +282,7 @@
 		4543982C20D0344F00991ADC /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				45855FC7244466580079C767 /* DownloadView */,
 				451ED0A4241E6A92006CE4E8 /* SwiftUITest */,
 				453D9BB1241BF1FD002EEBAB /* PlaylistSelector */,
 				456E6F2A2409BC2C0034BDA2 /* Playlists */,
@@ -339,6 +347,15 @@
 				451ED0AC241E8A83006CE4E8 /* PlaylistInteractor.swift */,
 			);
 			path = Playlists;
+			sourceTree = "<group>";
+		};
+		45855FC7244466580079C767 /* DownloadView */ = {
+			isa = PBXGroup;
+			children = (
+				45855FC8244467420079C767 /* DownloadView.swift */,
+				45855FCA244475050079C767 /* DownloadHostingController.swift */,
+			);
+			path = DownloadView;
 			sourceTree = "<group>";
 		};
 		45AA90F320FF2F4200794147 /* Networking */ = {
@@ -409,6 +426,7 @@
 		45D3929820B1DDEC00EEF4E3 = {
 			isa = PBXGroup;
 			children = (
+				45855FC624444C9B0079C767 /* ampplayer.entitlements */,
 				45D61F5E20E17D9600869814 /* Frameworks */,
 				45D392A320B1DDEC00EEF4E3 /* 4champ */,
 				45D392A220B1DDEC00EEF4E3 /* Products */,
@@ -461,6 +479,7 @@
 			children = (
 				45D61F5820E1695100869814 /* UIUtils.swift */,
 				45D61F5A20E1780D00869814 /* Appearance.swift */,
+				45855FCC2444AC6B0079C767 /* ModuleSharing.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -588,8 +607,10 @@
 			files = (
 				4543984F20D0366E00991ADC /* String+extension.swift in Sources */,
 				45AA91162100ECE600794147 /* VisualizerViewController.swift in Sources */,
+				45855FCB244475050079C767 /* DownloadHostingController.swift in Sources */,
 				45CEA1E12415005E00930A72 /* SelectPlaylistView.swift in Sources */,
 				45AA91102100C48500794147 /* MainViewController.swift in Sources */,
+				45855FC9244467420079C767 /* DownloadView.swift in Sources */,
 				4535A4672114BB2D005FBB8B /* SearchModels.swift in Sources */,
 				451ED0B0241E8A83006CE4E8 /* PlaylistModels.swift in Sources */,
 				4543983820D0344F00991ADC /* AboutPresenter.swift in Sources */,
@@ -600,6 +621,7 @@
 				451ED0AD241E8A83006CE4E8 /* PlaylistPresenter.swift in Sources */,
 				4535A4662114BB2D005FBB8B /* SearchRouter.swift in Sources */,
 				4535A4642114BB2D005FBB8B /* SearchPresenter.swift in Sources */,
+				45855FCD2444AC6B0079C767 /* ModuleSharing.swift in Sources */,
 				450E506621879347008FB155 /* SettingsRouter.swift in Sources */,
 				4509EA48226251EF0031408D /* ModuleInfo+CoreDataProperties.swift in Sources */,
 				451B6AA42204B6CC001848FA /* LocalViewController.swift in Sources */,
@@ -831,9 +853,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -861,9 +884,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

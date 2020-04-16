@@ -22,6 +22,8 @@ extension Spacer {
 struct PlaylistPickerView: View {
     var dismissAction: (() -> Void)
     var addToPlaylistAction: ((Int) -> Void)?
+    var shareAction: (() -> Void)
+    var deleteAction: (() -> Void)
     @ObservedObject var store: PlaylistSelectorStore
     @Environment(\.presentationMode) var presentationMode
     
@@ -37,35 +39,53 @@ struct PlaylistPickerView: View {
                 Spacer().onTapGesture {
                     self.dismissAction()
                 }
-                VStack {
-                    Spacer()
-                    Color.white
-                    Text(self.store.viewModel.module).foregroundColor(Color(.black))
-                    Text("PlaylistSelector_Title").foregroundColor(Color(.black))
-                    Picker(selection: $store.viewModel.currentPlaylistIndex, label: Text("")) {
-                        ForEach(0..<self.store.viewModel.playlistOptions.count) {
-                            Text(self.store.viewModel.playlistOptions[$0]).foregroundColor(Color(.black))
-                        }
-                    }.labelsHidden().background(Color.white)
+                VStack{
+                    if store.viewModel.status == DownloadStatus.complete {
+                Button(action: {
+                    self.deleteAction()
+                }) {
                     HStack {
+                        Image("trashcan")
+                        Text("Remove from collection")
+                    }.frame(maxWidth:.infinity, minHeight:50)
+                }.background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 8, leading: 5, bottom: -12, trailing: 5)).foregroundColor(.red)
+                    }
+                Button(action: {
+                    self.shareAction()
+                }) {
+                    HStack {
+                        Image("shareicon")
+                        Text("Share module")
+                    }.frame(maxWidth:.infinity, minHeight:50)
+                }.background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 8, leading: 5, bottom: 4, trailing: 5))
+                }.background(Color.black.opacity(0.25))
+                VStack {
+                    VStack {
                         Spacer()
+                        Text(self.store.viewModel.module).foregroundColor(Color(.black))
+                        Text("PlaylistSelector_Title").foregroundColor(Color(.black))
+                        Picker(selection: $store.viewModel.currentPlaylistIndex, label: Text("")) {
+                            ForEach(0..<self.store.viewModel.playlistOptions.count) {
+                                Text(self.store.viewModel.playlistOptions[$0]).foregroundColor(Color(.black))
+                            }
+                        }.labelsHidden().background(Color(Appearance.veryLightGray))
+                    }.frame(maxWidth:.infinity).background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 5, leading: 5, bottom: -5, trailing: 5))
+                    HStack {
                         Button(action: addModuleToPlaylist) {
-                            Text("PlaylistSelector_Add")
-                        }.padding(25)
-                        Spacer()
+                            Text("PlaylistSelector_Add").frame(maxWidth:.infinity, minHeight:50).background(Color(Appearance.veryLightGray))
+                            }.cornerRadius(5).padding(EdgeInsets(top: 5, leading: 5, bottom: 8, trailing: 0))
                         Button(action: { self.dismissAction() }) {
-                            Text("G_Cancel")
-                        }.padding(25)
-                        Spacer()
-                    }.background(Color.black.opacity(0.1))
-                }.background(Color.white)
+                            Text("G_Cancel").frame(maxWidth:.infinity, minHeight:50).background(Color(Appearance.veryLightGray))
+                            }.cornerRadius(5).padding(EdgeInsets(top: 5, leading: 0, bottom: 8, trailing: 5))
+                    }.background(Color.black.opacity(0.0))
+                }.background(Color(.black).opacity(0.25))
             }
             
             if self.store.viewModel.status == .downloading(progress: 0) {
                 withAnimation {
-            ZStack {
-                Text("Search_Downloading".l13n()).foregroundColor(Color(.black))
-            }.frame(maxWidth:.infinity, minHeight: 80).background(Color(.white))
+                    ZStack {
+                        Text("Search_Downloading".l13n()).foregroundColor(Color(.black))
+                    }.frame(maxWidth:.infinity, minHeight: 100).background(Color.white).cornerRadius(20).padding(20).shadow(radius: 5)
                 }.transition(.opacity)
             }
         }
@@ -76,7 +96,7 @@ struct PlaylistPickerView: View {
 struct PlaylistPickerView_Previews : PreviewProvider {
     static var store = PlaylistSelectorStore()
     static var previews: some View {
-        PlaylistPickerView(dismissAction: {}, store: store)
+        PlaylistPickerView(dismissAction: {},shareAction: {}, deleteAction: {}, store: store)
     }
 }
 #endif

@@ -144,6 +144,6 @@ struct PlaylistSelectorSUI: View {
             }) {
                 Image(systemName: "plus").imageScale(.large)
             }).background(Color(Appearance.darkBlueColor))
-        }.background(Color(Appearance.darkBlueColor))
+        }.background(Color(Appearance.darkBlueColor)).navigationViewStyle(StackNavigationViewStyle())
     }
 }

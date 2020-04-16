@@ -10,30 +10,37 @@ import SwiftyBeaver
 import AVFoundation
 import Alamofire
 import UserNotifications
+import SwiftUI
 
 // Global
 let modulePlayer = ModulePlayer()
 let moduleStorage = ModuleStorage()
 let log = SwiftyBeaver.self
 let settings = SettingsInteractor()
+let shareUtil = ShareUtility()
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
   
   private var _bgFetchCallback: ((UIBackgroundFetchResult) -> Void)?
   
+  private var sharedMod: MMD?
+  
+  private lazy var dlController: DownloadController = DownloadController()
+  
   var window: UIWindow?
+  
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // Override point for customization after application launch.
     Appearance.setup()
     setupLogging()
     setupAVSession()
     cleanupFiles()
-// UNCOMMENT BELOW TWO LINES TO TEST LOCAL NOTIFICATIONS
-//    settings.prevCollectionSize = 0
-//    settings.newestPlayed = 152890
+    // UNCOMMENT BELOW TWO LINES TO TEST LOCAL NOTIFICATIONS
+    //    settings.prevCollectionSize = 0
+    //    settings.newestPlayed = 152890
     
-      updateLatest()
+    updateLatest()
     UIApplication.shared.beginReceivingRemoteControlEvents()
     application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
     return true
@@ -74,6 +81,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     log.debug("performFetch")
     _bgFetchCallback = completionHandler
     updateLatest()
+  }
+  
+  func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+    
+    guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+      let url = userActivity.webpageURL,
+      let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+        return false
+    }
+    
+    if components.path == "/mod", let idString = components.queryItems?.first?.value, let modId = Int(idString) {
+      dlController.rootViewController = UIApplication.shared.windows[0].rootViewController
+      dlController.show(modId: modId)
+    }
+    
+    return true
+  }
+  
+  func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    if url.scheme == "fourchamp" && url.host == "modules" {
+      if let idString = url.path.split(separator: "/").first, let modId = Int(idString) {
+        dlController.show(modId: modId)
+      }
+      
+    }
+    return true
+  }
+  
+  func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
+    return true
   }
   
   /// Set up SwiftyBeaver logging
@@ -145,4 +182,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     _bgFetchCallback = nil
   }
 }
+
 

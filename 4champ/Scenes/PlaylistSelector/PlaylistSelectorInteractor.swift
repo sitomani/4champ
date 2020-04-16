@@ -16,6 +16,7 @@ protocol PlaylistSelectorBusinessLogic
 {
   func prepare(request: PlaylistSelector.PrepareSelection.Request)
   func appendToPlaylist(request: PlaylistSelector.Append.Request)
+  func deleteModule(request: PlaylistSelector.Delete.Request)
 }
 
 protocol PlaylistSelectorDataStore
@@ -103,6 +104,10 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
         fetcher.fetchModule(ampId: module!.id!)
       }
     }
+  }
+  
+  func deleteModule(request: PlaylistSelector.Delete.Request) {
+    moduleStorage.deleteModule(module: request.module)
   }
   
   private func getPlaylist(with id: String) -> Playlist? {

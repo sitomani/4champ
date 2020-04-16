@@ -32,7 +32,14 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
   
   public static func buildPicker(module: MMD) -> UIHostingController<PlaylistPickerView> {
     let pls = PlaylistSelectorStore()
-    var contentView = PlaylistPickerView(dismissAction: { pls.hostingController?.dismiss(animated: true, completion: nil)}, store: pls)
+    var contentView = PlaylistPickerView(dismissAction: { pls.hostingController?.dismiss(animated: true, completion: nil)},
+                                         shareAction: {
+                                          pls.shareModule(module)
+    },
+                                         deleteAction: {
+                                          pls.deleteModule(module)
+    },
+                                         store: pls)
     pls.setup()
     pls.doPrepare(mod: module)
     contentView.addToPlaylistAction = { b in
@@ -78,8 +85,34 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
   }
   
   func addToPlaylist(playlistIndex: Int) {
-    interactor?.appendToPlaylist(request: PlaylistSelector.Append.Request(module: MMD(), playlistIndex: playlistIndex))
+    switch viewModel.status {
+    case .downloading:
+      return
+    default:
+      interactor?.appendToPlaylist(request: PlaylistSelector.Append.Request(module: MMD(), playlistIndex: playlistIndex))
+    }
   }
+  
+  func deleteModule(_ module: MMD) {
+    guard viewModel.status == .complete else {
+      return
+    }
+
+    interactor?.deleteModule(request: PlaylistSelector.Delete.Request(module: module))
+    hostingController?.dismiss(animated: true, completion: nil)
+  }
+  
+  func shareModule(_ module: MMD) {
+    switch viewModel.status {
+    case .downloading:
+      return
+    default:
+      hostingController?.dismiss(animated: true, completion: {
+        shareUtil.shareMod(mod: module)
+      })
+    }
+  }
+  
 }
 
 

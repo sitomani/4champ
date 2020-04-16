@@ -183,6 +183,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     composerLabel.text = info.composer! + playlistName
     faveStar.isSelected = info.favorite
     saveButton.isHidden = info.hasBeenSaved()
+    shareButton.isHidden = true
     
     var samples:Array<String>
     samples = modulePlayer.renderer.getInstruments()
@@ -210,7 +211,6 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     updateFaveStar(updated.favorite)
   }
   
-  
   @IBAction func sliderChanged() {
     modulePlayer.renderer.setCurrentPosition(Int32(self.playhead!.value))
   }
@@ -221,6 +221,14 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     }
     moduleStorage.addModule(module: mod)
     saveButton.isHidden = true
+    shareButton.isHidden = false
+  }
+  
+  @IBAction func shareTapped() {
+    guard let mod = modulePlayer.currentModule else {
+      return
+    }
+    shareUtil.shareMod(mod: mod, presentingVC: self)
   }
   
   func animateColLabel(_ visible:Bool) {

@@ -514,15 +514,18 @@ extension SearchViewController: ModuleCellDelegate {
     interactor?.downloadModules(request)
   }
   
+  func shareTapped(cell: ModuleCell) {
+    guard let ip = tableView?.indexPath(for: cell),
+      let module = viewModel?.modules[ip.row], let _ = module.id, module.supported() else {
+        return
+    }
+    shareUtil.shareMod(mod: module)
+  }
+  
   func longTap(cell: ModuleCell) {
     if let ip = tableView?.indexPath(for: cell),
       let mmd = viewModel?.modules[ip.row] {
       router?.toPlaylistSelector(module: mmd)
-
-//      let contentView = PlaylistPickerView2(dismissAction: dismissAction, module: mod).environment(\.managedObjectContext, moduleStorage.managedObjectContext)
-//      let vc = UIHostingController(rootView: contentView)
-//      vc.view.backgroundColor = .clear
-//      present(vc, animated: true)
     }
   }
   

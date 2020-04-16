@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct Constants {
   static let radioBufferLen = 3 // Length of the radio buffer
@@ -35,7 +36,7 @@ struct MMD: Identifiable {
     if let path = cdi.modLocalPath {
       self.localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(path)
     } else {
-      log.error("Module \(cdi.modName) file not available")
+      log.error("Module \(cdi.modName ?? "noname") file not available")
     }
     self.name = cdi.modName
     self.size = cdi.modSize?.intValue
@@ -78,8 +79,18 @@ struct MMD: Identifiable {
   }
   
   func hasBeenSaved() -> Bool {
-    let saved = moduleStorage.getModuleById(id!)
+    guard let modId = self.id else {
+      return false
+    }
+    let saved = moduleStorage.getModuleById(modId)
     return saved != nil
+  }
+  
+  func queueIndex() -> Int? {
+    if let queueIndex = modulePlayer.playQueue.firstIndex(of: self) {
+      return queueIndex
+    }
+    return nil
   }
   
   func supported() -> Bool {

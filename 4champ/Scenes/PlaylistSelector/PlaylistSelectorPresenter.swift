@@ -48,7 +48,9 @@ class PlaylistSelectorPresenter: PlaylistSelectorPresentationLogic
         
         let moduleName = String.init(format: "LockScreen_Playing".l13n(), response.module.name ?? "", response.module.composer ?? "")
         
-        let viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: moduleName, currentPlaylistIndex: plIndex, playlistOptions: options, status: .unknown)
+        let status:DownloadStatus = response.module.hasBeenSaved() ? .complete : .unknown
+        
+        let viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: moduleName, currentPlaylistIndex: plIndex, playlistOptions: options, status: status)
         viewController?.displaySelector(viewModel: viewModel)
     }
     

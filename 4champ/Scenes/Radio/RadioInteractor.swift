@@ -31,6 +31,12 @@ protocol RadioBusinessLogic
   
   /// Refresh badge
   func refreshBadge()
+  
+  /// Trigger save for current module
+  func saveCurrentModule()
+  
+  /// Trigger share for current module
+  func shareCurrentModule()
 }
 
 /// Radio datastore for keeping currently selected channel and status
@@ -136,6 +142,20 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   func refreshBadge() {
     log.debug("")
     doBadgeUpdate(nil)
+  }
+  
+  func shareCurrentModule() {
+    guard radioOn, let mod = modulePlayer.currentModule else {
+      return
+    }
+    shareUtil.shareMod(mod: mod)
+  }
+  
+  func saveCurrentModule() {
+    guard radioOn, let mod = modulePlayer.currentModule else {
+      return
+    }
+    moduleStorage.addModule(module: mod)
   }
   
   // MARK: private functions

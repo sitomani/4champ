@@ -23,6 +23,7 @@ class Appearance {
   static var ampTextfieldBgColor = UIColor.init(rgb: 0x1f3044)
   static var separatorColor = UIColor.init(rgb: 0x485675)
   static var barTitleColor = UIColor.init(rgb: 0xc0c0c0)
+  static var veryLightGray = UIColor.init(rgb: 0xf0f0f0)
   static var cellColor = UIColor.clear
   
   class func setup() {
