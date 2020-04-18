@@ -243,6 +243,9 @@ extension SearchInteractor: ModuleFetcherDelegate {
       presenter?.presentDownloadProgress(response: Search.ProgressResponse(progress: progress))
     case .failed(let err):
       log.error(err.debugDescription)
+      if downloadQueue.count == 0 {
+        presenter?.presentDownloadProgress(response: Search.ProgressResponse(progress: 0, error: err))
+      }
       fetchNextQueuedModule()
     default:
       log.verbose("noop")

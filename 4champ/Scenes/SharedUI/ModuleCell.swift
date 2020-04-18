@@ -63,4 +63,21 @@ extension ModuleCell {
     faveButton?.isSelected = module.favorite
     faveButton?.isHidden = !module.supported()
   }
+  
+  func showMessageOverlay(message: String) {
+    let lbl = UILabel.init(frame: self.contentView.frame)
+    lbl.backgroundColor = Appearance.errorColor
+    lbl.text = message
+    lbl.textColor = UIColor.white
+    lbl.font = UIFont.systemFont(ofSize: 20.0)
+    lbl.numberOfLines = 0
+    lbl.alpha = 0.8
+    lbl.textAlignment = .center
+    self.contentView.addSubview(lbl)
+    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+3.0) {
+      UIView.animate(withDuration: 1.0, animations: {lbl.alpha=0}) { (_) in
+        lbl.removeFromSuperview()
+      }
+    }
+  }
 }

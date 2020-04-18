@@ -29,8 +29,10 @@ enum Search
   
   struct ProgressResponse {
     var progress: Float
+    var error: Error? = nil
     struct ViewModel {
       var progress: Float
+      var error: String? = nil
     }
   }
   
@@ -102,6 +104,7 @@ struct SearchResultModule: Codable {
   let format: String
   let size, downloadCount: String
   let infos: String
+  let note: String
   func getId() -> Int {
     let modUri = URL.init(string: name.href)
     var id: Int = 0

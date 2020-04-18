@@ -184,6 +184,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       nameLabel?.text = "..."
       sizeLabel?.text = "0 kb"
       faveButton?.isSelected = false
+      saveButton?.isHidden = false
       shareButton?.isHidden = true
     }
   }

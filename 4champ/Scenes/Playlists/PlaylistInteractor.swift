@@ -113,11 +113,9 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore
 
 extension PlaylistInteractor: NSFetchedResultsControllerDelegate {
   func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    print("Controller will change content")
   }
   
   func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    print("Controller did change content")
     doPresent()
   }
 }

@@ -119,7 +119,6 @@ extension DownloadController: ModuleFetcherDelegate {
         case .done(let mmd):
             self.model = DownloadModel(module: mmd, progress: 1.0, error: nil)
         case .downloading(let progress):
-            print(progress)
             let model = DownloadModel(module: MMD(), progress: progress, error: nil)
             self.model = model
         case .failed(let err):

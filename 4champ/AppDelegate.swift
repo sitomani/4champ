@@ -138,11 +138,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     do {
       let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
       if let first = fileURLs.first {
-        print(first)
+        log.debug(first)
       }
       // process files
     } catch {
-      print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
+      log.error("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
     }
   }
   

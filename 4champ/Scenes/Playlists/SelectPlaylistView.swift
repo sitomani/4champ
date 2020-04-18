@@ -63,7 +63,7 @@ struct PlaylistSelectorSUI: View {
         do {
             try managedObjectContext.save()
         } catch {
-            print(error)
+            log.error(error)
         }
         self.editedPlaylist = nil
         self.listId = UUID()
@@ -84,10 +84,10 @@ struct PlaylistSelectorSUI: View {
     }
     
     func delete(at offsets: IndexSet) {
-        print(offsets.endIndex)
         let indices = Array(offsets)
         let pl = self.playlists[indices[0]]
         self.managedObjectContext.delete(pl)
+        try? self.managedObjectContext.save()
     }
     
     var body: some View {
@@ -135,7 +135,12 @@ struct PlaylistSelectorSUI: View {
                     }.onDelete(perform: delete)
                 }.contentShape(Rectangle()).id(listId)
             }.navigationBarTitle("PlaylistView_Playlists", displayMode: .inline)
-                .navigationBarItems(trailing: Button(action: {
+                .navigationBarItems(leading: Button (action: {
+                    self.show_modal.toggle()
+                }) {
+                    Image(systemName: "xmark").imageScale(.large)
+                    },
+                    trailing: Button(action: {
                 withAnimation {
                     self.editedPlaylist = nil
                     self.name = ""

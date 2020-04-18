@@ -50,7 +50,7 @@ struct DownloadView: View {
                     Button(action: {
                         self.store.play()
                     }) {
-                        Text("Play")//Image("play-small")
+                        Text("DownloadView_Play")
                         }.frame(maxWidth:.infinity, minHeight:50).padding(5).contentShape(Rectangle())
                         .disabled(self.store.model.progress < 1.0)
                     if store.model.module.hasBeenSaved() == false {

@@ -207,6 +207,12 @@ class SearchViewController: UIViewController, SearchDisplayLogic
     } else {
       progressBar?.isHidden = true
     }
+    if let err = viewModel.error {
+      if let ip = tableView?.indexPathForSelectedRow,
+        let cell = tableView?.cellForRow(at: ip) as? ModuleCell {
+        cell.showMessageOverlay(message: err)
+      }
+    }
   }
   
   func displayBatchProgress(viewModel: Search.BatchDownload.ViewModel) {
@@ -259,7 +265,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
     if sender.state == UIGestureRecognizer.State.began {
       let touchPoint = sender.location(in: self.tableView)
       if let indexPath = tableView?.indexPathForRow(at: touchPoint) {
-        print("Long pressed row: \(indexPath.row)")
+        log.debug("Long pressed row: \(indexPath.row)")
         if let cell = tableView?.cellForRow(at: indexPath) as? ModuleCell {
           longTap(cell: cell )
         }

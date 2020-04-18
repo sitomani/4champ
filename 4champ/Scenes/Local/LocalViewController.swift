@@ -26,6 +26,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   
   @IBOutlet var tableView: UITableView!
   @IBOutlet var tableBottomConstraint: NSLayoutConstraint!
+  @IBOutlet var noModulesLabel: UILabel!
   
   private var searchBar: UISearchBar?
   private var sortKey: LocalSortKey = .module
@@ -105,6 +106,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     tableView.rowHeight = UITableView.automaticDimension
     tableView.estimatedRowHeight = 76
     
+    noModulesLabel.text = "ModulesView_NoModules".l13n()
     
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
     self.view.addGestureRecognizer(longPressRecognizer)
@@ -118,7 +120,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     if sender.state == UIGestureRecognizer.State.began {
       let touchPoint = sender.location(in: self.tableView)
       if let indexPath = tableView.indexPathForRow(at: touchPoint) {
-        print("Long pressed row: \(indexPath.row)")
+        log.debug("Long pressed row: \(indexPath.row)")
         if let cell = tableView.cellForRow(at: indexPath) as? ModuleCell {
           longTap(cell: cell )
         }
@@ -210,7 +212,15 @@ extension LocalViewController: UITableViewDelegate {
 
 extension LocalViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return interactor?.moduleCount() ?? 0
+    let count = interactor?.moduleCount() ?? 0
+    if count == 0 {
+      if (searchBar?.text?.count ?? 0) == 0 {
+        noModulesLabel.isHidden = false
+      }
+    } else {
+      noModulesLabel.isHidden = true
+    }
+    return count
   }
   
   func numberOfSections(in tableView: UITableView) -> Int {

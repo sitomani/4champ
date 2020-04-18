@@ -46,7 +46,7 @@ struct PlaylistPickerView: View {
                 }) {
                     HStack {
                         Image("trashcan")
-                        Text("Remove from collection")
+                        Text("ModulesView_Delete")
                     }.frame(maxWidth:.infinity, minHeight:50)
                 }.background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 8, leading: 5, bottom: -12, trailing: 5)).foregroundColor(.red)
                     }
@@ -55,7 +55,7 @@ struct PlaylistPickerView: View {
                 }) {
                     HStack {
                         Image("shareicon")
-                        Text("Share module")
+                        Text("NP_Share")
                     }.frame(maxWidth:.infinity, minHeight:50)
                 }.background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 8, leading: 5, bottom: 4, trailing: 5))
                 }.background(Color.black.opacity(0.25))

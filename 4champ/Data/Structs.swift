@@ -70,7 +70,7 @@ struct MMD: Identifiable {
   var localPath: URL?
   var downloadPath: URL?
   var favorite: Bool = false
-  
+  var note: String? 
   func fileExists() -> Bool {
     if let path = localPath?.path {
       return FileManager.default.fileExists(atPath: path)
@@ -94,7 +94,10 @@ struct MMD: Identifiable {
   }
   
   func supported() -> Bool {
-    return MMD.supportedTypes.contains(self.type ?? "")
+    if MMD.supportedTypes.contains(self.type ?? "") && (self.note?.count ?? 0) == 0 {
+      return true
+    }
+    return false
   }
 }
 
