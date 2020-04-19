@@ -32,7 +32,7 @@ class RadioPresenter: RadioPresentationLogic
     log.debug("")
     var nextUp: String?
     if buffer.count > 1 {
-      nextUp = String.init(format: "Radio_NextUp".l13n(), buffer[1].name!, buffer[1].composer! )
+      nextUp = String.init(format: "Radio_NextUp".l13n(), buffer[1].name ?? "G_untitled".l13n(), buffer[1].composer ?? "G_untitled".l13n() )
     }
     
     let vm = Radio.ChannelBuffer.ViewModel(nowPlaying: buffer.first, nextUp: nextUp)

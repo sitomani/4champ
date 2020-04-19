@@ -309,6 +309,10 @@ extension RadioInteractor: ModulePlayerObserver {
   }
   
   func errorOccurred(error: PlayerError) {
+    // Skip to next mod.
+    guard radioOn else { return }
+    removeBufferHead()
+    playNext()  
     //nop at the moment
   }
   
