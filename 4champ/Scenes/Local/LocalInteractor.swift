@@ -102,7 +102,7 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
     if mmd.fileExists() {
         modulePlayer.play(mmd: mmd)
     } else {
-      presenter?.presentPlayerError(.fileNotFound(mmd: mmd))
+      presenter?.presentPlayerError(.loadFailed(mmd: mmd))
       moduleStorage.deleteModule(module: mmd)
     }
   }

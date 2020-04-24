@@ -9,7 +9,7 @@ import Foundation
 import MediaPlayer
 
 enum PlayerError: Error {
-  case fileNotFound(mmd: MMD)
+  case loadFailed(mmd: MMD)
   case unknown
 }
 
@@ -163,7 +163,7 @@ class ModulePlayer: NSObject {
     } else {
       log.error("Could not load tune: \(path)")
         _ = observers.map {
-          $0.errorOccurred(error: .fileNotFound(mmd: playQueue[at]))
+          $0.errorOccurred(error: .loadFailed(mmd: playQueue[at]))
         }
     }
   }

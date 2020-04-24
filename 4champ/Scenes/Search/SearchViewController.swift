@@ -243,6 +243,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
     } else {
       tableView?.reloadData()
     }
+    updateDownloadAllButton()
   }
   
   @objc private func triggerDownloadAll(_ sender: UIBarButtonItem) {
@@ -440,7 +441,8 @@ extension SearchViewController: ModulePlayerObserver {
   }
   
   func errorOccurred(error: PlayerError) {
-    //nop at the moment
+    let vm = Search.ProgressResponse.ViewModel(progress: 0, error: "Error_PlaybackFailed".l13n())
+    displayDownloadProgress(viewModel: vm)
   }
   
   func queueChanged() {

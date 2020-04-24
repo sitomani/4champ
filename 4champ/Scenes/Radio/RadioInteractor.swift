@@ -311,9 +311,18 @@ extension RadioInteractor: ModulePlayerObserver {
   func errorOccurred(error: PlayerError) {
     // Skip to next mod.
     guard radioOn else { return }
+
     removeBufferHead()
-    playNext()  
-    //nop at the moment
+    fillBuffer()
+
+    switch error {
+    case .loadFailed(let mmd):
+      modulePlayer.playQueue.removeAll(where: { $0.id == mmd.id })
+    default:
+      log.error("Unknown error occurred")
+    }
+    
+    playNext()
   }
   
   func queueChanged() {
