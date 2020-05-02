@@ -47,6 +47,7 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
     }
     let hvc = UIHostingController(rootView: contentView)
     pls.hostingController = hvc
+    hvc.modalPresentationStyle = .overFullScreen
     hvc.view.backgroundColor = .clear
     return hvc
   }
