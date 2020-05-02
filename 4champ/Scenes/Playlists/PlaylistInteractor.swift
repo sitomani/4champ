@@ -21,6 +21,7 @@ protocol PlaylistBusinessLogic
   func toggleShuffle()
   func toggleFavorite(request: Playlists.Favorite.Request)
   func playModule(request: Playlists.Play.Request)
+  func startPlaylist()
 }
 
 protocol PlaylistDataStore
@@ -110,6 +111,11 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore
     if let index = modulePlayer.playQueue.index(of: request.mmd) {
       modulePlayer.play(at: index)
     }
+  }
+  
+  func startPlaylist() {
+    rebuildQueue()
+    modulePlayer.play(at: 0)
   }
   
   private func rebuildQueue() {

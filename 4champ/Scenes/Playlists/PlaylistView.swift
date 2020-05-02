@@ -109,7 +109,14 @@ struct PlaylistView: View {
                     }.onMove(perform: move)
                     .onDelete(perform: deleteItems)
                 }.navigationBarTitle(Text("TabBar_Playlist".l13n().uppercased()), displayMode: .inline)
-                    .navigationBarItems(leading: Button(action: {self.toggleShuffle()}) {Image(store.viewModel.shuffle ? "shuffled" : "sequential")}, trailing: EditButton()).id(self.navigationButtonID)
+                    .navigationBarItems(leading: HStack {
+                        Button(action: {self.toggleShuffle()})
+                            {Image(store.viewModel.shuffle ? "shuffled" : "sequential")}
+                        Button(action: {self.store.interactor?.startPlaylist()})
+                        {Image("play-small")}
+                        },
+                                        trailing:
+                        EditButton()).id(self.navigationButtonID)
                     if store.viewModel.modules.count == 0 {
                         Text("No modules on the playlist. You can add modules to a playlist by long-tapping a module on any view.").foregroundColor(.white).font(.system(size: 20)).padding(20)
                     }
