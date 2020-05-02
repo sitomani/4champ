@@ -111,7 +111,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
       searchBar?.scopeButtonTitles = searchScopes.map { $0.l13n() }
     } else {
       searchBar?.removeFromSuperview()
-      navigationItem.title = router?.dataStore?.autoListTitle
+      navigationItem.title = router?.dataStore?.autoListTitle?.uppercased()
       spinner?.isHidden = false
       spinner?.startAnimating()
       interactor?.triggerAutoFetchList()
@@ -124,7 +124,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     if shouldDisplaySearchBar {
-      navigationItem.title = "TabBar_Search".l13n()
+      navigationItem.title = "TabBar_Search".l13n().uppercased()
       let text = searchBar?.text ?? ""
       navigationController?.setNavigationBarHidden(text.count != 0, animated: animated)
     } else {

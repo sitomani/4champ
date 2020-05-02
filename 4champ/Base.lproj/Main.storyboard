@@ -404,27 +404,12 @@
                                 <rect key="frame" x="10" y="10" width="355" height="554"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
-                            <navigationBar contentMode="scaleToFill" translucent="NO" largeTitles="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HP0-Rd-2Gm">
-                                <rect key="frame" x="10" y="-44" width="355" height="44"/>
-                                <textAttributes key="titleTextAttributes">
-                                    <color key="textColor" red="0.77647058823529413" green="0.77647058823529413" blue="0.77647058823529413" alpha="1" colorSpace="calibratedRGB"/>
-                                </textAttributes>
-                                <items>
-                                    <navigationItem title="Title" id="Ma2-wt-cKf">
-                                        <barButtonItem key="rightBarButtonItem" title="Item" id="xGq-cM-wFf"/>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" red="0.074509803921568626" green="0.20000000000000001" blue="0.31764705882352939" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="NXf-71-v6a" firstAttribute="bottom" secondItem="O1u-W8-tvY" secondAttribute="bottom" constant="-10" id="0vN-Ot-yCg"/>
-                            <constraint firstItem="NXf-71-v6a" firstAttribute="top" secondItem="HP0-Rd-2Gm" secondAttribute="bottom" constant="10" id="9Hq-ll-mar"/>
                             <constraint firstItem="NXf-71-v6a" firstAttribute="leading" secondItem="O1u-W8-tvY" secondAttribute="leading" constant="10" id="Iso-Pv-hAG"/>
-                            <constraint firstItem="HP0-Rd-2Gm" firstAttribute="trailing" secondItem="NXf-71-v6a" secondAttribute="trailing" id="Vml-Dl-vVk"/>
-                            <constraint firstItem="HP0-Rd-2Gm" firstAttribute="top" secondItem="QS5-Rx-YEW" secondAttribute="topMargin" constant="-44" id="f6Y-uj-RT0"/>
-                            <constraint firstItem="HP0-Rd-2Gm" firstAttribute="bottom" secondItem="O1u-W8-tvY" secondAttribute="top" id="m5X-un-B8Y"/>
-                            <constraint firstItem="HP0-Rd-2Gm" firstAttribute="leading" secondItem="NXf-71-v6a" secondAttribute="leading" id="qMF-8h-YCc"/>
+                            <constraint firstItem="NXf-71-v6a" firstAttribute="top" secondItem="O1u-W8-tvY" secondAttribute="top" constant="10" id="eNe-dS-r50"/>
                             <constraint firstItem="NXf-71-v6a" firstAttribute="trailing" secondItem="O1u-W8-tvY" secondAttribute="trailing" constant="-10" id="wDO-4V-dXy"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="O1u-W8-tvY"/>
