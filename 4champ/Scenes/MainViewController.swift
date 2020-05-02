@@ -166,7 +166,7 @@ extension MainViewController: ModulePlayerObserver {
     //nop at the moment
   }
   
-  func queueChanged() {
+  func queueChanged(changeType: QueueChange) {
     //nop at the moment
   }
 }

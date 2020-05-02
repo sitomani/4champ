@@ -21,6 +21,11 @@ enum PlayerStatus:Int {
   case paused
 }
 
+enum QueueChange: Int {
+  case newPlaylist
+  case other
+}
+
 /**
  Module Player observer delegate protocol.
  Note that there can be multiple observers for the player
@@ -42,7 +47,7 @@ protocol ModulePlayerObserver: class {
   func errorOccurred(error: PlayerError)
   
   /// called when play queue changes (e.g. due to playlist change, or when modules are added to queue by user)
-  func queueChanged()
+  func queueChanged(changeType:QueueChange)
 }
 
 class ModulePlayer: NSObject {
@@ -177,10 +182,20 @@ class ModulePlayer: NSObject {
     renderer.setStereoSeparation(newValue)
   }
   
+  /// Set new play queue (when user selects a playlist and starts playing)
+  func setNewPlayQueue(queue: [MMD]) {
+    cleanup()
+    playQueue = queue
+    _ = observers.map {
+      $0.queueChanged(changeType: .newPlaylist)
+    }
+  }
+  
   /// Plays the next module in the current playlist. If there are no more modules,
   /// the playback will wrap to the first module in the playlist
   func playNext() {
     guard let current = currentModule, playQueue.count > 0 else {
+      modulePlayer.stop()
       return
     }
     var nextIndex = 0
@@ -296,33 +311,33 @@ extension ModulePlayer: ModuleStorageObserver {
       }
     }
     _ = observers.map {
-      $0.queueChanged()
+      $0.queueChanged(changeType: .other)
     }
   }
   
   // At playlist change, load the new queue and start playing
   func playlistChange() {
     // Cleanup current queue first
-    if let pl = moduleStorage.currentPlaylist, let plMods = pl.modules {
-      cleanup()
-      for item in plMods {
-        if let mod = item as? ModuleInfo {
-          playQueue.append(MMD(cdi: mod))
-        }
-      }
-      _ = observers.map {
-        $0.queueChanged()
-      }
-      
-      let shuffle = (pl.playmode?.intValue ?? 0) == 1
-      if shuffle {
-        playQueue.shuffle()
-      }
-      play(at: 0)
-    }
-    
-    _ = observers.map {
-      $0.queueChanged()
-    }
+//    if let pl = moduleStorage.currentPlaylist, let plMods = pl.modules {
+//      cleanup()
+//      for item in plMods {
+//        if let mod = item as? ModuleInfo {
+//          playQueue.append(MMD(cdi: mod))
+//        }
+//      }
+//      _ = observers.map {
+//        $0.queueChanged()
+//      }
+//
+//      let shuffle = (pl.playmode?.intValue ?? 0) == 1
+//      if shuffle {
+//        playQueue.shuffle()
+//      }
+//      play(at: 0)
+//    }
+//
+//    _ = observers.map {
+//      $0.queueChanged()
+//    }
   }
 }

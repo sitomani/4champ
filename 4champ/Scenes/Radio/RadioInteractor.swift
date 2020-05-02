@@ -89,10 +89,16 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
       stopPlayback()
     }
     guard request.powerOn == true else {
+      modulePlayer.removePlayerObserver(self)
+
       presenter?.presentChannelBuffer(buffer: [])
+      modulePlayer.cleanup()
       return
     }
+    
     modulePlayer.addPlayerObserver(self)
+    modulePlayer.cleanup()
+
     playbackTimer?.invalidate()
     playbackTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
       self?.periodicUpdate()
@@ -325,7 +331,15 @@ extension RadioInteractor: ModulePlayerObserver {
     playNext()
   }
   
-  func queueChanged() {
-    triggerBufferPresentation()
+  func queueChanged(changeType: QueueChange) {
+    if changeType == .newPlaylist && radioOn {
+      status = .off
+      modulePlayer.removePlayerObserver(self)
+      presenter?.presentChannelBuffer(buffer: [])
+      presenter?.presentControlStatus(status: .off)
+      playbackTimer?.invalidate()
+    } else {
+      triggerBufferPresentation()
+    }
   }
 }

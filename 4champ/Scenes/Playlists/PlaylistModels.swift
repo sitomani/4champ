@@ -26,6 +26,12 @@ enum Playlists
         }
     }
     
+    enum Play {
+        struct Request {
+            let mmd: MMD
+        }
+    }
+    
     enum Select {
         struct Request {
             let playlistId: String

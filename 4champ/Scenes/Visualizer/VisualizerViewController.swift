@@ -262,8 +262,13 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
+  }
+  
+  override func viewDidDisappear(_ animated: Bool) {
+    super.viewDidDisappear(animated)
     stopVisualisation()
   }
+  
   override var preferredStatusBarStyle : UIStatusBarStyle {
     return UIStatusBarStyle.lightContent
   }
@@ -368,7 +373,7 @@ extension VisualizerViewController: ModulePlayerObserver {
     //nop at the moment
   }
   
-  func queueChanged() {
+  func queueChanged(changeType: QueueChange) {
     //nop at the moment
   }
   

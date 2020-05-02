@@ -445,7 +445,7 @@ extension SearchViewController: ModulePlayerObserver {
     displayDownloadProgress(viewModel: vm)
   }
   
-  func queueChanged() {
+  func queueChanged(changeType: QueueChange) {
     // nop
   }
 }

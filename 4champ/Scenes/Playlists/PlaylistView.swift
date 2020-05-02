@@ -51,7 +51,7 @@ struct PlaylistView: View {
     @State private var show_modal: Bool = false
     @State var showNowPlaying: Bool = false
     @State var isEditing: Bool = false
-    @State private var navigationButtonID = UUID()
+    @State var navigationButtonID = UUID()
     @State var selectedPlaylistId: String = "default" {
         didSet {
             store.interactor?.selectPlaylist(request: Playlists.Select.Request(playlistId: self.selectedPlaylistId))
@@ -102,7 +102,7 @@ struct PlaylistView: View {
                         SUIModule(module: mod, faveCallback: self.favorite(module:))
                             .contentShape(Rectangle())
                             .onTapGesture {
-                                modulePlayer.play(mmd: mod)
+                                self.store.interactor?.playModule(request: Playlists.Play.Request(mmd: mod))
                         }.onLongPressGesture {
                             self.store.router?.toPlaylistSelector(module: mod)
                         }

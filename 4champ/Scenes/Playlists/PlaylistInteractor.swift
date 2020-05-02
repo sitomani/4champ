@@ -20,6 +20,7 @@ protocol PlaylistBusinessLogic
   func moveModule(request: Playlists.Move.Request)
   func toggleShuffle()
   func toggleFavorite(request: Playlists.Favorite.Request)
+  func playModule(request: Playlists.Play.Request)
 }
 
 protocol PlaylistDataStore
@@ -94,6 +95,7 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore
     currentMode.toggle()
     moduleStorage.currentPlaylist?.playmode = NSNumber.init(value: currentMode)
     moduleStorage.saveContext()
+    rebuildQueue()
   }
   
   func toggleFavorite(request: Playlists.Favorite.Request) {
@@ -101,6 +103,30 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore
       _ = moduleStorage.toggleFavorite(module: mod)
     }
     doPresent()
+  }
+  
+  func playModule(request: Playlists.Play.Request) {
+    rebuildQueue()
+    if let index = modulePlayer.playQueue.index(of: request.mmd) {
+      modulePlayer.play(at: index)
+    }
+  }
+  
+  private func rebuildQueue() {
+    if let pl = frc?.fetchedObjects?.first(where: { ($0 as Playlist).plId == selectedPlaylistId }) {
+      var playlistQueue: [MMD] = []
+      if let moduleinfos = pl.modules {
+        for mod in moduleinfos {
+          playlistQueue.append(MMD(cdi: (mod as! ModuleInfo)))
+        }
+      }
+      if (pl.playmode?.boolValue ?? false) {
+        playlistQueue.shuffle()
+      }
+      
+      moduleStorage.currentPlaylist = pl
+      modulePlayer.setNewPlayQueue(queue: playlistQueue)
+    }
   }
   
   private func doPresent() {
@@ -113,6 +139,17 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore
 
 extension PlaylistInteractor: NSFetchedResultsControllerDelegate {
   func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+  }
+  
+  func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+
+    guard modulePlayer.radioOn == false else {
+      return
+    }
+    
+    if let pl = anObject as? Playlist, pl.plId == selectedPlaylistId {
+      rebuildQueue()
+    }    
   }
   
   func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {

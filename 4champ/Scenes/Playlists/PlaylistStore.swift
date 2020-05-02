@@ -72,7 +72,7 @@ class PlaylistStore: ObservableObject, PlaylistDisplayLogic
 
 extension PlaylistStore: ModulePlayerObserver {
   func moduleChanged(module: MMD) {
-    //    tableView?.reloadData()
+    hostingController?.rootView.navigationButtonID = UUID()
   }
   
   func statusChanged(status: PlayerStatus) {
@@ -87,15 +87,14 @@ extension PlaylistStore: ModulePlayerObserver {
     //nop at the moment
   }
   
-  func queueChanged() {
-//    let req = Playlists.Select.Request(playlistId: moduleStorage.currentPlaylist?.plId ?? "default")
-//    interactor?.selectPlaylist(request: req)
+  func queueChanged(changeType: QueueChange) {
+    //nop
   }
 }
 
 extension PlaylistStore: ModuleStorageObserver {
   func metadataChange(_ mmd: MMD) {
-    //NOP
+    //nop
   }
   
   func playlistChange() {
