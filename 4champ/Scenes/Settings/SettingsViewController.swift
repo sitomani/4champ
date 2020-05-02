@@ -75,6 +75,12 @@ class SettingsViewController: UITableViewController, SettingsDisplayLogic {
       self.updateSettings(fetchOnly: false)
     }
   }
+    
+  @IBAction func toggleInterpolation() {
+    DispatchQueue.main.async {
+      self.updateSettings(fetchOnly: false)
+    }
+  }
   
   func updateSettings(fetchOnly: Bool) {
     var request: Settings.Update.ValueBag?
@@ -90,14 +96,26 @@ class SettingsViewController: UITableViewController, SettingsDisplayLogic {
       stereoCell.title?.text = String.init(format: textFormat, "\(viewModel.stereoSeparation)")
       stereoCell.slider?.value = Float(viewModel.stereoSeparation)
     }
+    
+    if let interpolationCell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 1)) as? SettingsInterpolationCell {
+      let title = "Settings_Interpolation".l13n()
+      interpolationCell.title?.text = title
+      interpolationCell.interpolationSwitch?.isOn = viewModel.interpolation == .libraryDefault
+    }
   }
   
   private func buildValueBag() -> Settings.Update.ValueBag {
-    var valueBag = Settings.Update.ValueBag(stereoSeparation: 0)
+    var valueBag = Settings.Update.ValueBag(stereoSeparation: 0, interpolation: .libraryDefault)
         
     if let stereoCell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 0)) as? SettingsStereoCell,
       let separation = stereoCell.slider?.value {
       valueBag.stereoSeparation = Int(separation)
+    }
+    
+    if let interpolationCell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 1)) as? SettingsInterpolationCell,
+      let value = interpolationCell.interpolationSwitch?.isOn {
+      let i = value ? SampleInterpolation.libraryDefault : SampleInterpolation.off
+      valueBag.interpolation = i
     }
     
     return valueBag

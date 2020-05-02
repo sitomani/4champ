@@ -36,6 +36,10 @@
   openmpt_module_set_render_param(currentOMPTFile, OPENMPT_MODULE_RENDER_STEREOSEPARATION_PERCENT, (int32_t)newValue);
 }
 
+- (void) setInterpolationFilterLength:(NSInteger)len {
+    openmpt_module_set_render_param(currentOMPTFile, OPENMPT_MODULE_RENDER_INTERPOLATIONFILTER_LENGTH, (int32_t)len);
+}
+
 - (int) currentPosition {
   int cp = openmpt_module_get_position_seconds(currentOMPTFile);
   return cp;

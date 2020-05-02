@@ -50,6 +50,7 @@
 		4543984E20D0366E00991ADC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4543983D20D0366E00991ADC /* InfoPlist.strings */; };
 		4543984F20D0366E00991ADC /* String+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543984820D0366E00991ADC /* String+extension.swift */; };
 		4543985120D03C1600991ADC /* AboutHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543985020D03C1500991ADC /* AboutHeaderView.swift */; };
+		454612F3245DA50700C07D51 /* SettingsInterpolationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454612F2245DA50700C07D51 /* SettingsInterpolationCell.swift */; };
 		454D1ADA22035D87006ABA85 /* AmpCDModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 454D1AD822035D87006ABA85 /* AmpCDModel.xcdatamodeld */; };
 		454F5205215D20F3007011F3 /* ModuleFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F5204215D20F3007011F3 /* ModuleFetcher.swift */; };
 		454F5207215D3FF1007011F3 /* ComposerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F5206215D3FF1007011F3 /* ComposerCell.swift */; };
@@ -101,8 +102,8 @@
 		4509EA46226251EF0031408D /* Playlist+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playlist+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		450E505E21879347008FB155 /* SettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresenter.swift; sourceTree = "<group>"; };
 		450E506021879347008FB155 /* SettingsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRouter.swift; sourceTree = "<group>"; };
-		450E506121879347008FB155 /* SettingsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModels.swift; sourceTree = "<group>"; };
-		450E506221879347008FB155 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		450E506121879347008FB155 /* SettingsModels.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SettingsModels.swift; sourceTree = "<group>"; tabWidth = 2; };
+		450E506221879347008FB155 /* SettingsViewController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
 		450E506321879347008FB155 /* SettingsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsInteractor.swift; sourceTree = "<group>"; };
 		450E506C2187A066008FB155 /* SettingsStereoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStereoCell.swift; sourceTree = "<group>"; };
 		451B6A9A2204B6CC001848FA /* LocalPresenter.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = LocalPresenter.swift; sourceTree = "<group>"; tabWidth = 2; };
@@ -151,6 +152,7 @@
 		4543984B20D0366E00991ADC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4543984C20D0366E00991ADC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4543985020D03C1500991ADC /* AboutHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHeaderView.swift; sourceTree = "<group>"; };
+		454612F2245DA50700C07D51 /* SettingsInterpolationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsInterpolationCell.swift; sourceTree = "<group>"; };
 		454D1AD922035D87006ABA85 /* AmpCDModel 8 (preview).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 8 (preview).xcdatamodel"; sourceTree = "<group>"; };
 		454F5204215D20F3007011F3 /* ModuleFetcher.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModuleFetcher.swift; sourceTree = "<group>"; tabWidth = 2; };
 		454F5206215D3FF1007011F3 /* ComposerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerCell.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				450E506221879347008FB155 /* SettingsViewController.swift */,
 				450E506321879347008FB155 /* SettingsInteractor.swift */,
 				450E506C2187A066008FB155 /* SettingsStereoCell.swift */,
+				454612F2245DA50700C07D51 /* SettingsInterpolationCell.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -673,6 +676,7 @@
 				451B6AA32204B6CC001848FA /* LocalModels.swift in Sources */,
 				45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */,
 				456E6F2E240A5FAF0034BDA2 /* PlaylistView.swift in Sources */,
+				454612F3245DA50700C07D51 /* SettingsInterpolationCell.swift in Sources */,
 				45AA910520FF36C200794147 /* HVLReplayer.mm in Sources */,
 				45D61F5620E1647300869814 /* RadioInteractor.swift in Sources */,
 				453D9BBF241D24B7002EEBAB /* PlaylistPickerView.swift in Sources */,
@@ -856,7 +860,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -887,7 +891,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

@@ -28,6 +28,13 @@
 @param value integer in range 0-100. Actual Replay implementation maps to correct scale
  */
 - (void) setStereoSeparation:(NSInteger)value;
+
+/**
+ Sets interpolation filter length (used for LibOpenMPT playback)
+ @param value integer that maps to a interpolation filter setting defined for OPENMPT_MODULE_RENDER_INTERPOLATIONFILTER_LENGTH
+ in libpopenmpt.h
+ */
+- (void) setInterpolationFilterLength:(NSInteger)value;
 @end
 
 @protocol ReplayInformation <NSObject>

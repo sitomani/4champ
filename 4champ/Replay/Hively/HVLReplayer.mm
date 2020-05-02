@@ -110,6 +110,10 @@ static int iHivelyBufPos = 0;
     //no effect during playback.
 }
 
+- (void) setInterpolationFilterLength:(NSInteger)value {
+    //nop
+}
+
 - (int) currentPosition {
     if (!currentHVLtune) {
         return 0;

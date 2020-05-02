@@ -15,6 +15,7 @@ protocol SettingsBusinessLogic
 protocol SettingsDataStore
 {
   var stereoSeparation: Int { get set }
+  var interpolation: SampleInterpolation { get set }
 }
 
 class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore
@@ -26,13 +27,14 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore
     static let collectionSize = "collectionSize"
     static let newestPlayed = "newestPlayed"
     static let prevCollectionSize = "prevCollectionSize"
+    static let interpolation = "interpolation"
   }
 
   var presenter: SettingsPresentationLogic?
   
   var stereoSeparation: Int {
     set {
-      UserDefaults.standard.set(newValue, forKey: SettingKeys.stereoSeparation)
+        UserDefaults.standard.set(newValue, forKey: SettingKeys.stereoSeparation)
     }
     get {
       if let value = UserDefaults.standard.value(forKey: SettingKeys.stereoSeparation) as? Int {
@@ -41,6 +43,18 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore
       return Constants.stereoSeparationDefault
     }
   }
+    
+    var interpolation: SampleInterpolation {
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: SettingKeys.interpolation)
+        }
+        get {
+            if let value = UserDefaults.standard.value(forKey: SettingKeys.interpolation) as? Int {
+                return SampleInterpolation(rawValue: value) ?? .libraryDefault
+            }
+            return SampleInterpolation.libraryDefault
+        }
+    }
     
     var collectionSize: Int {
         set {
@@ -99,10 +113,12 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore
     if let request = request {
       response = request
       stereoSeparation = request.stereoSeparation
+      interpolation = request.interpolation
     } else {
-      response = Settings.Update.ValueBag(stereoSeparation: stereoSeparation)
+        response = Settings.Update.ValueBag(stereoSeparation: stereoSeparation, interpolation: interpolation)
     }
     modulePlayer.setStereoSeparation(stereoSeparation)
+    modulePlayer.setInterpolation(interpolation)
     presenter?.presentSettings(response: response)
   }
     

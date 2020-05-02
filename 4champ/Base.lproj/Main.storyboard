@@ -492,6 +492,42 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection id="ulZ-9m-1yY">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="LhJ-NB-FIk" customClass="SettingsInterpolationCell" customModule="ampplayer" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="148" width="375" height="94"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LhJ-NB-FIk" id="CjJ-Ee-OiU">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="94"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sample Interpolation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZQN-yh-fgG">
+                                                    <rect key="frame" x="16" y="16" width="359" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mrW-dz-r0o">
+                                                    <rect key="frame" x="16" y="45" width="49" height="31"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="toggleInterpolation" destination="Dck-3q-Mtf" eventType="valueChanged" id="qnP-sM-fXl"/>
+                                                    </connections>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="ZQN-yh-fgG" firstAttribute="leading" secondItem="CjJ-Ee-OiU" secondAttribute="leadingMargin" id="Fvo-ru-pFY"/>
+                                                <constraint firstAttribute="trailing" secondItem="ZQN-yh-fgG" secondAttribute="trailing" id="Os8-zQ-flv"/>
+                                                <constraint firstItem="ZQN-yh-fgG" firstAttribute="top" secondItem="CjJ-Ee-OiU" secondAttribute="topMargin" constant="5" id="dN6-iL-61j"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="interpolationSwitch" destination="mrW-dz-r0o" id="l2R-7g-2Z9"/>
+                                            <outlet property="title" destination="ZQN-yh-fgG" id="s8e-Px-qHN"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="Dck-3q-Mtf" id="1cL-1s-Ufm"/>

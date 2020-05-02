@@ -12,6 +12,7 @@ enum Settings {
   enum Update {
     struct ValueBag {
       var stereoSeparation: Int
+      var interpolation: SampleInterpolation
     }
   }
 }

@@ -26,6 +26,14 @@ enum QueueChange: Int {
   case other
 }
 
+enum SampleInterpolation: Int {
+  case libraryDefault = 0
+  case off = 1
+  case linear = 2
+  case cubic = 4
+  case windowed = 8
+}
+
 /**
  Module Player observer delegate protocol.
  Note that there can be multiple observers for the player
@@ -100,8 +108,9 @@ class ModulePlayer: NSObject {
     
     renderer.initAudio()
     renderer.streamDelegate = self
-    renderer.setStereoSeparation(SettingsInteractor().stereoSeparation)
-    
+    let settings = SettingsInteractor()
+    renderer.setStereoSeparation(settings.stereoSeparation)
+    renderer.setInterpolationFilterLength(settings.interpolation.rawValue)
     NotificationCenter.default.addObserver(self,
                                    selector: #selector(handleRouteChange),
                                    name: AVAudioSession.routeChangeNotification,
@@ -161,7 +170,9 @@ class ModulePlayer: NSObject {
     }
     renderer.stop()
     if renderer.loadModule(path, type:playQueue[at].type) {
-        setStereoSeparation(SettingsInteractor().stereoSeparation)
+        let settings = SettingsInteractor()
+        setStereoSeparation(settings.stereoSeparation)
+        setInterpolation(settings.interpolation)
         currentModule = playQueue[at]
         renderer.play()
         status = .playing
@@ -180,6 +191,10 @@ class ModulePlayer: NSObject {
       newValue = Constants.stereoSeparationDefault
     }
     renderer.setStereoSeparation(newValue)
+  }
+  
+  func setInterpolation(_ interpolation: SampleInterpolation) {
+    renderer.setInterpolationFilterLength(interpolation.rawValue)
   }
   
   /// Set new play queue (when user selects a playlist and starts playing)

@@ -137,7 +137,6 @@ static SInt16* bufRight;
   if (![[renderer class] isEqual:replayerClass]) {
     renderer = [[replayerClass alloc] init];
   }
-  
   return [renderer loadModule:path type:type];
 }
 
@@ -183,6 +182,7 @@ static SInt16* bufRight;
   OSStatus status = AudioOutputUnitStart(audioUnit);
   checkStatus(status);
   [self setPlayingStatus:YES];
+
 }
 
 - (NSArray*) getSamples
@@ -231,6 +231,13 @@ static SInt16* bufRight;
     [renderer setStereoSeparation:value];
   }
 }
+
+- (void) setInterpolationFilterLength:(NSInteger)value {
+  if (renderer) {
+    [renderer setInterpolationFilterLength:value];
+  }
+}
+
 
 
 -(void)dealloc {
