@@ -9,7 +9,9 @@ project that collects anything related to Amiga music production. AMP database b
 
 In this repository I'm working on rewriting the app that originally was released in AppStore in 2012. It was available in the store until late 2017, when I decided to remove the app from there as I could not release updates any more due to missing third party content license.
 
-In early 2020 I have set up a Sole Proprietor developer account in App Store and the third party content licensing issue has been resolved. The app is now in TestFlight beta, and if you're interested to test it before I get it finalised to official App Store release, you can install the app by joining the beta program at https://testflight.apple.com/join/j1yhaJQ1.
+In early 2020 I have set up a Sole Proprietor developer account in App Store and the third party content licensing issue has been resolved. The app is now in back in the AppStore, you can download it at [https://apps.apple.com/app/4champ/id578311010](https://apps.apple.com/app/4champ/id578311010).
+
+If you're interested to test new features when they're getting implemented before official App Store releases, you can join the beta program at https://testflight.apple.com/join/j1yhaJQ1.
 
 You can read more about the history of the app and follow the rewrite process on the development journal that I created for this project: [sitomani.github.io/4champ](https://sitomani.github.io/4champ).
 

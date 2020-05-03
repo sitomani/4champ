@@ -1,5 +1,13 @@
 # 4champ Development Journal
 
+### 3 May 2020 Back in the AppStore!
+
+It's been long time coming, and the time has finally come. 4champ is now again listed at the AppStore for iOS devices. It's been a really interesting four weeks since I started the TestFlight beta first invite only, and from Easter on with public link.
+
+During the beta period, I got a number of improvement suggestions, crash reports and comments that proved really helpful in getting the app finalised for release. 5 hours after I published the app, I got the first 5 star review - which makes me really glad and proves that my efforts with this project have not been void.
+
+Now, get your installs at [https://apps.apple.com/app/4champ/id578311010](https://apps.apple.com/app/4champ/id578311010) and don't forget to rate the app if you like it! 
+
 ### 11 Apr 2020 Easter Eggs Anyone?
 
 Thanks to the 2020 coronavirus pandemic and isolation I've been fighting boredom by finally writing the last missing big feature for the app, the playlists support. The playlist handling came out a bit differently as compared to the original app release where all modules got added to a playlist when listened once, which resulted in a number of clunky features to counteract the behaviour. In my opinion, it's now more in line with common sense.
