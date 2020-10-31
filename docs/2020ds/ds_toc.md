@@ -18,3 +18,4 @@ This is a series of data analytics observations on the
 **11** [Module name lengths](ds_11.md)<br/>
 **12** [Shortest module names](ds_12.md)<br/>
 **13** [Longest module names](ds_13.md)<br/>
+**14** [Sample count per module](ds_14.md)<br/>
