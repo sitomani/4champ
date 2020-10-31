@@ -170,7 +170,8 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore
   private func stopPlayback() {
     log.debug("")
     playbackTimer?.invalidate()
-    Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
+    
+    AF.session.getAllTasks { (tasks) in
       tasks.forEach {
         if !$0.currentRequest!.url!.absoluteString.contains("get_latest") {
           $0.cancel()

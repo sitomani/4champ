@@ -149,13 +149,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func updateLatest() {
     log.debug("")
     let req = RESTRoutes.latestId
-    Alamofire.request(req).validate().responseString { resp in
-      if let value = resp.result.value, let intValue = Int(value) {
-        log.info("Collection Size: \(intValue)")
-        self.updateCollectionSize(size: intValue)
-      } else {
+    AF.request(req).validate().responseString { resp in
+      switch resp.result {
+      case .failure(_):
         self._bgFetchCallback?(.noData)
         self._bgFetchCallback = nil
+      case .success(let str):
+        guard let collectionSize = Int(str) else { return }
+        log.info("Collection Size: \(collectionSize)")
+        self.updateCollectionSize(size: collectionSize)
       }
     }
   }

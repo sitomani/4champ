@@ -82,27 +82,27 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
       currentRequest = nil
     }
     let restRequest = RESTRoutes.search(type: request.type, text: request.text, position: request.pagingIndex)
-    currentRequest = Alamofire.request(restRequest).validate().responseJSON { (json) in
-      if let checkReq = self.currentRequest?.request, checkReq != json.request {
+    currentRequest = AF.request(restRequest).validate().responseData { response in
+      if let checkReq = self.currentRequest?.request, checkReq != response.request {
         log.warning("overlapping requests. Bypass all except most recent.")
         return
       }
-      if json.result.isSuccess {
-        log.info("\(json.result) \(request.text)")
+      if case let .success(jsonData) = response.result {
+        log.info("\(response.result) \(request.text)")
         self.pagingIndex = request.pagingIndex
-        if let modules = try? JSONDecoder().decode(ModuleResult.self, from: json.data!) {
+        if let modules = try? JSONDecoder().decode(ModuleResult.self, from: jsonData) {
           self.latestModuleResponse = Search.ModuleResponse(result: modules, text: request.text)
           self.presenter?.presentModules(response: self.latestModuleResponse)
-        } else if let composers = try? JSONDecoder().decode(ComposerResult.self, from: json.data!) {
+        } else if let composers = try? JSONDecoder().decode(ComposerResult.self, from: jsonData) {
           self.presenter?.presentComposers(response: Search.ComposerResponse(result: composers, text: request.text))
-        } else if let groups = try? JSONDecoder().decode(GroupResult.self, from: json.data!) {
+        } else if let groups = try? JSONDecoder().decode(GroupResult.self, from: jsonData) {
           self.presenter?.presentGroups(response: Search.GroupResponse(result: groups, text: request.text))
         } else {
           self.latestModuleResponse = Search.ModuleResponse(result: [], text: request.text)
           self.presenter?.presentModules(response: self.latestModuleResponse)
         }
       } else {
-        log.error(String.init(describing: json.error))
+        log.error(String.init(describing: response.error))
       }
       self.currentRequest = nil
     }
@@ -113,22 +113,20 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
     
     if type == .composer {
       let restRequest = RESTRoutes.listModules(composerId: id)
-      Alamofire.request(restRequest).validate().responseJSON { (json) in
-        if json.result.isSuccess {
-          if let modules = try? JSONDecoder().decode(ModuleResult.self, from: json.data!) {
+      AF.request(restRequest).validate().responseData { response in
+        if case let .success(jsonData) = response.result,
+           let modules = try? JSONDecoder().decode(ModuleResult.self, from: jsonData) {
             self.latestModuleResponse = Search.ModuleResponse(result: modules, text: "")
             self.presenter?.presentModules(response: self.latestModuleResponse)
           }
-        }
       }
     } else if type == .group {
       let restRequest = RESTRoutes.listComposers(groupId: id)
-      Alamofire.request(restRequest).validate().responseJSON { json in
-        if json.result.isSuccess {
-          if let composers = try? JSONDecoder().decode(ComposerResult.self, from: json.data!) {
+      AF.request(restRequest).validate().responseData { response in
+        if case let .success(jsonData) = response.result,
+           let composers = try? JSONDecoder().decode(ComposerResult.self, from: jsonData) {
             self.presenter?.presentComposers(response: Search.ComposerResponse(result: composers, text:""))
           }
-        }
       }
     } else {
       log.error("Invalid type for auto fetch \(type)")
