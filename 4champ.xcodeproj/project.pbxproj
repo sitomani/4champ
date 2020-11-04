@@ -515,6 +515,8 @@
 			dependencies = (
 			);
 			name = ampplayer;
+			packageProductDependencies = (
+			);
 			productName = ampplayer;
 			productReference = 45D392A120B1DDEC00EEF4E3 /* ampplayer.app */;
 			productType = "com.apple.product-type.application";
@@ -526,7 +528,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = boogie;
 				TargetAttributes = {
 					45D392A020B1DDEC00EEF4E3 = {
@@ -556,6 +558,8 @@
 				fi,
 			);
 			mainGroup = 45D3929820B1DDEC00EEF4E3;
+			packageReferences = (
+			);
 			productRefGroup = 45D392A220B1DDEC00EEF4E3 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -762,6 +766,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -823,6 +828,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;

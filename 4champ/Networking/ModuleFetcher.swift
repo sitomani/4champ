@@ -78,16 +78,15 @@ class ModuleFetcher {
     }
     
     let req = RESTRoutes.modulePath(id: ampId)
-    currentRequest = Alamofire.request(req).validate().responseString { resp in
-      guard resp.result.isSuccess else {
-        log.error(resp.result.error!)
-        self.state = .failed(err: resp.result.error)
-        return
-      }
-      if let uriPath = resp.result.value,
-        uriPath.count > 0,
-        let modUrl = URL.init(string: uriPath) {
-        self.fetchModule(modUrl: modUrl, id: ampId)
+    currentRequest = AF.request(req).validate().responseString { resp in
+      switch resp.result {
+      case .failure(let err):
+        log.error(err)
+        self.state = .failed(err: err)
+      case .success(let uriPath):
+        if uriPath.count > 0, let modUrl = URL.init(string: uriPath) {
+          self.fetchModule(modUrl: modUrl, id: ampId)
+        }
       }
     }
   }
@@ -113,13 +112,14 @@ class ModuleFetcher {
   private func fetchModule(modUrl: URL, id: Int) {
     log.debug("")
     state = .downloading(progress: 0)
-    currentRequest = Alamofire.request(modUrl).validate().responseData { resp in
-      guard resp.result.isSuccess else {
-        log.error(resp.result.error!)
-        self.state = .failed(err: resp.result.error)
+    currentRequest = AF.request(modUrl).validate().responseData { resp in
+      if case .failure(let error) = resp.result {
+        log.error(error)
+        self.state = .failed(err: error)
         return
       }
-      if let moduleData = resp.result.value {
+      
+      if case let .success(moduleData) = resp.result {
         self.state = .unpacking
         if let moduleDataUnzipped = self.gzipInflate(data: moduleData) {
           var mmd = MMD.init(path: modUrl.path, modId: id)
