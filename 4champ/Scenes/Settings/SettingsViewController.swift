@@ -55,6 +55,7 @@ class SettingsViewController: UITableViewController, SettingsDisplayLogic {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    view.backgroundColor = Appearance.ampBgColor
     title = "SettingsView_Title".l13n()
   }
   
