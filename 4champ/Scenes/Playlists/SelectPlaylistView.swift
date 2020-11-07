@@ -132,7 +132,7 @@ struct PlaylistSelectorSUI: View {
                                 self.edit(pl: pl)
                             }
                         }
-                    }.onDelete(perform: delete)
+                    }.onDelete(perform: delete).listRowBackground(Color.clear)
                 }.contentShape(Rectangle()).id(listId)
             }.navigationBarTitle("PlaylistView_Playlists", displayMode: .inline)
                 .navigationBarItems(leading: Button (action: {
@@ -152,3 +152,4 @@ struct PlaylistSelectorSUI: View {
         }.background(Color(Appearance.darkBlueColor)).navigationViewStyle(StackNavigationViewStyle())
     }
 }
+

@@ -22,19 +22,19 @@ struct SUIModule: View {
                     .font(.system(size:12))
                     .offset(y:13)
                 if module.supported() == false {
-                Image(uiImage: UIImage.init(named:"stopicon")!)
-                    .resizable()
-                    .frame(width:30, height:30).offset(x:-15)
+                    Image(uiImage: UIImage.init(named:"stopicon")!)
+                        .resizable()
+                        .frame(width:30, height:30).offset(x:-15)
                 }
             }.padding(EdgeInsets(top: 7, leading: -5, bottom: 7, trailing: 0))
             VStack(alignment: .leading) {
                 Text("\(module.name ?? "no name")")
                     .font(.system(size: 18))
-                    .foregroundColor(.white).padding(EdgeInsets(top: 0, leading: 0, bottom: 1, trailing: 0))
+                    .foregroundColor(.white)
                 Text(module.composer ?? "no name").font(.system(size: 12))
-                    .foregroundColor(.white).padding(EdgeInsets(top: 1, leading: 0, bottom: 1, trailing: 0))
+                    .foregroundColor(.white).baselineOffset(-1)
                 Text("\(module.size ?? 0) kb").font(.system(size: 12))
-                    .foregroundColor(.white).padding(EdgeInsets(top: 1, leading: 0, bottom: 1, trailing: 0))
+                    .foregroundColor(.white).baselineOffset(-1)
             }
             Spacer()
             Image(module.favorite ? "favestar-yellow" : "favestar-grey").padding(8).onTapGesture {
@@ -84,49 +84,51 @@ struct PlaylistView: View {
     }
     
     var body: some View {
-            VStack {
-                Button(action: {
-                    self.show_modal = true
-                }) {
+        VStack {
+            Button(action: {
+                self.show_modal = true
+            }) {
                 Text(store.viewModel.playlistName).underline()
                     .foregroundColor(Color(.white))
                     .padding(EdgeInsets.init(top: 5, leading: 0, bottom: -5, trailing: 0))
-                }.sheet(isPresented: self.$show_modal) {
-                    PlaylistSelectorSUI(show_modal: self.$show_modal).environment(\.managedObjectContext,self.managedObjectContext).onDisappear {
-                        self.navigationButtonID = UUID()
-                    }.background(Color(Appearance.darkBlueColor))
-                }
-                ZStack {
+            }.sheet(isPresented: self.$show_modal) {
+                PlaylistSelectorSUI(show_modal: self.$show_modal).environment(\.managedObjectContext,self.managedObjectContext).onDisappear {
+                    self.navigationButtonID = UUID()
+                }.background(Color(Appearance.darkBlueColor))
+            }
+            ZStack {
                 List {
                     ForEach(store.viewModel.modules) { mod in
                         SUIModule(module: mod, faveCallback: self.favorite(module:))
                             .contentShape(Rectangle())
                             .onTapGesture {
                                 self.store.interactor?.playModule(request: Playlists.Play.Request(mmd: mod))
-                        }.onLongPressGesture {
-                            self.store.router?.toPlaylistSelector(module: mod)
-                        }
+                            }.onLongPressGesture {
+                                self.store.router?.toPlaylistSelector(module: mod)
+                            }
                     }.onMove(perform: move)
                     .onDelete(perform: deleteItems)
-                }.navigationBarTitle(Text("TabBar_Playlist".l13n().uppercased()), displayMode: .inline)
-                    .navigationBarItems(leading: HStack {
-                        Button(action: {self.toggleShuffle()})
-                            {Image(store.viewModel.shuffle ? "shuffled" : "sequential")}
-                        Button(action: {self.store.interactor?.startPlaylist()})
+                    .listRowBackground(Color.clear)
+                }
+                .navigationBarTitle(Text("TabBar_Playlist".l13n().uppercased()), displayMode: .inline)
+                .navigationBarItems(leading: HStack {
+                    Button(action: {self.toggleShuffle()})
+                        {Image(store.viewModel.shuffle ? "shuffled" : "sequential")}
+                    Button(action: {self.store.interactor?.startPlaylist()})
                         {Image("play-small")}
-                        },
-                                        trailing:
-                        EditButton()).id(self.navigationButtonID)
-                    if store.viewModel.modules.count == 0 {
-                        Text("No modules on the playlist. You can add modules to a playlist by long-tapping a module on any view.").foregroundColor(.white).font(.system(size: 20)).padding(20)
-                    }
+                },
+                trailing:
+                    EditButton()).id(self.navigationButtonID)
+                if store.viewModel.modules.count == 0 {
+                    Text("No modules on the playlist. You can add modules to a playlist by long-tapping a module on any view.").foregroundColor(.white).font(.system(size: 20)).padding(20)
                 }
-                if store.nowPlaying {
-                    VStack {
-                        Text("").frame(height:50)
-                    }
+            }
+            if store.nowPlaying {
+                VStack {
+                    Text("").frame(height:50)
                 }
-            }.background(Color(Appearance.darkBlueColor))
+            }
+        }.background(Color(Appearance.darkBlueColor))
     }
 }
 
@@ -162,8 +164,13 @@ var st = PlaylistStore(viewModel:         Playlists.Select.ViewModel(playlistNam
 
 struct Playlist_Preview : PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            PlaylistView(store: st)
+        Group {
+            NavigationView {
+                PlaylistView(store: st)
+            }.preferredColorScheme(.light)
+            NavigationView {
+                PlaylistView(store: st)
+            }.preferredColorScheme(.dark)
         }
     }
 }
