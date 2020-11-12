@@ -78,6 +78,7 @@
 		45AA91162100ECE600794147 /* VisualizerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA91142100ECE600794147 /* VisualizerViewController.swift */; };
 		45AA911A2100EF1900794147 /* AmpSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA91182100EF1900794147 /* AmpSlider.swift */; };
 		45AA911B2100EF1900794147 /* AmpVizScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA91192100EF1900794147 /* AmpVizScene.swift */; };
+		45B5FC26255D997000282550 /* ReviewActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B5FC25255D997000282550 /* ReviewActions.swift */; };
 		45CEA1DF2413C8E300930A72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA1DE2413C8E300930A72 /* SceneDelegate.swift */; };
 		45CEA1E12415005E00930A72 /* SelectPlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CEA1E02415005E00930A72 /* SelectPlaylistView.swift */; };
 		45D392A520B1DDEC00EEF4E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D392A420B1DDEC00EEF4E3 /* AppDelegate.swift */; };
@@ -187,6 +188,7 @@
 		45AA91142100ECE600794147 /* VisualizerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = VisualizerViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45AA91182100EF1900794147 /* AmpSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmpSlider.swift; sourceTree = "<group>"; };
 		45AA91192100EF1900794147 /* AmpVizScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmpVizScene.swift; sourceTree = "<group>"; };
+		45B5FC25255D997000282550 /* ReviewActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewActions.swift; sourceTree = "<group>"; };
 		45CEA1DE2413C8E300930A72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		45CEA1E02415005E00930A72 /* SelectPlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPlaylistView.swift; sourceTree = "<group>"; };
 		45D392A120B1DDEC00EEF4E3 /* ampplayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ampplayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -483,6 +485,7 @@
 				45D61F5820E1695100869814 /* UIUtils.swift */,
 				45D61F5A20E1780D00869814 /* Appearance.swift */,
 				45855FCC2444AC6B0079C767 /* ModuleSharing.swift */,
+				45B5FC25255D997000282550 /* ReviewActions.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -660,6 +663,7 @@
 				453D9BB8241BF286002EEBAB /* PlaylistSelectorPresenter.swift in Sources */,
 				45AA910320FF36C200794147 /* hvl_replay.cpp in Sources */,
 				451ED0AF241E8A83006CE4E8 /* PlaylistRouter.swift in Sources */,
+				45B5FC26255D997000282550 /* ReviewActions.swift in Sources */,
 				45D61F5920E1695200869814 /* UIUtils.swift in Sources */,
 				451ED0A6241E6AA6006CE4E8 /* SwiftUITest.swift in Sources */,
 				451B6AA22204B6CC001848FA /* LocalRouter.swift in Sources */,

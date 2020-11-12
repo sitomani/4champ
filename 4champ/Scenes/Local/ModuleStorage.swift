@@ -229,6 +229,7 @@ extension ModuleStorage: ModuleStorageInterface {
         cdModule.modFavorite = 0
       } else {
         cdModule.modFavorite = 1
+        ReviewActions.increment()
       }
       saveContext()
       let mmd = MMD.init(cdi: cdModule)

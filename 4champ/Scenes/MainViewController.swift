@@ -104,6 +104,7 @@ class MainViewController: UITabBarController {
     log.debug("")
     if self.presentedViewController == nil {
       performSegue(withIdentifier: "ToVisualizer", sender: self)
+      ReviewActions.increment()
     }
   }
   

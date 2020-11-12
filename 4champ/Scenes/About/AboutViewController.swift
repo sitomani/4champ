@@ -79,12 +79,17 @@ class AboutViewController: UIViewController, AboutDisplayLogic
     navigationItem.title = "AboutView_Title".l13n().uppercased()
 
     toggleNowPlaying(modulePlayer.status.rawValue > PlayerStatus.stopped.rawValue)
+    navigationItem.leftBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(reviewNow))]
   }
   
   // MARK: Display Logic
   func displayNowPlaying(_ viewModel: About.Status.ViewModel) {
     //TODO
   }
+
+    @objc func reviewNow() {
+        ReviewActions.giveReview()
+    }
 }
 
 extension AboutViewController: NowPlayingContainer {

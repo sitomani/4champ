@@ -42,6 +42,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     updateLatest()
     UIApplication.shared.beginReceivingRemoteControlEvents()
+
+    #if DEBUG
+    ReviewActions.reset()
+    #endif
+
     application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
     return true
   }
