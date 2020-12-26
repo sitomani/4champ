@@ -432,6 +432,12 @@ extension SearchViewController: ModulePlayerObserver {
   }
   
   func statusChanged(status: PlayerStatus) {
+    DispatchQueue.main.async {
+      self.doHandleStatusChange(status: status)
+    }
+  }
+
+  func doHandleStatusChange(status: PlayerStatus) {
     if status == .stopped || status == .initialised {
       tableBottomConstraint?.constant = 0
     } else {

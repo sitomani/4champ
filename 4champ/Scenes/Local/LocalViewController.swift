@@ -264,6 +264,10 @@ extension LocalViewController: ModulePlayerObserver {
     }
     tableView?.reloadData()
   }
+
+  func doHandleStatusChange(_ status: PlayerStatus) {
+
+  }
   
   func errorOccurred(error: PlayerError) {
     //nop at the moment

@@ -69,7 +69,7 @@ class ModulePlayer: NSObject {
     didSet {
       if let mod = currentModule {
         let author = mod.composer
-        let songName = String.init(format: "LockScreen_Playing".l13n(), mod.name!, mod.composer!)
+        let songName = mod.name!
         let playlistName = "LockScreen_Radio".l13n()
         
         let artwork = MPMediaItemArtwork.init(boundsSize: mpImage.size, requestHandler: { (size) -> UIImage in

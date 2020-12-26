@@ -64,6 +64,7 @@
 		45855FC9244467420079C767 /* DownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45855FC8244467420079C767 /* DownloadView.swift */; };
 		45855FCB244475050079C767 /* DownloadHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45855FCA244475050079C767 /* DownloadHostingController.swift */; };
 		45855FCD2444AC6B0079C767 /* ModuleSharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45855FCC2444AC6B0079C767 /* ModuleSharing.swift */; };
+		45A4F13C257EAF81006FF21B /* liblibopenmpt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45A4F130257EA970006FF21B /* liblibopenmpt.a */; };
 		45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */; };
 		45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F420FF2F6600794147 /* RESTRoutes.swift */; };
 		45AA910220FF36C200794147 /* Replay.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F720FF36C200794147 /* Replay.m */; };
@@ -71,7 +72,6 @@
 		45AA910420FF36C200794147 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 45AA90FA20FF36C200794147 /* LICENSE */; };
 		45AA910520FF36C200794147 /* HVLReplayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90FB20FF36C200794147 /* HVLReplayer.mm */; };
 		45AA910620FF36C200794147 /* MPTReplayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AA910120FF36C200794147 /* MPTReplayer.m */; };
-		45AA910A20FF389800794147 /* liblibopenmpt-small.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45AA910920FF389800794147 /* liblibopenmpt-small.a */; };
 		45AA910E20FF5E8A00794147 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA910D20FF5E8A00794147 /* Structs.swift */; };
 		45AA91102100C48500794147 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA910F2100C48500794147 /* MainViewController.swift */; };
 		45AA91122100D13300794147 /* NowPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA91112100D13300794147 /* NowPlayingView.swift */; };
@@ -169,6 +169,7 @@
 		45855FCA244475050079C767 /* DownloadHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadHostingController.swift; sourceTree = "<group>"; };
 		45855FCC2444AC6B0079C767 /* ModuleSharing.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModuleSharing.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45A080E424327ED500AEA85F /* Entitlements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
+		45A4F130257EA970006FF21B /* liblibopenmpt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibopenmpt.a; path = ../openmpt/liblibopenmpt.a; sourceTree = "<group>"; };
 		45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModulePlayer.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45AA90F420FF2F6600794147 /* RESTRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTRoutes.swift; sourceTree = "<group>"; };
 		45AA90F720FF36C200794147 /* Replay.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = Replay.m; sourceTree = "<group>"; tabWidth = 2; };
@@ -213,7 +214,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45AA910A20FF389800794147 /* liblibopenmpt-small.a in Frameworks */,
+				45A4F13C257EAF81006FF21B /* liblibopenmpt.a in Frameworks */,
 				455CC0A62104A0E20094A5D3 /* SwiftyBeaver.framework in Frameworks */,
 				45D61F5D20E17D8F00869814 /* Alamofire.framework in Frameworks */,
 				45D61F6320E1863600869814 /* Gzip.framework in Frameworks */,
@@ -493,6 +494,7 @@
 		45D61F5E20E17D9600869814 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				45A4F130257EA970006FF21B /* liblibopenmpt.a */,
 				455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */,
 				45AA910920FF389800794147 /* liblibopenmpt-small.a */,
 				45D61F6220E1863600869814 /* Gzip.framework */,
@@ -870,7 +872,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -884,6 +886,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = ../openmpt;
+				MARKETING_VERSION = 3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -901,7 +904,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -915,6 +918,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = ../openmpt;
+				MARKETING_VERSION = 3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

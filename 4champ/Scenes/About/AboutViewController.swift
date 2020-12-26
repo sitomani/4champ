@@ -19,23 +19,23 @@ class AboutViewController: UIViewController, AboutDisplayLogic
 
   @IBOutlet weak var tableView: UITableView!
   @IBOutlet weak var bottomAnchor: NSLayoutConstraint?
-  
+
   // MARK: Object lifecycle
-  
+
   override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
   {
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     setup()
   }
-  
+
   required init?(coder aDecoder: NSCoder)
   {
     super.init(coder: aDecoder)
     setup()
   }
-  
+
   // MARK: Setup
-  
+
   private func setup()
   {
     let viewController = self
@@ -49,9 +49,9 @@ class AboutViewController: UIViewController, AboutDisplayLogic
     router.viewController = viewController
     router.dataStore = interactor
   }
-  
+
   // MARK: Routing
-  
+
   override func prepare(for segue: UIStoryboardSegue, sender: Any?)
   {
     if let scene = segue.identifier {
@@ -61,7 +61,7 @@ class AboutViewController: UIViewController, AboutDisplayLogic
       }
     }
   }
-  
+
   // MARK: View lifecycle
   override func viewDidLoad()
   {
@@ -79,17 +79,20 @@ class AboutViewController: UIViewController, AboutDisplayLogic
     navigationItem.title = "AboutView_Title".l13n().uppercased()
 
     toggleNowPlaying(modulePlayer.status.rawValue > PlayerStatus.stopped.rawValue)
-    navigationItem.leftBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(reviewNow))]
+
+    let img = UIImage(named: "favestar-grey")?.withRenderingMode(.alwaysTemplate)
+    let buttonItem = UIBarButtonItem.init(image: img, landscapeImagePhone: img, style: .plain, target: self, action: #selector(reviewNow))
+    self.navigationItem.leftBarButtonItem = buttonItem
   }
-  
+
   // MARK: Display Logic
   func displayNowPlaying(_ viewModel: About.Status.ViewModel) {
     //TODO
   }
 
-    @objc func reviewNow() {
-        ReviewActions.giveReview()
-    }
+  @objc func reviewNow() {
+    ReviewActions.giveReview()
+  }
 }
 
 extension AboutViewController: NowPlayingContainer {
@@ -109,7 +112,7 @@ extension AboutViewController: UITableViewDataSource {
     guard let titles = interactor?.details.titles else { return 0 }
     return titles.count
   }
-  
+
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     guard let contentKeys = interactor?.details.contents else { return 0 }
     if section < contentKeys.count  {
@@ -125,11 +128,11 @@ extension AboutViewController: UITableViewDataSource {
             UIApplication.shared.open(twitterUrl)
         }
     }
-  
+
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = UITableViewCell()
     guard let contentKeys = interactor?.details.contents else { return cell }
-    
+
     let text: String
     if indexPath.section < contentKeys.count {
       text = contentKeys[indexPath.section].l13n()
@@ -153,13 +156,13 @@ extension AboutViewController: UITableViewDelegate {
     guard let titles = interactor?.details.titles,
       let images = interactor?.details.images,
       section < titles.count && section < images.count else { return UIView() }
-    
+
     return AboutHeaderView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.size.width, height: 40), titleKey: titles[section], imageKey: images[section])
   }
-  
+
   func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
     guard indexPath.row < interactor?.details.licenseLinks.count ?? 0 else { return }
-    
+
     if let licUrls = interactor?.details.licenseLinks {
         let urlString = licUrls[indexPath.row]
         if let targetUrl = URL.init(string: urlString) {
