@@ -18,7 +18,7 @@ You can read more about the history of the app and follow the rewrite process on
 You can also follow the [@4champ_app](https://twitter.com/4champ_app) Twitter account to stay up to date on what's happening with the app.
 
 ### Main Features and their current status in this repository
-* Radio: You can listen to a random set of tunes from the whole collection of over 150000 modules, or stream from the head, i.e. the most recently added ones. You can also play from the local collection from set of modules that you've selected to keep for offline mode.
+* Radio: You can listen to a random set of tunes from the whole collection of over 150000 modules, or stream from the head, i.e. the most recently added ones. You can also play from the local collection from set of modules that you've selected to keep for offline mode. This was implemented first in the rewrite.
 * Search (search the AMP database by module, composer, group name or sampletexts): Implemented in October 2018.
 * Playlists (build your own playlists): Playlists implemented in April 2020.
 * Local Collection (store modules locally): Persistent storage for off-line listening of modules implemented June 2019.
@@ -44,16 +44,12 @@ To build these, run `carthage bootstrap --platform iOS` in the root folder of th
 
 **LibOpenMPT** repo does not build for iOS without small tweaks, which I have done on my own fork of the lib at https://github.com/sitomani/openmpt. In order to build it for use in connection with 4champ and the SamplePlayer demo app in this repository, you will need to take the following steps:
 
-1. Make sure you have [Premake5](https://premake.github.io/download.html) available and in the path before proceeding. 
+1. Make sure you have the [GENie](https://github.com/bkaradzic/GENie) project generator tool installed to your system
 2. Clone https://github.com/sitomani/openmpt at same folder where you cloned this repository at (the repositories will be subfolders in same level in the directory tree).
 3. Navigate in terminal to the openmpt repository root folder
-4. Execute `iOS_premake.sh` to generate the xcode project files for libopenmpt.
-5. Launch Xcode and open generated libopenmpt-small.xcworkspace file at `build/xcode/` folder in the openmpt repository
-6. Add the three included subprojects to *Link binary with libraries* build phase (you should find `openmpt-miniz.lib`, `openmpt-minimp3.lib` and `openmpt-stb_vorbis.lib` there)
-7. Get back to terminal, and execute `iOS_build.sh` to build the fat lib file for iOS use. 
-8. The library file `libopenmpt-small.a` will be found under openmpt repository root, and 4champ repository projects are configured to find it there, provided that you have cloned this repository and openmpt repository in the same folder.
-
-I plan to have a deeper look at openmpt project file generation with Genie at some point, in order to reduce the number of steps above. For the time being, the project is generated using premake, which does not fit that well when targeting iOS and one must do some housekeeping after premake run in order to build a static lib properly.
+4. Execute `iOS_genproject.sh` to generate the xcode project files for libopenmpt.
+5. Execute `iOS_build.sh` to build the fat lib file for iOS use (both X86_64 and ARM64 slices combined). 
+6. After successful build, the library file `liblibopenmpt.a` will be found under openmpt repository root, and 4champ repository projects are configured to find it there, provided that you have cloned this repository and openmpt repository in the same folder.
 
 ### Building the app
 
@@ -65,7 +61,7 @@ The Xcode generated developer certificate will only be valid for 7 days, which m
 
 ### License
 
-The code in this repository is copyright © Aleksi Sitomaniemi 2018 and licensed under [MIT license](LICENSE), **except** for HivelyTracker replay routine code which is by licenced under [BSD-3](4champ/replay/hively/LICENSE) by [Pete Gordon](https://github.com/pete-gordon).
+The code in this repository is copyright © Aleksi Sitomaniemi and licensed under [MIT license](LICENSE), **except** for HivelyTracker replay routine code which is by licenced under [BSD-3](4champ/replay/hively/LICENSE) by [Pete Gordon](https://github.com/pete-gordon).
 
 Module files included under *SamplePlayer* test project that I've used to verify the the replay routine are work of the original authors:
 

@@ -1,5 +1,11 @@
 # 4champ Development Journal
 
+### 26 December 2020 Small steps
+
+Quite some year, this one. Without touching the global events, just a bit of a summary of what happened lately for 4champ. In November, I pushed out a small update to the app that enabled reviewing through the About page. The app will also ask for a review after receiving a bit of trigger actions first, using the iOS review mechanics, so it won't be bugging you too often.
+
+For the last actions this year I managed to rebuild the libopenmpt from the latest sources, and got the updgrade out for beta testing just in time before AppStore holiday break! Now I'm cleaning up here and there and will also be posting about my progress with the libopenmtp iOS build on the OpenMPT forum. Also, updating the main repository README to reflect the changes in building the lib.
+
 ### 3 May 2020 Back in the AppStore!
 
 It's been long time coming, and the time has finally come. 4champ is now again listed at the AppStore for iOS devices. It's been a really interesting four weeks since I started the TestFlight beta first invite only, and from Easter on with public link.

@@ -87,3 +87,10 @@ In the year 2020 I have managed to finalise two things needed to get the app bac
 2. Get the third party content licensing issues solved. This is also done as of March 2020.
 
 The application is in Testflight Beta as of Easter 2020. I'm anticipating an app store within a couple of weeks.
+
+### Version 3.0 Public Release May 2020
+First public release since 2015! Hooray!
+
+### Version 3.1 
+Small update to enable app reviews.
+
