@@ -1,5 +1,7 @@
 Carthage
 Cartfile.resolved
+.DS_Store
 fastlane/report.xml
+xcuserdata
 *.ipa
 *.dSYM.zip

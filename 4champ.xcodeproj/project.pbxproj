@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -58,7 +58,6 @@
 		454F520C21610E94007011F3 /* ModuleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 454F520B21610E94007011F3 /* ModuleCell.xib */; };
 		454F520E21610F70007011F3 /* GroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 454F520D21610F70007011F3 /* GroupCell.xib */; };
 		454F521021610F83007011F3 /* ComposerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 454F520F21610F83007011F3 /* ComposerCell.xib */; };
-		455CC0A62104A0E20094A5D3 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */; };
 		4569AC8B21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4569AC8A21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift */; };
 		456E6F2E240A5FAF0034BDA2 /* PlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456E6F2D240A5FAF0034BDA2 /* PlaylistView.swift */; };
 		45855FC9244467420079C767 /* DownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45855FC8244467420079C767 /* DownloadView.swift */; };
@@ -92,8 +91,9 @@
 		45D61F5620E1647300869814 /* RadioInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F5020E1647300869814 /* RadioInteractor.swift */; };
 		45D61F5920E1695200869814 /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F5820E1695100869814 /* UIUtils.swift */; };
 		45D61F5B20E1780D00869814 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F5A20E1780D00869814 /* Appearance.swift */; };
-		45D61F5D20E17D8F00869814 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45D61F5C20E17D8F00869814 /* Alamofire.framework */; };
-		45D61F6320E1863600869814 /* Gzip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45D61F6220E1863600869814 /* Gzip.framework */; };
+		735A273E264FDFAD004EAC0C /* Gzip in Frameworks */ = {isa = PBXBuildFile; productRef = 735A273D264FDFAD004EAC0C /* Gzip */; };
+		735A2742264FDFDE004EAC0C /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = 735A2741264FDFDE004EAC0C /* SwiftyBeaver */; };
+		735A2746264FE01D004EAC0C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 735A2745264FE01D004EAC0C /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -215,9 +215,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				45A4F13C257EAF81006FF21B /* liblibopenmpt.a in Frameworks */,
-				455CC0A62104A0E20094A5D3 /* SwiftyBeaver.framework in Frameworks */,
-				45D61F5D20E17D8F00869814 /* Alamofire.framework in Frameworks */,
-				45D61F6320E1863600869814 /* Gzip.framework in Frameworks */,
+				735A2746264FE01D004EAC0C /* Alamofire in Frameworks */,
+				735A273E264FDFAD004EAC0C /* Gzip in Frameworks */,
+				735A2742264FDFDE004EAC0C /* SwiftyBeaver in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -510,7 +510,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 45D392B520B1DDEE00EEF4E3 /* Build configuration list for PBXNativeTarget "ampplayer" */;
 			buildPhases = (
-				45D61F5F20E180AF00869814 /* ShellScript */,
 				45D3929D20B1DDEC00EEF4E3 /* Sources */,
 				45D3929E20B1DDEC00EEF4E3 /* Frameworks */,
 				45D3929F20B1DDEC00EEF4E3 /* Resources */,
@@ -521,6 +520,9 @@
 			);
 			name = ampplayer;
 			packageProductDependencies = (
+				735A273D264FDFAD004EAC0C /* Gzip */,
+				735A2741264FDFDE004EAC0C /* SwiftyBeaver */,
+				735A2745264FE01D004EAC0C /* Alamofire */,
 			);
 			productName = ampplayer;
 			productReference = 45D392A120B1DDEC00EEF4E3 /* ampplayer.app */;
@@ -564,6 +566,9 @@
 			);
 			mainGroup = 45D3929820B1DDEC00EEF4E3;
 			packageReferences = (
+				735A273C264FDFAD004EAC0C /* XCRemoteSwiftPackageReference "GzipSwift" */,
+				735A2740264FDFDE004EAC0C /* XCRemoteSwiftPackageReference "SwiftyBeaver" */,
+				735A2744264FE01D004EAC0C /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 45D392A220B1DDEC00EEF4E3 /* Products */;
 			projectDirPath = "";
@@ -592,25 +597,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		45D61F5F20E180AF00869814 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Gzip.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SwiftyBeaver.framework",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		45D3929D20B1DDEC00EEF4E3 /* Sources */ = {
@@ -874,10 +860,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = ../openmpt/libopenmpt;
 				INFOPLIST_FILE = "$(SRCROOT)/4champ/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -906,10 +889,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = ../openmpt/libopenmpt;
 				INFOPLIST_FILE = "$(SRCROOT)/4champ/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -950,6 +930,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		735A273C264FDFAD004EAC0C /* XCRemoteSwiftPackageReference "GzipSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/1024jp/GzipSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.1;
+			};
+		};
+		735A2740264FDFDE004EAC0C /* XCRemoteSwiftPackageReference "SwiftyBeaver" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyBeaver/SwiftyBeaver";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.9.4;
+			};
+		};
+		735A2744264FE01D004EAC0C /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.4.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		735A273D264FDFAD004EAC0C /* Gzip */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 735A273C264FDFAD004EAC0C /* XCRemoteSwiftPackageReference "GzipSwift" */;
+			productName = Gzip;
+		};
+		735A2741264FDFDE004EAC0C /* SwiftyBeaver */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 735A2740264FDFDE004EAC0C /* XCRemoteSwiftPackageReference "SwiftyBeaver" */;
+			productName = SwiftyBeaver;
+		};
+		735A2745264FE01D004EAC0C /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 735A2744264FE01D004EAC0C /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		454D1AD822035D87006ABA85 /* AmpCDModel.xcdatamodeld */ = {
