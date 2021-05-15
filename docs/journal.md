@@ -1,5 +1,9 @@
 # 4champ Development Journal
 
+### 15 May 2021 Goodbye Carthage, Hello Swift Package Manager
+
+Thought it would be time to give [Swift Package Manager](https://swift.org/package-manager/) a try. As all my three dependencies are available thru SwiftPM the switchover was smooth & effortless <3. 
+
 ### 26 December 2020 Small steps
 
 Quite some year, this one. Without touching the global events, just a bit of a summary of what happened lately for 4champ. In November, I pushed out a small update to the app that enabled reviewing through the About page. The app will also ask for a review after receiving a bit of trigger actions first, using the iOS review mechanics, so it won't be bugging you too often.
