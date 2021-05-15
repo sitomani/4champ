@@ -26,17 +26,12 @@ You can also follow the [@4champ_app](https://twitter.com/4champ_app) Twitter ac
 
 ### Dependencies
 
-##### A. Carthage 
-4champ is built with a number of dependencies. Part of them are configured through a Cartfile, so you will need to have [Carthage](https://github.com/Carthage/Carthage) installed to prepare these. 
-
-##### B. Frameworks configured in Cartfile
+##### A. Frameworks configured through Swift Package Manager
 **[Alamofire](https://github.com/Alamofire/Alamofire)** is used for network comms.
 **[GzipSwift](https://github.com/1024jp/GzipSwift)** is used to unpack the gzipped module files.
 **[SwiftyBeaver](https://github.com/SwiftyBeaver/SwiftyBeaver)** is used for logging.
 
-To build these, run `carthage bootstrap --platform iOS` in the root folder of the project.
-
-##### C. Module Playback Libraries
+##### B. Module Playback Libraries
 
 4champ uses [libOpenMPT](https://github.com/OpenMPT/openmpt) and [Hivelytracker](https://github.com/pete-gordon/hivelytracker) for module playback. 
 
