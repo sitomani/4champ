@@ -50,7 +50,7 @@ class PlaylistSelectorPresenter: PlaylistSelectorPresentationLogic
         
         let status:DownloadStatus = response.module.hasBeenSaved() ? .complete : .unknown
         
-        let viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: moduleName, currentPlaylistIndex: plIndex, playlistOptions: options, status: status)
+        let viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: moduleName, service: response.module.serviceId, currentPlaylistIndex: plIndex, playlistOptions: options, status: status)
         viewController?.displaySelector(viewModel: viewModel)
     }
     

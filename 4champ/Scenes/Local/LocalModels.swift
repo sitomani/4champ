@@ -19,6 +19,11 @@ enum LocalSortKey: Int {
   case added
 }
 
+enum SpecialFunctions: Int {
+  case filter = -1
+  case `import` = -2
+}
+
 enum Local
 {
   // MARK: Use cases
@@ -31,6 +36,18 @@ enum Local
     struct Response {
     }
     struct ViewModel {
+    }
+  }
+  enum Import {
+    struct Request {
+      let urls: [URL]
+    }
+    struct Response {
+      let modules:[MMD]
+    }
+    struct ViewModel {
+      let summary: String
+      let names: [String]
     }
   }
 }

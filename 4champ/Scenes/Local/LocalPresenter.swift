@@ -14,6 +14,7 @@ protocol LocalPresentationLogic
   func presentDeletion(_ indexPath: IndexPath)
   func presentUpdate(_ indexPath: IndexPath)
   func presentInsert(_ indexPath: IndexPath)
+  func presentImport(response: Local.Import.Response)
 }
 
 class LocalPresenter: LocalPresentationLogic
@@ -42,5 +43,20 @@ class LocalPresenter: LocalPresentationLogic
   
   func presentInsert(_ indexPath: IndexPath) {
     viewController?.displayRowInsert(indexPath: indexPath)
+  }
+  
+  func presentImport(response: Local.Import.Response) {
+    let l13nkey: String
+    switch response.modules.count {
+    case 0:
+      l13nkey = "Local_Import_None"
+    case 1:
+      l13nkey = "Local_Import_One"
+    default:
+      l13nkey = "Local_Import_Multiple"
+    }
+    let summary = String.init(format: l13nkey.l13n(), "\(response.modules.count)")
+    let vm = Local.Import.ViewModel(summary: summary, names: response.modules.map { $0.name!})
+    viewController?.displayImportResult(viewModel: vm)
   }
 }

@@ -17,6 +17,7 @@ protocol LocalDisplayLogic: class
   func displayRowDeletion(indexPath: IndexPath)
   func displayRowUpdate(indexPath: IndexPath)
   func displayRowInsert(indexPath: IndexPath)
+  func displayImportResult(viewModel: Local.Import.ViewModel)
 }
 
 class LocalViewController: UIViewController, LocalDisplayLogic
@@ -30,6 +31,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   
   private var searchBar: UISearchBar?
   private var sortKey: LocalSortKey = .module
+  private var documentPickerVC: UIDocumentPickerViewController?
   
   // MARK: Object lifecycle
   
@@ -134,13 +136,30 @@ class LocalViewController: UIViewController, LocalDisplayLogic
       sortKey = key
       let req = Local.SortFilter.Request.init(sortKey: sortKey, filterText: searchBar?.text, ascending: false)
       interactor?.sortAndFilter(request:req)
-    } else {
-      tableView.setContentOffset(CGPoint.zero, animated: false)
+    } else if let op = SpecialFunctions.init(rawValue: sender.tag) {
+      switch op {
+      case .filter:
+        tableView.setContentOffset(CGPoint.zero, animated: false)
+      case .import:
+        selectImportModules()
+      }
     }
     updateBarButtons()
   }
   
+  func selectImportModules() {
+    if documentPickerVC == nil {
+      documentPickerVC = UIDocumentPickerViewController(documentTypes: ["public.item"], in: .open)
+      documentPickerVC?.delegate = self
+      documentPickerVC?.modalPresentationStyle = .formSheet
+      documentPickerVC?.allowsMultipleSelection = true
+    }
+    present(documentPickerVC!, animated: true)
+  }
+  
   func updateBarButtons() {
+    let addBtn = UIBarButtonItem.init(image: UIImage.init(systemName: "square.and.arrow.down"), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
+    addBtn.tag = -2 // no sort key for import button
     let btn1 = UIBarButtonItem.init(title: "ModuleInfo_Type".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn1.tag = LocalSortKey.type.rawValue
     let btn2 = UIBarButtonItem.init(title: "G_Module".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
@@ -154,7 +173,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     let btn6 = UIBarButtonItem.init(title: "ModulesView_Filter".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn6.tag = -1 //No sort key for filter
     
-    _ = [btn1, btn2, btn3, btn4, btn5, btn6].map {
+    _ = [addBtn, btn1, btn2, btn3, btn4, btn5, btn6].map {
       if $0.tag == sortKey.rawValue {
         $0.tintColor = UIColor.white
         $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
@@ -166,7 +185,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
       }
     }
     
-    self.navigationItem.leftBarButtonItems = [btn1, btn2, btn3]
+    self.navigationItem.leftBarButtonItems = [addBtn, btn1, btn2, btn3]
     self.navigationItem.rightBarButtonItems = [btn6, btn5, btn4]
   }
   
@@ -200,6 +219,14 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   
   func displayRowInsert(indexPath: IndexPath) {
     tableView.insertRows(at: [indexPath], with: .automatic)
+  }
+  
+  func displayImportResult(viewModel: Local.Import.ViewModel) {
+    let av = UIAlertController.init(title: nil, message: viewModel.summary, preferredStyle: .alert)
+    self.present(av, animated: true)
+    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3.0) {
+      av.dismiss(animated: true, completion: nil)
+    }
   }
 }
 
@@ -284,6 +311,7 @@ extension LocalViewController: UISearchBarDelegate {
   }
 }
 
+// MARK: ModuleCellDelegate
 extension LocalViewController: ModuleCellDelegate {
   func faveTapped(cell: ModuleCell) {
     guard let ip = tableView.indexPath(for: cell) else {
@@ -311,5 +339,12 @@ extension LocalViewController: ModuleCellDelegate {
         return
     }
     router?.toPlaylistSelector(module: mod)
+  }
+}
+
+extension LocalViewController: UIDocumentPickerDelegate {
+  func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+    let request = Local.Import.Request(urls: urls)
+    interactor?.importModules(request: request)
   }
 }

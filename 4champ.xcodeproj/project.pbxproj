@@ -207,6 +207,7 @@
 		45D61F5A20E1780D00869814 /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
 		45D61F5C20E17D8F00869814 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		45D61F6220E1863600869814 /* Gzip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Gzip.framework; path = Carthage/Build/iOS/Gzip.framework; sourceTree = "<group>"; };
+		735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 9 (imports).xcdatamodel"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -980,9 +981,10 @@
 		454D1AD822035D87006ABA85 /* AmpCDModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */,
 				454D1AD922035D87006ABA85 /* AmpCDModel 8 (preview).xcdatamodel */,
 			);
-			currentVersion = 454D1AD922035D87006ABA85 /* AmpCDModel 8 (preview).xcdatamodel */;
+			currentVersion = 735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */;
 			path = AmpCDModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
