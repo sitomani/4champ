@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		45BAC923208BAA5800ACEDB8 /* 1st_intro.mod in Resources */ = {isa = PBXBuildFile; fileRef = 45BAC921208BAA5800ACEDB8 /* 1st_intro.mod */; };
 		45BAC925208CA64900ACEDB8 /* mislead.ahx in Resources */ = {isa = PBXBuildFile; fileRef = 45BAC924208CA64900ACEDB8 /* mislead.ahx */; };
-		45BAC937208CF08900ACEDB8 /* liblibopenmpt-small.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45BAC936208CF08900ACEDB8 /* liblibopenmpt-small.a */; };
 		45C005B5208B7B1800126E78 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C005B4208B7B1800126E78 /* AppDelegate.swift */; };
 		45C005B7208B7B1800126E78 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C005B6208B7B1800126E78 /* ViewController.swift */; };
 		45C005BA208B7B1800126E78 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45C005B8208B7B1800126E78 /* Main.storyboard */; };
@@ -21,12 +20,13 @@
 		45D707E8208B7C52004CB16A /* Replay.m in Sources */ = {isa = PBXBuildFile; fileRef = 45D707DF208B7C52004CB16A /* Replay.m */; };
 		45D707F5208B7E2A004CB16A /* all.in.eightchannels.xm in Resources */ = {isa = PBXBuildFile; fileRef = 45D707F1208B7E2A004CB16A /* all.in.eightchannels.xm */; };
 		45D707F6208B7E2A004CB16A /* peanuts!.hvl in Resources */ = {isa = PBXBuildFile; fileRef = 45D707F2208B7E2A004CB16A /* peanuts!.hvl */; };
+		739D39B52652A095001EBC9E /* liblibopenmpt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 739D39B42652A095001EBC9E /* liblibopenmpt.a */; };
+		739D39B82652A0EC001EBC9E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 739D39B72652A0EC001EBC9E /* libz.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		45BAC921208BAA5800ACEDB8 /* 1st_intro.mod */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1st_intro.mod; sourceTree = "<group>"; };
 		45BAC924208CA64900ACEDB8 /* mislead.ahx */ = {isa = PBXFileReference; lastKnownFileType = file; path = mislead.ahx; sourceTree = "<group>"; };
-		45BAC936208CF08900ACEDB8 /* liblibopenmpt-small.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "liblibopenmpt-small.a"; path = "../../openmpt/liblibopenmpt-small.a"; sourceTree = "<group>"; };
 		45C005B1208B7B1800126E78 /* SamplePlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SamplePlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45C005B4208B7B1800126E78 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		45C005B6208B7B1800126E78 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -43,10 +43,10 @@
 		45D707DD208B7C52004CB16A /* MPTReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTReplayer.m; sourceTree = "<group>"; };
 		45D707DE208B7C52004CB16A /* Replay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Replay.h; sourceTree = "<group>"; };
 		45D707DF208B7C52004CB16A /* Replay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Replay.m; sourceTree = "<group>"; };
-		45D707EB208B7CEA004CB16A /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		45D707ED208B7DAF004CB16A /* liblibopenmpt-small.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "liblibopenmpt-small.a"; path = "../4champ/Lib/liblibopenmpt-small.a"; sourceTree = "<group>"; };
 		45D707F1208B7E2A004CB16A /* all.in.eightchannels.xm */ = {isa = PBXFileReference; lastKnownFileType = file; path = all.in.eightchannels.xm; sourceTree = "<group>"; };
 		45D707F2208B7E2A004CB16A /* peanuts!.hvl */ = {isa = PBXFileReference; lastKnownFileType = file; path = "peanuts!.hvl"; sourceTree = "<group>"; };
+		739D39B42652A095001EBC9E /* liblibopenmpt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibopenmpt.a; path = ../../openmpt/liblibopenmpt.a; sourceTree = "<group>"; };
+		739D39B72652A0EC001EBC9E /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,7 +54,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45BAC937208CF08900ACEDB8 /* liblibopenmpt-small.a in Frameworks */,
+				739D39B82652A0EC001EBC9E /* libz.tbd in Frameworks */,
+				739D39B52652A095001EBC9E /* liblibopenmpt.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,9 +130,8 @@
 		45D707EA208B7CEA004CB16A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				45D707ED208B7DAF004CB16A /* liblibopenmpt-small.a */,
-				45BAC936208CF08900ACEDB8 /* liblibopenmpt-small.a */,
-				45D707EB208B7CEA004CB16A /* libz.tbd */,
+				739D39B72652A0EC001EBC9E /* libz.tbd */,
+				739D39B42652A095001EBC9E /* liblibopenmpt.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
