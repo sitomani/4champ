@@ -149,7 +149,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   
   func selectImportModules() {
     if documentPickerVC == nil {
-      documentPickerVC = UIDocumentPickerViewController(documentTypes: ["public.item"], in: .open)
+      documentPickerVC = UIDocumentPickerViewController(documentTypes: ["public.item"], in: .import)
       documentPickerVC?.delegate = self
       documentPickerVC?.modalPresentationStyle = .formSheet
       documentPickerVC?.allowsMultipleSelection = true
@@ -223,10 +223,34 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   
   func displayImportResult(viewModel: Local.Import.ViewModel) {
     let av = UIAlertController.init(title: nil, message: viewModel.summary, preferredStyle: .alert)
-    self.present(av, animated: true)
-    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3.0) {
-      av.dismiss(animated: true, completion: nil)
+    let assignAction = UIAlertAction.init(title: "Local_Import_Assign".l13n(), style: .default) { (action) in
+      self.displayAssignDialog(viewModel: viewModel)
     }
+    let okAction = UIAlertAction.init(title: "G_OK".l13n(), style: .default, handler: nil)
+    let cancelAction = UIAlertAction.init(title: "Local_Import_Cancel".l13n(), style: .destructive, handler: { [weak self] (action) in
+      self?.interactor?.deleteModules(request: Local.Delete.Request(moduleIds: viewModel.moduleIds))
+    })
+    av.addAction(okAction)
+    av.addAction(assignAction)
+    av.addAction(cancelAction)
+
+    self.present(av, animated: true)
+  }
+  
+  private func displayAssignDialog(viewModel: Local.Import.ViewModel) {
+    let av = UIAlertController.init(title: "Local_Import_Assign".l13n(), message: viewModel.summary, preferredStyle: .alert)
+    av.addTextField { (tf) in
+      tf.placeholder = "Local_Import_Composer".l13n()
+    }
+    
+    av.addAction(UIAlertAction.init(title: "G_OK".l13n(), style: .default, handler: { [unowned av] (action) in
+      if let tf = av.textFields, let composerName = tf[0].text {
+        let request = Local.Assign.Request(moduleIds: viewModel.moduleIds, composerName: composerName)
+        self.interactor?.assignComposer(request: request)
+      }
+    }))
+    av.addAction(UIAlertAction.init(title: "G_Cancel".l13n(), style: .cancel, handler: nil))
+    present(av, animated: true)
   }
 }
 

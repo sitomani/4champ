@@ -47,7 +47,20 @@ enum Local
     }
     struct ViewModel {
       let summary: String
-      let names: [String]
+      let moduleIds: [Int]
+    }
+  }
+  
+  enum Delete {
+    struct Request {
+      let moduleIds:[Int]
+    }
+  }
+  
+  enum Assign {
+    struct Request {
+      let moduleIds:[Int]
+      let composerName: String
     }
   }
 }

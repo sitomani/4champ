@@ -56,7 +56,7 @@ class LocalPresenter: LocalPresentationLogic
       l13nkey = "Local_Import_Multiple"
     }
     let summary = String.init(format: l13nkey.l13n(), "\(response.modules.count)")
-    let vm = Local.Import.ViewModel(summary: summary, names: response.modules.map { $0.name!})
+    let vm = Local.Import.ViewModel(summary: summary, moduleIds: response.modules.map { $0.id!})
     viewController?.displayImportResult(viewModel: vm)
   }
 }

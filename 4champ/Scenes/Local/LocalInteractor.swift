@@ -14,8 +14,10 @@ protocol LocalBusinessLogic
   func playModule(at: IndexPath)
   func sortAndFilter(request: Local.SortFilter.Request)
   func deleteModule(at: IndexPath)
+  func deleteModules(request: Local.Delete.Request)
   func toggleFavorite(at: IndexPath)
   func importModules(request: Local.Import.Request)
+  func assignComposer(request: Local.Assign.Request)
   // Direct getters
   func moduleCount() -> Int
   func getModule(at: IndexPath) -> MMD
@@ -115,6 +117,23 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
     moduleStorage.deleteModule(module: mmd)
   }
   
+  func deleteModules(request: Local.Delete.Request) {
+    request.moduleIds.forEach {
+      if let mod = moduleStorage.getModuleById($0) {
+        moduleStorage.deleteModule(module: mod)
+      }
+    }
+  }
+  
+  func assignComposer(request: Local.Assign.Request) {
+    request.moduleIds.forEach {
+      if let modInfo = moduleStorage.fetchModuleInfo($0) {
+        modInfo.modAuthor = request.composerName
+      }
+    }
+    moduleStorage.saveContext()
+  }
+  
   func toggleFavorite(at: IndexPath) {
     let mmd = getModule(at: at)
     if mmd.fileExists() {
@@ -138,7 +157,6 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
       return nil
     }
     let filename = String(pathElements.popLast()!)
-    let foldername = String(pathElements.popLast()!)
 
     guard let suffix = filename.split(separator: ".").last else {
       return nil
@@ -161,7 +179,7 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
     mmd.downloadPath = nil
     mmd.name = filename
     mmd.type = filetype
-    mmd.composer = foldername
+    mmd.composer = ""
     mmd.serviceId = .local
     mmd.serviceKey = filename
     
