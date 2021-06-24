@@ -14,10 +14,10 @@ protocol LocalBusinessLogic
   func playModule(at: IndexPath)
   func sortAndFilter(request: Local.SortFilter.Request)
   func deleteModule(at: IndexPath)
-  func deleteModules(request: Local.Delete.Request)
+//  func deleteModules(request: Local.Delete.Request)
   func toggleFavorite(at: IndexPath)
-  func importModules(request: Local.Import.Request)
-  func assignComposer(request: Local.Assign.Request)
+  func importModules()
+//  func assignComposer(request: Local.Assign.Request)
   // Direct getters
   func moduleCount() -> Int
   func getModule(at: IndexPath) -> MMD
@@ -33,6 +33,7 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
 {
   var presenter: LocalPresentationLogic?
   var frc: NSFetchedResultsController<ModuleInfo>?
+  private var importController = ImportController.init()
   
   // MARK: API
   func sortAndFilter(request: Local.SortFilter.Request) {
@@ -117,22 +118,22 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
     moduleStorage.deleteModule(module: mmd)
   }
   
-  func deleteModules(request: Local.Delete.Request) {
-    request.moduleIds.forEach {
-      if let mod = moduleStorage.getModuleById($0) {
-        moduleStorage.deleteModule(module: mod)
-      }
-    }
-  }
-  
-  func assignComposer(request: Local.Assign.Request) {
-    request.moduleIds.forEach {
-      if let modInfo = moduleStorage.fetchModuleInfo($0) {
-        modInfo.modAuthor = request.composerName
-      }
-    }
-    moduleStorage.saveContext()
-  }
+//  func deleteModules(request: Local.Delete.Request) {
+//    request.moduleIds.forEach {
+//      if let mod = moduleStorage.getModuleById($0) {
+//        moduleStorage.deleteModule(module: mod)
+//      }
+//    }
+//  }
+//
+//  func assignComposer(request: Local.Assign.Request) {
+//    request.moduleIds.forEach {
+//      if let modInfo = moduleStorage.fetchModuleInfo($0) {
+//        modInfo.modAuthor = request.composerName
+//      }
+//    }
+//    moduleStorage.saveContext()
+//  }
   
   func toggleFavorite(at: IndexPath) {
     let mmd = getModule(at: at)
@@ -141,71 +142,73 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
     }
   }
   
-  func importModules(request: Local.Import.Request) {
-    var imported: [MMD] = []
-    for url in request.urls {
-      if let mod = importModule(at: url) {
-        imported.append(mod)
-      }
-    }
-    presenter?.presentImport(response: Local.Import.Response(modules: imported))
+  func importModules() {
+    importController.rootViewController = ShareUtility.topMostController()
+    importController.selectImportModules()
+//    var imported: [MMD] = []
+//    for url in request.urls {
+//      if let mod = importModule(at: url) {
+//        imported.append(mod)
+//      }
+//    }
+//    presenter?.presentImport(response: Local.Import.Response(modules: imported))
   }
   
-  private func importModule(at url: URL) -> MMD? {
-    var pathElements = url.path.split(separator: "/")
-    guard pathElements.count > 2 else {
-      return nil
-    }
-    let filename = String(pathElements.popLast()!)
-
-    guard let suffix = filename.split(separator: ".").last else {
-      return nil
-    }
-    
-    let filetype = String(suffix).uppercased()
-    guard MMD.supportedTypes.contains(filetype) else {
-      return nil
-    }
-    
-    log.debug(url.path)
-    
-    guard moduleStorage.fetchModuleInfoByKey(filename) == nil else {
-      log.info("File \(filename) already imported")
-      // already imported file with this name
-      return nil
-    }
-    
-    var mmd = MMD.init()
-    mmd.downloadPath = nil
-    mmd.name = filename
-    mmd.type = filetype
-    mmd.composer = ""
-    mmd.serviceId = .local
-    mmd.serviceKey = filename
-    
-    //store to file and make sure it's not writing over an existing mod
-    var numberExt = 0
-    var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(mmd.name!).appendingPathExtension(mmd.type!)
-    while FileManager.default.fileExists(atPath: localPath.path) {
-        numberExt += 1
-        let filename = mmd.name! + "_\(numberExt)"
-        localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
-    }
-    
-    // Copy to documents dir from the picker temp folder
-    do {
-      try FileManager.default.copyItem(at: url, to: localPath)
-      let attrs = try FileManager.default.attributesOfItem(atPath: localPath.path)
-      mmd.size = ((attrs[FileAttributeKey.size] as? Int) ?? 0) / 1024
-    } catch {
-      return nil
-    }
-    
-    mmd.localPath = localPath
-    mmd.id = moduleStorage.getNextModuleId(service: .local)
-    moduleStorage.addModule(module: mmd)
-    return mmd
-  }
+//  private func importModule(at url: URL) -> MMD? {
+//    var pathElements = url.path.split(separator: "/")
+//    guard pathElements.count > 2 else {
+//      return nil
+//    }
+//    let filename = String(pathElements.popLast()!)
+//
+//    guard let suffix = filename.split(separator: ".").last else {
+//      return nil
+//    }
+//
+//    let filetype = String(suffix).uppercased()
+//    guard MMD.supportedTypes.contains(filetype) else {
+//      return nil
+//    }
+//
+//    log.debug(url.path)
+//
+//    guard moduleStorage.fetchModuleInfoByKey(filename) == nil else {
+//      log.info("File \(filename) already imported")
+//      // already imported file with this name
+//      return nil
+//    }
+//
+//    var mmd = MMD.init()
+//    mmd.downloadPath = nil
+//    mmd.name = filename
+//    mmd.type = filetype
+//    mmd.composer = ""
+//    mmd.serviceId = .local
+//    mmd.serviceKey = filename
+//
+//    //store to file and make sure it's not writing over an existing mod
+//    var numberExt = 0
+//    var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(mmd.name!).appendingPathExtension(mmd.type!)
+//    while FileManager.default.fileExists(atPath: localPath.path) {
+//        numberExt += 1
+//        let filename = mmd.name! + "_\(numberExt)"
+//        localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
+//    }
+//
+//    // Copy to documents dir from the picker temp folder
+//    do {
+//      try FileManager.default.copyItem(at: url, to: localPath)
+//      let attrs = try FileManager.default.attributesOfItem(atPath: localPath.path)
+//      mmd.size = ((attrs[FileAttributeKey.size] as? Int) ?? 0) / 1024
+//    } catch {
+//      return nil
+//    }
+//
+//    mmd.localPath = localPath
+//    mmd.id = moduleStorage.getNextModuleId(service: .local)
+//    moduleStorage.addModule(module: mmd)
+//    return mmd
+//  }
 }
 
 extension LocalInteractor: NSFetchedResultsControllerDelegate {

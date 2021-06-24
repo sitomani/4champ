@@ -6,6 +6,37 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>4champ</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Tracker music file</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.4champ.trackermusicfile</string>
+			</array>
+		</dict>
+		<dict>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>asdasd</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+		</dict>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>asdasdasd</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+		</dict>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -32,6 +63,8 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
@@ -91,7 +124,76 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UISupportsDocumentBrowser</key>
+	<false/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Tracker music file</string>
+			<key>UTTypeIconFiles</key>
+			<array/>
+			<key>UTTypeIdentifier</key>
+			<string>com.4champ.trackermusicfile</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>669</string>
+					<string>AMF</string>
+					<string>AMS</string>
+					<string>DBM</string>
+					<string>DIGI</string>
+					<string>DMF</string>
+					<string>DSM</string>
+					<string>DTM</string>
+					<string>FAR</string>
+					<string>IT</string>
+					<string>GDM</string>
+					<string>ST26</string>
+					<string>IMF</string>
+					<string>J2B</string>
+					<string>M15</string>
+					<string>MED</string>
+					<string>MDL</string>
+					<string>MOD</string>
+					<string>MTM</string>
+					<string>NST</string>
+					<string>OCT</string>
+					<string>OKT</string>
+					<string>OSS</string>
+					<string>PTM</string>
+					<string>PSM</string>
+					<string>S3M</string>
+					<string>STM</string>
+					<string>SFX</string>
+					<string>SFX2</string>
+					<string>ULT</string>
+					<string>UMX</string>
+					<string>WOW</string>
+					<string>XM</string>
+					<string>FST</string>
+					<string>STK</string>
+					<string>MMCMP</string>
+					<string>MMS</string>
+					<string>MO3</string>
+					<string>MPTM</string>
+					<string>OK</string>
+					<string>PLM</string>
+					<string>PPM</string>
+					<string>PT36</string>
+					<string>AHX</string>
+					<string>THX</string>
+					<string>HVL</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

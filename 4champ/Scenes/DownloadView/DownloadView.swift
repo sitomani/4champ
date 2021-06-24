@@ -47,17 +47,26 @@ struct DownloadView: View {
                     .foregroundColor(.black)
 
                 HStack {
-                    Button(action: {
+                    if store.model.error == nil {
+                        Button(action: {
                         self.store.play()
                     }) {
                         Text("DownloadView_Play")
                         }.frame(maxWidth:.infinity, minHeight:50).padding(5).contentShape(Rectangle())
                         .disabled(self.store.model.progress < 1.0)
-                    if store.model.module.hasBeenSaved() == false {
+                    }
+                    if store.model.error == nil && store.model.module.hasBeenSaved() == false {
                     Button(action: {
                         self.store.keep()
                     }) {
                         Text("Dialog_Keep") //Image("preview-save")
+                        }.frame(maxWidth:.infinity, minHeight:50).padding(5).contentShape(Rectangle())
+                    }
+                    if store.model.error == nil && store.model.module.composer?.count == 0 {
+                        Button(action: {
+                            self.store.assignComposer()
+                        }) {
+                            Text("Local_Import_Assign")
                         }.frame(maxWidth:.infinity, minHeight:50).padding(5).contentShape(Rectangle())
                     }
                     Button(action: {

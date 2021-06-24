@@ -43,10 +43,12 @@ enum Local
       let urls: [URL]
     }
     struct Response {
-      let modules:[MMD]
+      let modules: [MMD]
+      let importResults: [ImportResultType]
     }
     struct ViewModel {
       let summary: String
+      let modulenames: String
       let moduleIds: [Int]
     }
   }

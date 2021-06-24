@@ -27,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   private var sharedMod: MMD?
   
   private lazy var dlController: DownloadController = DownloadController()
+  private lazy var importController: ImportController = ImportController()
   
   var window: UIWindow?
   
@@ -109,7 +110,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       if let idString = url.path.split(separator: "/").first, let modId = Int(idString) {
         dlController.show(modId: modId)
       }
-      
+    } else {
+      dlController.showSingleImport(for: url);
+//      importController.rootViewController = UIApplication.shared.windows[0].rootViewController
+//      importController.importModules(request: Local.Import.Request(urls: [url]))
     }
     return true
   }
