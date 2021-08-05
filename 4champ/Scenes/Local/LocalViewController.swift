@@ -17,7 +17,6 @@ protocol LocalDisplayLogic: class
   func displayRowDeletion(indexPath: IndexPath)
   func displayRowUpdate(indexPath: IndexPath)
   func displayRowInsert(indexPath: IndexPath)
-//  func displayImportResult(viewModel: Local.Import.ViewModel)
 }
 
 class LocalViewController: UIViewController, LocalDisplayLogic
@@ -31,7 +30,6 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   
   private var searchBar: UISearchBar?
   private var sortKey: LocalSortKey = .module
-//  private var documentPickerVC: UIDocumentPickerViewController?
   
   // MARK: Object lifecycle
   
@@ -147,16 +145,6 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     updateBarButtons()
   }
   
-//  func selectImportModules() {
-//    if documentPickerVC == nil {
-//      documentPickerVC = UIDocumentPickerViewController(documentTypes: ["public.item"], in: .import)
-//      documentPickerVC?.delegate = self
-//      documentPickerVC?.modalPresentationStyle = .formSheet
-//      documentPickerVC?.allowsMultipleSelection = true
-//    }
-//    present(documentPickerVC!, animated: true)
-//  }
-  
   func updateBarButtons() {
     let addBtn = UIBarButtonItem.init(image: UIImage.init(systemName: "square.and.arrow.down"), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     addBtn.tag = -2 // no sort key for import button
@@ -220,38 +208,6 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   func displayRowInsert(indexPath: IndexPath) {
     tableView.insertRows(at: [indexPath], with: .automatic)
   }
-  
-//  func displayImportResult(viewModel: Local.Import.ViewModel) {
-//    let av = UIAlertController.init(title: nil, message: viewModel.summary, preferredStyle: .alert)
-//    let assignAction = UIAlertAction.init(title: "Local_Import_Assign".l13n(), style: .default) { (action) in
-//      self.displayAssignDialog(viewModel: viewModel)
-//    }
-//    let okAction = UIAlertAction.init(title: "G_OK".l13n(), style: .default, handler: nil)
-//    let cancelAction = UIAlertAction.init(title: "Local_Import_Cancel".l13n(), style: .destructive, handler: { [weak self] (action) in
-//      self?.interactor?.deleteModules(request: Local.Delete.Request(moduleIds: viewModel.moduleIds))
-//    })
-//    av.addAction(okAction)
-//    av.addAction(assignAction)
-//    av.addAction(cancelAction)
-//
-//    self.present(av, animated: true)
-//  }
-//
-//  private func displayAssignDialog(viewModel: Local.Import.ViewModel) {
-//    let av = UIAlertController.init(title: "Local_Import_Assign".l13n(), message: viewModel.summary, preferredStyle: .alert)
-//    av.addTextField { (tf) in
-//      tf.placeholder = "Local_Import_Composer".l13n()
-//    }
-//
-//    av.addAction(UIAlertAction.init(title: "G_OK".l13n(), style: .default, handler: { [unowned av] (action) in
-//      if let tf = av.textFields, let composerName = tf[0].text {
-//        let request = Local.Assign.Request(moduleIds: viewModel.moduleIds, composerName: composerName)
-//        self.interactor?.assignComposer(request: request)
-//      }
-//    }))
-//    av.addAction(UIAlertAction.init(title: "G_Cancel".l13n(), style: .cancel, handler: nil))
-//    present(av, animated: true)
-//  }
 }
 
 extension LocalViewController: UITableViewDelegate {
@@ -365,10 +321,3 @@ extension LocalViewController: ModuleCellDelegate {
     router?.toPlaylistSelector(module: mod)
   }
 }
-
-//extension LocalViewController: UIDocumentPickerDelegate {
-//  func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-//    let request = Local.Import.Request(urls: urls)
-//    interactor?.importModules(request: request)
-//  }
-//}

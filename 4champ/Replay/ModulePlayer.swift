@@ -164,9 +164,9 @@ class ModulePlayer: NSObject {
   /// - parameters:
   ///    - at: index of the module to play in the playlist.
   ///          Invalid index will result in no change in playback.
-  func play(at: Int) {
+  @discardableResult func play(at: Int) -> Bool {
     guard at < playQueue.count, let path = playQueue[at].localPath?.path else {
-      return
+      return false
     }
     renderer.stop()
     if renderer.loadModule(path, type:playQueue[at].type) {
@@ -176,11 +176,13 @@ class ModulePlayer: NSObject {
         currentModule = playQueue[at]
         renderer.play()
         status = .playing
+        return true
     } else {
       log.error("Could not load tune: \(path)")
         _ = observers.map {
           $0.errorOccurred(error: .loadFailed(mmd: playQueue[at]))
         }
+      return false
     }
   }
   
@@ -221,7 +223,9 @@ class ModulePlayer: NSObject {
     while playQueue[nextIndex] == currentModule && nextIndex < playQueue.count-1 {
       nextIndex += 1
     }
-    play(at: nextIndex)
+    if play(at: nextIndex) == false {
+      playQueue.remove(at: nextIndex)
+    }
   }
   
   /// Plays the previous module in the current playlist. The playlist index

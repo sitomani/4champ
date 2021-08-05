@@ -34,7 +34,7 @@ struct DownloadView: View {
     var body: some View {
         ZStack {
             VStack {
-                Text(store.model.statusText())
+                Text(store.model.status)
                     .padding(EdgeInsets(top: 15, leading: 0, bottom: 0, trailing: 0))
                     .foregroundColor(.black)
                 
@@ -42,12 +42,14 @@ struct DownloadView: View {
                     .frame(height:4)
                     .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
 
-                Text(store.model.displayName())
-                    .padding(EdgeInsets(top: 5, leading: 0, bottom: 0, trailing: 0))
+                Text(store.model.summary)
+                    .padding(EdgeInsets(top: 5, leading: 15, bottom: 0, trailing: 15))
                     .foregroundColor(.black)
 
                 HStack {
-                    if store.model.error == nil {
+                    if store.model.error == nil &&
+                        (store.model.importType == .universalLink ||
+                            (store.model.importType == .documentLink && store.model.importIds.count > 0)) {
                         Button(action: {
                         self.store.play()
                     }) {
@@ -55,14 +57,14 @@ struct DownloadView: View {
                         }.frame(maxWidth:.infinity, minHeight:50).padding(5).contentShape(Rectangle())
                         .disabled(self.store.model.progress < 1.0)
                     }
-                    if store.model.error == nil && store.model.module.hasBeenSaved() == false {
+                    if store.model.error == nil && store.model.importType == .universalLink {
                     Button(action: {
                         self.store.keep()
                     }) {
                         Text("Dialog_Keep") //Image("preview-save")
                         }.frame(maxWidth:.infinity, minHeight:50).padding(5).contentShape(Rectangle())
                     }
-                    if store.model.error == nil && store.model.module.composer?.count == 0 {
+                    if store.model.error == nil && store.model.importType == .documentLink && store.model.importIds.count > 0 {
                         Button(action: {
                             self.store.assignComposer()
                         }) {

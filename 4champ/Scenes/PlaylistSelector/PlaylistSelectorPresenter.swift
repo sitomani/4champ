@@ -45,8 +45,11 @@ class PlaylistSelectorPresenter: PlaylistSelectorPresentationLogic
                 options.append(plstring)
             }
         }
-        
-        let moduleName = String.init(format: "LockScreen_Playing".l13n(), response.module.name ?? "", response.module.composer ?? "")
+
+        var moduleName = response.module.name ?? ""
+        if let mod_name = response.module.name, let composer_name = response.module.composer, composer_name.count > 0 {
+            moduleName = String.init(format: "LockScreen_Playing".l13n(), mod_name, composer_name)
+        }
         
         let status:DownloadStatus = response.module.hasBeenSaved() ? .complete : .unknown
         

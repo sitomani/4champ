@@ -20,22 +20,6 @@
 				<string>com.4champ.trackermusicfile</string>
 			</array>
 		</dict>
-		<dict>
-			<key>LSHandlerRank</key>
-			<string>Owner</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeName</key>
-			<string>asdasd</string>
-			<key>LSHandlerRank</key>
-			<string>Default</string>
-		</dict>
-		<dict>
-			<key>CFBundleIdentifier</key>
-			<string>asdasdasd</string>
-			<key>LSHandlerRank</key>
-			<string>Default</string>
-		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
@@ -65,7 +49,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<true/>
+	<false/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>

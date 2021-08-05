@@ -94,7 +94,6 @@
 		735A273E264FDFAD004EAC0C /* Gzip in Frameworks */ = {isa = PBXBuildFile; productRef = 735A273D264FDFAD004EAC0C /* Gzip */; };
 		735A2742264FDFDE004EAC0C /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = 735A2741264FDFDE004EAC0C /* SwiftyBeaver */; };
 		735A2746264FE01D004EAC0C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 735A2745264FE01D004EAC0C /* Alamofire */; };
-		736F9D102659501B0025E68A /* ImportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736F9D0F2659501B0025E68A /* ImportController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -209,7 +208,6 @@
 		45D61F5C20E17D8F00869814 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		45D61F6220E1863600869814 /* Gzip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Gzip.framework; path = Carthage/Build/iOS/Gzip.framework; sourceTree = "<group>"; };
 		735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 9 (imports).xcdatamodel"; sourceTree = "<group>"; };
-		736F9D0F2659501B0025E68A /* ImportController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ImportController.swift; sourceTree = "<group>"; tabWidth = 2; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -250,7 +248,6 @@
 				451B6A9E2204B6CC001848FA /* LocalViewController.swift */,
 				451B6A9F2204B6CC001848FA /* LocalInteractor.swift */,
 				451B6AA62204BBBB001848FA /* ModuleStorage.swift */,
-				736F9D0F2659501B0025E68A /* ImportController.swift */,
 			);
 			path = Local;
 			sourceTree = "<group>";
@@ -675,7 +672,6 @@
 				4543983620D0344F00991ADC /* AboutInteractor.swift in Sources */,
 				451B6AA32204B6CC001848FA /* LocalModels.swift in Sources */,
 				45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */,
-				736F9D102659501B0025E68A /* ImportController.swift in Sources */,
 				456E6F2E240A5FAF0034BDA2 /* PlaylistView.swift in Sources */,
 				454612F3245DA50700C07D51 /* SettingsInterpolationCell.swift in Sources */,
 				45AA910520FF36C200794147 /* HVLReplayer.mm in Sources */,
@@ -863,7 +859,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = ../openmpt/libopenmpt;
@@ -874,7 +870,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = ../openmpt;
-				MARKETING_VERSION = 3.2;
+				MARKETING_VERSION = 3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -892,7 +888,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = ../openmpt/libopenmpt;
@@ -903,7 +899,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = ../openmpt;
-				MARKETING_VERSION = 3.2;
+				MARKETING_VERSION = 3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

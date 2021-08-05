@@ -9,83 +9,72 @@
 import Foundation
 import SwiftUI
 
+enum ImportResultType {
+  case importSuccess
+  case alreadyImported
+  case unknownType
+  case importFailed
+}
+
+enum ImportType {
+  case unknown
+  case universalLink
+  case documentLink
+}
+
 enum ImportError: Error {
   case alreadyImported
   case importFailed
 }
 
 struct DownloadModel {
-  var module: MMD
-  var summary: String?
+  var status: String = "Search_Downloading".l13n()
+  var summary: String = "..."
   var importIds: [Int] = []
   var importResults: [ImportResultType] = []
-  var progress: Float
+  var importType: ImportType = .unknown
+  var progress: Float = 0
   var error: Error?
-  
-  func statusText() -> String {
-    if progress == 1.0 {
-      return "ShareDialog_DownloadComplete".l13n()
-    }
-    if let err = error {
-      if (err as? ImportError) == ImportError.alreadyImported {
-        return "Local_Import_None".l13n()
-      }
-      return "Error"
-    }
-    return "Search_Downloading".l13n()
-  }
-  
-  func displayName() -> String {
-    if importResults.count > 0 {
-      let alreadyImported = importResults.filter { $0 == .alreadyImported }.count
-      let unknown = importResults.filter { $0 == .unknownType }.count
-      
-      var msg = ""
-      if alreadyImported > 0 {
-        msg += "\(alreadyImported) file(s) already in database"
-      }
-      
-      if unknown > 0 {
-        msg += "\n\(unknown) unknown file(s)\n"
-      }
-      if msg.count > 0 {
-        return msg
-      }
-    }
-
-    if let name = module.name, let composer = module.composer {
-      if composer.count > 0 {
-        return "\(name) by \(composer)"
-      } else {
-        return "\(name)"
-      }
-    }
-    return "..."
-  }
 }
 
-class DownloadController: ObservableObject {
-  @Published var model: DownloadModel = DownloadModel(module: MMD(), progress: 0.0)
+class DownloadController: NSObject, ObservableObject {
+  @Published var model: DownloadModel = DownloadModel()
   
   lazy var hostingVC: UIHostingController<DownloadView> = UIHostingController<DownloadView>(rootView: DownloadView(store: self))
   weak var rootViewController: UIViewController?
   private var showing: Bool = false
+  private var documentPickerVC: UIDocumentPickerViewController?
+  private var downloadedModule: MMD?
   
   convenience init(rootVC: UIViewController) {
     self.init()
     self.rootViewController = rootVC
   }
   
+  func selectImportModules() {
+
+    if documentPickerVC == nil {
+      documentPickerVC = UIDocumentPickerViewController(documentTypes: ["public.item"], in: .import)
+      documentPickerVC?.delegate = self
+      documentPickerVC?.modalPresentationStyle = .formSheet
+      documentPickerVC?.allowsMultipleSelection = true
+    }
+    rootViewController?.present(documentPickerVC!, animated: true)
+  }
+  
   func show(modId: Int) {
     log.debug("")
+    model.importType = .universalLink
     rootViewController = ShareUtility.topMostController()
     let queuedMod = modulePlayer.playQueue.first { modId == $0.id }
     if let mod = queuedMod {
       model.progress = 1.0
-      model.module = mod
+      model.status = "ShareDialog_DownloadComplete".l13n()
+      model.summary = buildSummary(mod: mod)
     } else if let mod = moduleStorage.getModuleById(modId) {
       model.progress = 1.0
-      model.module = mod
+      model.status = "ShareDialog_DownloadComplete".l13n()
+      model.summary = buildSummary(mod: mod)
     } else {
       let fetcher = ModuleFetcher(delegate: self)
       fetcher.fetchModule(ampId: modId)
@@ -95,31 +84,76 @@ class DownloadController: ObservableObject {
     rootViewController?.present(hostingVC, animated: true, completion: nil)
   }
   
-  func showSingleImport(for url: URL) {
+  private func buildSummary(mod: MMD) -> String {
+    if let name = mod.name, let composer = mod.composer, composer.count > 0 {
+      return "\(name) by \(composer)"
+    }
+    if let name = mod.name {
+      return name
+    }
+    return "..."
+  }
+  
+  func showImport(for urls: [URL]) {
     log.debug("")
     rootViewController = ShareUtility.topMostController()
+    model.importResults = []
+    model.importType = .documentLink
+    model.importIds.removeAll()
     var result: ImportResultType? = .unknownType
-    if let mod = importModule(at: url, &result) {
-      model.progress = 1.0
-      model.module = mod
-      model.error = nil
-      model.importResults = [result!]
-      model.importIds = [mod.id!]
-    } else {
-      model.importResults = [result!]
-      switch(result) {
-      case .alreadyImported:
-        model.error = ImportError.alreadyImported
-      case .importFailed:
-        model.error = ImportError.importFailed
-      default:
-        log.debug("noop")
-      }
-    }
     showing = true
     hostingVC.view.backgroundColor = .clear
     rootViewController?.present(hostingVC, animated: true, completion: nil)
-    
+
+    for url in urls {
+      if let mod = importModule(at: url, &result) {
+        if result == ImportResultType.importSuccess {
+          model.progress = 1.0
+        }
+        model.error = nil
+        model.importResults.append(result!)
+        model.importIds.append(mod.id!)
+      } else {
+        model.importResults.append(result!)
+      }
+    }
+    let imported = model.importResults.filter { $0 == .importSuccess }.count
+
+    let l13nkey: String
+    switch imported {
+    case 0:
+      l13nkey = "Local_Import_None"
+    case 1:
+      l13nkey = "Local_Import_One"
+    default:
+      l13nkey = "Local_Import_Multiple"
+    }
+    model.status = String.init(format: l13nkey.l13n(), "\(imported)")
+
+    if model.importIds.count == 1 && model.importResults[0] == .importSuccess {
+      if let mod = moduleStorage.getModuleById(model.importIds[0]) {
+        model.summary = buildSummary(mod: mod)
+      }
+    } else {
+      let imported = model.importResults.filter { $0 == .importSuccess }.count
+      let alreadyImported = model.importResults.filter { $0 == .alreadyImported }.count
+      let unknown = model.importResults.filter { $0 == .unknownType }.count
+      
+      var summaryItems: [String] = []
+
+      if imported > 0 {
+        summaryItems.append("\(imported) files imported")
+      }
+      
+      if alreadyImported > 0 {
+        summaryItems.append("\(alreadyImported) file(s) already in database")
+      }
+      
+      if unknown > 0 {
+        summaryItems.append("\n\(unknown) unknown file(s)\n")
+      }
+      model.summary = summaryItems.joined(separator: ", ")
+    }
   }
   
   func dismiss() {
@@ -130,23 +164,45 @@ class DownloadController: ObservableObject {
   
   func play() {
     log.debug("")
-    modulePlayer.play(mmd: model.module)
+    switch model.importType {
+    case .universalLink:
+      if let mmd = downloadedModule {
+        modulePlayer.play(mmd: mmd)
+      }
+    case .documentLink:
+      model.importIds.forEach {
+        var playStarted = false
+        if let mmd = moduleStorage.getModuleById($0) {
+          if modulePlayer.playQueue.contains(mmd) == false {
+            modulePlayer.playQueue.append(mmd)
+          }
+          if !playStarted {
+            modulePlayer.play(mmd: mmd)
+            playStarted = true
+          }
+        }
+      }
+    default:
+      log.debug("noop")
+    }
     dismissView()
   }
   
   func keep() {
     log.debug("")
-    if model.module.hasBeenSaved() {
+    guard let modId = model.importIds.first, let mod = moduleStorage.getModuleById(modId) else {
       return
     }
-    moduleStorage.addModule(module: model.module)
+    if mod.hasBeenSaved() {
+      return
+    }
+    moduleStorage.addModule(module: mod)
     dismissView()
   }
   
   func assignComposer() {
-    let vm = buildImportViewModel()
-    rootViewController?.dismiss(animated: true, completion: {
-                                  self.displayAssignDialog(viewModel: vm)
+    rootViewController?.dismiss(animated: false, completion: {
+                                  self.displayAssignDialog()
                                   self.showing = false })
   }
   
@@ -172,42 +228,15 @@ class DownloadController: ObservableObject {
     moduleStorage.saveContext()
   }
   
-  private func buildImportViewModel() -> Local.Import.ViewModel {
-    let l13nkey: String
-    switch model.importIds.count {
-    case 0:
-      l13nkey = "Local_Import_None"
-    case 1:
-      l13nkey = "Local_Import_One"
-    default:
-      l13nkey = "Local_Import_Multiple"
-    }
-    let summary = String.init(format: l13nkey.l13n(), "\(model.importIds.count)")
-    let alreadyImported = model.importResults.filter { $0 == .alreadyImported }.count
-    let unknown = model.importResults.filter { $0 == .unknownType }.count
-    
-    var msg = ""
-    if alreadyImported > 0 {
-      msg += "\(alreadyImported) file(s) already in database"
-    }
-    
-    if unknown > 0 {
-      msg += "\n\(unknown) unknown file(s)\n"
-    }
-    
-    let vm = Local.Import.ViewModel(summary: summary, modulenames: msg, moduleIds: model.importIds)
-    return vm
-  }
-  
-  private func displayAssignDialog(viewModel: Local.Import.ViewModel) {
-    let av = UIAlertController.init(title: "Local_Import_Assign".l13n(), message: viewModel.summary, preferredStyle: .alert)
+  private func displayAssignDialog() {
+    let av = UIAlertController.init(title: "Local_Import_Assign".l13n(), message: model.status, preferredStyle: .alert)
     av.addTextField { (tf) in
       tf.placeholder = "Local_Import_Composer".l13n()
     }
     
     av.addAction(UIAlertAction.init(title: "G_OK".l13n(), style: .default, handler: { [unowned av] (action) in
       if let tf = av.textFields, let composerName = tf[0].text {
-        let request = Local.Assign.Request(moduleIds: viewModel.moduleIds, composerName: composerName)
+        let request = Local.Assign.Request(moduleIds: self.model.importIds, composerName: composerName)
         self.doAssignComposer(request: request)
       }
     }))
@@ -274,9 +303,12 @@ class DownloadController: ObservableObject {
   }
   
   private func discardModule() {
-    if model.module.hasBeenSaved() == false {
+    guard let modId = model.importIds.first, let mod = moduleStorage.getModuleById(modId) else {
+      return
+    }
+    if mod.hasBeenSaved() == false {
       log.debug("")
-      if let url = model.module.localPath {
+      if let url = mod.localPath {
         log.info("Deleting module \(url.lastPathComponent)")
         do {
           try FileManager.default.removeItem(at: url)
@@ -293,9 +325,16 @@ extension DownloadController: ModuleFetcherDelegate {
   func fetcherStateChanged(_ fetcher: ModuleFetcher, state: FetcherState) {
     switch state {
     case .done(let mmd):
-      self.model = DownloadModel(module: mmd, progress: 1.0, error: nil)
+      self.model = DownloadModel(status: "ShareDialog_DownloadComplete".l13n(),
+                                 summary: buildSummary(mod: mmd),
+                                 importIds: [mmd.id!],
+                                 importResults:[.importSuccess],
+                                 importType: .universalLink,
+                                 progress: 1.0,
+                                 error: nil)
+      downloadedModule = mmd
     case .downloading(let progress):
-      let model = DownloadModel(module: MMD(), progress: progress, error: nil)
+      let model = DownloadModel(progress: progress, error: nil)
       self.model = model
     case .failed(let err):
       model.error = err
@@ -305,3 +344,9 @@ extension DownloadController: ModuleFetcherDelegate {
   }
 }
 
+extension DownloadController: UIDocumentPickerDelegate {
+  
+  func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+    showImport(for: urls)
+  }
+}
