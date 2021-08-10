@@ -45,14 +45,15 @@ class DownloadController: NSObject, ObservableObject {
   private var showing: Bool = false
   private var documentPickerVC: UIDocumentPickerViewController?
   private var downloadedModule: MMD?
+  private var addToCurrentPlaylist: Bool = false
   
   convenience init(rootVC: UIViewController) {
     self.init()
     self.rootViewController = rootVC
   }
   
-  func selectImportModules() {
-
+  func selectImportModules(addToPlaylist: Bool = false) {
+    self.addToCurrentPlaylist = addToPlaylist
     if documentPickerVC == nil {
       documentPickerVC = UIDocumentPickerViewController(documentTypes: ["public.item"], in: .import)
       documentPickerVC?.delegate = self
@@ -109,6 +110,9 @@ class DownloadController: NSObject, ObservableObject {
       if let mod = importModule(at: url, &result) {
         if result == ImportResultType.importSuccess {
           model.progress = 1.0
+          if addToCurrentPlaylist, let modId = mod.id, let modInfo = moduleStorage.fetchModuleInfo(modId) {
+            moduleStorage.currentPlaylist?.addToModules(modInfo)
+          }
         }
         model.error = nil
         model.importResults.append(result!)
@@ -142,15 +146,32 @@ class DownloadController: NSObject, ObservableObject {
       var summaryItems: [String] = []
 
       if imported > 0 {
-        summaryItems.append("\(imported) files imported")
+        if (alreadyImported > 0 || unknown > 0) {
+          summaryItems.append(String.init(format:"Local_Import_Imported".l13n(), "\(imported)"))
+        } else {
+          let names:[String] = model.importIds.compactMap {
+            if let mod = moduleStorage.getModuleById($0), let name = mod.name {
+              return name
+            }
+            return nil
+          }
+          if names.count > 10 {
+            summaryItems.append(names.joined(separator: ", ") + ", ...")
+
+          } else {
+            summaryItems.append(names.joined(separator: ", "))
+          }
+        }
       }
       
       if alreadyImported > 0 {
-        summaryItems.append("\(alreadyImported) file(s) already in database")
+        let prefixString = summaryItems.count > 0 ? "\n" : ""
+        summaryItems.append(prefixString + String.init(format:"Local_Import_Already_In".l13n(), "\(alreadyImported)"))
       }
       
       if unknown > 0 {
-        summaryItems.append("\n\(unknown) unknown file(s)\n")
+        let prefixString = summaryItems.count > 0 ? "\n" : ""
+        summaryItems.append(prefixString + String.init(format:"Local_Import_Unknown".l13n(), "\(unknown)"))
       }
       model.summary = summaryItems.joined(separator: ", ")
     }

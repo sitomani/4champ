@@ -14,6 +14,7 @@ struct SUIModule: View {
     let module: MMD
     let faveCallback: ((MMD) -> Void)?
     var body: some View {
+        VStack{
         HStack {
             ZStack {
                 Image(uiImage: UIImage.init(named: "modicon")!).resizable().frame(width: 50, height: 50)
@@ -26,20 +27,24 @@ struct SUIModule: View {
                         .resizable()
                         .frame(width:30, height:30).offset(x:-15)
                 }
-            }.padding(EdgeInsets(top: 7, leading: -5, bottom: 7, trailing: 0))
+            }.padding(EdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 0))
             VStack(alignment: .leading) {
                 Text("\(module.name ?? "no name")")
                     .font(.system(size: 18))
                     .foregroundColor(.white)
-                Text(module.composer ?? "no name").font(.system(size: 12))
-                    .foregroundColor(.white).baselineOffset(-1)
+                if let composer = module.composer, composer.count > 0 {
+                    Text(module.composer ?? "no name").font(.system(size: 12))
+                    .foregroundColor(.white)
+                }
                 Text("\(module.size ?? 0) kb").font(.system(size: 12))
-                    .foregroundColor(.white).baselineOffset(-1)
+                    .foregroundColor(.white)
             }
             Spacer()
             Image(module.favorite ? "favestar-yellow" : "favestar-grey").padding(8).onTapGesture {
                 self.faveCallback?(self.module)
-            }.padding(-10)
+            }.padding(7)
+        }
+        Divider().background(Color(Appearance.separatorColor))
         }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
     }
 }
@@ -79,6 +84,10 @@ struct PlaylistView: View {
         store.interactor?.toggleShuffle()
     }
     
+    func startImport() {
+        store.interactor?.importModules()
+    }
+    
     func favorite(module: MMD) {
         store.interactor?.toggleFavorite(request: Playlists.Favorite.Request(modId: module.id!))
     }
@@ -109,6 +118,7 @@ struct PlaylistView: View {
                     }.onMove(perform: move)
                     .onDelete(perform: deleteItems)
                     .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
                 }
                 .navigationBarTitle(Text("TabBar_Playlist".l13n().uppercased()), displayMode: .inline)
                 .navigationBarItems(leading: HStack {
@@ -117,8 +127,12 @@ struct PlaylistView: View {
                     Button(action: {self.store.interactor?.startPlaylist()})
                         {Image("play-small")}
                 },
-                trailing:
-                    EditButton()).id(self.navigationButtonID)
+                trailing: HStack {
+                        Button(action: {self.startImport()})
+                        {Image(systemName: "square.and.arrow.down").padding(EdgeInsets(top: -3, leading: 0, bottom: 0, trailing: 0))
+                            .font(Font.system(size: 20, weight: .light))
+                        }
+                        EditButton()}).id(self.navigationButtonID)
                 if store.viewModel.modules.count == 0 {
                     Text("No modules on the playlist. You can add modules to a playlist by long-tapping a module on any view.").foregroundColor(.white).font(.system(size: 20)).padding(20)
                 }

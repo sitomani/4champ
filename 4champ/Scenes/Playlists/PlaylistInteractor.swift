@@ -19,6 +19,7 @@ protocol PlaylistBusinessLogic
   func removeModule(request: Playlists.Remove.Request)
   func moveModule(request: Playlists.Move.Request)
   func toggleShuffle()
+  func importModules()
   func toggleFavorite(request: Playlists.Favorite.Request)
   func playModule(request: Playlists.Play.Request)
   func startPlaylist()
@@ -35,6 +36,8 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore
   var selectedPlaylistId: String?
   var frc: NSFetchedResultsController<Playlist>?
   //var name: String = ""
+
+  private var downloadController = DownloadController.init()
 
   
   override init() {
@@ -116,6 +119,11 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore
   func startPlaylist() {
     rebuildQueue()
     modulePlayer.play(at: 0)
+  }
+  
+  func importModules() {
+    downloadController.rootViewController = ShareUtility.topMostController()
+    downloadController.selectImportModules(addToPlaylist: true)
   }
   
   private func rebuildQueue() {
