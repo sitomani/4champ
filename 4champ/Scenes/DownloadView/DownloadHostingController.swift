@@ -108,7 +108,7 @@ class DownloadController: NSObject, ObservableObject {
 
     for url in urls {
       if let mod = importModule(at: url, &result) {
-        if result == ImportResultType.importSuccess {
+        if result == ImportResultType.importSuccess || result == .alreadyImported {
           model.progress = 1.0
           if addToCurrentPlaylist, let modId = mod.id, let modInfo = moduleStorage.fetchModuleInfo(modId) {
             moduleStorage.currentPlaylist?.addToModules(modInfo)
@@ -282,11 +282,11 @@ class DownloadController: NSObject, ObservableObject {
       return nil
     }
     
-    guard moduleStorage.fetchModuleInfoByKey(filename) == nil else {
+    if let previouslyImported = moduleStorage.fetchModuleInfoByKey(filename) {
       log.info("File \(filename) already imported")
       // already imported file with this name
       status = .alreadyImported
-      return nil
+      return MMD.init(cdi: previouslyImported)
     }
     
     var mmd = MMD.init()
