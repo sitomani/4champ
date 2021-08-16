@@ -3,7 +3,7 @@
 
 Many of us who grew up with computers in the 80's and early 90's remember Amiga and particularly its mind-blowing audio capabilities which were unrivaled at the era. Amiga inspired a lot of musicians to 
 produce a vast amount of compositions, or modules as they were called. [Amiga Music Preservation](http://amp.dascene.net) is a non-profit 
-project that collects anything related to Amiga music production. AMP database boasts over 150 000 modules, 4champ app is your direct access to all that goodness.
+project that collects anything related to Amiga music production. AMP database boasts over 160 000 modules, 4champ app is your direct access to all that goodness.
 
 ### Development journal
 
@@ -23,6 +23,7 @@ You can also follow the [@4champ_app](https://twitter.com/4champ_app) Twitter ac
 * Playlists (build your own playlists): Playlists implemented in April 2020.
 * Local Collection (store modules locally): Persistent storage for off-line listening of modules implemented June 2019.
 * Settings (control stereo separation etc): Stereo separation setting implemented in November 2018.
+* Import modules from filesystem (local / cloud / network). The first complete new feature that never existed in the old generation app. August 2021.
 
 ### Dependencies
 
