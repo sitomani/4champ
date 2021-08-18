@@ -15,6 +15,8 @@ protocol LocalBusinessLogic
   func sortAndFilter(request: Local.SortFilter.Request)
   func deleteModule(at: IndexPath)
   func toggleFavorite(at: IndexPath)
+  func importModules()
+
   // Direct getters
   func moduleCount() -> Int
   func getModule(at: IndexPath) -> MMD
@@ -30,6 +32,7 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
 {
   var presenter: LocalPresentationLogic?
   var frc: NSFetchedResultsController<ModuleInfo>?
+  private var downloadController = DownloadController.init()
   
   // MARK: API
   func sortAndFilter(request: Local.SortFilter.Request) {
@@ -84,6 +87,8 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
       module.size = mi.modSize?.intValue ?? 0
       module.composer = mi.modAuthor ?? ""
       module.favorite = mi.modFavorite?.boolValue ?? false
+      module.serviceId = ModuleService(rawValue: mi.serviceId?.intValue ?? 1)
+      module.serviceKey = mi.serviceKey
       return module
     }
     return MMD()
@@ -117,6 +122,11 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
     if mmd.fileExists() {
       _ = moduleStorage.toggleFavorite(module: mmd)
     }
+  }
+  
+  func importModules() {
+    downloadController.rootViewController = ShareUtility.topMostController()
+    downloadController.selectImportModules()
   }
 }
 

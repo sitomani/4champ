@@ -41,23 +41,25 @@ struct PlaylistPickerView: View {
                 }
                 VStack{
                     if store.viewModel.status == DownloadStatus.complete {
-                Button(action: {
-                    self.deleteAction()
-                }) {
-                    HStack {
-                        Image("trashcan").renderingMode(.template).foregroundColor(.red)
-                        Text("ModulesView_Delete")
-                    }.frame(maxWidth:.infinity, minHeight:50)
-                }.background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 8, leading: 5, bottom: -12, trailing: 5)).foregroundColor(.red)
+                        Button(action: {
+                            self.deleteAction()
+                        }) {
+                            HStack {
+                                Image("trashcan").renderingMode(.template).foregroundColor(.red)
+                                Text("ModulesView_Delete")
+                            }.frame(maxWidth:.infinity, minHeight:50)
+                        }.background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 8, leading: 5, bottom: -12, trailing: 5)).foregroundColor(.red)
                     }
-                Button(action: {
-                    self.shareAction()
-                }) {
-                    HStack {
-                        Image("shareicon").renderingMode(.template).foregroundColor(.blue)
-                        Text("NP_Share")
-                    }.frame(maxWidth:.infinity, minHeight:50)
-                }.background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 8, leading: 5, bottom: 4, trailing: 5))
+                    if store.viewModel.service == .amp {
+                    Button(action: {
+                        self.shareAction()
+                    }) {
+                        HStack {
+                            Image("shareicon").renderingMode(.template).foregroundColor(.blue)
+                            Text("NP_Share")
+                        }.frame(maxWidth:.infinity, minHeight:50)
+                    }.background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 8, leading: 5, bottom: 4, trailing: 5))
+                    }
                 }.background(Color.black.opacity(0.25))
                 VStack {
                     VStack {
@@ -73,10 +75,10 @@ struct PlaylistPickerView: View {
                     HStack {
                         Button(action: addModuleToPlaylist) {
                             Text("PlaylistSelector_Add").frame(maxWidth:.infinity, minHeight:50).background(Color(Appearance.veryLightGray))
-                            }.cornerRadius(5).padding(EdgeInsets(top: 5, leading: 5, bottom: 8, trailing: 0))
+                        }.cornerRadius(5).padding(EdgeInsets(top: 5, leading: 5, bottom: 8, trailing: 0))
                         Button(action: { self.dismissAction() }) {
                             Text("G_Cancel").frame(maxWidth:.infinity, minHeight:50).background(Color(Appearance.veryLightGray))
-                            }.cornerRadius(5).padding(EdgeInsets(top: 5, leading: 0, bottom: 8, trailing: 5))
+                        }.cornerRadius(5).padding(EdgeInsets(top: 5, leading: 0, bottom: 8, trailing: 5))
                     }.background(Color.black.opacity(0.0))
                 }.background(Color(.black).opacity(0.25))
             }

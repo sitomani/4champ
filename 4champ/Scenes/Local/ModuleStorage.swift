@@ -24,6 +24,11 @@ protocol ModuleStorageInterface {
   func createPlaylist(name: String, id: String?) -> Playlist
   func saveContext()
   func fetchModuleInfo(_ id: Int) -> ModuleInfo?
+  func fetchModuleInfoByKey(_ key: String) -> ModuleInfo?
+  
+  /// Get unique id for a module
+  /// - parameter service: Identifies the service for which to get the id for. Valid services are all non-amp ones.
+  func getNextModuleId(service: ModuleService) -> Int
 }
 
 protocol ModuleStorageObserver: class {
@@ -34,6 +39,12 @@ protocol ModuleStorageObserver: class {
 class ModuleStorage: NSObject {
   private var observers: [ModuleStorageObserver] = []
   private var _currentPlaylist: Playlist?
+
+  /// Identifier ranges for different services
+  private let idRanges = [
+    ModuleService.amp: 0..<1000000,
+    ModuleService.local: 1000000..<2000000
+  ]
   
     // MARK: Core Data lazy initialisers
   private lazy var managedObjectModel: NSManagedObjectModel = {
@@ -175,6 +186,8 @@ extension ModuleStorage: ModuleStorageInterface {
     cdModule.preview = 0
     cdModule.radioOnly = 0
     cdModule.shared = nil
+    cdModule.serviceId = NSNumber.init(value: module.serviceId?.rawValue ?? 1)
+    cdModule.serviceKey = module.serviceKey
     saveContext()
     
     let mmd = MMD.init(cdi: cdModule)
@@ -266,9 +279,37 @@ extension ModuleStorage: ModuleStorageInterface {
     let fetchRequest = NSFetchRequest<ModuleInfo>.init(entityName: "ModuleInfo")
     let predicate = NSPredicate.init(format: "modId == \(id)")
     fetchRequest.predicate = predicate
+    return fetchModuleInfo(fetchRequest)
+  }
+  
+  func fetchModuleInfoByKey(_ key: String) -> ModuleInfo? {
+    let fetchRequest = NSFetchRequest<ModuleInfo>.init(entityName: "ModuleInfo")
+    let predicate = NSPredicate.init(format: "serviceKey == %@", key)
+    fetchRequest.predicate = predicate
+    return fetchModuleInfo(fetchRequest)
+  }
+  
+  func getNextModuleId(service: ModuleService) -> Int {
+    guard let range = idRanges[service] else {
+      fatalError("Invalid service or no range found")
+    }
+    let request = NSFetchRequest<ModuleInfo>.init(entityName: "ModuleInfo")
+    let lowerBound = NSPredicate.init(format: "modId >= \(range.lowerBound) AND modId < \(range.upperBound)")
+    request.predicate = lowerBound
+    request.fetchLimit = 1
+    let sortDescriptor = NSSortDescriptor(key: "modId", ascending: false)
+    request.sortDescriptors = [sortDescriptor]
     
+    if let modInfo = fetchModuleInfo(request), let modId = modInfo.modId?.intValue {
+      return modId + 1
+    }
+    // no IDs yet for this service range
+    return range.lowerBound
+  }
+    
+  private func fetchModuleInfo(_ request: NSFetchRequest<ModuleInfo>) -> ModuleInfo? {
     do {
-      let match = try managedObjectContext.fetch(fetchRequest)
+      let match = try managedObjectContext.fetch(request)
       if let module = match.first {
         return module
       }

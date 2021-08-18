@@ -66,6 +66,7 @@ class SearchPresenter: SearchPresentationLogic
       mmd.size = Int($0.size.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
       mmd.type = $0.format
       mmd.composer = $0.composer.label
+      mmd.serviceId = .amp
       mmd.note = $0.note
       if let localCopy = moduleStorage.getModuleById(id) {
         mmd.localPath = localCopy.localPath

@@ -8,6 +8,12 @@
 import Foundation
 import UIKit
 
+/// Enumeration identifying the source of a module
+enum ModuleService: Int {
+  case local = 0
+  case amp = 1
+}
+
 struct Constants {
   static let radioBufferLen = 3 // Length of the radio buffer
   static let searchDelay = 0.3  // Type wait delay before search is triggered
@@ -41,6 +47,8 @@ struct MMD: Identifiable {
     self.name = cdi.modName
     self.size = cdi.modSize?.intValue
     self.type = cdi.modType
+    self.serviceId = ModuleService.init(rawValue: cdi.serviceId?.intValue ?? 1) ?? .amp
+    self.serviceKey = cdi.serviceKey
     self.favorite = cdi.modFavorite?.boolValue ?? false
   }
   
@@ -70,7 +78,9 @@ struct MMD: Identifiable {
   var localPath: URL?
   var downloadPath: URL?
   var favorite: Bool = false
-  var note: String? 
+  var note: String?
+  var serviceId: ModuleService? // local | amp | nn?
+  var serviceKey: String? // identifier of the module in non-amp service
   func fileExists() -> Bool {
     if let path = localPath?.path {
       return FileManager.default.fileExists(atPath: path)

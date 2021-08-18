@@ -144,6 +144,7 @@ class ModuleFetcher {
           } catch {
             log.error("Could not write module data to file: \(error)")
           }
+          mmd.serviceId = .amp
           self.state = .done(mmd: mmd)
           self.state = .idle
           self.currentRequest = nil

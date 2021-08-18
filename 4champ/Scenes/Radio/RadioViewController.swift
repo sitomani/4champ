@@ -136,6 +136,8 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     switch viewModel.status {
     case .on:
       switchTitle?.text = "Radio_StatusOn".l13n()
+      switchTitle?.textColor = UIColor.white
+      radioSwitch?.onTintColor = Appearance.successColor
       radioSwitch?.isOn = true
     case .off:
       switchTitle?.text = "Radio_StatusOff".l13n()

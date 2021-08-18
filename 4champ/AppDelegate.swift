@@ -109,7 +109,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       if let idString = url.path.split(separator: "/").first, let modId = Int(idString) {
         dlController.show(modId: modId)
       }
-      
+    } else {
+      dlController.showImport(for: [url]);
     }
     return true
   }

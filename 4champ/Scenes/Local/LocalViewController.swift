@@ -134,13 +134,20 @@ class LocalViewController: UIViewController, LocalDisplayLogic
       sortKey = key
       let req = Local.SortFilter.Request.init(sortKey: sortKey, filterText: searchBar?.text, ascending: false)
       interactor?.sortAndFilter(request:req)
-    } else {
-      tableView.setContentOffset(CGPoint.zero, animated: false)
+    } else if let op = SpecialFunctions.init(rawValue: sender.tag) {
+      switch op {
+      case .filter:
+        tableView.setContentOffset(CGPoint.zero, animated: false)
+      case .import:
+        interactor?.importModules()
+      }
     }
     updateBarButtons()
   }
   
   func updateBarButtons() {
+    let addBtn = UIBarButtonItem.init(image: UIImage.init(systemName: "square.and.arrow.down"), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
+    addBtn.tag = -2 // no sort key for import button
     let btn1 = UIBarButtonItem.init(title: "ModuleInfo_Type".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn1.tag = LocalSortKey.type.rawValue
     let btn2 = UIBarButtonItem.init(title: "G_Module".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
@@ -154,7 +161,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     let btn6 = UIBarButtonItem.init(title: "ModulesView_Filter".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn6.tag = -1 //No sort key for filter
     
-    _ = [btn1, btn2, btn3, btn4, btn5, btn6].map {
+    _ = [addBtn, btn1, btn2, btn3, btn4, btn5, btn6].map {
       if $0.tag == sortKey.rawValue {
         $0.tintColor = UIColor.white
         $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
@@ -166,7 +173,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
       }
     }
     
-    self.navigationItem.leftBarButtonItems = [btn1, btn2, btn3]
+    self.navigationItem.leftBarButtonItems = [addBtn, btn1, btn2, btn3]
     self.navigationItem.rightBarButtonItems = [btn6, btn5, btn4]
   }
   
@@ -284,6 +291,7 @@ extension LocalViewController: UISearchBarDelegate {
   }
 }
 
+// MARK: ModuleCellDelegate
 extension LocalViewController: ModuleCellDelegate {
   func faveTapped(cell: ModuleCell) {
     guard let ip = tableView.indexPath(for: cell) else {

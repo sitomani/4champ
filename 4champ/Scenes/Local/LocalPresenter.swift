@@ -14,6 +14,7 @@ protocol LocalPresentationLogic
   func presentDeletion(_ indexPath: IndexPath)
   func presentUpdate(_ indexPath: IndexPath)
   func presentInsert(_ indexPath: IndexPath)
+//  func presentImport(response: Local.Import.Response)
 }
 
 class LocalPresenter: LocalPresentationLogic
