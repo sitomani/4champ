@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -176,7 +177,7 @@
                                     <constraint firstAttribute="width" constant="81" id="yYW-v0-oRt"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <state key="normal" image="radioskip"/>
+                                <state key="normal" image="next-small"/>
                                 <connections>
                                     <action selector="nextTapped:" destination="9pv-A4-QxB" eventType="touchUpInside" id="IeR-Qv-vTm"/>
                                 </connections>
@@ -212,6 +213,27 @@
                                     <action selector="ntfButtonTapped:" destination="9pv-A4-QxB" eventType="touchUpInside" id="9OF-SI-ydB"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qcG-Wi-evM">
+                                <rect key="frame" x="220" y="9" width="81" height="53"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="53" id="IYJ-zg-uAz"/>
+                                    <constraint firstAttribute="height" constant="53" id="SmA-ir-CSr"/>
+                                    <constraint firstAttribute="width" constant="81" id="nN4-Ga-A7N"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="57" id="ykb-p0-XTt"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" image="prev-small"/>
+                                <connections>
+                                    <action selector="prevTapped:" destination="9pv-A4-QxB" eventType="touchUpInside" id="Hge-sN-351"/>
+                                </connections>
+                            </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="zEe-nb-Fcg">
+                                <rect key="frame" x="0.0" y="270" width="375" height="304"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <connections>
+                                    <outlet property="delegate" destination="9pv-A4-QxB" id="8fj-kd-O1d"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
                         <color key="backgroundColor" red="0.073797307908535004" green="0.2040666937828064" blue="0.33733105659484863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -219,21 +241,27 @@
                             <constraint firstItem="73F-xa-P2f" firstAttribute="top" secondItem="Ac5-pb-fyE" secondAttribute="bottom" constant="10" id="1qy-n5-1U8"/>
                             <constraint firstItem="TVg-ts-xlz" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="20" id="2BM-fr-qSE"/>
                             <constraint firstItem="PQr-Ze-W5v" firstAttribute="trailing" secondItem="RQm-Tf-BLL" secondAttribute="trailing" constant="20" id="9ba-LF-f0V"/>
+                            <constraint firstItem="zEe-nb-Fcg" firstAttribute="bottom" secondItem="PQr-Ze-W5v" secondAttribute="bottom" id="A3w-Se-vOI"/>
                             <constraint firstItem="PQr-Ze-W5v" firstAttribute="trailing" secondItem="YZW-HR-7AL" secondAttribute="trailing" constant="4" id="DH6-my-XZ2"/>
                             <constraint firstItem="QUj-fw-iU8" firstAttribute="top" secondItem="PQr-Ze-W5v" secondAttribute="top" constant="24" id="Iul-0i-yEn"/>
+                            <constraint firstItem="qcG-Wi-evM" firstAttribute="top" secondItem="PQr-Ze-W5v" secondAttribute="top" constant="9" id="KgW-Md-kl8"/>
                             <constraint firstItem="73F-xa-P2f" firstAttribute="leading" secondItem="Ac5-pb-fyE" secondAttribute="leading" id="O5k-Pv-nA8"/>
                             <constraint firstItem="AIU-Eo-k1H" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="20" id="OeL-iW-cNz"/>
                             <constraint firstItem="PQr-Ze-W5v" firstAttribute="trailing" secondItem="QUj-fw-iU8" secondAttribute="trailing" constant="74" id="OwL-Iy-acT"/>
                             <constraint firstItem="s3G-WD-8hy" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="20" id="Pzw-zQ-Azd"/>
                             <constraint firstItem="RQm-Tf-BLL" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="20" id="SoZ-me-mY4"/>
                             <constraint firstItem="PQr-Ze-W5v" firstAttribute="trailing" secondItem="s3G-WD-8hy" secondAttribute="trailing" constant="20" id="Vud-Op-6RM"/>
+                            <constraint firstItem="zEe-nb-Fcg" firstAttribute="top" secondItem="s3G-WD-8hy" secondAttribute="bottom" constant="8" id="YAT-eA-2YZ"/>
                             <constraint firstItem="TVg-ts-xlz" firstAttribute="top" secondItem="YZW-HR-7AL" secondAttribute="bottom" constant="96" id="cK8-Tz-Q3E"/>
                             <constraint firstItem="QUj-fw-iU8" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="78" id="eC9-aG-EXQ"/>
+                            <constraint firstItem="zEe-nb-Fcg" firstAttribute="trailing" secondItem="PQr-Ze-W5v" secondAttribute="trailing" id="eXh-8p-vxB"/>
                             <constraint firstItem="Ac5-pb-fyE" firstAttribute="trailing" secondItem="TVg-ts-xlz" secondAttribute="trailing" id="gaR-jT-mnV"/>
                             <constraint firstItem="RQm-Tf-BLL" firstAttribute="top" secondItem="YZW-HR-7AL" secondAttribute="bottom" constant="3" id="j6t-TF-8Yp"/>
+                            <constraint firstItem="PQr-Ze-W5v" firstAttribute="trailing" secondItem="qcG-Wi-evM" secondAttribute="trailing" constant="74" id="qad-su-sj7"/>
                             <constraint firstItem="Ac5-pb-fyE" firstAttribute="leading" secondItem="TVg-ts-xlz" secondAttribute="leading" id="rHQ-sv-NpU"/>
                             <constraint firstItem="Ac5-pb-fyE" firstAttribute="top" secondItem="TVg-ts-xlz" secondAttribute="bottom" id="rq2-ys-x2m"/>
                             <constraint firstItem="PQr-Ze-W5v" firstAttribute="trailing" secondItem="TVg-ts-xlz" secondAttribute="trailing" constant="20" id="sSL-qY-8Bo"/>
+                            <constraint firstItem="zEe-nb-Fcg" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" id="tIj-Mp-TCd"/>
                             <constraint firstItem="73F-xa-P2f" firstAttribute="trailing" secondItem="Ac5-pb-fyE" secondAttribute="trailing" id="v7H-q7-g9H"/>
                             <constraint firstItem="Ac5-pb-fyE" firstAttribute="top" secondItem="TVg-ts-xlz" secondAttribute="bottom" id="vCe-bC-ygr"/>
                             <constraint firstItem="s3G-WD-8hy" firstAttribute="top" secondItem="73F-xa-P2f" secondAttribute="bottom" constant="10" id="vWX-3X-TwB"/>
@@ -251,9 +279,12 @@
                         <outlet property="faveButton" destination="Fyg-Y7-fs2" id="06B-Cg-UGJ"/>
                         <outlet property="localLabel" destination="4OQ-0n-pEG" id="KJo-Hq-dvq"/>
                         <outlet property="nameLabel" destination="76e-bz-4oq" id="1YO-ok-OPg"/>
+                        <outlet property="nextButton" destination="YZW-HR-7AL" id="vt3-gh-Gsa"/>
                         <outlet property="nextUpTitle" destination="TVg-ts-xlz" id="Ift-0M-zMk"/>
                         <outlet property="notifyButton" destination="s3G-WD-8hy" id="CdB-zA-5Qp"/>
+                        <outlet property="prevButton" destination="qcG-Wi-evM" id="wfY-QT-rfv"/>
                         <outlet property="radioSwitch" destination="AIU-Eo-k1H" id="nSu-Sb-Yo5"/>
+                        <outlet property="radioTable" destination="zEe-nb-Fcg" id="quM-Sb-snq"/>
                         <outlet property="saveButton" destination="C2i-QI-t6Z" id="tUk-hP-y85"/>
                         <outlet property="shareButton" destination="dc9-dD-PrN" id="ePR-wh-KiR"/>
                         <outlet property="sizeLabel" destination="YRF-yg-SgF" id="orJ-zV-4md"/>
@@ -263,7 +294,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3354" y="-362"/>
+            <point key="canvasLocation" x="3352.8000000000002" y="-362.06896551724139"/>
         </scene>
         <!--Radio-->
         <scene sceneID="p7G-go-eUf">
@@ -1004,7 +1035,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" placeholder="Type to search" showsScopeBar="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gaD-2L-PpF">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="103"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="98"/>
                                 <color key="barTintColor" red="0.047058823530000002" green="0.14901960780000001" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <scopeButtonTitles>
@@ -1015,12 +1046,12 @@
                                 </scopeButtonTitles>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="76" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="CIQ-bO-rf0">
-                                <rect key="frame" x="0.0" y="103" width="375" height="515"/>
+                                <rect key="frame" x="0.0" y="98" width="375" height="520"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </tableView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="8wg-n4-mQe">
-                                <rect key="frame" x="177.5" y="113" width="20" height="20"/>
+                                <rect key="frame" x="177.5" y="108" width="20" height="20"/>
                             </activityIndicatorView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ymZ-1X-6xh">
                                 <rect key="frame" x="0.0" y="616" width="375" height="2"/>
@@ -1078,7 +1109,6 @@
         <image name="preview-keep" width="22" height="22"/>
         <image name="preview-save" width="22" height="22"/>
         <image name="radio" width="30" height="30"/>
-        <image name="radioskip" width="35" height="35"/>
         <image name="search" width="30" height="30"/>
         <image name="settings" width="22" height="22"/>
         <image name="shareicon" width="20" height="20"/>
@@ -1086,6 +1116,9 @@
         <image name="vizbars_disabled" width="22" height="22"/>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

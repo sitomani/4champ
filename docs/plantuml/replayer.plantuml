@@ -1,0 +1,89 @@
+@startuml Replayer
+allowmixing 
+
+
+legend left
+    |Color| Type |
+    |<#business>| 4champ |
+    |<#lightgreen>| iOS Core Audio |
+    |<#lightblue>| Third party |
+endlegend
+
+
+class Replay <<ReplayControl, ReplayInformation>> {
+    -audioUnit: AudioComponentInstance
+    -renderer<<ReplayControl, ReplayInformation, ReplayerStream>>
+    initAudio() 
+    play()
+    stop()
+    pause()
+    resume()
+    - playbackCallback()
+}
+
+interface ReplayInformation {
+    currentPosition()
+    moduleLength()
+    volumeOnChannel(int)
+    numberOfChannels()
+    samples()
+    instruments()
+}
+
+interface ReplayControl {
+    loadModule(path)
+    setCurrentPosition(int)
+    setStereoSeparation(int)
+    setInterpolationFilterLength(int)
+}
+
+interface ReplayerStream {
+    readFrames(count, bufLeft, bufRight)
+}
+
+class MTPReplayer <<ReplayControl, ReplayInformation>> implements ReplayerStream {
+
+}
+
+class HVLReplayer <<ReplayControl, ReplayInformation>> implements ReplayerStream {
+
+}
+
+interface ReplayStreamDelegate {
+    reachedEndOfStream(Replayer)
+}
+
+interface ReplayStatusDelegate {
+    playStatusChanged(Replayer)
+}
+interface AURenderCallback #lightgreen {
+    callbackFunction    
+}
+
+Replay o-- HVLReplayer
+Replay o-- MTPReplayer
+Replay --> ReplayerStream
+
+App --> Replay
+App -.-|> ReplayStreamDelegate
+App -.-|> ReplayStatusDelegate
+Replay -up-> ReplayStreamDelegate
+Replay -up-> ReplayStatusDelegate
+
+Replay -.left--|> ReplayInformation
+Replay -.left--|> ReplayControl
+Replay -.right-|> AURenderCallback
+AudioComponentInstance --> AURenderCallback
+
+package libopenmpt #lightblue {
+    
+}
+package hvl_replay #lightblue {
+}
+
+class AudioComponentInstance #lightgreen
+
+Replay *-right-> AudioComponentInstance
+MTPReplayer --> libopenmpt
+HVLReplayer --> hvl_replay
+@enduml

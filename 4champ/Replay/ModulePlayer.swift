@@ -63,7 +63,8 @@ class ModulePlayer: NSObject {
   var playQueue: [MMD] = [] 
   let renderer = Replay()
   let mpImage = UIImage.init(named: "albumart")!
-  
+  weak var radioRemoteControl: RadioRemoteControl?
+    
   var currentModule: MMD? {
     // on currentModule change, post info on MPNowPlayingInfoCenter
     didSet {
@@ -169,13 +170,17 @@ class ModulePlayer: NSObject {
       return false
     }
     renderer.stop()
-    if renderer.loadModule(path, type:playQueue[at].type) {
+    let mod = playQueue[at]
+    if renderer.loadModule(path, type:mod.type) {
         let settings = SettingsInteractor()
         setStereoSeparation(settings.stereoSeparation)
         setInterpolation(settings.interpolation)
-        currentModule = playQueue[at]
+        currentModule = mod
         renderer.play()
         status = .playing
+        if radioOn {
+          radioRemoteControl?.appendToSessionHistory(module: mod)
+        }
         return true
     } else {
       log.error("Could not load tune: \(path)")
@@ -229,11 +234,17 @@ class ModulePlayer: NSObject {
   }
   
   /// Plays the previous module in the current playlist. The playlist index
-  /// will not wrap from start to end when using `playPrev()` function
+  /// will not wrap from start to end when using `playPrev()` function.
+  /// Function has custom implementation for Radio mode.
   func playPrev() {
+    guard !radioOn else {
+      radioRemoteControl?.playPrev()
+      return;
+    }
     guard let current = currentModule, playQueue.count > 0 else {
       return
     }
+        
     var prevIndex = 0
     if let index = playQueue.firstIndex(of: current) {
       if index > 0 {
@@ -242,7 +253,7 @@ class ModulePlayer: NSObject {
     }
     play(at: prevIndex)
   }
-  
+    
   /// Pauses the current playback
   func pause() {
     guard status == .playing else { return }

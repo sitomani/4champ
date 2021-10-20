@@ -12,7 +12,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 
-@interface Replay () <AVAudioPlayerDelegate> {
+@interface Replay () {
   AudioComponentInstance audioUnit;
   AURenderCallbackStruct callbackStruct;
   id<ReplayControl, ReplayInformation, ReplayerStream> renderer;

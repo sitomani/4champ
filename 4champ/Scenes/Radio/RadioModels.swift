@@ -60,6 +60,7 @@ enum Radio
     struct ViewModel {
       var nowPlaying: MMD?
       var nextUp: String?
+      var historyAvailable: Bool
     }
   }
   

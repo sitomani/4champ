@@ -42,6 +42,10 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   
   @IBOutlet weak var notifyButton: UIButton?
   @IBOutlet weak var radioSwitch: UISwitch?
+  @IBOutlet weak var prevButton: UIButton?
+  @IBOutlet weak var nextButton: UIButton?
+  
+  @IBOutlet weak var radioTable: UITableView?
   
   // MARK: Object lifecycle
   
@@ -113,7 +117,11 @@ class RadioViewController: UIViewController, RadioDisplayLogic
 
     interactor?.refreshLocalNotificationsStatus()
     interactor?.refreshBadge()
-    displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel(nowPlaying: nil, nextUp: nil))
+    displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel(nowPlaying: nil, nextUp: nil, historyAvailable: false))
+    
+    radioTable?.dataSource = self
+    radioTable?.delegate = self
+    radioTable?.register(RadioSessionCell.self, forCellReuseIdentifier: RadioSessionCell.ReuseId)
     
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
     currentModuleView?.addGestureRecognizer(longPressRecognizer)
@@ -168,6 +176,9 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       nextUpTitle?.text = ""
     }
     
+    prevButton?.isEnabled = viewModel.historyAvailable
+    nextButton?.isEnabled = viewModel.nowPlaying != nil
+    
     if let current = viewModel.nowPlaying {
       currentModule = current
       currentModuleView?.alpha = 1
@@ -191,6 +202,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       saveButton?.isHidden = false
       shareButton?.isHidden = true
     }
+    radioTable?.reloadData()
   }
   
   func displayPlaybackTime(viewModel: Radio.Playback.ViewModel) {
@@ -233,6 +245,10 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     interactor?.playNext()
   }
   
+  @IBAction private func prevTapped(_ sender: UIButton) {
+    interactor?.playPrev();
+  }
+  
   @IBAction private func controlSwitchChanged(_ sender: UISwitch) {
     log.debug("")
     if let channelSelection = RadioChannel(rawValue: channelSegments?.selectedSegmentIndex ?? 0) {
@@ -253,3 +269,28 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     }
   }
 }
+
+extension RadioViewController: UITableViewDataSource, UITableViewDelegate {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return interactor?.getSessionLength() ?? 0
+  }
+  
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    if let cell = tableView.dequeueReusableCell(withIdentifier: RadioSessionCell.ReuseId) {
+      cell.textLabel?.text = interactor?.getModule(at: indexPath)?.name ?? "n/a"
+      return cell
+    } else {
+      fatalError()
+    }
+  }
+  
+  func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+    log.debug("foo")
+    return indexPath
+  }
+  
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    interactor?.playFromSessionHistory(at: indexPath)
+  }
+}
+
