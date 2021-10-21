@@ -57,7 +57,7 @@ protocol RadioBusinessLogic
 /// Protocol to handle play history in radio mode
 protocol RadioRemoteControl: NSObjectProtocol {
   func playPrev()
-  func appendToSessionHistory(module: MMD)
+  func addToSessionHistory(module: MMD)
 }
 
 /// Radio datastore for keeping currently selected channel and status
@@ -161,8 +161,8 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   func playPrev() {
     guard radioOn && radioSessionHistory.count > 0, let currentMod = modulePlayer.currentModule else { return }
 
-    if let currentIndex = radioSessionHistory.index(of: currentMod), currentIndex > 0 {
-      let nextIndex = currentIndex - 1
+    if let currentIndex = radioSessionHistory.index(of: currentMod), currentIndex >= 0 {
+      let nextIndex = currentIndex + 1
       postFetchAction = .insertToQueue
       let fetcher = ModuleFetcher.init(delegate: self)
       fetcher.fetchModule(ampId: radioSessionHistory[nextIndex].id!)
@@ -172,13 +172,16 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   func playFromSessionHistory(at: IndexPath) {
     postFetchAction = .startPlay
     let fetcher = ModuleFetcher.init(delegate: self)
-    let historyIndex = radioSessionHistory.count - at.row - 1
+    let historyIndex = at.row + 1
     fetcher.fetchModule(ampId: radioSessionHistory[historyIndex].id!)
   }
     
-  func appendToSessionHistory(module: MMD) {
+  func addToSessionHistory(module: MMD) {
     if !radioSessionHistory.contains(module) {
-      radioSessionHistory.append(module)
+      radioSessionHistory.insert(module, at: 0)
+      if radioSessionHistory.count > 1 {
+        presenter?.presentSessionHistoryInsert()
+      }
     }
   }
 
@@ -226,11 +229,13 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   }
   
   func getSessionLength() -> Int {
-    return radioSessionHistory.count
+    guard radioSessionHistory.count > 0 else { return 0 }
+    return radioSessionHistory.count - 1 // the currently playing item is not shown
   }
   
   func getModule(at: IndexPath) -> MMD? {
-    return radioSessionHistory[radioSessionHistory.count - at.row - 1]
+    guard radioSessionHistory.count > at.row else { return nil }
+    return radioSessionHistory[at.row + 1]
   }
   
   // MARK: private functions

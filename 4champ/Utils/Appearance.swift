@@ -25,6 +25,7 @@ class Appearance {
   static var barTitleColor = UIColor.init(rgb: 0xc0c0c0)
   static var veryLightGray = UIColor.init(rgb: 0xf0f0f0)
   static var cellColor = UIColor.clear
+  static var radioSeparatorColor = UIColor.init(rgb: 0x294976)
   
   class func setup() {
     let navigationBarAppearace = UINavigationBar.appearance()

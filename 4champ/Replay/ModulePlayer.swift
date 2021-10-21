@@ -179,7 +179,7 @@ class ModulePlayer: NSObject {
         renderer.play()
         status = .playing
         if radioOn {
-          radioRemoteControl?.appendToSessionHistory(module: mod)
+          radioRemoteControl?.addToSessionHistory(module: mod)
         }
         return true
     } else {

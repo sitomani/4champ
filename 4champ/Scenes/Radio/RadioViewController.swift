@@ -14,6 +14,7 @@ protocol RadioDisplayLogic: class
   func displayPlaybackTime(viewModel: Radio.Playback.ViewModel)
   func displayLocalNotificationStatus(viewModel: Radio.LocalNotifications.ViewModel)
   func displayNewModules(viewModel: Radio.NewModules.ViewModel)
+  func displaySessionHistoryInsert()
 }
 
 class RadioViewController: UIViewController, RadioDisplayLogic
@@ -29,6 +30,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   
   @IBOutlet weak var switchTitle: UILabel?
   @IBOutlet weak var nextUpTitle: UILabel?
+  @IBOutlet weak var historyTitle: UILabel?
   
   @IBOutlet weak var nameLabel: UILabel?
   @IBOutlet weak var composerLabel: UILabel?
@@ -46,7 +48,17 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   @IBOutlet weak var nextButton: UIButton?
   
   @IBOutlet weak var radioTable: UITableView?
+  @IBOutlet weak var tableBottomConstraint: NSLayoutConstraint?
+
+  private let gradientLayer = CAGradientLayer()
+  let gradientColorTop =  UIColor.init(rgb: 0x16538a)
+  let gradientColorBottom = UIColor.init(rgb: 0x16538a)
   
+  enum GradientAnimationDirection: String {
+    case none
+    case `in` = "colorIn"
+    case out = "colorOut"
+  }
   // MARK: Object lifecycle
   
   override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
@@ -114,14 +126,18 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     
     channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
     channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
-
+    downloadProgress?.trackTintColor = UIColor.white.withAlphaComponent(0.1)
+    
     interactor?.refreshLocalNotificationsStatus()
     interactor?.refreshBadge()
     displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel(nowPlaying: nil, nextUp: nil, historyAvailable: false))
     
     radioTable?.dataSource = self
     radioTable?.delegate = self
+    radioTable?.separatorStyle = .none
     radioTable?.register(RadioSessionCell.self, forCellReuseIdentifier: RadioSessionCell.ReuseId)
+
+    setupGradientBackground()
     
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
     currentModuleView?.addGestureRecognizer(longPressRecognizer)
@@ -139,7 +155,39 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     super.viewDidAppear(animated)
   }
   
-  // MARK: Do something
+
+  func setupGradientBackground() {
+      gradientLayer.colors = [gradientColorTop.withAlphaComponent(0).cgColor, gradientColorBottom.withAlphaComponent(0).cgColor]
+      gradientLayer.locations = [0.0, 1.0]
+      gradientLayer.drawsAsynchronously = true
+      gradientLayer.frame = CGRect.init(x: 0, y: 0, width: view.frame.width, height: currentModuleView?.frame.height ?? 100)
+      currentModuleView?.layer.insertSublayer(gradientLayer, at:0)
+  }
+  
+  func animateGradient(_ direction: GradientAnimationDirection) {
+    guard gradientLayer.animation(forKey: direction.rawValue) == nil else { return }
+    gradientLayer.removeAnimation(forKey: GradientAnimationDirection.in.rawValue)
+    gradientLayer.removeAnimation(forKey: GradientAnimationDirection.out.rawValue)
+
+    let startAlphas: [CGFloat] = direction == .in ? [0, 0] : [1,0.2]
+    gradientLayer.colors = [gradientColorTop.withAlphaComponent(startAlphas[0]).cgColor, gradientColorBottom.withAlphaComponent(startAlphas[1]).cgColor]
+
+    let gradientChangeAnimation = CABasicAnimation(keyPath: "colors")
+    gradientChangeAnimation.duration = 0.5
+    
+    let endAlphas: [CGFloat] = direction == .in ? [1, 0.2] : [0,0]
+
+    gradientChangeAnimation.toValue = [
+      gradientColorTop.withAlphaComponent(endAlphas[0]).cgColor,
+      gradientColorBottom.withAlphaComponent(endAlphas[1]).cgColor
+    ]
+    gradientChangeAnimation.fillMode = CAMediaTimingFillMode.forwards
+    gradientChangeAnimation.isRemovedOnCompletion = false
+    gradientLayer.add(gradientChangeAnimation, forKey: direction.rawValue)
+  }
+ 
+  
+  
   func displayControlStatus(viewModel: Radio.Control.ViewModel) {
     switch viewModel.status {
     case .on:
@@ -173,7 +221,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     if let nextUp = viewModel.nextUp {
       nextUpTitle?.text = nextUp
     } else {
-      nextUpTitle?.text = ""
+      nextUpTitle?.text = radioSwitch?.isOn ?? false ? " " : "" // just to keep the space open when radio is on
     }
     
     prevButton?.isEnabled = viewModel.historyAvailable
@@ -190,6 +238,8 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       saveButton?.isHidden = current.hasBeenSaved()
       // For now, hide the share button (sharing through the long-tap menu)
       shareButton?.isHidden = true
+      animateGradient(.in)
+      tableBottomConstraint?.constant = 50.0
     } else {
       currentModule = nil
       currentModuleView?.alpha = 0.8
@@ -201,8 +251,11 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       faveButton?.isSelected = false
       saveButton?.isHidden = false
       shareButton?.isHidden = true
+      tableBottomConstraint?.constant = 0
+      radioTable?.reloadData()
+      animateGradient(.out)
+      historyTitle?.text = ""
     }
-    radioTable?.reloadData()
   }
   
   func displayPlaybackTime(viewModel: Radio.Playback.ViewModel) {
@@ -212,7 +265,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   func displayLocalNotificationStatus(viewModel: Radio.LocalNotifications.ViewModel) {
     log.debug("")
     notifyButton?.setTitle(viewModel.buttonTitle, for: .normal)
-    notifyButton?.isHidden = false
+    notifyButton?.isHidden = true
   }
 
   func displayNewModules(viewModel: Radio.NewModules.ViewModel) {
@@ -227,6 +280,11 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       channelSegments?.setTitle("Radio_New".l13n(), forSegmentAt: 1)
       navigationController?.tabBarItem.badgeValue = nil
     }
+  }
+  
+  func displaySessionHistoryInsert() {
+    historyTitle?.text = "Previous:"
+    radioTable?.insertRows(at: [IndexPath.init(item: 0, section: 0)], with: .top)
   }
   
   @IBAction private func saveTapped(_ sender: UIButton) {
@@ -276,8 +334,11 @@ extension RadioViewController: UITableViewDataSource, UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    if let cell = tableView.dequeueReusableCell(withIdentifier: RadioSessionCell.ReuseId) {
-      cell.textLabel?.text = interactor?.getModule(at: indexPath)?.name ?? "n/a"
+    if let cell = tableView.dequeueReusableCell(withIdentifier: RadioSessionCell.ReuseId), let mod = interactor?.getModule(at: indexPath) {
+      let modName = mod.name ?? "n/a"
+      let composer = mod.composer ?? "n/a"
+      
+      cell.textLabel?.text = "\(modName.trimmingCharacters(in: .whitespaces)) by \(composer)"
       return cell
     } else {
       fatalError()
@@ -291,6 +352,10 @@ extension RadioViewController: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     interactor?.playFromSessionHistory(at: indexPath)
+  }
+  
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    return 40
   }
 }
 

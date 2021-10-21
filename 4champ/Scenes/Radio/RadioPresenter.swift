@@ -11,6 +11,7 @@ protocol RadioPresentationLogic
 {
   func presentControlStatus(status: RadioStatus)
   func presentChannelBuffer(buffer: [MMD], history: [MMD])
+  func presentSessionHistoryInsert()
   func presentPlaybackTime(length: Int, elapsed: Int)
   func presentNotificationStatus(response: Radio.LocalNotifications.Response)
   func presentNewModules(response: Radio.NewModules.Response)
@@ -35,11 +36,15 @@ class RadioPresenter: RadioPresentationLogic
       nextUp = String.init(format: "Radio_NextUp".l13n(), buffer[1].name ?? "G_untitled".l13n(), buffer[1].composer ?? "G_untitled".l13n() )
     }
     
-    let canStepBack = history.count > 0 && buffer.first != history.first
+    let canStepBack = history.count > 0 && buffer.first != history.last
     let vm = Radio.ChannelBuffer.ViewModel(nowPlaying: buffer.first, nextUp: nextUp, historyAvailable: canStepBack)
     DispatchQueue.main.async {
       self.viewController?.displayChannelBuffer(viewModel: vm)
     }
+  }
+
+  func presentSessionHistoryInsert() {
+    self.viewController?.displaySessionHistoryInsert()
   }
   
   func presentPlaybackTime(length: Int, elapsed: Int) {

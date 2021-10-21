@@ -14,7 +14,21 @@ class RadioSessionCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        textLabel?.textColor = Appearance.veryLightGray.withAlphaComponent(0.5)
+        textLabel?.textColor = Appearance.veryLightGray.withAlphaComponent(0.8)
+        let descriptor = UIFontDescriptor.init(fontAttributes: [.family : "DIN Alternate"])
+        let fnt = UIFont.init(descriptor: descriptor, size: 13.0)
+        textLabel?.font = fnt
+        
+        let separatorView = UIView.init(frame: .zero)
+        separatorView.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        separatorView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(separatorView)
+        NSLayoutConstraint.activate([
+            separatorView.heightAnchor.constraint(equalToConstant: 0.5),
+            separatorView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40),
+            separatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            separatorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
     }
 
     
