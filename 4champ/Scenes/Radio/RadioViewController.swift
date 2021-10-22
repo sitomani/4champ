@@ -341,7 +341,7 @@ extension RadioViewController: UITableViewDataSource, UITableViewDelegate {
       cell.textLabel?.text = "\(modName.trimmingCharacters(in: .whitespaces)) by \(composer)"
       return cell
     } else {
-      fatalError()
+      return UITableViewCell()
     }
   }
   

@@ -170,9 +170,17 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   }
   
   func playFromSessionHistory(at: IndexPath) {
+    let historyIndex = at.row + 1
+    let mod = radioSessionHistory[historyIndex]
+    if mod.fileExists() {
+      modulePlayer.play(mmd: mod)
+    }
+    guard mod.serviceId == .amp else {
+      radioSessionHistory.remove(at: historyIndex)
+      return;
+    }
     postFetchAction = .startPlay
     let fetcher = ModuleFetcher.init(delegate: self)
-    let historyIndex = at.row + 1
     fetcher.fetchModule(ampId: radioSessionHistory[historyIndex].id!)
   }
     
@@ -374,7 +382,7 @@ extension RadioInteractor: ModuleFetcherDelegate {
       case .startPlay:
         modulePlayer.play(mmd: mmd)
       }
-      postFetchAction = .appendToQueue
+      postFetchAction = .appendToQueue // reset to default
       
       self.triggerBufferPresentation()
       if let first = modulePlayer.playQueue.first, first == mmd {
