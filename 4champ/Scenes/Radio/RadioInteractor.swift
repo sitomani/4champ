@@ -436,6 +436,7 @@ extension RadioInteractor: ModulePlayerObserver {
   func queueChanged(changeType: QueueChange) {
     if changeType == .newPlaylist && radioOn {
       status = .off
+      radioSessionHistory.removeAll()
       modulePlayer.removePlayerObserver(self)
       presenter?.presentChannelBuffer(buffer: [], history: [])
       presenter?.presentControlStatus(status: .off)
