@@ -178,6 +178,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     let mod = radioSessionHistory[historyIndex]
     if mod.fileExists() {
       modulePlayer.play(mmd: mod)
+      return
     }
     guard mod.serviceId == .amp else {
       radioSessionHistory.remove(at: historyIndex)

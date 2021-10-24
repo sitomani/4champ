@@ -291,7 +291,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   }
   
   func displaySessionHistoryInsert() {
-    historyTitle?.text = "Previous:"
+    historyTitle?.text = "Radio_Previous".l13n()
     radioTable?.insertRows(at: [IndexPath.init(item: 0, section: 0)], with: .top)
   }
   
@@ -342,7 +342,8 @@ extension RadioViewController: UITableViewDataSource, UITableViewDelegate {
       let modName = mod.name ?? "n/a"
       let composer = mod.composer ?? "n/a"
       
-      cell.moduleTitle.text = "\(modName.trimmingCharacters(in: .whitespaces)) by \(composer)"
+      let title = String.init(format: "Radio_NByN".l13n(), modName.trimmingCharacters(in: .whitespaces), composer)
+      cell.moduleTitle.text = title
       return cell
     } else {
       return UITableViewCell()
