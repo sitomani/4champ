@@ -334,11 +334,11 @@ extension RadioViewController: UITableViewDataSource, UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    if let cell = tableView.dequeueReusableCell(withIdentifier: RadioSessionCell.ReuseId), let mod = interactor?.getModule(at: indexPath) {
+    if let cell = tableView.dequeueReusableCell(withIdentifier: RadioSessionCell.ReuseId) as? RadioSessionCell, let mod = interactor?.getModule(at: indexPath) {
       let modName = mod.name ?? "n/a"
       let composer = mod.composer ?? "n/a"
       
-      cell.textLabel?.text = "\(modName.trimmingCharacters(in: .whitespaces)) by \(composer)"
+      cell.moduleTitle.text = "\(modName.trimmingCharacters(in: .whitespaces)) by \(composer)"
       return cell
     } else {
       return UITableViewCell()
