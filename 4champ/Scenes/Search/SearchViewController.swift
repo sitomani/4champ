@@ -427,7 +427,7 @@ extension SearchViewController: UITableViewDelegate {
 
 // MARK: Module Player Observer
 extension SearchViewController: ModulePlayerObserver {
-  func moduleChanged(module: MMD) {
+  func moduleChanged(module: MMD, previous: MMD?) {
     tableView?.reloadData()
   }
   

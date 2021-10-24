@@ -17,6 +17,12 @@ protocol RadioPresentationLogic
   func presentNewModules(response: Radio.NewModules.Response)
 }
 
+enum NotificationState {
+  case unknown
+  case enabled
+  case disabled
+}
+
 class RadioPresenter: RadioPresentationLogic
 {
   weak var viewController: RadioDisplayLogic?
@@ -60,9 +66,14 @@ class RadioPresenter: RadioPresentationLogic
   
   func presentNotificationStatus(response: Radio.LocalNotifications.Response) {
     log.debug("")
-    var vm = Radio.LocalNotifications.ViewModel(buttonTitle: "Radio_NotificationButton".l13n())
-    if response.notificationsEnabled {
-      vm.buttonTitle = "Radio_NotificationButton_Settings".l13n()
+    var vm = Radio.LocalNotifications.ViewModel(imageName: "notifications-add")
+
+    if response.notificationsRequested {
+      if response.notificationsEnabled {
+        vm.imageName = "notifications-active"
+      } else {
+        vm.imageName = "notifications-off"
+      }
     }
     DispatchQueue.main.async {
       self.viewController?.displayLocalNotificationStatus(viewModel: vm)

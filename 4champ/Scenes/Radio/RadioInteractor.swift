@@ -57,7 +57,6 @@ protocol RadioBusinessLogic
 /// Protocol to handle play history in radio mode
 protocol RadioRemoteControl: NSObjectProtocol {
   func playPrev()
-  func addToSessionHistory(module: MMD)
 }
 
 /// Radio datastore for keeping currently selected channel and status
@@ -87,7 +86,6 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   // Keep session history for getting back to modules listened in the radio mode.
   private var radioSessionHistory: [MMD] = []
 
-
   private var radioOn: Bool {
     switch status {
     case .off:
@@ -108,6 +106,11 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   override init() {
     super.init()
     NotificationCenter.default.addObserver(self, selector: #selector(doBadgeUpdate(_:)), name: Notifications.badgeUpdate, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(refreshLocalNotificationsStatus), name: UIApplication.willEnterForegroundNotification, object: nil)
+  }
+  
+  deinit {
+    NotificationCenter.default.removeObserver(self)
   }
   
   @objc func doBadgeUpdate(_ notification: Notification?) {
@@ -161,16 +164,17 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   func playPrev() {
     guard radioOn && radioSessionHistory.count > 0, let currentMod = modulePlayer.currentModule else { return }
 
+    var nextIndex = 0
     if let currentIndex = radioSessionHistory.index(of: currentMod), currentIndex >= 0 {
-      let nextIndex = currentIndex + 1
-      postFetchAction = .insertToQueue
-      let fetcher = ModuleFetcher.init(delegate: self)
-      fetcher.fetchModule(ampId: radioSessionHistory[nextIndex].id!)
+      nextIndex = currentIndex + 1
     }
+    postFetchAction = .insertToQueue
+    let fetcher = ModuleFetcher.init(delegate: self)
+    fetcher.fetchModule(ampId: radioSessionHistory[nextIndex].id!)
   }
   
   func playFromSessionHistory(at: IndexPath) {
-    let historyIndex = at.row + 1
+    let historyIndex = at.row
     let mod = radioSessionHistory[historyIndex]
     if mod.fileExists() {
       modulePlayer.play(mmd: mod)
@@ -187,20 +191,19 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   func addToSessionHistory(module: MMD) {
     if !radioSessionHistory.contains(module) {
       radioSessionHistory.insert(module, at: 0)
-      if radioSessionHistory.count > 1 {
-        presenter?.presentSessionHistoryInsert()
-      }
+      presenter?.presentSessionHistoryInsert()
     }
   }
 
   
-  func refreshLocalNotificationsStatus() {
+  @objc func refreshLocalNotificationsStatus() {
     log.debug("")
     let un = UNUserNotificationCenter.current()
     un.getNotificationSettings { (settings) in
       self.ntfAuthorization = settings.authorizationStatus
       let response = Radio.LocalNotifications.Response(
-        notificationsEnabled: self.ntfAuthorization == .authorized)
+        notificationsEnabled: self.ntfAuthorization == .authorized,
+        notificationsRequested: self.ntfAuthorization != .notDetermined)
       self.presenter?.presentNotificationStatus(response: response)
     }
   }
@@ -237,13 +240,12 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   }
   
   func getSessionLength() -> Int {
-    guard radioSessionHistory.count > 0 else { return 0 }
-    return radioSessionHistory.count - 1 // the currently playing item is not shown
+    return radioSessionHistory.count
   }
   
   func getModule(at: IndexPath) -> MMD? {
     guard radioSessionHistory.count > at.row else { return nil }
-    return radioSessionHistory[at.row + 1]
+    return radioSessionHistory[at.row]
   }
   
   // MARK: private functions
@@ -397,7 +399,7 @@ extension RadioInteractor: ModuleFetcherDelegate {
 }
 
 extension RadioInteractor: ModulePlayerObserver {
-  func moduleChanged(module: MMD) {
+  func moduleChanged(module: MMD, previous: MMD?) {
     guard radioOn else { return }
     log.debug("")
     if let index = modulePlayer.playQueue.firstIndex(of: module), index > 0 {
@@ -405,6 +407,9 @@ extension RadioInteractor: ModulePlayerObserver {
     }
     fillBuffer()
     triggerBufferPresentation()
+    if let previous = previous {
+      addToSessionHistory(module: previous)
+    }
   }
   
   func statusChanged(status: PlayerStatus) {

@@ -71,7 +71,7 @@ class PlaylistStore: ObservableObject, PlaylistDisplayLogic
 }
 
 extension PlaylistStore: ModulePlayerObserver {
-  func moduleChanged(module: MMD) {
+  func moduleChanged(module: MMD, previous: MMD?) {
     hostingController?.rootView.navigationButtonID = UUID()
   }
   

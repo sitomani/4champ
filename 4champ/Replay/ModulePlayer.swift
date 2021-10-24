@@ -47,7 +47,7 @@ protocol ModulePlayerObserver: class {
   /// called when module changes in the player
   /// - parameters:
   ///     - module: module that player changed to
-  func moduleChanged(module: MMD)
+  func moduleChanged(module: MMD, previous: MMD?)
   
   /// called if there is an error in the modulePlayer
   /// - parameters:
@@ -88,7 +88,7 @@ class ModulePlayer: NSObject {
         MPNowPlayingInfoCenter.default().nowPlayingInfo = dict
         
         _ = observers.map {
-          $0.moduleChanged(module: mod)
+          $0.moduleChanged(module: mod, previous: oldValue)
         }
       }
     }
@@ -178,9 +178,6 @@ class ModulePlayer: NSObject {
         currentModule = mod
         renderer.play()
         status = .playing
-        if radioOn {
-          radioRemoteControl?.addToSessionHistory(module: mod)
-        }
         return true
     } else {
       log.error("Could not load tune: \(path)")
@@ -290,6 +287,7 @@ class ModulePlayer: NSObject {
       }
     }
     playQueue.removeAll()
+    currentModule = nil
   }
 
   

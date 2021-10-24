@@ -37,8 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     setupAVSession()
     cleanupFiles()
     // UNCOMMENT BELOW TWO LINES TO TEST LOCAL NOTIFICATIONS
-    //    settings.prevCollectionSize = 0
-    //    settings.newestPlayed = 152890
+        settings.prevCollectionSize = 0
+        settings.newestPlayed = 152890
     
     updateLatest()
     UIApplication.shared.beginReceivingRemoteControlEvents()

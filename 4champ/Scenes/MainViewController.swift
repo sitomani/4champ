@@ -148,7 +148,7 @@ class MainViewController: UITabBarController {
 }
 
 extension MainViewController: ModulePlayerObserver {
-  func moduleChanged(module: MMD) {
+  func moduleChanged(module: MMD, previous: MMD?) {
     log.info("\(module.name!) (\(module.type!))")
     DispatchQueue.main.async {
       self.npView.setModule(module)

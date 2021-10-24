@@ -68,9 +68,10 @@ enum Radio
     struct Request {}
     struct Response {
       var notificationsEnabled: Bool
+      var notificationsRequested: Bool
     }
     struct ViewModel {
-      var buttonTitle: String
+      var imageName: String
     }
   }
   

@@ -42,7 +42,6 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   @IBOutlet weak var faveButton: UIButton?
   @IBOutlet weak var shareButton: UIButton?
   
-  @IBOutlet weak var notifyButton: UIButton?
   @IBOutlet weak var radioSwitch: UISwitch?
   @IBOutlet weak var prevButton: UIButton?
   @IBOutlet weak var nextButton: UIButton?
@@ -50,6 +49,8 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   @IBOutlet weak var radioTable: UITableView?
   @IBOutlet weak var tableBottomConstraint: NSLayoutConstraint?
 
+  var notifyItem: UIBarButtonItem?
+  
   private let gradientLayer = CAGradientLayer()
   let gradientColorTop =  UIColor.init(rgb: 0x16538a)
   let gradientColorBottom = UIColor.init(rgb: 0x16538a)
@@ -118,7 +119,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     shareButton?.isHidden = true
     faveButton?.isHidden = false
 //    saveButton?.isHidden = true
-    notifyButton?.isHidden = true
+
 
     channelSegments?.setTitle("Radio_All".l13n(), forSegmentAt: 0)
     channelSegments?.setTitle("Radio_New".l13n(), forSegmentAt: 1)
@@ -141,6 +142,10 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
     currentModuleView?.addGestureRecognizer(longPressRecognizer)
+    
+    let img = UIImage(named: "notifications-add")?.withRenderingMode(.alwaysTemplate)
+    notifyItem = UIBarButtonItem.init(image: img, landscapeImagePhone: img, style: .plain, target: self, action: #selector(notificationsPressed))
+    self.navigationItem.rightBarButtonItem = notifyItem
   }
   
   @objc func longPressed(sender: UILongPressGestureRecognizer) {
@@ -149,6 +154,10 @@ class RadioViewController: UIViewController, RadioDisplayLogic
         router?.toPlaylistSelector(module: mod)
       }
     }
+  }
+  
+  @objc func notificationsPressed(sender: UINavigationItem) {
+    interactor?.requestLocalNotifications()
   }
   
   override func viewDidAppear(_ animated: Bool) {
@@ -230,7 +239,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     if let current = viewModel.nowPlaying {
       currentModule = current
       currentModuleView?.alpha = 1
-      composerLabel?.text = current.composer ?? ""
+      composerLabel?.text = current.composer
       nameLabel?.text = current.name ?? ""
       sizeLabel?.text = "\(current.size ?? 0) kb"
       localLabel?.isHidden = !current.hasBeenSaved()
@@ -264,8 +273,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   
   func displayLocalNotificationStatus(viewModel: Radio.LocalNotifications.ViewModel) {
     log.debug("")
-    notifyButton?.setTitle(viewModel.buttonTitle, for: .normal)
-    notifyButton?.isHidden = true
+    notifyItem?.image = UIImage(named: viewModel.imageName)
   }
 
   func displayNewModules(viewModel: Radio.NewModules.ViewModel) {
@@ -293,10 +301,6 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   
   @IBAction private func shareTapped(_ sender: UIButton) {
     interactor?.shareCurrentModule()
-  }
-  
-  @IBAction private func ntfButtonTapped(_ sender: UIButton) {
-    interactor?.requestLocalNotifications()
   }
   
   @IBAction private func nextTapped(_ sender: UIButton) {
