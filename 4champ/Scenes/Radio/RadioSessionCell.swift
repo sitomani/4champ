@@ -26,7 +26,7 @@ class RadioSessionCell: UITableViewCell {
         moduleTitle.font = fnt
         
         let separatorView = UIView.init(frame: .zero)
-        separatorView.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        separatorView.backgroundColor = Appearance.radioSeparatorColor
         separatorView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(separatorView)
         contentView.addSubview(moduleTitle);

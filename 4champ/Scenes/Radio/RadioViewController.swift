@@ -46,6 +46,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   @IBOutlet weak var prevButton: UIButton?
   @IBOutlet weak var nextButton: UIButton?
   
+  @IBOutlet weak var tableDivider: UIView? // view between table currentModuleView
   @IBOutlet weak var radioTable: UITableView?
   @IBOutlet weak var tableBottomConstraint: NSLayoutConstraint?
 
@@ -137,7 +138,8 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     radioTable?.delegate = self
     radioTable?.separatorStyle = .none
     radioTable?.register(RadioSessionCell.self, forCellReuseIdentifier: RadioSessionCell.ReuseId)
-
+    tableDivider?.backgroundColor = Appearance.radioSeparatorColor
+    
     setupGradientBackground()
     
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
@@ -154,6 +156,11 @@ class RadioViewController: UIViewController, RadioDisplayLogic
         router?.toPlaylistSelector(module: mod)
       }
     }
+  }
+  
+  override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews()
+    gradientLayer.frame = CGRect.init(x: 0, y: 0, width: view.frame.width, height: currentModuleView?.frame.height ?? 100)
   }
   
   @objc func notificationsPressed(sender: UINavigationItem) {
@@ -178,13 +185,13 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     gradientLayer.removeAnimation(forKey: GradientAnimationDirection.in.rawValue)
     gradientLayer.removeAnimation(forKey: GradientAnimationDirection.out.rawValue)
 
-    let startAlphas: [CGFloat] = direction == .in ? [0, 0] : [1,0.2]
+    let startAlphas: [CGFloat] = direction == .in ? [0, 0] : [1,0.4]
     gradientLayer.colors = [gradientColorTop.withAlphaComponent(startAlphas[0]).cgColor, gradientColorBottom.withAlphaComponent(startAlphas[1]).cgColor]
 
     let gradientChangeAnimation = CABasicAnimation(keyPath: "colors")
     gradientChangeAnimation.duration = 0.5
     
-    let endAlphas: [CGFloat] = direction == .in ? [1, 0.2] : [0,0]
+    let endAlphas: [CGFloat] = direction == .in ? [1, 0.4] : [0,0]
 
     gradientChangeAnimation.toValue = [
       gradientColorTop.withAlphaComponent(endAlphas[0]).cgColor,
