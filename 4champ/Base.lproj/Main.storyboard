@@ -192,7 +192,7 @@
                                     <action selector="prevTapped:" destination="9pv-A4-QxB" eventType="touchUpInside" id="Hge-sN-351"/>
                                 </connections>
                             </button>
-                            <view alpha="0.10000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F68-Dd-9Qo">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F68-Dd-9Qo">
                                 <rect key="frame" x="20" y="237" width="335" height="2"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
@@ -269,6 +269,7 @@
                         <outlet property="sizeLabel" destination="YRF-yg-SgF" id="orJ-zV-4md"/>
                         <outlet property="switchTitle" destination="QUj-fw-iU8" id="EOl-Jw-9Zp"/>
                         <outlet property="tableBottomConstraint" destination="rNa-XF-MUM" id="eyO-Wd-cHw"/>
+                        <outlet property="tableDivider" destination="F68-Dd-9Qo" id="QId-Nh-6Rv"/>
                         <outlet property="timeLabel" destination="56G-Gw-0Kr" id="pu6-Xz-FeW"/>
                     </connections>
                 </viewController>

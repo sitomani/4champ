@@ -47,6 +47,7 @@ protocol ModulePlayerObserver: class {
   /// called when module changes in the player
   /// - parameters:
   ///     - module: module that player changed to
+  ///     - previous: the module that player was playing at change (if any)
   func moduleChanged(module: MMD, previous: MMD?)
   
   /// called if there is an error in the modulePlayer

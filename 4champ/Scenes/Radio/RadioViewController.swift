@@ -128,7 +128,8 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     
     channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
     channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
-    downloadProgress?.trackTintColor = UIColor.white.withAlphaComponent(0.1)
+    downloadProgress?.trackTintColor = Appearance.radioSeparatorColor
+    downloadProgress?.progressViewStyle = .default
     
     interactor?.refreshLocalNotificationsStatus()
     interactor?.refreshBadge()
@@ -139,6 +140,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     radioTable?.separatorStyle = .none
     radioTable?.register(RadioSessionCell.self, forCellReuseIdentifier: RadioSessionCell.ReuseId)
     tableDivider?.backgroundColor = Appearance.radioSeparatorColor
+    tableDivider?.layer.cornerRadius = 1.5
     
     setupGradientBackground()
     
