@@ -114,3 +114,7 @@ Adopted Swift Package Manager.
 ### Version 3.3 August 2021
 
 Support for importing module files from local file system / network drive / cloud.
+
+### Version 3.4 Octover 2021
+
+Radio session play history added to enable moving back in the session.
