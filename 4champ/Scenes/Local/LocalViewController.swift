@@ -259,7 +259,7 @@ extension LocalViewController: UITableViewDataSource {
 
 // MARK: Module Player Observer
 extension LocalViewController: ModulePlayerObserver {
-  func moduleChanged(module: MMD) {
+  func moduleChanged(module: MMD, previous: MMD?) {
     //    tableView?.reloadData()
   }
   

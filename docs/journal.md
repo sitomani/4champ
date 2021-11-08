@@ -1,5 +1,9 @@
 # 4champ Development Journal
 
+### 27 Oct 2021 We need to go back
+
+A couple of months ago 4champ got a review in AppStore where the reviewer stated that the only thing he/she was missing was a way to see the previously played tracks when listening to 4champ radio. I had thought about something similar myself, and this gave me a good motivation kick to put it next in the backlog. Well now it is implmented in the app!
+
 ### 10 Aug 2021 Modules, modules everywhere
 
 It has been requested by users occasionally if it would be possible to import your own modules to 4champ. Well now it is! 4champ now works as a share target for the supported module types, or if you want to get a bunch of files in at once, you can trigger module import from either local modules tab, or playlist tab. After the files have been imported, you can assign a composer name in case you'd like.

@@ -347,7 +347,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
 }
 
 extension VisualizerViewController: ModulePlayerObserver {
-  func moduleChanged(module: MMD) {
+  func moduleChanged(module: MMD, previous: MMD?) {
     log.debug("")
     DispatchQueue.main.async {
       self.updateView(module: module)

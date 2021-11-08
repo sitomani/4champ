@@ -10,10 +10,17 @@ import UIKit
 protocol RadioPresentationLogic
 {
   func presentControlStatus(status: RadioStatus)
-  func presentChannelBuffer(buffer: [MMD])
+  func presentChannelBuffer(buffer: [MMD], history: [MMD])
+  func presentSessionHistoryInsert()
   func presentPlaybackTime(length: Int, elapsed: Int)
   func presentNotificationStatus(response: Radio.LocalNotifications.Response)
   func presentNewModules(response: Radio.NewModules.Response)
+}
+
+enum NotificationState {
+  case unknown
+  case enabled
+  case disabled
 }
 
 class RadioPresenter: RadioPresentationLogic
@@ -28,17 +35,22 @@ class RadioPresenter: RadioPresentationLogic
     }
   }
   
-  func presentChannelBuffer(buffer: [MMD]) {
+  func presentChannelBuffer(buffer: [MMD], history: [MMD]) {
     log.debug("")
     var nextUp: String?
     if buffer.count > 1 {
-      nextUp = String.init(format: "Radio_NextUp".l13n(), buffer[1].name ?? "G_untitled".l13n(), buffer[1].composer ?? "G_untitled".l13n() )
+      nextUp = "Radio_NextUp".l13n() + " " + String.init(format: "Radio_NByN".l13n(), buffer[1].name ?? "G_untitled".l13n(), buffer[1].composer ?? "G_untitled".l13n() )
     }
     
-    let vm = Radio.ChannelBuffer.ViewModel(nowPlaying: buffer.first, nextUp: nextUp)
+    let canStepBack = history.count > 0 && buffer.first != history.last
+    let vm = Radio.ChannelBuffer.ViewModel(nowPlaying: buffer.first, nextUp: nextUp, historyAvailable: canStepBack)
     DispatchQueue.main.async {
       self.viewController?.displayChannelBuffer(viewModel: vm)
     }
+  }
+
+  func presentSessionHistoryInsert() {
+    self.viewController?.displaySessionHistoryInsert()
   }
   
   func presentPlaybackTime(length: Int, elapsed: Int) {
@@ -54,9 +66,14 @@ class RadioPresenter: RadioPresentationLogic
   
   func presentNotificationStatus(response: Radio.LocalNotifications.Response) {
     log.debug("")
-    var vm = Radio.LocalNotifications.ViewModel(buttonTitle: "Radio_NotificationButton".l13n())
-    if response.notificationsEnabled {
-      vm.buttonTitle = "Radio_NotificationButton_Settings".l13n()
+    var vm = Radio.LocalNotifications.ViewModel(imageName: "notifications-add")
+
+    if response.notificationsRequested {
+      if response.notificationsEnabled {
+        vm.imageName = "notifications-active"
+      } else {
+        vm.imageName = "notifications-off"
+      }
     }
     DispatchQueue.main.async {
       self.viewController?.displayLocalNotificationStatus(viewModel: vm)

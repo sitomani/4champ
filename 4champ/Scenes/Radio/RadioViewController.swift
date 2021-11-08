@@ -14,6 +14,7 @@ protocol RadioDisplayLogic: class
   func displayPlaybackTime(viewModel: Radio.Playback.ViewModel)
   func displayLocalNotificationStatus(viewModel: Radio.LocalNotifications.ViewModel)
   func displayNewModules(viewModel: Radio.NewModules.ViewModel)
+  func displaySessionHistoryInsert()
 }
 
 class RadioViewController: UIViewController, RadioDisplayLogic
@@ -29,6 +30,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   
   @IBOutlet weak var switchTitle: UILabel?
   @IBOutlet weak var nextUpTitle: UILabel?
+  @IBOutlet weak var historyTitle: UILabel?
   
   @IBOutlet weak var nameLabel: UILabel?
   @IBOutlet weak var composerLabel: UILabel?
@@ -40,9 +42,25 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   @IBOutlet weak var faveButton: UIButton?
   @IBOutlet weak var shareButton: UIButton?
   
-  @IBOutlet weak var notifyButton: UIButton?
   @IBOutlet weak var radioSwitch: UISwitch?
+  @IBOutlet weak var prevButton: UIButton?
+  @IBOutlet weak var nextButton: UIButton?
   
+  @IBOutlet weak var tableDivider: UIView? // view between table currentModuleView
+  @IBOutlet weak var radioTable: UITableView?
+  @IBOutlet weak var tableBottomConstraint: NSLayoutConstraint?
+
+  var notifyItem: UIBarButtonItem?
+  
+  private let gradientLayer = CAGradientLayer()
+  let gradientColorTop =  UIColor.init(rgb: 0x16538a)
+  let gradientColorBottom = UIColor.init(rgb: 0x16538a)
+  
+  enum GradientAnimationDirection: String {
+    case none
+    case `in` = "colorIn"
+    case out = "colorOut"
+  }
   // MARK: Object lifecycle
   
   override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
@@ -102,7 +120,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     shareButton?.isHidden = true
     faveButton?.isHidden = false
 //    saveButton?.isHidden = true
-    notifyButton?.isHidden = true
+
 
     channelSegments?.setTitle("Radio_All".l13n(), forSegmentAt: 0)
     channelSegments?.setTitle("Radio_New".l13n(), forSegmentAt: 1)
@@ -110,13 +128,28 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     
     channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
     channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
-
+    downloadProgress?.trackTintColor = Appearance.radioSeparatorColor
+    downloadProgress?.progressViewStyle = .default
+    
     interactor?.refreshLocalNotificationsStatus()
     interactor?.refreshBadge()
-    displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel(nowPlaying: nil, nextUp: nil))
+    displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel(nowPlaying: nil, nextUp: nil, historyAvailable: false))
+    
+    radioTable?.dataSource = self
+    radioTable?.delegate = self
+    radioTable?.separatorStyle = .none
+    radioTable?.register(RadioSessionCell.self, forCellReuseIdentifier: RadioSessionCell.ReuseId)
+    tableDivider?.backgroundColor = Appearance.radioSeparatorColor
+    tableDivider?.layer.cornerRadius = 1.5
+    
+    setupGradientBackground()
     
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
     currentModuleView?.addGestureRecognizer(longPressRecognizer)
+    
+    let img = UIImage(named: "notifications-add")?.withRenderingMode(.alwaysTemplate)
+    notifyItem = UIBarButtonItem.init(image: img, landscapeImagePhone: img, style: .plain, target: self, action: #selector(notificationsPressed))
+    self.navigationItem.rightBarButtonItem = notifyItem
   }
   
   @objc func longPressed(sender: UILongPressGestureRecognizer) {
@@ -127,11 +160,52 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     }
   }
   
+  override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews()
+    gradientLayer.frame = CGRect.init(x: 0, y: 0, width: view.frame.width, height: currentModuleView?.frame.height ?? 100)
+  }
+  
+  @objc func notificationsPressed(sender: UINavigationItem) {
+    interactor?.requestLocalNotifications()
+  }
+  
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
   }
   
-  // MARK: Do something
+
+  func setupGradientBackground() {
+      gradientLayer.colors = [gradientColorTop.withAlphaComponent(0).cgColor, gradientColorBottom.withAlphaComponent(0).cgColor]
+      gradientLayer.locations = [0.0, 1.0]
+      gradientLayer.drawsAsynchronously = true
+      gradientLayer.frame = CGRect.init(x: 0, y: 0, width: view.frame.width, height: currentModuleView?.frame.height ?? 100)
+      currentModuleView?.layer.insertSublayer(gradientLayer, at:0)
+  }
+  
+  func animateGradient(_ direction: GradientAnimationDirection) {
+    guard gradientLayer.animation(forKey: direction.rawValue) == nil else { return }
+    gradientLayer.removeAnimation(forKey: GradientAnimationDirection.in.rawValue)
+    gradientLayer.removeAnimation(forKey: GradientAnimationDirection.out.rawValue)
+
+    let startAlphas: [CGFloat] = direction == .in ? [0, 0] : [1,0.4]
+    gradientLayer.colors = [gradientColorTop.withAlphaComponent(startAlphas[0]).cgColor, gradientColorBottom.withAlphaComponent(startAlphas[1]).cgColor]
+
+    let gradientChangeAnimation = CABasicAnimation(keyPath: "colors")
+    gradientChangeAnimation.duration = 0.5
+    
+    let endAlphas: [CGFloat] = direction == .in ? [1, 0.4] : [0,0]
+
+    gradientChangeAnimation.toValue = [
+      gradientColorTop.withAlphaComponent(endAlphas[0]).cgColor,
+      gradientColorBottom.withAlphaComponent(endAlphas[1]).cgColor
+    ]
+    gradientChangeAnimation.fillMode = CAMediaTimingFillMode.forwards
+    gradientChangeAnimation.isRemovedOnCompletion = false
+    gradientLayer.add(gradientChangeAnimation, forKey: direction.rawValue)
+  }
+ 
+  
+  
   func displayControlStatus(viewModel: Radio.Control.ViewModel) {
     switch viewModel.status {
     case .on:
@@ -165,13 +239,16 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     if let nextUp = viewModel.nextUp {
       nextUpTitle?.text = nextUp
     } else {
-      nextUpTitle?.text = ""
+      nextUpTitle?.text = radioSwitch?.isOn ?? false ? " " : "" // just to keep the space open when radio is on
     }
+    
+    prevButton?.isEnabled = viewModel.historyAvailable
+    nextButton?.isEnabled = viewModel.nowPlaying != nil
     
     if let current = viewModel.nowPlaying {
       currentModule = current
       currentModuleView?.alpha = 1
-      composerLabel?.text = current.composer ?? ""
+      composerLabel?.text = current.composer
       nameLabel?.text = current.name ?? ""
       sizeLabel?.text = "\(current.size ?? 0) kb"
       localLabel?.isHidden = !current.hasBeenSaved()
@@ -179,6 +256,8 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       saveButton?.isHidden = current.hasBeenSaved()
       // For now, hide the share button (sharing through the long-tap menu)
       shareButton?.isHidden = true
+      animateGradient(.in)
+      tableBottomConstraint?.constant = 50.0
     } else {
       currentModule = nil
       currentModuleView?.alpha = 0.8
@@ -190,6 +269,10 @@ class RadioViewController: UIViewController, RadioDisplayLogic
       faveButton?.isSelected = false
       saveButton?.isHidden = false
       shareButton?.isHidden = true
+      tableBottomConstraint?.constant = 0
+      radioTable?.reloadData()
+      animateGradient(.out)
+      historyTitle?.text = ""
     }
   }
   
@@ -199,8 +282,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   
   func displayLocalNotificationStatus(viewModel: Radio.LocalNotifications.ViewModel) {
     log.debug("")
-    notifyButton?.setTitle(viewModel.buttonTitle, for: .normal)
-    notifyButton?.isHidden = false
+    notifyItem?.image = UIImage(named: viewModel.imageName)
   }
 
   func displayNewModules(viewModel: Radio.NewModules.ViewModel) {
@@ -217,6 +299,11 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     }
   }
   
+  func displaySessionHistoryInsert() {
+    historyTitle?.text = "Radio_Previous".l13n()
+    radioTable?.insertRows(at: [IndexPath.init(item: 0, section: 0)], with: .top)
+  }
+  
   @IBAction private func saveTapped(_ sender: UIButton) {
     interactor?.saveCurrentModule()
   }
@@ -225,12 +312,12 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     interactor?.shareCurrentModule()
   }
   
-  @IBAction private func ntfButtonTapped(_ sender: UIButton) {
-    interactor?.requestLocalNotifications()
-  }
-  
   @IBAction private func nextTapped(_ sender: UIButton) {
     interactor?.playNext()
+  }
+  
+  @IBAction private func prevTapped(_ sender: UIButton) {
+    interactor?.playPrev();
   }
   
   @IBAction private func controlSwitchChanged(_ sender: UISwitch) {
@@ -253,3 +340,36 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     }
   }
 }
+
+extension RadioViewController: UITableViewDataSource, UITableViewDelegate {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return interactor?.getSessionLength() ?? 0
+  }
+  
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    if let cell = tableView.dequeueReusableCell(withIdentifier: RadioSessionCell.ReuseId) as? RadioSessionCell, let mod = interactor?.getModule(at: indexPath) {
+      let modName = mod.name ?? "n/a"
+      let composer = mod.composer ?? "n/a"
+      
+      let title = String.init(format: "Radio_NByN".l13n(), modName.trimmingCharacters(in: .whitespaces), composer)
+      cell.moduleTitle.text = title
+      return cell
+    } else {
+      return UITableViewCell()
+    }
+  }
+  
+  func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+    log.debug("foo")
+    return indexPath
+  }
+  
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    interactor?.playFromSessionHistory(at: indexPath)
+  }
+  
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    return 40
+  }
+}
+

@@ -94,6 +94,7 @@
 		735A273E264FDFAD004EAC0C /* Gzip in Frameworks */ = {isa = PBXBuildFile; productRef = 735A273D264FDFAD004EAC0C /* Gzip */; };
 		735A2742264FDFDE004EAC0C /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = 735A2741264FDFDE004EAC0C /* SwiftyBeaver */; };
 		735A2746264FE01D004EAC0C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 735A2745264FE01D004EAC0C /* Alamofire */; };
+		739B4BF42720850200C2D69F /* RadioSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739B4BF32720850200C2D69F /* RadioSessionCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -208,6 +209,7 @@
 		45D61F5C20E17D8F00869814 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		45D61F6220E1863600869814 /* Gzip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Gzip.framework; path = Carthage/Build/iOS/Gzip.framework; sourceTree = "<group>"; };
 		735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 9 (imports).xcdatamodel"; sourceTree = "<group>"; };
+		739B4BF32720850200C2D69F /* RadioSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioSessionCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -379,8 +381,8 @@
 			children = (
 				45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */,
 				45AA90F720FF36C200794147 /* Replay.m */,
-				45AA90F820FF36C200794147 /* Hively */,
 				45AA90FE20FF36C200794147 /* Replay.h */,
+				45AA90F820FF36C200794147 /* Hively */,
 				45AA90FF20FF36C200794147 /* OpenMPT */,
 			);
 			path = Replay;
@@ -477,6 +479,7 @@
 				45D61F4E20E1647300869814 /* RadioModels.swift */,
 				45D61F4F20E1647300869814 /* RadioViewController.swift */,
 				45D61F5020E1647300869814 /* RadioInteractor.swift */,
+				739B4BF32720850200C2D69F /* RadioSessionCell.swift */,
 			);
 			path = Radio;
 			sourceTree = "<group>";
@@ -662,6 +665,7 @@
 				451ED0B1241E8A83006CE4E8 /* PlaylistStore.swift in Sources */,
 				45D392A520B1DDEC00EEF4E3 /* AppDelegate.swift in Sources */,
 				4569AC8B21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift in Sources */,
+				739B4BF42720850200C2D69F /* RadioSessionCell.swift in Sources */,
 				4509EA49226251EF0031408D /* Playlist+CoreDataClass.swift in Sources */,
 				45AA911B2100EF1900794147 /* AmpVizScene.swift in Sources */,
 				451B6AA52204B6CC001848FA /* LocalInteractor.swift in Sources */,
@@ -859,7 +863,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = ../openmpt/libopenmpt;
@@ -870,7 +874,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = ../openmpt;
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -888,7 +892,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = ../openmpt/libopenmpt;
@@ -899,7 +903,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = ../openmpt;
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

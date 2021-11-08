@@ -60,6 +60,7 @@ enum Radio
     struct ViewModel {
       var nowPlaying: MMD?
       var nextUp: String?
+      var historyAvailable: Bool
     }
   }
   
@@ -67,9 +68,10 @@ enum Radio
     struct Request {}
     struct Response {
       var notificationsEnabled: Bool
+      var notificationsRequested: Bool
     }
     struct ViewModel {
-      var buttonTitle: String
+      var imageName: String
     }
   }
   
