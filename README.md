@@ -1,8 +1,9 @@
 # 4champ
+
 4champ is an app that provides a mobile interface to [Amiga Music Preservation](http://amp.dascene.net) database on iOS devices.
 
-Many of us who grew up with computers in the 80's and early 90's remember Amiga and particularly its mind-blowing audio capabilities which were unrivaled at the era. Amiga inspired a lot of musicians to 
-produce a vast amount of compositions, or modules as they were called. [Amiga Music Preservation](http://amp.dascene.net) is a non-profit 
+Many of us who grew up with computers in the 80's and early 90's remember Amiga and particularly its mind-blowing audio capabilities which were unrivaled at the era. Amiga inspired a lot of musicians to
+produce a vast amount of compositions, or modules as they were called. [Amiga Music Preservation](http://amp.dascene.net) is a non-profit
 project that collects anything related to Amiga music production. AMP database boasts over 160 000 modules, 4champ app is your direct access to all that goodness.
 
 ### Development journal
@@ -18,25 +19,27 @@ You can read more about the history of the app and follow the rewrite process on
 You can also follow the [@4champ_app](https://twitter.com/4champ_app) Twitter account to stay up to date on what's happening with the app.
 
 ### Main Features and their current status in this repository
-* Radio: You can listen to a random set of tunes from the whole collection of over 150000 modules, or stream from the head, i.e. the most recently added ones. You can also play from the local collection from set of modules that you've selected to keep for offline mode. This was implemented first in the rewrite.
-* Search (search the AMP database by module, composer, group name or sampletexts): Implemented in October 2018.
-* Playlists (build your own playlists): Playlists implemented in April 2020.
-* Local Collection (store modules locally): Persistent storage for off-line listening of modules implemented June 2019.
-* Settings (control stereo separation etc): Stereo separation setting implemented in November 2018.
-* Import modules from filesystem (local / cloud / network). The first complete new feature that never existed in the old generation app. August 2021.
+
+- Radio: You can listen to a random set of tunes from the whole collection of over 150000 modules, or stream from the head, i.e. the most recently added ones. You can also play from the local collection from set of modules that you've selected to keep for offline mode. This was implemented first in the rewrite.
+- Search (search the AMP database by module, composer, group name or sampletexts): Implemented in October 2018.
+- Playlists (build your own playlists): Playlists implemented in April 2020.
+- Local Collection (store modules locally): Persistent storage for off-line listening of modules implemented June 2019.
+- Settings (control stereo separation etc): Stereo separation setting implemented in November 2018.
+- Import modules from filesystem (local / cloud / network). The first complete new feature that never existed in the old generation app. August 2021.
 
 ### Dependencies
 
 ##### A. Frameworks configured through Swift Package Manager
+
 **[Alamofire](https://github.com/Alamofire/Alamofire)** is used for network comms.
 **[GzipSwift](https://github.com/1024jp/GzipSwift)** is used to unpack the gzipped module files.
 **[SwiftyBeaver](https://github.com/SwiftyBeaver/SwiftyBeaver)** is used for logging.
 
 ##### B. Module Playback Libraries
 
-4champ uses [libOpenMPT](https://github.com/OpenMPT/openmpt) and [Hivelytracker](https://github.com/pete-gordon/hivelytracker) for module playback. 
+4champ uses [libOpenMPT](https://github.com/OpenMPT/openmpt) and [Hivelytracker](https://github.com/pete-gordon/hivelytracker) for module playback.
 
-**Hivelytracker** replayer code is included in [4champ/Replay/Hively](4champ/replay/hively) folder, so it will be built automatically when you build xcode projects in this repository, no further actions needed. 
+**Hivelytracker** replayer code is included in [4champ/Replay/Hively](4champ/replay/hively) folder, so it will be built automatically when you build xcode projects in this repository, no further actions needed.
 
 **LibOpenMPT** repo does not build for iOS without small tweaks, which I have done on my own fork of the lib at https://github.com/sitomani/openmpt. In order to build it for use in connection with 4champ and the SamplePlayer demo app in this repository, you will need to take the following steps:
 
@@ -44,8 +47,8 @@ You can also follow the [@4champ_app](https://twitter.com/4champ_app) Twitter ac
 2. Clone https://github.com/sitomani/openmpt at same folder where you cloned this repository at (the repositories will be subfolders in same level in the directory tree).
 3. Navigate in terminal to the openmpt repository root folder
 4. Execute `iOS_genproject.sh` to generate the xcode project files for libopenmpt.
-5. Execute `iOS_build.sh` to build the fat lib file for iOS use (both X86_64 and ARM64 slices combined). 
-6. After successful build, the library file `liblibopenmpt.a` will be found under openmpt repository root, and 4champ repository projects are configured to find it there, provided that you have cloned this repository and openmpt repository in the same folder.
+5. Execute `iOS_build.sh` to build the fat framework file for iOS use (supports simulators on both Intel and M1 macs and all Arm64 iOS devices)
+6. After successful build, the framework file `libopenmpt.framework` will be found under openmpt repository root, and 4champ repository projects are configured to find it there, provided that you have cloned this repository and openmpt repository in the same folder.
 
 ### Building the app
 
@@ -59,9 +62,9 @@ The Xcode generated developer certificate will only be valid for 7 days, which m
 
 The code in this repository is copyright © Aleksi Sitomaniemi and licensed under [MIT license](LICENSE), **except** for HivelyTracker replay routine code which is by licenced under [BSD-3](4champ/replay/hively/LICENSE) by [Pete Gordon](https://github.com/pete-gordon).
 
-Module files included under *SamplePlayer* test project that I've used to verify the the replay routine are work of the original authors:
+Module files included under _SamplePlayer_ test project that I've used to verify the the replay routine are work of the original authors:
 
-*1st_intro.mod* by florist (Aleksi Sitomaniemi - yup that's me!)<br/>
-*all.in.eightchannels.xm* by Daze (Patrick Glasby-Baldwin)<br/>
-*mislead.ahx* by Pink (Manfred Linzner)<br/>
-*peanuts!.hvl* by Lavaburn (Dale Whinham)<br/>
+_1st_intro.mod_ by florist (Aleksi Sitomaniemi - yup that's me!)<br/>
+_all.in.eightchannels.xm_ by Daze (Patrick Glasby-Baldwin)<br/>
+_mislead.ahx_ by Pink (Manfred Linzner)<br/>
+_peanuts!.hvl_ by Lavaburn (Dale Whinham)<br/>
