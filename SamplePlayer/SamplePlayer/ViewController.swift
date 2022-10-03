@@ -10,12 +10,42 @@ import UIKit
 class ViewController: UIViewController {
   
   @IBOutlet weak var modLabel: UILabel!
+  @IBOutlet weak var modStack: UIStackView!
+  
+  private let modulesUrl: URL
+  private let modulePaths: [String]
   
   let replay = Replay()
+  
+  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    modulesUrl = Bundle.main.url(forResource: "Modules", withExtension: "bundle")!
+    modulePaths = try! FileManager.default.contentsOfDirectory(atPath: modulesUrl.path)
+    super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+  }
+  
+  required init?(coder: NSCoder) {
+    modulesUrl = Bundle.main.url(forResource: "Modules", withExtension: "bundle")!
+    modulePaths = try! FileManager.default.contentsOfDirectory(atPath: modulesUrl.path)
+    super.init(coder: coder)
+  }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     replay.initAudio()
+    
+    modStack.spacing = 8.0
+    modStack.distribution = .fillEqually
+    
+    // Add module buttons
+    modulePaths.forEach { path in
+      let btn = UIButton()
+      btn.backgroundColor = UIColor.init(red: 0, green: 0x42/255, blue: 0x47/255, alpha: 1)
+      let ext = path.split(separator: ".").last
+      btn.setTitle(String(ext ?? "n/a").uppercased() , for: .normal)
+      btn.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+      modStack.addArrangedSubview(btn)
+    }
+    
   }
   
   @IBAction func buttonTapped(_ sender: UIButton) {
@@ -25,10 +55,12 @@ class ViewController: UIViewController {
         modLabel.text = "no module selected"
         replay.stop()
       default:
-        let mods = Bundle.main.paths(forResourcesOfType: btn.lowercased(), inDirectory: nil)
-        if let mod = mods.first {
+        if let mod = modulePaths.first(where: { path in
+          path.uppercased().hasSuffix(btn)
+        }) {
+          let fullpath = "\(modulesUrl.path)/\(mod)"
           modLabel.text = String(mod.split(separator: "/").last ?? "")
-          replay.loadModule(mod, type: btn)
+          replay.loadModule(fullpath, type: btn)
           replay.play()
         }
       }

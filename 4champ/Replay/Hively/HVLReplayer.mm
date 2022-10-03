@@ -185,7 +185,7 @@ static int iHivelyBufPos = 0;
 - (bool) loadModule:(NSString *)path type:(NSString*) type {
   currentHVLtune = hvl_LoadTune((TEXT*)[path UTF8String], 44100, hvlStereoSeparation );
   if (currentHVLtune == nil) {
-    return nil;
+    return false;
   }
   
   curpos = 0;
