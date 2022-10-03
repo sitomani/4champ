@@ -36,6 +36,27 @@ class MainViewController: UITabBarController {
     npView.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
     npView?.alpha = 0
     
+    let tabBarAppearance: UITabBarAppearance = UITabBarAppearance()
+    tabBarAppearance.configureWithDefaultBackground()
+    tabBarAppearance.backgroundColor = Appearance.tabColor
+    UITabBar.appearance().standardAppearance = tabBarAppearance
+
+    if #available(iOS 15.0, *) {
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+    }
+    
+    let navBarAppearance: UINavigationBarAppearance = UINavigationBarAppearance()
+    navBarAppearance.configureWithDefaultBackground()
+    navBarAppearance.backgroundColor = Appearance.tabColor
+    navBarAppearance.titleTextAttributes = [.foregroundColor: Appearance.barTitleColor,
+                                                  .font: UIFont.systemFont(ofSize: 16.0, weight: .heavy)]
+    UINavigationBar.appearance().standardAppearance = navBarAppearance
+
+    if #available(iOS 15.0, *) {
+        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+    }
+
+    
     self.becomeFirstResponder()
     modulePlayer.addPlayerObserver(self)
     moduleStorage.addStorageObserver(self)

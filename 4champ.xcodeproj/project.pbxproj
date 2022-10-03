@@ -63,7 +63,6 @@
 		45855FC9244467420079C767 /* DownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45855FC8244467420079C767 /* DownloadView.swift */; };
 		45855FCB244475050079C767 /* DownloadHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45855FCA244475050079C767 /* DownloadHostingController.swift */; };
 		45855FCD2444AC6B0079C767 /* ModuleSharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45855FCC2444AC6B0079C767 /* ModuleSharing.swift */; };
-		45A4F13C257EAF81006FF21B /* liblibopenmpt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45A4F130257EA970006FF21B /* liblibopenmpt.a */; };
 		45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */; };
 		45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F420FF2F6600794147 /* RESTRoutes.swift */; };
 		45AA910220FF36C200794147 /* Replay.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F720FF36C200794147 /* Replay.m */; };
@@ -94,6 +93,7 @@
 		735A273E264FDFAD004EAC0C /* Gzip in Frameworks */ = {isa = PBXBuildFile; productRef = 735A273D264FDFAD004EAC0C /* Gzip */; };
 		735A2742264FDFDE004EAC0C /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = 735A2741264FDFDE004EAC0C /* SwiftyBeaver */; };
 		735A2746264FE01D004EAC0C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 735A2745264FE01D004EAC0C /* Alamofire */; };
+		73759FD228EB34DF00535F8E /* libopenmpt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73759FD128EB34DF00535F8E /* libopenmpt.xcframework */; };
 		739B4BF42720850200C2D69F /* RadioSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739B4BF32720850200C2D69F /* RadioSessionCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -170,7 +170,6 @@
 		45855FCA244475050079C767 /* DownloadHostingController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = DownloadHostingController.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45855FCC2444AC6B0079C767 /* ModuleSharing.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModuleSharing.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45A080E424327ED500AEA85F /* Entitlements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
-		45A4F130257EA970006FF21B /* liblibopenmpt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibopenmpt.a; path = ../openmpt/liblibopenmpt.a; sourceTree = "<group>"; };
 		45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModulePlayer.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45AA90F420FF2F6600794147 /* RESTRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTRoutes.swift; sourceTree = "<group>"; };
 		45AA90F720FF36C200794147 /* Replay.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = Replay.m; sourceTree = "<group>"; tabWidth = 2; };
@@ -182,7 +181,6 @@
 		45AA90FE20FF36C200794147 /* Replay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Replay.h; sourceTree = "<group>"; };
 		45AA910020FF36C200794147 /* MPTReplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTReplayer.h; sourceTree = "<group>"; };
 		45AA910120FF36C200794147 /* MPTReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTReplayer.m; sourceTree = "<group>"; };
-		45AA910920FF389800794147 /* liblibopenmpt-small.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "liblibopenmpt-small.a"; path = "../openmpt/liblibopenmpt-small.a"; sourceTree = "<group>"; };
 		45AA910B20FF3A3B00794147 /* 4champ-bridging-header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "4champ-bridging-header.h"; path = "4champ/4champ-bridging-header.h"; sourceTree = SOURCE_ROOT; };
 		45AA910D20FF5E8A00794147 /* Structs.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45AA910F2100C48500794147 /* MainViewController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
@@ -209,6 +207,7 @@
 		45D61F5C20E17D8F00869814 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		45D61F6220E1863600869814 /* Gzip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Gzip.framework; path = Carthage/Build/iOS/Gzip.framework; sourceTree = "<group>"; };
 		735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 9 (imports).xcdatamodel"; sourceTree = "<group>"; };
+		73759FD128EB34DF00535F8E /* libopenmpt.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libopenmpt.xcframework; path = ../openmpt/libopenmpt.xcframework; sourceTree = "<group>"; };
 		739B4BF32720850200C2D69F /* RadioSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioSessionCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -217,7 +216,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45A4F13C257EAF81006FF21B /* liblibopenmpt.a in Frameworks */,
+				73759FD228EB34DF00535F8E /* libopenmpt.xcframework in Frameworks */,
 				735A2746264FE01D004EAC0C /* Alamofire in Frameworks */,
 				735A273E264FDFAD004EAC0C /* Gzip in Frameworks */,
 				735A2742264FDFDE004EAC0C /* SwiftyBeaver in Frameworks */,
@@ -498,9 +497,8 @@
 		45D61F5E20E17D9600869814 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				45A4F130257EA970006FF21B /* liblibopenmpt.a */,
+				73759FD128EB34DF00535F8E /* libopenmpt.xcframework */,
 				455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */,
-				45AA910920FF389800794147 /* liblibopenmpt-small.a */,
 				45D61F6220E1863600869814 /* Gzip.framework */,
 				45D61F5C20E17D8F00869814 /* Alamofire.framework */,
 			);
