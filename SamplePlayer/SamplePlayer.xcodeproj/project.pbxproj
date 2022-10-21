@@ -16,9 +16,11 @@
 		45D707E6208B7C52004CB16A /* HVLReplayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 45D707DA208B7C52004CB16A /* HVLReplayer.mm */; };
 		45D707E7208B7C52004CB16A /* MPTReplayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 45D707DD208B7C52004CB16A /* MPTReplayer.m */; };
 		45D707E8208B7C52004CB16A /* Replay.m in Sources */ = {isa = PBXBuildFile; fileRef = 45D707DF208B7C52004CB16A /* Replay.m */; };
+		735012E028EC9702003EF294 /* UADEReplayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 735012DF28EC9702003EF294 /* UADEReplayer.m */; };
 		73759FCA28EB271A00535F8E /* libopenmpt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73759FC928EB271A00535F8E /* libopenmpt.xcframework */; };
 		73759FD028EB2B0A00535F8E /* Modules.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 73759FCF28EB2B0A00535F8E /* Modules.bundle */; };
 		739D39B82652A0EC001EBC9E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 739D39B72652A0EC001EBC9E /* libz.tbd */; };
+		73D4C0EF28F688E800B59CAE /* uade_ios.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73D4C0EE28F688E800B59CAE /* uade_ios.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,9 +40,12 @@
 		45D707DD208B7C52004CB16A /* MPTReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTReplayer.m; sourceTree = "<group>"; };
 		45D707DE208B7C52004CB16A /* Replay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Replay.h; sourceTree = "<group>"; };
 		45D707DF208B7C52004CB16A /* Replay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Replay.m; sourceTree = "<group>"; };
+		735012DE28EC9702003EF294 /* UADEReplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UADEReplayer.h; sourceTree = "<group>"; };
+		735012DF28EC9702003EF294 /* UADEReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UADEReplayer.m; sourceTree = "<group>"; };
 		73759FC928EB271A00535F8E /* libopenmpt.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libopenmpt.xcframework; path = ../../openmpt/libopenmpt.xcframework; sourceTree = "<group>"; };
 		73759FCF28EB2B0A00535F8E /* Modules.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Modules.bundle; sourceTree = "<group>"; };
 		739D39B72652A0EC001EBC9E /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		73D4C0EE28F688E800B59CAE /* uade_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = uade_ios.xcframework; path = "../../uade-ios/uade_ios.xcframework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73D4C0EF28F688E800B59CAE /* uade_ios.xcframework in Frameworks */,
 				73759FCA28EB271A00535F8E /* libopenmpt.xcframework in Frameworks */,
 				739D39B82652A0EC001EBC9E /* libz.tbd in Frameworks */,
 			);
@@ -93,6 +99,7 @@
 		45D707D5208B7C52004CB16A /* Replay */ = {
 			isa = PBXGroup;
 			children = (
+				735012DD28EC9702003EF294 /* UADE */,
 				45D707D6208B7C52004CB16A /* Hively */,
 				45D707DB208B7C52004CB16A /* OpenMPT */,
 				45D707DE208B7C52004CB16A /* Replay.h */,
@@ -125,6 +132,7 @@
 		45D707EA208B7CEA004CB16A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				73D4C0EE28F688E800B59CAE /* uade_ios.xcframework */,
 				73759FC928EB271A00535F8E /* libopenmpt.xcframework */,
 				739D39B72652A0EC001EBC9E /* libz.tbd */,
 			);
@@ -136,6 +144,15 @@
 			children = (
 			);
 			path = Modules;
+			sourceTree = "<group>";
+		};
+		735012DD28EC9702003EF294 /* UADE */ = {
+			isa = PBXGroup;
+			children = (
+				735012DE28EC9702003EF294 /* UADEReplayer.h */,
+				735012DF28EC9702003EF294 /* UADEReplayer.m */,
+			);
+			path = UADE;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -216,6 +233,7 @@
 				45D707E8208B7C52004CB16A /* Replay.m in Sources */,
 				45C005B7208B7B1800126E78 /* ViewController.swift in Sources */,
 				45C005B5208B7B1800126E78 /* AppDelegate.swift in Sources */,
+				735012E028EC9702003EF294 /* UADEReplayer.m in Sources */,
 				45D707E7208B7C52004CB16A /* MPTReplayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -358,13 +376,20 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
-				HEADER_SEARCH_PATHS = ../../openmpt/libopenmpt;
+				HEADER_SEARCH_PATHS = (
+					../../uade/src/frontends/include,
+					../../openmpt/libopenmpt,
+					../../uade/src/include,
+				);
 				INFOPLIST_FILE = SamplePlayer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = ../../openmpt;
+				LIBRARY_SEARCH_PATHS = (
+					../../openmpt,
+					../../uade,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.4champ.SamplePlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -382,13 +407,20 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
-				HEADER_SEARCH_PATHS = ../../openmpt/libopenmpt;
+				HEADER_SEARCH_PATHS = (
+					../../uade/src/frontends/include,
+					../../openmpt/libopenmpt,
+					../../uade/src/include,
+				);
 				INFOPLIST_FILE = SamplePlayer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = ../../openmpt;
+				LIBRARY_SEARCH_PATHS = (
+					../../openmpt,
+					../../uade,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.4champ.SamplePlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

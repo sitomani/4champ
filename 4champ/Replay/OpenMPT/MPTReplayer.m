@@ -12,6 +12,53 @@
   openmpt_module* currentOMPTFile;
 }
 
++ (NSArray<NSString*>*)supportedFormats {
+    return @[@"669",
+            @"AMF",
+            @"AMS",
+            @"DBM",
+            @"DIGI",
+            @"DMF",
+            @"DSM",
+            @"DTM",
+            @"FAR",
+            @"IT",
+            @"GDM",
+            @"ST26",
+            @"IMF",
+            @"J2B",
+            @"M15",
+            //@"MED", UADE
+            @"MDL",
+            @"MOD",
+            @"MT2",
+            @"MTM",
+            @"NST",
+            @"OCT",
+            @"OKT",
+            @"OSS",
+            @"PTM",
+            @"PSM",
+            @"S3M",
+            @"STM",
+            @"SFX",
+            @"SFX2",
+            @"ULT",
+            @"UMX",
+            @"WOW",
+            @"XM",
+            @"FST",
+            @"STK",
+            @"MMCMP",
+            @"MMS",
+            @"MO3",
+            @"MPTM",
+            @"OK",
+            @"PLM",
+            @"PPM",
+            @"PT36"];
+}
+
 - (bool) loadModule:(NSString *)path type:(NSString*)type {
   NSData* data = [[NSFileManager defaultManager] contentsAtPath:path];
   if (!data) return false;
@@ -22,9 +69,13 @@
 }
 
 - (void)dealloc {
-  if (currentOMPTFile) {
-    openmpt_module_destroy(currentOMPTFile);
-  }
+    NSLog(@"MTPReplayer deallocated");
+}
+
+- (void) cleanup {
+    if (currentOMPTFile) {
+      openmpt_module_destroy(currentOMPTFile);
+    }
 }
 
 - (int) readFrames:(size_t)count bufLeft:(int16_t*)bufLeft bufRight:(int16_t*)bufRight {

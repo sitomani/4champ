@@ -7,6 +7,7 @@
 
 #import "Replay.h"
 #import "MPTReplayer.h"
+#import "UADEReplayer.h"
 #import "HVLReplayer.h"
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
@@ -22,6 +23,7 @@
 
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 @property (nonatomic, strong) NSDictionary* replayerMap;
+@property (nonatomic, strong) NSArray* replayers;
 #define checkStatus( err) \
 if(err) {\
 NSLog(@"Error in audio %@", @(err));\
@@ -35,15 +37,19 @@ NSLog(@"Error in audio %@", @(err));\
 static SInt16* bufLeft;
 static SInt16* bufRight;
 
++ (NSArray<NSString*>*)supportedFormats {
+  NSMutableArray* formats = [[NSMutableArray alloc] init];
+  [formats addObjectsFromArray:[MPTReplayer supportedFormats]];
+  [formats addObjectsFromArray:[HVLReplayer supportedFormats]];
+  [formats addObjectsFromArray:[UADEReplayer supportedFormats]];
+  return formats;
+}
+
 -(id)init
 {
   self=[super init];
   if (self) {
-    //Map AHX and HVL to HVLReplayer, everything else plays with OpenMPT
-    self.replayerMap = @{@"AHX": [HVLReplayer class],
-                         @"HVL": [HVLReplayer class],
-                         @"THX": [HVLReplayer class]
-                         };
+    self.replayers = @[[MPTReplayer class], [HVLReplayer class], [UADEReplayer class]];
   }
   return self;
 }
@@ -126,15 +132,23 @@ static SInt16* bufRight;
     type = [[path pathExtension] uppercaseString];
   }
   Class replayerClass;
-  if ([self.replayerMap.allKeys containsObject:type]) {
-    replayerClass = [self.replayerMap objectForKey:type];
-  } else {
-    replayerClass = [MPTReplayer class];
+//  if ([self.replayerMap.allKeys containsObject:type]) {
+//    replayerClass = [self.replayerMap objectForKey:type];
+//  } else {
+//    replayerClass = [MPTReplayer class];
+//  }
+  for (int i=0; i< self.replayers.count; i++) {
+    if ([[self.replayers[i] supportedFormats] containsObject:(type)]) {
+      replayerClass = self.replayers[i];
+    }
   }
   if (renderer) {
     [self pause];
   }
   if (![[renderer class] isEqual:replayerClass]) {
+      if(renderer) {
+          [renderer cleanup];
+      }
     renderer = [[replayerClass alloc] init];
   }
   return [renderer loadModule:path type:type];
@@ -237,6 +251,11 @@ static SInt16* bufRight;
     [renderer setInterpolationFilterLength:value];
   }
 }
+
+- (void)cleanup {
+  //noop, done in loadModule for the replayer
+}
+
 
 
 

@@ -10,6 +10,11 @@
 @protocol ReplayControl <NSObject>
 // Control API
 /**
+ Supported @formats
+ */
+@property (class, nonatomic, strong, readonly) NSArray<NSString*>* supportedFormats;
+
+/**
  Loads module for playback from given path.
  @param path identifies the module file. Path extension can identify format (type)
  @param type can be passed separately if path does not have extension. If this parameter
@@ -35,6 +40,12 @@
  in libpopenmpt.h
  */
 - (void) setInterpolationFilterLength:(NSInteger)value;
+
+/**
+ Free replayer resources
+ */
+- (void) cleanup;
+
 @end
 
 @protocol ReplayInformation <NSObject>

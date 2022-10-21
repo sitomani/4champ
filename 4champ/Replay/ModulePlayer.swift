@@ -13,6 +13,7 @@ enum PlayerError: Error {
   case unknown
 }
 
+
 /// possible states of a ModulePlayer
 enum PlayerStatus:Int {
   case initialised
