@@ -17,11 +17,26 @@
 		45D707E7208B7C52004CB16A /* MPTReplayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 45D707DD208B7C52004CB16A /* MPTReplayer.m */; };
 		45D707E8208B7C52004CB16A /* Replay.m in Sources */ = {isa = PBXBuildFile; fileRef = 45D707DF208B7C52004CB16A /* Replay.m */; };
 		735012E028EC9702003EF294 /* UADEReplayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 735012DF28EC9702003EF294 /* UADEReplayer.m */; };
-		73759FCA28EB271A00535F8E /* libopenmpt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73759FC928EB271A00535F8E /* libopenmpt.xcframework */; };
+		73759FCA28EB271A00535F8E /* libopenmpt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73759FC928EB271A00535F8E /* libopenmpt.xcframework */; settings = {ATTRIBUTES = (Required, ); }; };
 		73759FD028EB2B0A00535F8E /* Modules.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 73759FCF28EB2B0A00535F8E /* Modules.bundle */; };
+		7397C1E929092561002D5CDB /* uade_ios.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73E345A6290595DA00B3C937 /* uade_ios.xcframework */; };
+		7397C1EA29092561002D5CDB /* uade_ios.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 73E345A6290595DA00B3C937 /* uade_ios.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		739D39B82652A0EC001EBC9E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 739D39B72652A0EC001EBC9E /* libz.tbd */; };
-		73D4C0EF28F688E800B59CAE /* uade_ios.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73D4C0EE28F688E800B59CAE /* uade_ios.xcframework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7397C1EB29092561002D5CDB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7397C1EA29092561002D5CDB /* uade_ios.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		45C005B1208B7B1800126E78 /* SamplePlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SamplePlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,7 +60,7 @@
 		73759FC928EB271A00535F8E /* libopenmpt.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libopenmpt.xcframework; path = ../../openmpt/libopenmpt.xcframework; sourceTree = "<group>"; };
 		73759FCF28EB2B0A00535F8E /* Modules.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Modules.bundle; sourceTree = "<group>"; };
 		739D39B72652A0EC001EBC9E /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		73D4C0EE28F688E800B59CAE /* uade_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = uade_ios.xcframework; path = "../../uade-ios/uade_ios.xcframework"; sourceTree = "<group>"; };
+		73E345A6290595DA00B3C937 /* uade_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = uade_ios.xcframework; path = "../../uade-ios/uade_ios.xcframework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,7 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				73D4C0EF28F688E800B59CAE /* uade_ios.xcframework in Frameworks */,
+				7397C1E929092561002D5CDB /* uade_ios.xcframework in Frameworks */,
 				73759FCA28EB271A00535F8E /* libopenmpt.xcframework in Frameworks */,
 				739D39B82652A0EC001EBC9E /* libz.tbd in Frameworks */,
 			);
@@ -84,7 +99,6 @@
 			isa = PBXGroup;
 			children = (
 				73759FCF28EB2B0A00535F8E /* Modules.bundle */,
-				45D707EF208B7E2A004CB16A /* Modules */,
 				45C005B4208B7B1800126E78 /* AppDelegate.swift */,
 				45C005B6208B7B1800126E78 /* ViewController.swift */,
 				45C005B8208B7B1800126E78 /* Main.storyboard */,
@@ -132,18 +146,11 @@
 		45D707EA208B7CEA004CB16A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				73D4C0EE28F688E800B59CAE /* uade_ios.xcframework */,
+				73E345A6290595DA00B3C937 /* uade_ios.xcframework */,
 				73759FC928EB271A00535F8E /* libopenmpt.xcframework */,
 				739D39B72652A0EC001EBC9E /* libz.tbd */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		45D707EF208B7E2A004CB16A /* Modules */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Modules;
 			sourceTree = "<group>";
 		};
 		735012DD28EC9702003EF294 /* UADE */ = {
@@ -165,6 +172,7 @@
 				45C005AD208B7B1800126E78 /* Sources */,
 				45C005AE208B7B1800126E78 /* Frameworks */,
 				45C005AF208B7B1800126E78 /* Resources */,
+				7397C1EB29092561002D5CDB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -308,7 +316,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -359,7 +367,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -377,9 +385,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				HEADER_SEARCH_PATHS = (
-					../../uade/src/frontends/include,
+					"../../uade-ios/src/frontends/include",
 					../../openmpt/libopenmpt,
-					../../uade/src/include,
+					"../../uade-ios/src/include",
 				);
 				INFOPLIST_FILE = SamplePlayer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -387,8 +395,8 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					../../openmpt,
-					../../uade,
+					"../../openmpt/**",
+					"../../uade/**",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.4champ.SamplePlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -408,9 +416,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				HEADER_SEARCH_PATHS = (
-					../../uade/src/frontends/include,
+					"../../uade-ios/src/frontends/include",
 					../../openmpt/libopenmpt,
-					../../uade/src/include,
+					"../../uade-ios/src/include",
 				);
 				INFOPLIST_FILE = SamplePlayer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -418,8 +426,8 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					../../openmpt,
-					../../uade,
+					"../../openmpt/**",
+					"../../uade/**",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.4champ.SamplePlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";

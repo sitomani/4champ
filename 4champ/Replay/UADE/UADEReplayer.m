@@ -16,14 +16,7 @@ static volatile int uadethread_running;
 #include <uade/uade.h>
 #include <sys/socket.h>
 #include "uae.h"
-
-int uadeconf_loaded;
-char uadeconfname[256];
-enum uade_control_state ctrlstate = UADE_S_STATE;
-
-int new_subsong = -1;
-#define MAX_LEN 256
-char current_format[80] = "";
+#include <dirent.h>
 
 @implementation UADEReplayer{
     struct uade_config* cfg;
@@ -35,7 +28,7 @@ char current_format[80] = "";
     char basedir[PATH_MAX];
     struct uade_file* playername;
     int fds[2];
-  }
+}
 
 + (NSArray<NSString*>*)supportedFormats {
     return @[@"AAM", // ArtAndMagic,
@@ -113,7 +106,7 @@ char current_format[80] = "";
              @"MXTX",// Maxtrax
              @"MCMD",// MCMD
              @"MIDI",// MIDI-loriciel
-             @"ML",  // MusicLine Editor
+             //@"ML",@"Ml"  // MusicLine Editor - disabled since ML player does not handle file paths longer than 127 chars.
              @"MOK", // Silmarilis
              @"MON", // ManiacsOfNoise
              @"MSO", // Medley
@@ -174,7 +167,7 @@ char current_format[80] = "";
              @"WB",  // Wally Beben
              @"YM",  // YM-2149,
              @"QPA", @"SQT", @"QTS", // Quartet - PSG - ST
-             ];
+    ];
 }
 
 // Handle main UADE thread (amiga emu)
@@ -182,12 +175,12 @@ char current_format[80] = "";
     uadethread_running = 1;
     NSLog(@"UADECore enter");
     @autoreleasepool {
-    const char* inParam = [[params objectAtIndex:0] UTF8String];
-    const char* outParam = [[params objectAtIndex:1] UTF8String];
-
-    [[NSThread currentThread] setThreadPriority:0.9f];
-    const char *argv[5] = {"uadecore", "-i", inParam, "-o", outParam};
-    uadecore_main(5,(char**)argv);
+        const char* inParam = [[params objectAtIndex:0] UTF8String];
+        const char* outParam = [[params objectAtIndex:1] UTF8String];
+        
+        [[NSThread currentThread] setThreadPriority:0.9f];
+        const char *argv[5] = {"uadecore", "-i", inParam, "-o", outParam};
+        uadecore_main(5,(char**)argv);
     }
     NSLog(@"UADECore exit");
     uadethread_running=0;
@@ -196,8 +189,8 @@ char current_format[80] = "";
 - (UADEReplayer*) init {
     self = [super init];
     if (self) {
-        // get basedir from bundle
-        NSString *bd = [[NSBundle mainBundle] pathForResource:@"UADERes" ofType:@"bundle"];
+        NSBundle* uadeBundle = [NSBundle bundleWithIdentifier: @"com.apple.xcode.dsym.libuade"];
+        NSString *bd = [uadeBundle pathForResource:@"UADERes" ofType:@"bundle"];
         strcpy(basedir, [bd UTF8String]);
         
         struct uade_config *cfg = uade_new_config();
@@ -207,7 +200,7 @@ char current_format[80] = "";
         uade_config_set_option(cfg, UC_SCORE_FILE, uadescorename);
         ustate = [self create_state:cfg];
         free(cfg);
-
+        
     }
     return self;
 }
@@ -227,54 +220,65 @@ char current_format[80] = "";
     close(fds[1]);
 }
 
-
 /// Create UADE state. Implementation is identical with `uade_new_state` provided by libuade,
 /// with the exception that uadecore is spawned in a thread, not a separate process.
 /// @param extraconfig any client-specific configuration
 - (struct uade_state*) create_state:(struct uade_config*)extraconfig {
-
     struct uade_state *state;
+    DIR *bd;
     char path[PATH_MAX];
     const char *basedir;
-
+    
     state = calloc(1, sizeof *state);
     if (!state)
         return NULL;
-
+    
     basedir = NULL;
     if (extraconfig != NULL && extraconfig->basedir_set)
         basedir = extraconfig->basedir.name;
-
-    if (!uade_load_initial_config(state, basedir))
-        NSLog(@"uadeconfig not loaded");
-
-    if (extraconfig)
-        state->extraconfig = *extraconfig;
-    else
-        uade_config_set_defaults(&state->extraconfig);
-
+    
+    if (!uade_load_initial_config(state, basedir)) {
+        //        uade_warning("uadeconfig not loaded\n");
+        
+        if (extraconfig) {
+            state->extraconfig = *extraconfig;
+        }
+        else {
+            uade_config_set_defaults(&state->extraconfig);
+        }
+    }
+    
     state->config = state->permconfig;
     uade_merge_configs(&state->config, &state->extraconfig);
-
+    
     uade_load_initial_song_conf(state);
-//    load_content_db(state);
-
-    snprintf(path, sizeof path, "%s/uadecore", state->config.basedir.name);
+    //load_content_db(state);
+    
+    bd = opendir(state->config.basedir.name);
+    if (bd == NULL) {
+        NSLog(@"Could not access dir %s", state->config.basedir.name);
+        return nil;
+    }
+    closedir(bd);
+    
     uade_config_set_option(&state->config, UC_UADECORE_FILE,
-                   path);
+                           UADE_CONFIG_UADE_CORE);
     
     snprintf(path, sizeof path, "%s/uaerc", state->config.basedir.name);
     uade_config_set_option(&state->config, UC_UAE_CONFIG_FILE, path);
-
+    
     uade_merge_configs(&state->config, &state->extraconfig);
-
-    if (access(state->config.uae_config_file.name, R_OK)) {
-        NSLog(@"Could not read uae config file: %s\n",
-                 state->config.uae_config_file.name);
-        uade_cleanup_state(state);
-        return NULL;
+    
+    /* TODO: Remove this, but make uadecore respond with a HELLO message. */
+    if (access(state->config.uadecore_file.name, X_OK)) {
+        NSLog(@"Could not execute %s", state->config.uadecore_file.name);
+        return nil;
     }
-
+    if (access(state->config.uae_config_file.name, R_OK)) {
+        NSLog(@"Could not read uae config file: %s", state->config.uae_config_file.name);
+        return nil;
+    }
+    
     // set up ipc
     if (socketpair(AF_UNIX, SOCK_STREAM, 0, fds)) {
         NSLog(@"Cannot create socket pair");
@@ -285,29 +289,27 @@ char current_format[80] = "";
     [NSThread detachNewThreadSelector:@selector(uadeThread:) toTarget:self withObject:params];
     
     uade_set_peer(&state->ipc, 1, fds[1], fds[1]);
-    
     if (uade_send_string(UADE_COMMAND_CONFIG, state->config.uae_config_file.name, &state->ipc)) {
-        NSLog(@"Can not send config name: %s\n", strerror(errno));
-        uade_cleanup_state(state);
-        return NULL;
+        NSLog(@"Can not send config name: %s", strerror(errno));
+        return nil;
     }
+    
     return state;
-
 }
 
 - (bool)loadModule:(NSString *)path type:(NSString *)type {
     
     NSData* data = [[NSFileManager defaultManager] contentsAtPath:path];
     if (!data) return false;
-        
+    
     uade_stop(ustate);
     if (!uade_is_our_file_from_buffer([path UTF8String], data.bytes, data.length, ustate)) {
         NSLog(@"Not our file");
         return false;
     }
-//    uade_play([path UTF8String], 0, ustate);
-//    const char *fname, const void *buf, size_t size,
-//                  int subsong, struct uade_state *state
+    //    uade_play([path UTF8String], 0, ustate);
+    //    const char *fname, const void *buf, size_t size,
+    //                  int subsong, struct uade_state *state
     NSString* nameOnly = [[path componentsSeparatedByString:@"/"] lastObject];
     uade_play_from_buffer([path UTF8String], data.bytes, data.length, 0, ustate);
     

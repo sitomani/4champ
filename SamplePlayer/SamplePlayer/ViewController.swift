@@ -11,6 +11,7 @@ class ViewController: UIViewController {
   
   @IBOutlet weak var modLabel: UILabel!
   @IBOutlet weak var modStack: UIStackView!
+  @IBOutlet weak var viewTitle: UILabel!
   
   private let modulesUrl: URL
   private let modulePaths: [String]
@@ -27,6 +28,13 @@ class ViewController: UIViewController {
     modulesUrl = Bundle.main.url(forResource: "Modules", withExtension: "bundle")!
     modulePaths = try! FileManager.default.contentsOfDirectory(atPath: modulesUrl.path)
     super.init(coder: coder)
+  }
+
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    modLabel.textColor = .black
+    viewTitle.textColor = .black
+
   }
   
   override func viewDidAppear(_ animated: Bool) {
