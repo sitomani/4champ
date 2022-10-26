@@ -28,7 +28,7 @@
             @"IMF",
             @"J2B",
             @"M15",
-            //@"MED", UADE
+            //@"MED", Handled by UADE
             @"MDL",
             @"MOD",
             @"MT2",
