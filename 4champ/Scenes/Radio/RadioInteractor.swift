@@ -168,9 +168,11 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     if let currentIndex = radioSessionHistory.index(of: currentMod), currentIndex >= 0 {
       nextIndex = currentIndex + 1
     }
-    postFetchAction = .insertToQueue
-    let fetcher = ModuleFetcher.init(delegate: self)
-    fetcher.fetchModule(ampId: radioSessionHistory[nextIndex].id!)
+    if radioSessionHistory.count > nextIndex, let prevId = radioSessionHistory[nextIndex].id {
+      postFetchAction = .insertToQueue
+      let fetcher = ModuleFetcher.init(delegate: self)
+      fetcher.fetchModule(ampId: prevId)
+    }
   }
   
   func playFromSessionHistory(at: IndexPath) {

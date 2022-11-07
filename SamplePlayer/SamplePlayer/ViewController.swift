@@ -43,6 +43,11 @@ class ViewController: UIViewController {
     
     modStack.spacing = 8.0
     modStack.distribution = .fillEqually
+
+    let bundle = Bundle.main //init(identifier: "lib.uade.ios")
+    viewTitle.text = bundle.resourcePath ?? ""
+//    NSString *bd = [uadeBundle pathForResource:@"UADERes" ofType:@"bundle"];
+
     
     // Add module buttons
     modulePaths.forEach { path in

@@ -67,7 +67,6 @@
 		45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F420FF2F6600794147 /* RESTRoutes.swift */; };
 		45AA910220FF36C200794147 /* Replay.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F720FF36C200794147 /* Replay.m */; };
 		45AA910320FF36C200794147 /* hvl_replay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F920FF36C200794147 /* hvl_replay.cpp */; };
-		45AA910420FF36C200794147 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 45AA90FA20FF36C200794147 /* LICENSE */; };
 		45AA910520FF36C200794147 /* HVLReplayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90FB20FF36C200794147 /* HVLReplayer.mm */; };
 		45AA910620FF36C200794147 /* MPTReplayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AA910120FF36C200794147 /* MPTReplayer.m */; };
 		45AA910E20FF5E8A00794147 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA910D20FF5E8A00794147 /* Structs.swift */; };
@@ -619,7 +618,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45AA910420FF36C200794147 /* LICENSE in Resources */,
 				45D392B120B1DDEE00EEF4E3 /* LaunchScreen.storyboard in Resources */,
 				454F520C21610E94007011F3 /* ModuleCell.xib in Resources */,
 				454F520E21610F70007011F3 /* GroupCell.xib in Resources */,
@@ -895,7 +893,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
@@ -913,7 +911,7 @@
 					../openmpt,
 					"../uade-ios",
 				);
-				MARKETING_VERSION = 3.4;
+				MARKETING_VERSION = 3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -931,7 +929,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
@@ -949,7 +947,7 @@
 					../openmpt,
 					"../uade-ios",
 				);
-				MARKETING_VERSION = 3.4;
+				MARKETING_VERSION = 3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

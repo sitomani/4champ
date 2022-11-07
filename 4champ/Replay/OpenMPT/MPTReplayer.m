@@ -63,6 +63,7 @@
   NSData* data = [[NSFileManager defaultManager] contentsAtPath:path];
   if (!data) return false;
   
+    [self cleanup];
   currentOMPTFile = openmpt_module_create_from_memory2(data.bytes, (uint32_t)data.length, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
   if (!currentOMPTFile) return false;
   return true;

@@ -26,7 +26,6 @@ static volatile int uadethread_running;
     int16_t* rightByte;
     char uadescorename[PATH_MAX];
     char basedir[PATH_MAX];
-    struct uade_file* playername;
     int fds[2];
 }
 
@@ -189,10 +188,10 @@ static volatile int uadethread_running;
 - (UADEReplayer*) init {
     self = [super init];
     if (self) {
-        NSBundle* uadeBundle = [NSBundle bundleWithIdentifier: @"com.apple.xcode.dsym.libuade"];
-        NSString *bd = [uadeBundle pathForResource:@"UADERes" ofType:@"bundle"];
-        strcpy(basedir, [bd UTF8String]);
+        NSString* bu = [NSBundle mainBundle].resourcePath;
+        NSString* bd = [bu stringByAppendingString:@"/Frameworks/uade_ios.framework/UADERes.bundle"];
         
+        strcpy(basedir, [bd UTF8String]);
         struct uade_config *cfg = uade_new_config();
         sprintf(uadescorename, "%s/score",basedir);
         uade_config_set_option(cfg, UC_VERBOSE, [@"1" UTF8String]);
@@ -238,14 +237,15 @@ static volatile int uadethread_running;
         basedir = extraconfig->basedir.name;
     
     if (!uade_load_initial_config(state, basedir)) {
-        //        uade_warning("uadeconfig not loaded\n");
-        
-        if (extraconfig) {
-            state->extraconfig = *extraconfig;
-        }
-        else {
-            uade_config_set_defaults(&state->extraconfig);
-        }
+        NSLog(@"Config not loaded");
+        return nil;
+
+    }
+    if (extraconfig) {
+        state->extraconfig = *extraconfig;
+    }
+    else {
+        uade_config_set_defaults(&state->extraconfig);
     }
     
     state->config = state->permconfig;
@@ -263,17 +263,12 @@ static volatile int uadethread_running;
     
     uade_config_set_option(&state->config, UC_UADECORE_FILE,
                            UADE_CONFIG_UADE_CORE);
-    
+        
     snprintf(path, sizeof path, "%s/uaerc", state->config.basedir.name);
     uade_config_set_option(&state->config, UC_UAE_CONFIG_FILE, path);
     
     uade_merge_configs(&state->config, &state->extraconfig);
     
-    /* TODO: Remove this, but make uadecore respond with a HELLO message. */
-    if (access(state->config.uadecore_file.name, X_OK)) {
-        NSLog(@"Could not execute %s", state->config.uadecore_file.name);
-        return nil;
-    }
     if (access(state->config.uae_config_file.name, R_OK)) {
         NSLog(@"Could not read uae config file: %s", state->config.uae_config_file.name);
         return nil;
@@ -302,15 +297,13 @@ static volatile int uadethread_running;
     NSData* data = [[NSFileManager defaultManager] contentsAtPath:path];
     if (!data) return false;
     
+    
     uade_stop(ustate);
+    
     if (!uade_is_our_file_from_buffer([path UTF8String], data.bytes, data.length, ustate)) {
         NSLog(@"Not our file");
         return false;
     }
-    //    uade_play([path UTF8String], 0, ustate);
-    //    const char *fname, const void *buf, size_t size,
-    //                  int subsong, struct uade_state *state
-    NSString* nameOnly = [[path componentsSeparatedByString:@"/"] lastObject];
     uade_play_from_buffer([path UTF8String], data.bytes, data.length, 0, ustate);
     
     return true;
@@ -320,6 +313,13 @@ static volatile int uadethread_running;
 }
 
 - (void)setInterpolationFilterLength:(NSInteger)value {
+    if (value == 0 ) {
+        uade_config_set_option(&ustate->config, UC_FORCE_LED_ON, nil);
+        uade_set_filter_state(ustate, 1);
+    } else {
+        uade_config_set_option(&ustate->config, UC_FORCE_LED_OFF, nil);
+        uade_set_filter_state(ustate, 0);
+    }
 }
 
 - (void)setStereoSeparation:(NSInteger)value {
@@ -328,8 +328,6 @@ static volatile int uadethread_running;
 }
 
 - (int)currentPosition {
-    const struct uade_song_info *info = uade_get_song_info(ustate);
-    
     return 0;
 }
 
@@ -338,7 +336,9 @@ static volatile int uadethread_running;
 }
 
 - (NSArray<NSString *> *)getSamples {
-    return @[];
+    const struct uade_song_info *info = uade_get_song_info(ustate);
+    NSString* playerName = [[NSString stringWithUTF8String: info->playerfname] componentsSeparatedByString:@"/"].lastObject;
+    return @[@"UADE Player:", playerName];
 }
 
 - (int)moduleLength {

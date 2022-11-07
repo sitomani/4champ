@@ -132,11 +132,6 @@ static SInt16* bufRight;
     type = [[path pathExtension] uppercaseString];
   }
   Class replayerClass;
-//  if ([self.replayerMap.allKeys containsObject:type]) {
-//    replayerClass = [self.replayerMap objectForKey:type];
-//  } else {
-//    replayerClass = [MPTReplayer class];
-//  }
   for (int i=0; i< self.replayers.count; i++) {
     if ([[self.replayers[i] supportedFormats] containsObject:(type)]) {
       replayerClass = self.replayers[i];

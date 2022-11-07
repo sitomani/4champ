@@ -7,8 +7,9 @@
 
 #import <Foundation/Foundation.h>
 
+/// The Replay control API
 @protocol ReplayControl <NSObject>
-// Control API
+
 /**
  Supported @formats
  */
@@ -48,8 +49,8 @@
 
 @end
 
+/// Visualisation API getters
 @protocol ReplayInformation <NSObject>
-// Visualisation API getters
 - (int) currentPosition; //returns current position in current module
 - (int) moduleLength; //returns current mod length in seconds
 - (NSInteger) volumeOnChannel:(NSInteger)channel; //returns current volume on requested channel
@@ -58,14 +59,15 @@
 - (NSArray<NSString*>*) getInstruments; //returns instrument names of current mod
 @end
 
+/// Stream API for getting rendered frames for output
 @protocol ReplayerStream <NSObject>
-// Stream API
 - (int) readFrames:(size_t)count bufLeft:(int16_t*)bufLeft bufRight:(int16_t*)bufRight;
 @end
 
 @class Replay;
 
 @protocol ReplayStreamDelegate <NSObject>
+
 /**
  Called when replay reaches end of the module
  @param replay identifies the Replay object
