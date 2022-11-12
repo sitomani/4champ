@@ -25,10 +25,11 @@
     
     int hvlStereoSeparation;
 }
-
-
 static int iHivelyBufPos = 0;
 
++ (NSArray<NSString*>*)supportedFormats {
+    return @[@"THX", @"AHX", @"HVL"];
+}
 
 - (HVLReplayer*) init {
     self = [super init];
@@ -59,6 +60,10 @@ static int iHivelyBufPos = 0;
 }
 
 - (void)dealloc {
+    NSLog(@"HVLReplayer deallocated");
+}
+
+- (void) cleanup {
     if (currentHVLtune) {
         hvl_FreeTune(currentHVLtune);
         free(leftByte);

@@ -67,7 +67,6 @@
 		45AA90F520FF2F6600794147 /* RESTRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F420FF2F6600794147 /* RESTRoutes.swift */; };
 		45AA910220FF36C200794147 /* Replay.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F720FF36C200794147 /* Replay.m */; };
 		45AA910320FF36C200794147 /* hvl_replay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90F920FF36C200794147 /* hvl_replay.cpp */; };
-		45AA910420FF36C200794147 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 45AA90FA20FF36C200794147 /* LICENSE */; };
 		45AA910520FF36C200794147 /* HVLReplayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 45AA90FB20FF36C200794147 /* HVLReplayer.mm */; };
 		45AA910620FF36C200794147 /* MPTReplayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AA910120FF36C200794147 /* MPTReplayer.m */; };
 		45AA910E20FF5E8A00794147 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AA910D20FF5E8A00794147 /* Structs.swift */; };
@@ -94,8 +93,25 @@
 		735A2742264FDFDE004EAC0C /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = 735A2741264FDFDE004EAC0C /* SwiftyBeaver */; };
 		735A2746264FE01D004EAC0C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 735A2745264FE01D004EAC0C /* Alamofire */; };
 		73759FD228EB34DF00535F8E /* libopenmpt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73759FD128EB34DF00535F8E /* libopenmpt.xcframework */; };
+		7397C1DE29091504002D5CDB /* UADEReplayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7397C1DC29091504002D5CDB /* UADEReplayer.m */; };
+		7397C1E629091D9D002D5CDB /* uade_ios.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7397C1E129091BC3002D5CDB /* uade_ios.xcframework */; };
+		7397C1E729091D9D002D5CDB /* uade_ios.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7397C1E129091BC3002D5CDB /* uade_ios.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		739B4BF42720850200C2D69F /* RadioSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739B4BF32720850200C2D69F /* RadioSessionCell.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7397C1E829091D9D002D5CDB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7397C1E729091D9D002D5CDB /* uade_ios.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4509EA43226251EF0031408D /* ModuleInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModuleInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -208,6 +224,9 @@
 		45D61F6220E1863600869814 /* Gzip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Gzip.framework; path = Carthage/Build/iOS/Gzip.framework; sourceTree = "<group>"; };
 		735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 9 (imports).xcdatamodel"; sourceTree = "<group>"; };
 		73759FD128EB34DF00535F8E /* libopenmpt.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libopenmpt.xcframework; path = ../openmpt/libopenmpt.xcframework; sourceTree = "<group>"; };
+		7397C1DA29091504002D5CDB /* UADEReplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UADEReplayer.h; sourceTree = "<group>"; };
+		7397C1DC29091504002D5CDB /* UADEReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UADEReplayer.m; sourceTree = "<group>"; };
+		7397C1E129091BC3002D5CDB /* uade_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = uade_ios.xcframework; path = "../uade-ios/uade_ios.xcframework"; sourceTree = "<group>"; };
 		739B4BF32720850200C2D69F /* RadioSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioSessionCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -216,6 +235,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7397C1E629091D9D002D5CDB /* uade_ios.xcframework in Frameworks */,
 				73759FD228EB34DF00535F8E /* libopenmpt.xcframework in Frameworks */,
 				735A2746264FE01D004EAC0C /* Alamofire in Frameworks */,
 				735A273E264FDFAD004EAC0C /* Gzip in Frameworks */,
@@ -383,6 +403,7 @@
 				45AA90FE20FF36C200794147 /* Replay.h */,
 				45AA90F820FF36C200794147 /* Hively */,
 				45AA90FF20FF36C200794147 /* OpenMPT */,
+				7397C1D929091504002D5CDB /* UADE */,
 			);
 			path = Replay;
 			sourceTree = "<group>";
@@ -497,12 +518,22 @@
 		45D61F5E20E17D9600869814 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7397C1E129091BC3002D5CDB /* uade_ios.xcframework */,
 				73759FD128EB34DF00535F8E /* libopenmpt.xcframework */,
 				455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */,
 				45D61F6220E1863600869814 /* Gzip.framework */,
 				45D61F5C20E17D8F00869814 /* Alamofire.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7397C1D929091504002D5CDB /* UADE */ = {
+			isa = PBXGroup;
+			children = (
+				7397C1DA29091504002D5CDB /* UADEReplayer.h */,
+				7397C1DC29091504002D5CDB /* UADEReplayer.m */,
+			);
+			path = UADE;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -515,6 +546,7 @@
 				45D3929D20B1DDEC00EEF4E3 /* Sources */,
 				45D3929E20B1DDEC00EEF4E3 /* Frameworks */,
 				45D3929F20B1DDEC00EEF4E3 /* Resources */,
+				7397C1E829091D9D002D5CDB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -586,7 +618,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45AA910420FF36C200794147 /* LICENSE in Resources */,
 				45D392B120B1DDEE00EEF4E3 /* LaunchScreen.storyboard in Resources */,
 				454F520C21610E94007011F3 /* ModuleCell.xib in Resources */,
 				454F520E21610F70007011F3 /* GroupCell.xib in Resources */,
@@ -629,6 +660,7 @@
 				451ED0B2241E8A83006CE4E8 /* PlaylistInteractor.swift in Sources */,
 				45D61F5320E1647300869814 /* RadioRouter.swift in Sources */,
 				453D9BBA241BF286002EEBAB /* PlaylistSelectorRouter.swift in Sources */,
+				7397C1DE29091504002D5CDB /* UADEReplayer.m in Sources */,
 				453D9BBD241BF286002EEBAB /* PlaylistSelectorInteractor.swift in Sources */,
 				45CEA1DF2413C8E300930A72 /* SceneDelegate.swift in Sources */,
 				4535A4682114BB2D005FBB8B /* SearchViewController.swift in Sources */,
@@ -861,18 +893,25 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				HEADER_SEARCH_PATHS = ../openmpt/libopenmpt;
+				HEADER_SEARCH_PATHS = (
+					../openmpt/libopenmpt,
+					"../uade-ios/src/frontends/include",
+					"../uade-ios/src/include",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/4champ/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = ../openmpt;
-				MARKETING_VERSION = 3.4;
+				LIBRARY_SEARCH_PATHS = (
+					../openmpt,
+					"../uade-ios",
+				);
+				MARKETING_VERSION = 3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -890,18 +929,25 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				HEADER_SEARCH_PATHS = ../openmpt/libopenmpt;
+				HEADER_SEARCH_PATHS = (
+					../openmpt/libopenmpt,
+					"../uade-ios/src/frontends/include",
+					"../uade-ios/src/include",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/4champ/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = ../openmpt;
-				MARKETING_VERSION = 3.4;
+				LIBRARY_SEARCH_PATHS = (
+					../openmpt,
+					"../uade-ios",
+				);
+				MARKETING_VERSION = 3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -11,6 +11,7 @@ class ViewController: UIViewController {
   
   @IBOutlet weak var modLabel: UILabel!
   @IBOutlet weak var modStack: UIStackView!
+  @IBOutlet weak var viewTitle: UILabel!
   
   private let modulesUrl: URL
   private let modulePaths: [String]
@@ -28,6 +29,13 @@ class ViewController: UIViewController {
     modulePaths = try! FileManager.default.contentsOfDirectory(atPath: modulesUrl.path)
     super.init(coder: coder)
   }
+
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    modLabel.textColor = .black
+    viewTitle.textColor = .black
+
+  }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
@@ -35,6 +43,11 @@ class ViewController: UIViewController {
     
     modStack.spacing = 8.0
     modStack.distribution = .fillEqually
+
+    let bundle = Bundle.main //init(identifier: "lib.uade.ios")
+    viewTitle.text = bundle.resourcePath ?? ""
+//    NSString *bd = [uadeBundle pathForResource:@"UADERes" ofType:@"bundle"];
+
     
     // Add module buttons
     modulePaths.forEach { path in

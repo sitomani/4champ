@@ -66,11 +66,12 @@ class AboutInteractor: AboutBusinessLogic, AboutDataStore
         let titleKeys = [aboutTitle, "Twitter","About_Copyrights", "TabBar_Local", "TabBar_Playlist", "TabBar_Search", "TabBar_Radio", "About_Licenses"]
         let contentKeys = ["AboutView_Info", "AboutView_Twitter", "AboutView_Legal", "AboutView_Local","AboutView_Playlists", "AboutView_Search", "AboutView_Radio"]
         let imageKeys = ["about", "twitter_small", "legal", "localMods", "playlist", "search", "radio", "about"]
-        let lics = ["Alamofire", "GzipSwift", "HivelyTracker", "LibOpenMPT"]
+        let lics = ["Alamofire", "GzipSwift", "HivelyTracker", "LibOpenMPT", "UADE"]
         let licUrls = ["https://github.com/Alamofire/Alamofire/blob/master/LICENSE",
                        "https://github.com/1024jp/GzipSwift/blob/develop/LICENSE",
                        "HivelyTracker replayer source code is public domain, see http://www.hivelytracker.co.uk/forum.php?action=viewthread&id=114",
-                       "https://lib.openmpt.org/libopenmpt/license/"]
+                       "https://lib.openmpt.org/libopenmpt/license/",
+                       "https://gitlab.com/uade-music-player/uade/-/blob/master/COPYING"]
         
         details = About.Details(titles: titleKeys, contents: contentKeys, images: imageKeys, licenseLinks: licUrls, licenseNames: lics)
     }

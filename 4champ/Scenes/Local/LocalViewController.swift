@@ -146,7 +146,9 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   }
   
   func updateBarButtons() {
-    let addBtn = UIBarButtonItem.init(image: UIImage.init(systemName: "square.and.arrow.down"), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
+    let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .light, scale: .large)
+    let importImage = UIImage.init(systemName: "square.and.arrow.down", withConfiguration: config)
+    let addBtn = UIBarButtonItem.init(image: importImage, style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     addBtn.tag = -2 // no sort key for import button
     let btn1 = UIBarButtonItem.init(title: "ModuleInfo_Type".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn1.tag = LocalSortKey.type.rawValue

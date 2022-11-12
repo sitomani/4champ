@@ -16,7 +16,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap module format buttons to play sample modules. Stop playback by tapping Stop button." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sKK-j5-Yi9">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap module format buttons to play sample modules. Stop playback by tapping Stop button." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sKK-j5-Yi9">
                                 <rect key="frame" x="16" y="30" width="343" height="61"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -34,7 +34,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="k88-Q8-Iud">
-                                <rect key="frame" x="16" y="99" width="343" height="477"/>
+                                <rect key="frame" x="16" y="107" width="343" height="461"/>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="no module selected" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xwm-vx-wVn">
                                 <rect key="frame" x="16" y="584" width="343" height="21"/>
@@ -49,8 +49,8 @@
                             <constraint firstItem="Xwm-vx-wVn" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="1zV-Lo-uub"/>
                             <constraint firstItem="k88-Q8-Iud" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="4wC-T0-G9D"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="k88-Q8-Iud" secondAttribute="trailing" constant="16" id="6lK-1b-9g6"/>
-                            <constraint firstItem="k88-Q8-Iud" firstAttribute="top" secondItem="sKK-j5-Yi9" secondAttribute="bottom" constant="8" symbolic="YES" id="8VB-vw-vgG"/>
-                            <constraint firstItem="Xwm-vx-wVn" firstAttribute="top" secondItem="k88-Q8-Iud" secondAttribute="bottom" constant="8" symbolic="YES" id="Gc8-LV-J5W"/>
+                            <constraint firstItem="k88-Q8-Iud" firstAttribute="top" secondItem="sKK-j5-Yi9" secondAttribute="bottom" constant="16" id="8VB-vw-vgG"/>
+                            <constraint firstItem="Xwm-vx-wVn" firstAttribute="top" secondItem="k88-Q8-Iud" secondAttribute="bottom" constant="16" id="Gc8-LV-J5W"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="sKK-j5-Yi9" secondAttribute="trailing" constant="16" id="MYM-gg-fWg"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8a8-BU-ZFE" secondAttribute="trailing" constant="16" id="QFQ-Wc-19l"/>
                             <constraint firstItem="sKK-j5-Yi9" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Sl1-ah-wXK"/>
@@ -64,6 +64,7 @@
                     <connections>
                         <outlet property="modLabel" destination="Xwm-vx-wVn" id="mlF-xi-D4h"/>
                         <outlet property="modStack" destination="k88-Q8-Iud" id="LYd-hW-VP9"/>
+                        <outlet property="viewTitle" destination="sKK-j5-Yi9" id="z5O-C1-AAi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

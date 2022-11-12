@@ -1,5 +1,19 @@
 # 4champ Development Journal
 
+### 1-31 October 2022 Some esoteric formats anyone?
+
+For the Hacktoberfest campaign I took up the challenge to finalise my integration of UADE replayer to 4champ. A big body of work had to first be done on the UADE side. 
+
+I had earlier forked the main UADE repository to https://gitlab.com/sitmoani/uade-ios, and done quick modifications to get the code to build first for macOS. I started out from latest release of UADE, i.e. version 3.02. Building UADE requires a couple of dependencies, namely Heikki Orsila's `bencodetools` and `libao`. The first was a breeze to get from gitlab and build, but for the latter I tried first the suggested homebrew install which went all right, but the package was either missing headers, or they were in some off-path location. To iron the bumps out I ended up cloning the [libao repository](https://github.com/xiph/libao) and building it from sources. This way I got also the headers properly into `/usr/local/include/ao`.
+
+At first I put together a Xcode project for creating a static framework as with OpenMPT. It seemed rather straightforward to just add all the source files in a project and build. I used my SamplePlayer test app to verify the build first. I was facing a linker error, there was no implementation for some extern structs declared in `newcpu.c`. It took a while to figure out that the `Makefile` for uadecore has a set of intermediate files generated during the build process, which have to be part of the build for those structs to have an implementation. Once I got that straight, my testbed implementation started to play back test songs. So far so good.
+
+Static framework was not suitable for my purposes though, as for UADE to run it is necessary to have the amiga binaries available as resources, which I wanted not to bring into 4champ repository directly. Dynamic framework it was then, and after stumbling through the setup for quite some time, I managed to get it down so that I can package the UADE implementation into `uade_ios.xcframework` that carries the lib AND the resources needed to run the amiga emulation, in a nice Xcode compatible bundle. Hooray!
+
+During the process I also found a bug in the UADE, it would not play back MusicLine Editor format tracks if the file path to the module was longer than 127 characters. In case of iOS apps, the sandbox paths tend to be long enough to cross this boundary. Luckily vast majority of formats work also with longer paths. ML format support will be activated later when the bug gets a fix in UADE.
+
+The UADE library comes licensed as parts GPL, parts LGPL and then some custom licenses for the amiga player routines. In practice, since 4champ now links to UADE, it gets tainted by the GPL license and now is GPL licensed as well as a whole. MIT license stays in, alongisde with GPL. I am aware of the debate around whether or not AppStore is compatible with GPL - and then again, there is a multitude of really popular apps that are GPL licensed and available in the app store. So I'm boldly going the same route with [Signal](https://github.com/signalapp/Signal-iOS), [ProtonMail](https://github.com/ProtonMail/ios-mail) and [VLC](https://github.com/videolan/vlc-ios).
+
 ### 27 Oct 2021 We need to go back
 
 A couple of months ago 4champ got a review in AppStore where the reviewer stated that the only thing he/she was missing was a way to see the previously played tracks when listening to 4champ radio. I had thought about something similar myself, and this gave me a good motivation kick to put it next in the backlog. Well now it is implmented in the app!
