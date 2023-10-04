@@ -19,22 +19,23 @@ struct GroupInfo {
   var name: String
 }
 
-enum Search {
+enum Search
+{
   struct Request {
     var text: String
     var type: SearchType
     var pagingIndex: Int = 0
   }
-
+  
   struct ProgressResponse {
     var progress: Float
-    var error: Error?
+    var error: Error? = nil
     struct ViewModel {
       var progress: Float
-      var error: String?
+      var error: String? = nil
     }
   }
-
+  
   struct BatchDownload {
     struct Request {
       var moduleIds: [Int]
@@ -53,40 +54,24 @@ enum Search {
       var favoritedModuleId: Int
     }
   }
-
-  struct ModuleResponse {
-    var result: [SearchResultModule]
-    var text: String
-    func sortedResult() -> [SearchResultModule] {
-      let r = result.sorted { (a, b) -> Bool in
-        return a.name.label.compare(b.name.label, options: .caseInsensitive) == .orderedAscending
-      }
-      return r
-    }
-  }
-
-  struct ComposerResponse {
-    var result: [SearchResultComposer]
+  
+  struct Response<T> {
+    var result: [T]
     var text: String
   }
-
-  struct GroupResponse {
-    var result: [LabelHref]
-    var text: String
-  }
-
+  
   struct ViewModel {
     var modules: [MMD]
     var composers: [ComposerInfo]
     var groups: [GroupInfo]
     var text: String
   }
-
+  
   enum MetaDataChange {
     struct Response {
       var module: MMD
     }
-
+    
     struct ViewModel {
       var module: MMD
     }
@@ -94,9 +79,7 @@ enum Search {
 }
 
 // MARK: 4champ.net JSON interface objects
-typealias ModuleResult = [SearchResultModule]
-
-struct SearchResultModule: Codable {
+struct ModuleResult: Codable {
   let name, composer: LabelHref
   let format: String
   let size, downloadCount: String
@@ -117,11 +100,22 @@ struct LabelHref: Codable {
   let href: String
 }
 
-typealias ComposerResult = [SearchResultComposer]
 
-struct SearchResultComposer: Codable {
+struct ComposerResult: Codable {
   let handle: LabelHref
   let realname, groups: String
 }
 
-typealias GroupResult = [LabelHref]
+struct GroupResult: Codable {
+  let label: String
+  let href: String
+}
+
+extension Search.Response where T == ModuleResult {
+  func sortedResult() -> [ModuleResult] {
+    let r = result.sorted { (a, b) -> Bool in
+      return a.name.label.compare(b.name.label, options: .caseInsensitive) == .orderedAscending
+    }
+    return r
+  }
+}

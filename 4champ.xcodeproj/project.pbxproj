@@ -24,7 +24,6 @@
 		451B6AA52204B6CC001848FA /* LocalInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B6A9F2204B6CC001848FA /* LocalInteractor.swift */; };
 		451B6AA72204BBBB001848FA /* ModuleStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B6AA62204BBBB001848FA /* ModuleStorage.swift */; };
 		451ED0A6241E6AA6006CE4E8 /* SwiftUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451ED0A5241E6AA6006CE4E8 /* SwiftUITest.swift */; };
-		451ED0AD241E8A83006CE4E8 /* PlaylistPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451ED0A7241E8A83006CE4E8 /* PlaylistPresenter.swift */; };
 		451ED0AF241E8A83006CE4E8 /* PlaylistRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451ED0A9241E8A83006CE4E8 /* PlaylistRouter.swift */; };
 		451ED0B0241E8A83006CE4E8 /* PlaylistModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451ED0AA241E8A83006CE4E8 /* PlaylistModels.swift */; };
 		451ED0B1241E8A83006CE4E8 /* PlaylistStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451ED0AB241E8A83006CE4E8 /* PlaylistStore.swift */; };
@@ -97,6 +96,7 @@
 		7397C1E629091D9D002D5CDB /* uade_ios.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7397C1E129091BC3002D5CDB /* uade_ios.xcframework */; };
 		7397C1E729091D9D002D5CDB /* uade_ios.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7397C1E129091BC3002D5CDB /* uade_ios.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		739B4BF42720850200C2D69F /* RadioSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739B4BF32720850200C2D69F /* RadioSessionCell.swift */; };
+		73CE92E52AAF03D1000BFC1C /* PlaylistPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CE92E42AAF03D1000BFC1C /* PlaylistPresenter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -131,7 +131,6 @@
 		451B6A9F2204B6CC001848FA /* LocalInteractor.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = LocalInteractor.swift; sourceTree = "<group>"; tabWidth = 2; };
 		451B6AA62204BBBB001848FA /* ModuleStorage.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModuleStorage.swift; sourceTree = "<group>"; tabWidth = 2; };
 		451ED0A5241E6AA6006CE4E8 /* SwiftUITest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUITest.swift; sourceTree = "<group>"; };
-		451ED0A7241E8A83006CE4E8 /* PlaylistPresenter.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = PlaylistPresenter.swift; sourceTree = "<group>"; tabWidth = 2; };
 		451ED0A9241E8A83006CE4E8 /* PlaylistRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistRouter.swift; sourceTree = "<group>"; };
 		451ED0AA241E8A83006CE4E8 /* PlaylistModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistModels.swift; sourceTree = "<group>"; };
 		451ED0AB241E8A83006CE4E8 /* PlaylistStore.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = PlaylistStore.swift; sourceTree = "<group>"; tabWidth = 2; };
@@ -228,6 +227,7 @@
 		7397C1DC29091504002D5CDB /* UADEReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UADEReplayer.m; sourceTree = "<group>"; };
 		7397C1E129091BC3002D5CDB /* uade_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = uade_ios.xcframework; path = "../uade-ios/uade_ios.xcframework"; sourceTree = "<group>"; };
 		739B4BF32720850200C2D69F /* RadioSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioSessionCell.swift; sourceTree = "<group>"; };
+		73CE92E42AAF03D1000BFC1C /* PlaylistPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistPresenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -366,9 +366,9 @@
 		456E6F2A2409BC2C0034BDA2 /* Playlists */ = {
 			isa = PBXGroup;
 			children = (
+				73CE92E42AAF03D1000BFC1C /* PlaylistPresenter.swift */,
 				456E6F2D240A5FAF0034BDA2 /* PlaylistView.swift */,
 				45CEA1E02415005E00930A72 /* SelectPlaylistView.swift */,
-				451ED0A7241E8A83006CE4E8 /* PlaylistPresenter.swift */,
 				451ED0A9241E8A83006CE4E8 /* PlaylistRouter.swift */,
 				451ED0AA241E8A83006CE4E8 /* PlaylistModels.swift */,
 				451ED0AB241E8A83006CE4E8 /* PlaylistStore.swift */,
@@ -671,7 +671,6 @@
 				450E506721879347008FB155 /* SettingsModels.swift in Sources */,
 				45D61F5120E1647300869814 /* RadioPresenter.swift in Sources */,
 				453D9BBC241BF286002EEBAB /* PlaylistSelectorStore.swift in Sources */,
-				451ED0AD241E8A83006CE4E8 /* PlaylistPresenter.swift in Sources */,
 				4535A4662114BB2D005FBB8B /* SearchRouter.swift in Sources */,
 				4535A4642114BB2D005FBB8B /* SearchPresenter.swift in Sources */,
 				45855FCD2444AC6B0079C767 /* ModuleSharing.swift in Sources */,
@@ -679,6 +678,7 @@
 				4509EA48226251EF0031408D /* ModuleInfo+CoreDataProperties.swift in Sources */,
 				451B6AA42204B6CC001848FA /* LocalViewController.swift in Sources */,
 				454F5205215D20F3007011F3 /* ModuleFetcher.swift in Sources */,
+				73CE92E52AAF03D1000BFC1C /* PlaylistPresenter.swift in Sources */,
 				451ED0B2241E8A83006CE4E8 /* PlaylistInteractor.swift in Sources */,
 				45D61F5320E1647300869814 /* RadioRouter.swift in Sources */,
 				453D9BBA241BF286002EEBAB /* PlaylistSelectorRouter.swift in Sources */,
