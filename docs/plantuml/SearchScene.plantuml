@@ -1,0 +1,98 @@
+@startuml SearchScene
+
+title VIP cycle for Search
+
+allowmixing
+
+package SearchScene {
+protocol SearchRoutingLogic #white {
+  toComposerList(title: String, groupId: Int)
+  toModulesList(title: String, composerId: Int)
+  toPlaylistSelector(module: MMD)
+}
+
+protocol SearchPresentationLogic #white
+{
+  presentSearchresponse(response: Search.Response<T>)
+  presentDownloadProgress(response: Search.ProgressResponse)
+  presentBatchProgress(response: Search.BatchDownload.Response)
+  presentMetadataChange(response: Search.MetaDataChange.Response)
+  presentDeletion(response: Search.MetaDataChange.Response)
+}
+
+protocol SearchDataStore {
+  var autoListTitle: String?
+  var autoListId: Int?
+  var autoListType: SearchType?
+  var pagingIndex: Int
+}
+
+protocol SearchBusinessLogic #white
+{
+  func search(_ request: Search.Request)
+  func triggerAutoFetchList()
+  func download(moduleId: Int)
+  func downloadModules(_ request: Search.BatchDownload.Request)
+  func cancelDownload()
+  func getModuleInfo(at: IndexPath) -> ModuleInfo?
+  func addToPlaylist(moduleId: Int, playlistId: String)
+  func deleteModule(at indexPath: IndexPath)
+}
+
+protocol SearchDisplayLogic #white {
+  displayResult(viewModel: Search.ViewModel)
+  displayDownloadProgress(viewModel: Search.ProgressResponse.ViewModel)
+  displayBatchProgress(viewModel: Search.BatchDownload.ViewModel)
+  displayMetaDataChange(viewModel: Search.MetaDataChange.ViewModel)
+  displayDeletion(viewModel: Search.MetaDataChange.ViewModel)
+}
+
+protocol SearchDataPassing {
+  dataStore: SearchDataStore?
+}
+
+class SearchViewController implements SearchDisplayLogic 
+class SearchInteractor implements SearchBusinessLogic
+class SearchPresenter 
+class SearchRouter implements SearchRoutingLogic
+
+SearchPresenter -.|> SearchPresentationLogic
+SearchViewController -> SearchBusinessLogic
+SearchPresenter -up-> SearchDisplayLogic
+SearchInteractor -> SearchPresentationLogic
+SearchViewController -down-> SearchRoutingLogic
+SearchInteractor .down-|> SearchDataStore
+SearchRouter .-|> SearchDataPassing
+SearchDataPassing .> SearchDataStore : writes
+}
+
+package SearchModel {
+  struct ViewModel {
+    modules: [MMD]
+    composers: [ComposerInfo]
+    groups: [GroupInfo]
+    text: String
+  }
+  struct Request {
+    text: String
+    type: SearchType
+    pagingIndex: Int
+  }
+
+  struct Response<T> {
+    result: [T]
+    text: String
+  }
+
+  Request-[hidden]down-Response
+  Response-[hidden]down-ViewModel
+}
+
+package PlaylistSelectorScene {
+  class PlayListPickerView {}
+}
+
+SearchRouter --> PlayListPickerView : instantiate and present
+'SearchRouter --> SearchViewController : instantiate and present
+
+@enduml

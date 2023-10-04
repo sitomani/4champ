@@ -1,0 +1,31 @@
+@startuml CoreData
+
+entity ModuleInfo {
+  modId: Int
+  modAuthor: String
+  modName: String
+  modType: String
+  modUrl: String
+  modDLStatus: Int
+  modLocalPath: String
+  added: Date
+  lastPlayed: Date
+  playCount: Int
+  modFavorite: Boolean
+  preview: Boolean
+  radioOnly: Boolean
+  serviceId: Int
+  serviceKey: String
+  shared: Date
+}
+
+entity Playlist {
+  plId: Int
+  plName: String
+  locked: Boolean
+  playmode: Int
+}
+
+Playlist }|-|{  ModuleInfo
+
+@enduml

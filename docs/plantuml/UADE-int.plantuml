@@ -1,0 +1,44 @@
+@startuml UADE integration
+
+title UADE integration
+
+participant AudioComponentInstance as AU #lightgreen
+box ModulePlayer Thread #white
+participant ModulePlayer as MP
+participant UADEReplayer as Repl
+participant LibUADE as Lib #coral
+end box
+
+box Amiga Emulation Thread
+participant UADECore as Core #lightcoral
+end box
+
+MP -> AU : init
+activate AU
+MP -> Repl : init(playCallback)
+Repl -> Repl : setup socket pair
+Repl -> Core : spawn thread (socket)
+activate Core
+Repl -> Lib : set_peer(socket)
+MP -> Repl : LoadModule(path) 
+Repl -> Repl : load module buffer
+Repl -> Lib : uade_play_from_buffer(data)
+loop 
+AU -> MP : playCallback(frames)
+activate MP
+MP -> Repl : readFrames()
+Repl -> Lib: uade_read()
+activate Lib
+loop Simplified play loop
+Lib -> Core : send_message()
+Lib <- Core : receive_messages()
+end
+Repl <- Lib : buffer
+deactivate Lib
+MP <- Repl: buffer
+AU <- MP : buffer
+deactivate MP
+end
+
+
+@enduml

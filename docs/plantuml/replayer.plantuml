@@ -1,10 +1,11 @@
 @startuml Replayer
 allowmixing 
 
+title Replayer architecture
 
-legend left
+legend 
     |Color| Type |
-    |<#business>| 4champ |
+    |<#MOTIVATION>| 4champ |
     |<#lightgreen>| iOS Core Audio |
     |<#lightblue>| Third party |
 endlegend
@@ -18,7 +19,7 @@ class Replay <<ReplayControl, ReplayInformation>> {
     stop()
     pause()
     resume()
-    - playbackCallback()
+    -playbackCallback()
 }
 
 interface ReplayInformation {
@@ -45,7 +46,12 @@ class MTPReplayer <<ReplayControl, ReplayInformation>> implements ReplayerStream
 
 }
 
+class ModulePlayer {}
+
 class HVLReplayer <<ReplayControl, ReplayInformation>> implements ReplayerStream {
+}
+
+class UADEReplayer <<ReplayControl, ReplayInformation>> implements ReplayerStream {
 
 }
 
@@ -64,14 +70,14 @@ Replay o-- HVLReplayer
 Replay o-- MTPReplayer
 Replay --> ReplayerStream
 
-App --> Replay
-App -.-|> ReplayStreamDelegate
-App -.-|> ReplayStatusDelegate
+ModulePlayer -> Replay
+ModulePlayer .-|> ReplayStreamDelegate
+ModulePlayer .-|> ReplayStatusDelegate
 Replay -up-> ReplayStreamDelegate
 Replay -up-> ReplayStatusDelegate
 
-Replay -.left--|> ReplayInformation
-Replay -.left--|> ReplayControl
+Replay .up-|> ReplayInformation
+Replay .up-|> ReplayControl
 Replay -.right-|> AURenderCallback
 AudioComponentInstance --> AURenderCallback
 
@@ -81,9 +87,13 @@ package libopenmpt #lightblue {
 package hvl_replay #lightblue {
 }
 
+package UADE #lightblue {
+}
+
 class AudioComponentInstance #lightgreen
 
 Replay *-right-> AudioComponentInstance
 MTPReplayer --> libopenmpt
 HVLReplayer --> hvl_replay
+UADEReplayer --> UADE
 @enduml
