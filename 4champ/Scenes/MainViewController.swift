@@ -71,7 +71,24 @@ class MainViewController: UITabBarController {
       }
     }
   }
-
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    log.debug("")
+    
+    // Try to recover from potential database migration error
+    if let _ = moduleStorage.coordinatorError {
+      let migrationAlert = UIAlertController.init(title: "Local_Database_Error_Title".l13n(), message: "Local_Database_Error_Text".l13n(), preferredStyle: .alert)
+      migrationAlert.addAction(UIAlertAction.init(title: "Local_Database_Error_Try_Fix".l13n(), style: .default, handler: { _ in
+        moduleStorage.rebuildDatabaseFromDisk()
+      }))
+      migrationAlert.addAction(UIAlertAction.init(title: "Local_Database_Error_Nvm".l13n(), style: .cancel, handler: { _ in
+        moduleStorage.resetCoordinatorError()
+      }))
+      present(migrationAlert, animated: true)
+    }
+  }
+  
   func toggleNowPlaying(_ value: Bool) {
     log.debug("")
 

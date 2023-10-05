@@ -8,10 +8,16 @@
 import Foundation
 import CoreData
 
+enum StorageError:Error {
+  case migrationFailed
+}
+
+
 protocol ModuleStorageInterface {
   var currentPlaylist: Playlist? { get set }
-
-  func createFRC<T: NSManagedObject>(fetchRequest: NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T>
+  var coordinatorError: StorageError? { get }
+  
+  func createFRC<T: NSManagedObject>(fetchRequest:NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T>
   func addStorageObserver(_ observer: ModuleStorageObserver)
   func removeStorageObserver(_ observer: ModuleStorageObserver)
   func addModule(module: MMD)
@@ -19,7 +25,8 @@ protocol ModuleStorageInterface {
   func getModuleById(_ id: Int) -> MMD?
   func getRandomModule() -> MMD?
   func deleteModule(module: MMD)
-
+  func resetCoordinatorError()
+  func rebuildDatabaseFromDisk()  
   func createPlaylist(name: String, id: String?) -> Playlist
   func saveContext()
   func fetchModuleInfo(_ id: Int) -> ModuleInfo?
@@ -38,6 +45,7 @@ protocol ModuleStorageObserver: class {
 class ModuleStorage: NSObject {
   private var observers: [ModuleStorageObserver] = []
   private var _currentPlaylist: Playlist?
+  private var _storageError: StorageError?
 
   /// Identifier ranges for different services
   private let idRanges = [
@@ -95,10 +103,18 @@ class ModuleStorage: NSObject {
       var dict = [String: AnyObject]()
       dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data" as AnyObject?
       dict[NSLocalizedFailureReasonErrorKey] = failureReason as AnyObject?
-
       dict[NSUnderlyingErrorKey] = error as NSError
       log.error("Unresolved error \(dict)")
-      abort()
+
+      // Instead of aborting, delete the SQLite file and try again
+      try? FileManager.default.removeItem(at: url)
+      do {
+        try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url)
+        _storageError = .migrationFailed
+      } catch {
+        let nserror = error as NSError
+        fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+      }
     }
     return coordinator
   }()
@@ -130,6 +146,7 @@ class ModuleStorage: NSObject {
     _currentPlaylist = playlist
     _ = observers.map { $0.playlistChange() }
   }
+  
 }
 
 extension ModuleStorage: ModuleStorageInterface {
@@ -141,9 +158,18 @@ extension ModuleStorage: ModuleStorageInterface {
       setCurrentPlaylist(playlist: newValue)
     }
   }
-
-  func createFRC<T>(fetchRequest: NSFetchRequest<T>,
-                    entityName: String) -> NSFetchedResultsController<T> where T: NSManagedObject {
+  
+  var coordinatorError: StorageError? {
+    get {
+      return _storageError
+    }
+  }
+  
+  func resetCoordinatorError() {
+    _storageError = nil
+  }
+  
+  func createFRC<T>(fetchRequest: NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T> where T : NSManagedObject {
 
     // Initialize Fetch Request
     let fetchedResultsController = NSFetchedResultsController<T>(fetchRequest: fetchRequest,
@@ -307,7 +333,41 @@ extension ModuleStorage: ModuleStorageInterface {
     // no IDs yet for this service range
     return range.lowerBound
   }
+  
+  func rebuildDatabaseFromDisk() {
+    if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+      do {
+        let fileURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+        for fileURL in fileURLs {
+          let filename = fileURL.lastPathComponent
+          
+          if filename.contains("bbbb.sqlite") { continue }
+          let nameComponents = filename.components(separatedBy: ".")
+          guard let suffix = filename.split(separator: ".").last else { continue }
 
+          let filetype = String(suffix).uppercased()
+          guard MMD.supportedTypes.contains(filetype) else { continue }
+          
+          var mmd = MMD.init()
+          mmd.localPath = fileURL
+          mmd.name = nameComponents.dropLast().joined(separator: ".")
+          mmd.serviceId = .local
+          mmd.serviceKey = fileURL.lastPathComponent
+          mmd.id = moduleStorage.getNextModuleId(service: .local)
+          mmd.type = filetype
+          mmd.composer = " "
+          let attrs = try FileManager.default.attributesOfItem(atPath: fileURL.path)
+          mmd.size = ((attrs[FileAttributeKey.size] as? Int) ?? 0) / 1024
+          
+          addModule(module: mmd)
+        }
+      } catch {
+        log.error("Error in enumerating files: \(error.localizedDescription)")
+      }
+      resetCoordinatorError()
+    }
+  }
+    
   private func fetchModuleInfo(_ request: NSFetchRequest<ModuleInfo>) -> ModuleInfo? {
     do {
       let match = try managedObjectContext.fetch(request)
