@@ -44,8 +44,8 @@ class ModuleCell: UITableViewCell {
 
 extension ModuleCell {
   func configure(with module: MMD) {
-    nameLabel?.text = module.name!
-    composerLabel?.text = module.composer!
+    nameLabel?.text = module.name
+    composerLabel?.text = (module.composer?.trimmingCharacters(in: .whitespaces).count ?? 0) > 0 ? module.composer : " "
     typeLabel?.text = module.type!
     stopImage?.isHidden = module.supported()
 

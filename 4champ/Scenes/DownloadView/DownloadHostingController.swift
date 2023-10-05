@@ -86,13 +86,10 @@ class DownloadController: NSObject, ObservableObject {
   }
 
   private func buildSummary(mod: MMD) -> String {
-    if let name = mod.name, let composer = mod.composer, composer.count > 0 {
-      return "\(name) by \(composer)"
+    if let composer = mod.composer, composer.trimmingCharacters(in: CharacterSet.whitespaces).count > 0 {
+      return "\(mod.name) by \(composer)"
     }
-    if let name = mod.name {
-      return name
-    }
-    return "..."
+    return mod.name
   }
 
   func showImport(for urls: [URL]) {
@@ -157,18 +154,18 @@ class DownloadController: NSObject, ObservableObject {
 
     var summaryItems: [String] = []
 
-    if imported > 0 {
-      if alreadyImported > 0 || unknown > 0 {
-        summaryItems.append(String.init(format: "Local_Import_Imported".l13n(), "\(imported)"))
-      } else {
-        let names: [String] = model.importIds.compactMap {
-          if let mod = moduleStorage.getModuleById($0), let name = mod.name {
-            return name
+      if imported > 0 {
+        if (alreadyImported > 0 || unknown > 0) {
+          summaryItems.append(String.init(format:"Local_Import_Imported".l13n(), "\(imported)"))
+        } else {
+          let names:[String] = model.importIds.compactMap {
+            if let mod = moduleStorage.getModuleById($0) {
+              return mod.name
+            }
+            return nil
           }
-          return nil
-        }
-        if names.count > 10 {
-          summaryItems.append(names.joined(separator: ", ") + ", ...")
+          if names.count > 10 {
+            summaryItems.append(names.joined(separator: ", ") + ", ...")
 
         } else {
           summaryItems.append(names.joined(separator: ", "))
@@ -321,13 +318,11 @@ class DownloadController: NSObject, ObservableObject {
 
   private func copyFileToDocumentsDirectory(from url: URL, with mmd: inout MMD, status: inout ImportResultType?) -> URL? {
     var numberExt = 0
-    var localPath = FileManager.default.urls(for: .documentDirectory,
-                         in: .userDomainMask).last!.appendingPathComponent(mmd.name!).appendingPathExtension(mmd.type!)
+    var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(mmd.name!).appendingPathExtension(mmd.type!)
     while FileManager.default.fileExists(atPath: localPath.path) {
       numberExt += 1
       let filename = mmd.name! + "_\(numberExt)"
-      localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        .last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
+      localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
     }
 
     // Copy to documents dir from the picker temp folder

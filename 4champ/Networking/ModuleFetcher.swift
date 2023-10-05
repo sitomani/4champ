@@ -21,7 +21,7 @@ enum FetcherState {
   case done(mmd: MMD)
 }
 
-enum FetcherError: Error {
+enum FetcherError:Error {
   case unsupportedFormat
 }
 
@@ -29,7 +29,7 @@ enum FetcherError: Error {
  ModuleFetcher state delegate.
  Implemented in classes that use a fetcher to download modules, e.g. RadioInteractor and SearchInteractor
  */
-protocol ModuleFetcherDelegate: class {
+protocol ModuleFetcherDelegate {
   /**
    Fetcher calls delegate on state changes.
    - parameters:
@@ -53,16 +53,16 @@ class ModuleFetcher {
       delegate?.fetcherStateChanged(self, state: state)
     }
   }
-
+  
   convenience init(delegate: ModuleFetcherDelegate) {
     self.init()
     self.delegate = delegate
   }
-
+  
   deinit {
     log.debug("")
   }
-
+  
   /**
   Fetches a module based on Amiga Music Preservation module id. In case the module
      is available in local storage, will complete immediately through state change to `FetcherState.done`.
@@ -76,7 +76,7 @@ class ModuleFetcher {
         state = .done(mmd: mmd)
         return
     }
-
+    
     let req = RESTRoutes.modulePath(id: ampId)
     currentRequest = AF.request(req).validate().responseString { resp in
       switch resp.result {
@@ -90,7 +90,7 @@ class ModuleFetcher {
       }
     }
   }
-
+  
   /**
   Cancels current fetch request if any.
   */
@@ -99,7 +99,7 @@ class ModuleFetcher {
     req.cancel()
     currentRequest = nil
   }
-
+  
   /**
   private function that fetches the module from the identified download link,
   unpacks it and saves to disk. After completion, reports the module metadata on the
@@ -118,7 +118,7 @@ class ModuleFetcher {
         self.state = .failed(err: error)
         return
       }
-
+      
       if case let .success(moduleData) = resp.result {
         self.state = .unpacking
         if let moduleDataUnzipped = self.gzipInflate(data: moduleData) {
@@ -131,15 +131,13 @@ class ModuleFetcher {
             return
           }
           do {
-            // store to file and make sure it's not writing over an existing mod
+            //store to file and make sure it's not writing over an existing mod
             var numberExt = 0
-            var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-              .last!.appendingPathComponent(mmd.name!).appendingPathExtension(mmd.type!)
+            var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(mmd.name).appendingPathExtension(mmd.type!)
             while FileManager.default.fileExists(atPath: localPath.path) {
                 numberExt += 1
-                let filename = mmd.name! + "_\(numberExt)"
-                localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-                .last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
+                let filename = mmd.name + "_\(numberExt)"
+                localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
             }
             mmd.localPath = localPath
             try moduleDataUnzipped.write(to: mmd.localPath!, options: .atomic)
@@ -160,7 +158,7 @@ class ModuleFetcher {
         self.delegate?.fetcherStateChanged(self, state: FetcherState.downloading(progress: currentProg))
     }
   }
-
+  
   /**
   Unzips the module data using GzipSwift
    - parameters:
@@ -168,7 +166,8 @@ class ModuleFetcher {
    - returns: module data, unzipped
   */
   private func gzipInflate(data: Data) -> Data? {
-    if data.isGzipped, let inflated = try? data.gunzipped() {
+    if data.isGzipped {
+      let inflated = try! data.gunzipped()
       return inflated
     }
     log.error("FAILED TO UNZIP")
@@ -183,7 +182,7 @@ extension ModuleFetcher: Hashable {
   static func == (left: ModuleFetcher, right: ModuleFetcher) -> Bool {
     return left === right
   }
-
+  
   func hash(into hasher: inout Hasher) {
     hasher.combine(ObjectIdentifier(self).hashValue)
   }

@@ -14,10 +14,10 @@ class NowPlayingView: UIView {
   @IBOutlet weak var saveButton: UIButton?
   @IBOutlet weak var faveButton: UIButton?
   @IBOutlet weak var shareButton: UIButton?
-
-  func setModule(_ module: MMD) {
-    titleLabel?.text = "\(module.name!) (\(module.type!))"
-    composerLabel?.text = module.composer!
+  
+  func setModule(_ module:MMD) {
+    titleLabel?.text = "\(module.name) (\(module.type!))"
+    composerLabel?.text = (module.composer?.trimmingCharacters(in: .whitespaces).count ?? 0) > 0 ? module.composer : " "
     saveButton?.isHidden = module.hasBeenSaved()
     faveButton?.isSelected = module.favorite
     // For now, hide the share button (sharing through the long-tap menu)

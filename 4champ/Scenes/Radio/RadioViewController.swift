@@ -238,7 +238,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
       currentModule = current
       currentModuleView?.alpha = 1
       composerLabel?.text = current.composer
-      nameLabel?.text = current.name ?? ""
+      nameLabel?.text = current.name
       sizeLabel?.text = "\(current.size ?? 0) kb"
       localLabel?.isHidden = !current.hasBeenSaved()
       faveButton?.isSelected = current.favorite
@@ -337,7 +337,7 @@ extension RadioViewController: UITableViewDataSource, UITableViewDelegate {
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     if let cell = tableView.dequeueReusableCell(withIdentifier: RadioSessionCell.ReuseId) as? RadioSessionCell, let mod = interactor?.getModule(at: indexPath) {
-      let modName = mod.name ?? "n/a"
+      let modName = mod.name
       let composer = mod.composer ?? "n/a"
 
       let title = String.init(format: "Radio_NByN".l13n(), modName.trimmingCharacters(in: .whitespaces), composer)

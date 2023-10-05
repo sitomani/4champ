@@ -22,52 +22,29 @@ class SearchPresenter: SearchPresentationLogic
 {
   weak var viewController: SearchDisplayLogic?
   
+  private let nameSorterBlock: (NameComparable, NameComparable) -> Bool = { (a, b) in
+    return a.name.compare(b.name, options: .caseInsensitive) == .orderedAscending
+  }
+  
   func presentSearchResponse<T>(_ response: Search.Response<T>) {
     var modules: [MMD] = []
     var composers: [ComposerInfo] = []
     var groups: [GroupInfo] = []
     switch T.self {
     case is ComposerResult.Type:
-      composers = (response as! Search.Response<ComposerResult>).result.compactMap { c in
-        guard let cUri = URL.init(string: c.handle.href) else { return nil }
-        guard let idString  = cUri.query?.split(separator: "=").last else { return nil }
-        return ComposerInfo(id: Int(idString) ?? 0, name: c.handle.label, realName: c.realname, groups: c.groups)
-          }.sorted { (a, b) -> Bool in
-              return a.name.compare(b.name, options: .caseInsensitive) == .orderedAscending
-      }
+      composers = (response as! Search.Response<ComposerResult>).result.compactMap {
+        return getComposerInfoFrom(resultObject: $0)
+      }.sorted(by: nameSorterBlock)
       break;
     case is ModuleResult.Type:
       modules = (response as! Search.Response<ModuleResult>).result.map {
-        let modUri = URL.init(string: $0.name.href)
-        var id: Int = 0
-        if let idString = modUri?.query?.split(separator: "=").last {
-            id = Int(idString) ?? 0
-        }
-        var mmd = MMD()
-        mmd.id = id
-        mmd.downloadPath = modUri
-        mmd.name = $0.name.label
-        mmd.size = Int($0.size.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
-        mmd.type = $0.format
-        mmd.composer = $0.composer.label
-        mmd.serviceId = .amp
-        mmd.note = $0.note
-        if let localCopy = moduleStorage.getModuleById(id) {
-          mmd.localPath = localCopy.localPath
-        }
-        return mmd
-          }.sorted { (a, b) -> Bool in
-          return a.name!.compare(b.name!, options: .caseInsensitive) == .orderedAscending
-      }
+        return getMMDFrom(resultObject: $0)
+      }.sorted(by: nameSorterBlock)
       break;
     case is GroupResult.Type:
-      groups = (response as! Search.Response<GroupResult>).result.compactMap { g in
-        guard let gUri = URL.init(string: g.href),
-          let idString = gUri.query?.split(separator: "=").last else { return nil }
-        return GroupInfo(id: Int(idString) ?? 0, name: g.label)
-          }.sorted { (a, b) -> Bool in
-              return a.name.compare(b.name, options: .caseInsensitive) == .orderedAscending
-      }
+      groups = (response as! Search.Response<GroupResult>).result.compactMap {
+        return getGroupInfoFrom(resultObject: $0)
+      }.sorted(by: nameSorterBlock)
       break;
     default:
         break;
@@ -114,4 +91,43 @@ class SearchPresenter: SearchPresentationLogic
       self.viewController?.displayDeletion(viewModel: vm)
     }
   }
+  
+  private func getIdString(href: String) -> String? {
+    guard let cUri = URL.init(string: href) else { return nil }
+    guard let idString  = cUri.query?.split(separator: "=").last else { return nil }
+    return String(idString)
+  }
+  
+  private func getGroupInfoFrom(resultObject: GroupResult) -> GroupInfo? {
+    guard let idString = getIdString(href: resultObject.href) else { return nil }
+    return GroupInfo(id: Int(idString) ?? 0, name: resultObject.label)
+
+  }
+  
+  private func getComposerInfoFrom(resultObject: ComposerResult) -> ComposerInfo? {
+    guard let idString = getIdString(href: resultObject.handle.href) else { return nil }
+    return ComposerInfo(id: Int(idString) ?? 0, name: resultObject.handle.label,
+                        realName: resultObject.realname, groups: resultObject.groups)
+  }
+  
+  private func getMMDFrom(resultObject: ModuleResult) -> MMD {
+    var id: Int = 0
+    if let idString = getIdString(href: resultObject.name.href) {
+      id = Int(idString) ?? 0
+    }
+    var mmd = MMD()
+    mmd.id = id
+    mmd.downloadPath = URL.init(string: resultObject.name.href)
+    mmd.name = resultObject.name.label
+    mmd.size = Int(resultObject.size.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
+    mmd.type = resultObject.format
+    mmd.composer = resultObject.composer.label
+    mmd.serviceId = .amp
+    mmd.note = resultObject.note
+    if let localCopy = moduleStorage.getModuleById(id) {
+      mmd.localPath = localCopy.localPath
+    }
+    return mmd
+  }
+
 }

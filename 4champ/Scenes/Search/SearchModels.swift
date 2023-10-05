@@ -7,14 +7,18 @@
 
 import UIKit
 
-struct ComposerInfo {
+protocol NameComparable {
+  var name: String { get set }
+}
+
+struct ComposerInfo: NameComparable {
   var id: Int
   var name: String
   var realName: String
   var groups: String
 }
 
-struct GroupInfo {
+struct GroupInfo: NameComparable {
   var id: Int
   var name: String
 }
