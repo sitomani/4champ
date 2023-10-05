@@ -1,0 +1,13 @@
+@startuml VIPCycle
+title VIP cycle in SwiftUI
+package View {}
+package Interactor {}
+package Presenter {}
+package Store {}
+
+View -right-> Interactor : triggers
+Interactor --> Presenter : outputs
+Presenter --> Store : presents
+View --> Store : observes
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml E2E view
+title 4champ High level Architecture
+actor User
+frame iOS {
+  component "4champ" as App
+  component PlayerLibs
+}
+
+frame "4champ.net" {
+  component NodeJS
+  database "Meta"
+}
+
+frame "amp.dascene.net" {
+  component PHP
+  database AMP
+}
+
+User -> App 
+App -.right.>> NodeJS
+NodeJS -.right.-> PHP
+NodeJS -down->Meta
+App -down->PlayerLibs
+PHP -down->AMP
+@enduml

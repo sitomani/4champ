@@ -1,0 +1,12 @@
+@startuml VIPCycle
+title View-Interactor-Presenter Cycle
+
+package View {}
+package Interactor {}
+package Presenter {}
+
+View -right-> Interactor : triggers
+Interactor --> Presenter : outputs
+Presenter --> View : presents
+
+@enduml
