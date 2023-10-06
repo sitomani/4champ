@@ -92,29 +92,29 @@ class SearchPresenter: SearchPresentationLogic
     }
   }
   
-  private func getIdString(href: String) -> String? {
+  private func getIdFrom(href: String) -> Int? {
     guard let cUri = URL.init(string: href) else { return nil }
     guard let idString  = cUri.query?.split(separator: "=").last else { return nil }
-    return String(idString)
+    return Int(idString)
   }
   
   private func getGroupInfoFrom(resultObject: GroupResult) -> GroupInfo? {
-    guard let idString = getIdString(href: resultObject.href) else { return nil }
-    return GroupInfo(id: Int(idString) ?? 0, name: resultObject.label)
+    guard let id = getIdFrom(href: resultObject.href) else { return nil }
+    return GroupInfo(id: id,
+                     name: resultObject.label)
 
   }
   
   private func getComposerInfoFrom(resultObject: ComposerResult) -> ComposerInfo? {
-    guard let idString = getIdString(href: resultObject.handle.href) else { return nil }
-    return ComposerInfo(id: Int(idString) ?? 0, name: resultObject.handle.label,
-                        realName: resultObject.realname, groups: resultObject.groups)
+    guard let id = getIdFrom(href: resultObject.handle.href) else { return nil }
+    return ComposerInfo(id: id,
+                        name: resultObject.handle.label,
+                        realName: resultObject.realname,
+                        groups: resultObject.groups)
   }
   
   private func getMMDFrom(resultObject: ModuleResult) -> MMD {
-    var id: Int = 0
-    if let idString = getIdString(href: resultObject.name.href) {
-      id = Int(idString) ?? 0
-    }
+    let id: Int = getIdFrom(href: resultObject.name.href) ?? 0
     var mmd = MMD()
     mmd.id = id
     mmd.downloadPath = URL.init(string: resultObject.name.href)
