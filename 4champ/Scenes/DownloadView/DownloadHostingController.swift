@@ -308,10 +308,21 @@ class DownloadController: NSObject, ObservableObject {
     mmd.serviceId = .local
     mmd.serviceKey = filename
 
-    // store to file and make sure it's not writing over an existing mod
+    guard let localPath = copyFileToDocumentsDirectory(from: url, with: &mmd, status: &status) else {
+      return nil
+    }
+
+    mmd.localPath = localPath
+    mmd.id = moduleStorage.getNextModuleId(service: .local)
+    moduleStorage.addModule(module: mmd)
+    status = .importSuccess
+    return mmd
+  }
+
+  private func copyFileToDocumentsDirectory(from url: URL, with mmd: inout MMD, status: inout ImportResultType?) -> URL? {
     var numberExt = 0
     var localPath = FileManager.default.urls(for: .documentDirectory,
-                                             in: .userDomainMask).last!.appendingPathComponent(mmd.name!).appendingPathExtension(mmd.type!)
+                         in: .userDomainMask).last!.appendingPathComponent(mmd.name!).appendingPathExtension(mmd.type!)
     while FileManager.default.fileExists(atPath: localPath.path) {
       numberExt += 1
       let filename = mmd.name! + "_\(numberExt)"
@@ -329,11 +340,7 @@ class DownloadController: NSObject, ObservableObject {
       return nil
     }
 
-    mmd.localPath = localPath
-    mmd.id = moduleStorage.getNextModuleId(service: .local)
-    moduleStorage.addModule(module: mmd)
-    status = .importSuccess
-    return mmd
+    return localPath
   }
 
   private func discardModule() {
