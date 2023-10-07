@@ -43,22 +43,22 @@ struct PlaylistPickerView: View {
                     if store.viewModel.status == DownloadStatus.complete {
                         Button(action: {
                             self.deleteAction()
-                        }) {
+                        }, label: {
                             HStack {
                                 Image("trashcan").renderingMode(.template).foregroundColor(.red)
                                 Text("ModulesView_Delete")
                             }.frame(maxWidth: .infinity, minHeight: 50)
-                        }.background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 8, leading: 5, bottom: -12, trailing: 5)).foregroundColor(.red)
+                        }).background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 8, leading: 5, bottom: -12, trailing: 5)).foregroundColor(.red)
                     }
                     if store.viewModel.service == .amp {
                     Button(action: {
                         self.shareAction()
-                    }) {
+                    }, label: {
                         HStack {
                             Image("shareicon").renderingMode(.template).foregroundColor(.blue)
                             Text("NP_Share")
                         }.frame(maxWidth: .infinity, minHeight: 50)
-                    }.background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 8, leading: 5, bottom: 4, trailing: 5))
+                    }).background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 8, leading: 5, bottom: 4, trailing: 5))
                     }
                 }.background(Color.black.opacity(0.25))
                 VStack {
@@ -73,12 +73,12 @@ struct PlaylistPickerView: View {
                         }.labelsHidden().background(Color(Appearance.veryLightGray))
                     }.frame(maxWidth: .infinity).background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 5, leading: 5, bottom: -5, trailing: 5))
                     HStack {
-                        Button(action: addModuleToPlaylist) {
+                        Button(action: addModuleToPlaylist, label: {
                             Text("PlaylistSelector_Add").frame(maxWidth: .infinity, minHeight: 50).background(Color(Appearance.veryLightGray))
-                        }.cornerRadius(5).padding(EdgeInsets(top: 5, leading: 5, bottom: 8, trailing: 0))
-                        Button(action: { self.dismissAction() }) {
+                        }).cornerRadius(5).padding(EdgeInsets(top: 5, leading: 5, bottom: 8, trailing: 0))
+                        Button(action: { self.dismissAction() }, label: {
                             Text("G_Cancel").frame(maxWidth: .infinity, minHeight: 50).background(Color(Appearance.veryLightGray))
-                        }.cornerRadius(5).padding(EdgeInsets(top: 5, leading: 0, bottom: 8, trailing: 5))
+                        }).cornerRadius(5).padding(EdgeInsets(top: 5, leading: 0, bottom: 8, trailing: 5))
                     }.background(Color.black.opacity(0.0))
                 }.background(Color(.black).opacity(0.25))
             }

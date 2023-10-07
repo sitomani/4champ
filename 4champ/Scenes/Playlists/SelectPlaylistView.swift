@@ -104,9 +104,9 @@ struct PlaylistSelectorSUI: View {
                             .padding(EdgeInsets(top: 8, leading: 20, bottom: 2, trailing: 0)).frame(minHeight: 44)
                         Button(action: {
                                 self.upsertPlaylist(name: self.name, playlist: self.editedPlaylist)
-                            }) {
+                        }, label: {
                             Image(uiImage: UIImage(named: "save_playlist")!)
-                        }.accentColor(Color(Appearance.successColor))
+                        }).accentColor(Color(Appearance.successColor))
                             .disabled(self.name.count == 0)
                         Button(action: {
                             self.name = ""
@@ -115,9 +115,9 @@ struct PlaylistSelectorSUI: View {
                             withAnimation {
                                 self.editingName = false
                             }
-                            }) {
+                        }, label: {
                             Image(uiImage: UIImage(named: "cancel_save")!)
-                            }.accentColor(Color(Appearance.errorColor)).padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 4))
+                            }) .accentColor(Color(Appearance.errorColor)).padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 4))
                         .contentShape(Rectangle())
                     }.background(Color(Appearance.darkBlueColor)).transition(.slide)
                 }
@@ -137,18 +137,18 @@ struct PlaylistSelectorSUI: View {
             }.navigationBarTitle("PlaylistView_Playlists", displayMode: .inline)
                 .navigationBarItems(leading: Button(action: {
                     self.showModal.toggle()
-                }) {
+                }, label: {
                     Image(systemName: "xmark").imageScale(.large)
-                    },
+                    }),
                     trailing: Button(action: {
                 withAnimation {
                     self.editedPlaylist = nil
                     self.name = ""
                     self.editingName.toggle()
                 }
-            }) {
-                Image(systemName: "plus").imageScale(.large)
-            }).background(Color(Appearance.darkBlueColor))
+                }, label: {
+                    Image(systemName: "plus").imageScale(.large)
+                })).background(Color(Appearance.darkBlueColor))
         }.background(Color(Appearance.darkBlueColor)).navigationViewStyle(StackNavigationViewStyle())
     }
 }

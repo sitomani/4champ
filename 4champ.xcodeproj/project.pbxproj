@@ -180,7 +180,7 @@
 		454F520F21610F83007011F3 /* ComposerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComposerCell.xib; sourceTree = "<group>"; };
 		455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
 		4569AC8A21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchBar+ActivityIndicator.swift"; sourceTree = "<group>"; };
-		456E6F2D240A5FAF0034BDA2 /* PlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistView.swift; sourceTree = "<group>"; };
+		456E6F2D240A5FAF0034BDA2 /* PlaylistView.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = PlaylistView.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45855FC624444C9B0079C767 /* ampplayer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ampplayer.entitlements; sourceTree = "<group>"; };
 		45855FC8244467420079C767 /* DownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadView.swift; sourceTree = "<group>"; };
 		45855FCA244475050079C767 /* DownloadHostingController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = DownloadHostingController.swift; sourceTree = "<group>"; tabWidth = 2; };

@@ -41,46 +41,46 @@ struct DownloadView: View {
                 ProgressBar(value: $store.model.progress)
                     .frame(height: 4)
                     .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
-
+                
                 Text(store.model.summary)
                     .padding(EdgeInsets(top: 5, leading: 15, bottom: 0, trailing: 15))
                     .foregroundColor(.black)
-
+                
                 HStack {
                     if store.model.error == nil &&
                         (store.model.importType == .universalLink ||
-                            (store.model.importType == .documentLink && store.model.importIds.count > 0)) {
+                         (store.model.importType == .documentLink && store.model.importIds.count > 0)) {
                         Button(action: {
-                        self.store.play()
-                    }) {
-                        Text("DownloadView_Play")
-                        }.frame(maxWidth: .infinity, minHeight: 50).padding(5).contentShape(Rectangle())
-                        .disabled(self.store.model.progress < 1.0)
+                            self.store.play()
+                        }, label: {
+                            Text("DownloadView_Play")
+                        }).frame(maxWidth: .infinity, minHeight: 50).padding(5).contentShape(Rectangle())
+                            .disabled(self.store.model.progress < 1.0)
                     }
                     if store.model.error == nil && store.model.importType == .universalLink {
-                    Button(action: {
-                        self.store.keep()
-                    }) {
-                        Text("Dialog_Keep") // Image("preview-save")
-                        }.frame(maxWidth: .infinity, minHeight: 50).padding(5).contentShape(Rectangle())
+                        Button(action: {
+                            self.store.keep()
+                        }, label: {
+                            Text("Dialog_Keep") // Image("preview-save")
+                        }).frame(maxWidth: .infinity, minHeight: 50).padding(5).contentShape(Rectangle())
                     }
                     if store.model.error == nil && store.model.importType == .documentLink && store.model.importIds.count > 0 {
                         Button(action: {
                             self.store.assignComposer()
-                        }) {
+                        }, label: {
                             Text("Local_Import_Assign")
-                        }.frame(maxWidth: .infinity, minHeight: 50).padding(5).contentShape(Rectangle())
+                        }).frame(maxWidth: .infinity, minHeight: 50).padding(5).contentShape(Rectangle())
                     }
                     Button(action: {
                         self.store.dismiss()
-                    }) {
+                    }, label: {
                         Text("DownloadView_Dismiss")
-                        }.frame(maxWidth: .infinity, minHeight: 50).padding(5).contentShape(Rectangle())
+                    }).frame(maxWidth: .infinity, minHeight: 50).padding(5).contentShape(Rectangle())
                 }.padding(5)
             }.background(Color(Appearance.veryLightGray)).cornerRadius(10.0)
-            }.padding(EdgeInsets(top: 0, leading: 40, bottom: 0, trailing: 40)).onDisappear(perform: {
-                self.store.swipeDismissed()
-            })
+        }.padding(EdgeInsets(top: 0, leading: 40, bottom: 0, trailing: 40)).onDisappear(perform: {
+            self.store.swipeDismissed()
+        })
     }
 }
 
