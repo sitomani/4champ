@@ -108,7 +108,7 @@ class ModuleStorage: NSObject {
     var _ = persistentStoreCoordinator
     let name = managedObjectContext.name
     log.info(name ?? "managedObjectContext does not have name")
-    
+
     setCurrentPlaylist(playlist: getDefaultPlaylist())
   }
 

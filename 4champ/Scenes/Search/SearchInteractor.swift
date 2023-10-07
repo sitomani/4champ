@@ -10,8 +10,7 @@ import Alamofire
 import Foundation
 
 /// Search Interactor business logic interface
-protocol SearchBusinessLogic
-{
+protocol SearchBusinessLogic {
   /// Triggers a search towards 4champ.net
   /// - parameters:
   ///    - request: parameters for the search (keyword, type, paging index)
@@ -19,31 +18,30 @@ protocol SearchBusinessLogic
 
   /// Triggers a resource list fetch based on variables set in the datastore
   func triggerAutoFetchList()
-  
+
   /// Starts download and playback of a module
   /// - parameters:
   ///    - moduleId: id of the module to download
   func download(moduleId: Int)
-  
+
   /// Starts download of a set of modules to persistent storage. Progress will be indicated
   /// through presentDownloadProgress
   /// - parameters:
   ///    - request: BatchDownload request containing the ids to download
   func downloadModules(_ request: Search.BatchDownload.Request)
-    
+
   /// Cancels an ongoing multiple module fetch
   func cancelDownload()
-  
+
   func getModuleInfo(at: IndexPath) -> ModuleInfo?
-  
+
   func addToPlaylist(moduleId: Int, playlistId: String)
-  
+
   func deleteModule(at indexPath: IndexPath)
 }
 
 /// Search Interactor datastore
-protocol SearchDataStore
-{
+protocol SearchDataStore {
   var autoListTitle: String? { get set }
   var autoListId: Int? { get set }
   var autoListType: SearchType? { get set }
@@ -51,30 +49,29 @@ protocol SearchDataStore
 }
 
 /// Implementation of Search business logic
-class SearchInteractor: SearchBusinessLogic, SearchDataStore
-{
+class SearchInteractor: SearchBusinessLogic, SearchDataStore {
   var presenter: SearchPresentationLogic?
 
   var autoListTitle: String?
   var autoListId: Int?
   var autoListType: SearchType?
   var pagingIndex: Int = 0
-  
+
   private var currentRequest: Alamofire.DataRequest?
   private var downloadQueue: [Int] = []
   private var favoritedModuleId: Int = 0
   private var originalQueueLenght: Int = 0
   private var fetcher: ModuleFetcher?
   private var latestModuleResponse = Search.Response<ModuleResult>(result: [], text: "")
-  
+
   init() {
     moduleStorage.addStorageObserver(self)
   }
-  
+
   deinit {
     moduleStorage.removeStorageObserver(self)
   }
-    
+
   func search(_ request: Search.Request) {
     log.debug("keyword: \(request.text), type: \(request.type), pagingIndex: \(request.pagingIndex)")
     if currentRequest != nil {
@@ -100,9 +97,8 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
       self.currentRequest = nil
     }
   }
-  
-  private func processResponse(request: Search.Request, responseData: Data) -> Bool
-  {
+
+  private func processResponse(request: Search.Request, responseData: Data) -> Bool {
     switch request.type {
     case SearchType.module, SearchType.meta:
       if let modules = try? JSONDecoder().decode([ModuleResult].self, from: responseData) {
@@ -110,26 +106,23 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
         self.presenter?.presentSearchResponse(self.latestModuleResponse)
         return true
       }
-      break
     case SearchType.composer:
       if let composers = try? JSONDecoder().decode([ComposerResult].self, from: responseData) {
         self.presenter?.presentSearchResponse(Search.Response<ComposerResult>(result: composers, text: request.text))
         return true
       }
-      break
     case SearchType.group:
       if let groups = try? JSONDecoder().decode([GroupResult].self, from: responseData) {
         self.presenter?.presentSearchResponse(Search.Response<GroupResult>(result: groups, text: request.text))
         return true
       }
-      break
     }
     return false
   }
-  
+
   func triggerAutoFetchList() {
     guard let id = autoListId, let type = autoListType else { return }
-    
+
     if type == .composer {
       let restRequest = RESTRoutes.listModules(composerId: id)
       AF.request(restRequest).validate().responseData { response in
@@ -144,21 +137,21 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
       AF.request(restRequest).validate().responseData { response in
         if case let .success(jsonData) = response.result,
            let composers = try? JSONDecoder().decode([ComposerResult].self, from: jsonData) {
-            self.presenter?.presentSearchResponse(Search.Response<ComposerResult>(result: composers, text:""))
+            self.presenter?.presentSearchResponse(Search.Response<ComposerResult>(result: composers, text: ""))
           }
       }
     } else {
       log.error("Invalid type for auto fetch \(type)")
     }
   }
-  
+
   func download(moduleId: Int) {
-    //reset the download queue if single downloads are triggered
+    // reset the download queue if single downloads are triggered
     originalQueueLenght = 0
     downloadQueue = []
     doDownload(moduleId: moduleId)
   }
-  
+
   func getModuleInfo(at: IndexPath) -> ModuleInfo? {
     guard latestModuleResponse.result.count > at.row else {
       return nil
@@ -169,23 +162,23 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
     }
     return nil
   }
-  
+
   func deleteModule(at: IndexPath) {
     if let cdi = getModuleInfo(at: at) {
       var mod = MMD(cdi: cdi)
       moduleStorage.deleteModule(module: mod)
       mod.favorite = false
       mod.localPath = nil
-      
+
       // Remove deleted module from play queue
       if let queueIndex = modulePlayer.playQueue.firstIndex(of: mod) {
         modulePlayer.playQueue.remove(at: queueIndex)
       }
-      
+
       presenter?.presentDeletion(response: Search.MetaDataChange.Response(module: mod))
     }
   }
-  
+
   private func doDownload(moduleId: Int) {
     // Always create a new fetcher. Fetchers will be released
     // Once the fetch is complete
@@ -200,7 +193,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
 
     fetcher?.fetchModule(ampId: moduleId)
   }
-    
+
   func downloadModules(_ request: Search.BatchDownload.Request) {
     downloadQueue = request.moduleIds
     originalQueueLenght = request.moduleIds.count
@@ -211,16 +204,16 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
     }
     fetchNextQueuedModule()
   }
-  
+
   func cancelDownload() {
     downloadQueue = []
     fetcher?.cancel()
   }
-  
+
   func addToPlaylist(moduleId: Int, playlistId: String) {
-    
+
   }
-  
+
   private func fetchNextQueuedModule() {
     var resp = Search.BatchDownload.Response(originalQueueLength: originalQueueLenght,
                                              queueLength: downloadQueue.count,
@@ -235,7 +228,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
     presenter?.presentBatchProgress(response: resp)
     doDownload(moduleId: nextId)
   }
-  
+
 }
 
 extension SearchInteractor: ModuleFetcherDelegate {
@@ -268,17 +261,17 @@ extension SearchInteractor: ModuleFetcherDelegate {
       log.verbose("noop")
     }
   }
-  
+
   /// Keeps the playlist short so that the disk is not flooded with modules
   private func removeBufferHead() {
     guard modulePlayer.playQueue.count > Constants.radioBufferLen else { return }
     let current = modulePlayer.playQueue.removeFirst()
-    
+
     guard moduleStorage.getModuleById(current.id!) == nil else {
         // Not removing modules in local storage
         return
     }
-    
+
     if let url = current.localPath {
       log.info("Deleting module \(url.lastPathComponent)")
       do {
@@ -295,7 +288,7 @@ extension SearchInteractor: ModuleStorageObserver {
     presenter?.presentMetadataChange(response: Search.MetaDataChange.Response(module: mmd))
     log.debug("")
   }
-  
+
   func playlistChange() {
     log.debug("")
   }

@@ -44,8 +44,8 @@ class PlaylistSelectorPresenter: PlaylistSelectorPresentationLogic {
         }
 
         var moduleName = response.module.name
-        if let composer_name = response.module.composer, composer_name.count > 0 {
-            moduleName = String.init(format: "LockScreen_Playing".l13n(), moduleName, composer_name)
+        if let cName = response.module.composer, cName.count > 0 {
+            moduleName = String.init(format: "LockScreen_Playing".l13n(), moduleName, cName)
         }
 
         let status: DownloadStatus = response.module.hasBeenSaved() ? .complete : .unknown

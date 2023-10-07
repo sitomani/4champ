@@ -14,8 +14,8 @@ class NowPlayingView: UIView {
   @IBOutlet weak var saveButton: UIButton?
   @IBOutlet weak var faveButton: UIButton?
   @IBOutlet weak var shareButton: UIButton?
-  
-  func setModule(_ module:MMD) {
+
+  func setModule(_ module: MMD) {
     titleLabel?.text = "\(module.name) (\(module.type!))"
     composerLabel?.text = (module.composer?.trimmingCharacters(in: .whitespaces).count ?? 0) > 0 ? module.composer : " "
     saveButton?.isHidden = module.hasBeenSaved()

@@ -155,10 +155,10 @@ class DownloadController: NSObject, ObservableObject {
     var summaryItems: [String] = []
 
       if imported > 0 {
-        if (alreadyImported > 0 || unknown > 0) {
-          summaryItems.append(String.init(format:"Local_Import_Imported".l13n(), "\(imported)"))
+        if alreadyImported > 0 || unknown > 0 {
+          summaryItems.append(String.init(format: "Local_Import_Imported".l13n(), "\(imported)"))
         } else {
-          let names:[String] = model.importIds.compactMap {
+          let names: [String] = model.importIds.compactMap {
             if let mod = moduleStorage.getModuleById($0) {
               return mod.name
             }
@@ -318,11 +318,13 @@ class DownloadController: NSObject, ObservableObject {
 
   private func copyFileToDocumentsDirectory(from url: URL, with mmd: inout MMD, status: inout ImportResultType?) -> URL? {
     var numberExt = 0
-    var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(mmd.name!).appendingPathExtension(mmd.type!)
+    var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+      .last!.appendingPathComponent(mmd.name).appendingPathExtension(mmd.type!)
     while FileManager.default.fileExists(atPath: localPath.path) {
       numberExt += 1
-      let filename = mmd.name! + "_\(numberExt)"
-      localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
+      let filename = mmd.name + "_\(numberExt)"
+      localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        .last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
     }
 
     // Copy to documents dir from the picker temp folder

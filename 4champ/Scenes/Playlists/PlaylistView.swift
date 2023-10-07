@@ -14,18 +14,18 @@ struct SUIModule: View {
     let module: MMD
     let faveCallback: ((MMD) -> Void)?
     var body: some View {
-        VStack{
+        VStack {
         HStack {
             ZStack {
                 Image(uiImage: UIImage.init(named: "modicon")!).resizable().frame(width: 50, height: 50)
                 Text(module.type?.uppercased() ?? "MOD")
                     .foregroundColor(Color.black)
-                    .font(.system(size:12))
-                    .offset(y:13)
+                    .font(.system(size: 12))
+                    .offset(y: 13)
                 if module.supported() == false {
-                    Image(uiImage: UIImage.init(named:"stopicon")!)
+                    Image(uiImage: UIImage.init(named: "stopicon")!)
                         .resizable()
-                        .frame(width:30, height:30).offset(x:-15)
+                        .frame(width: 30, height: 30).offset(x: -15)
                 }
             }.padding(EdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 0))
             VStack(alignment: .leading) {

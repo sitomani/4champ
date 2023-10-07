@@ -23,23 +23,22 @@ struct GroupInfo: NameComparable {
   var name: String
 }
 
-enum Search
-{
+enum Search {
   struct Request {
     var text: String
     var type: SearchType
     var pagingIndex: Int = 0
   }
-  
+
   struct ProgressResponse {
     var progress: Float
-    var error: Error? = nil
+    var error: Error?
     struct ViewModel {
       var progress: Float
-      var error: String? = nil
+      var error: String?
     }
   }
-  
+
   struct BatchDownload {
     struct Request {
       var moduleIds: [Int]
@@ -58,24 +57,24 @@ enum Search
       var favoritedModuleId: Int
     }
   }
-  
+
   struct Response<T> {
     var result: [T]
     var text: String
   }
-  
+
   struct ViewModel {
     var modules: [MMD]
     var composers: [ComposerInfo]
     var groups: [GroupInfo]
     var text: String
   }
-  
+
   enum MetaDataChange {
     struct Response {
       var module: MMD
     }
-    
+
     struct ViewModel {
       var module: MMD
     }
@@ -104,7 +103,6 @@ struct LabelHref: Codable {
   let href: String
 }
 
-
 struct ComposerResult: Codable {
   let handle: LabelHref
   let realname, groups: String
@@ -117,9 +115,9 @@ struct GroupResult: Codable {
 
 extension Search.Response where T == ModuleResult {
   func sortedResult() -> [ModuleResult] {
-    let r = result.sorted { (a, b) -> Bool in
-      return a.name.label.compare(b.name.label, options: .caseInsensitive) == .orderedAscending
+    let result = result.sorted { (resA, resB) -> Bool in
+      return resA.name.label.compare(resB.name.label, options: .caseInsensitive) == .orderedAscending
     }
-    return r
+    return result
   }
 }
