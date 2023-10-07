@@ -61,7 +61,11 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore {
     fetchRequest.predicate = NSPredicate.init(format: filterString)
     frc = moduleStorage.createFRC(fetchRequest: fetchRequest, entityName: "ModuleInfo")
     frc?.delegate = self
-    try! frc?.performFetch()
+    do {
+      try frc?.performFetch()
+    } catch {
+      log.error("Fetch failed \(error)")
+    }
     presenter?.presentModules(response: Local.SortFilter.Response())
   }
   

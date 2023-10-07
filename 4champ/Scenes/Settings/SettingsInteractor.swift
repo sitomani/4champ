@@ -17,7 +17,7 @@ protocol SettingsDataStore {
 }
 
 class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
-
+  
   private enum SettingKeys {
     static let domainName = "DomainName"
     static let stereoSeparation = "StereoSeparation"
@@ -26,81 +26,81 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     static let prevCollectionSize = "prevCollectionSize"
     static let interpolation = "interpolation"
   }
-
+  
   var presenter: SettingsPresentationLogic?
   
   var stereoSeparation: Int {
-    set {
-        UserDefaults.standard.set(newValue, forKey: SettingKeys.stereoSeparation)
-    }
     get {
       if let value = UserDefaults.standard.value(forKey: SettingKeys.stereoSeparation) as? Int {
         return value
       }
       return Constants.stereoSeparationDefault
     }
+    set {
+      UserDefaults.standard.set(newValue, forKey: SettingKeys.stereoSeparation)
+    }
   }
-    
-    var interpolation: SampleInterpolation {
-        set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: SettingKeys.interpolation)
-        }
-        get {
-            if let value = UserDefaults.standard.value(forKey: SettingKeys.interpolation) as? Int {
-                return SampleInterpolation(rawValue: value) ?? .libraryDefault
-            }
-            return SampleInterpolation.libraryDefault
-        }
+  
+  var interpolation: SampleInterpolation {
+    get {
+      if let value = UserDefaults.standard.value(forKey: SettingKeys.interpolation) as? Int {
+        return SampleInterpolation(rawValue: value) ?? .libraryDefault
+      }
+      return SampleInterpolation.libraryDefault
     }
-    
-    var collectionSize: Int {
-        set {
-            UserDefaults.standard.set(newValue, forKey: SettingKeys.collectionSize)
-            updateBadge()
-            NotificationCenter.default.post(Notification.init(name: Notifications.badgeUpdate))
-        }
-        get {
-            if let value = UserDefaults.standard.value(forKey: SettingKeys.collectionSize) as? Int {
-                return value
-            }
-            return Constants.latestDummy
-        }
+    set {
+      UserDefaults.standard.set(newValue.rawValue, forKey: SettingKeys.interpolation)
     }
-    
-    var newestPlayed: Int {
-        set {
-            UserDefaults.standard.set(newValue, forKey: SettingKeys.newestPlayed)
-            updateBadge()
-            NotificationCenter.default.post(Notification.init(name: Notifications.badgeUpdate))
-        }
-        get {
-            if let value = UserDefaults.standard.value(forKey: SettingKeys.newestPlayed) as? Int {
-                return value
-            }
-            return 0
-        }
+  }
+  
+  var collectionSize: Int {
+    get {
+      if let value = UserDefaults.standard.value(forKey: SettingKeys.collectionSize) as? Int {
+        return value
+      }
+      return Constants.latestDummy
     }
-    
-    var prevCollectionSize: Int {
-        set {
-            UserDefaults.standard.set(newValue, forKey: SettingKeys.prevCollectionSize)
-        }
-        get {
-            if let value = UserDefaults.standard.value(forKey: SettingKeys.prevCollectionSize) as? Int {
-                return value
-            }
-            return 0
-        }
+    set {
+      UserDefaults.standard.set(newValue, forKey: SettingKeys.collectionSize)
+      updateBadge()
+      NotificationCenter.default.post(Notification.init(name: Notifications.badgeUpdate))
     }
-    
-    var badgeCount: Int {
-        if newestPlayed < collectionSize {
-            var diff = collectionSize - newestPlayed
-            diff = diff > Constants.maxBadgeValue ? Constants.maxBadgeValue : diff
-            return diff
-        }
-        return 0
+  }
+  
+  var newestPlayed: Int {
+    get {
+      if let value = UserDefaults.standard.value(forKey: SettingKeys.newestPlayed) as? Int {
+        return value
+      }
+      return 0
     }
+    set {
+      UserDefaults.standard.set(newValue, forKey: SettingKeys.newestPlayed)
+      updateBadge()
+      NotificationCenter.default.post(Notification.init(name: Notifications.badgeUpdate))
+    }
+  }
+  
+  var prevCollectionSize: Int {
+    get {
+      if let value = UserDefaults.standard.value(forKey: SettingKeys.prevCollectionSize) as? Int {
+        return value
+      }
+      return 0
+    }
+    set {
+      UserDefaults.standard.set(newValue, forKey: SettingKeys.prevCollectionSize)
+    }
+  }
+  
+  var badgeCount: Int {
+    if newestPlayed < collectionSize {
+      var diff = collectionSize - newestPlayed
+      diff = diff > Constants.maxBadgeValue ? Constants.maxBadgeValue : diff
+      return diff
+    }
+    return 0
+  }
   
   // MARK: Do something
   
@@ -111,14 +111,14 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
       stereoSeparation = request.stereoSeparation
       interpolation = request.interpolation
     } else {
-        response = Settings.Update.ValueBag(stereoSeparation: stereoSeparation, interpolation: interpolation)
+      response = Settings.Update.ValueBag(stereoSeparation: stereoSeparation, interpolation: interpolation)
     }
     modulePlayer.setStereoSeparation(stereoSeparation)
     modulePlayer.setInterpolation(interpolation)
     presenter?.presentSettings(response: response)
   }
-    
-    private func updateBadge() {
-        UIApplication.shared.applicationIconBadgeNumber = badgeCount
-    }
+  
+  private func updateBadge() {
+    UIApplication.shared.applicationIconBadgeNumber = badgeCount
+  }
 }

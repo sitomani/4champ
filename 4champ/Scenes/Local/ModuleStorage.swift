@@ -118,7 +118,7 @@ class ModuleStorage: NSObject {
     let filterString = "plId == 'default'"
     fetchRequest.predicate = NSPredicate.init(format: filterString)
     let frc = createFRC(fetchRequest: fetchRequest, entityName: "Playlist")
-    try! frc.performFetch()
+    try? frc.performFetch()
     guard let defaultPl = frc.fetchedObjects?.first else {
       // No Default playlist yet, must create it
       return createPlaylist(name: "default", id: "default")

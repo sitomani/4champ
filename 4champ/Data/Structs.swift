@@ -112,7 +112,7 @@ struct MMD: Identifiable {
 }
 
 extension MMD: Equatable {}
-func ==(lhs: MMD, rhs: MMD) -> Bool {
+func == (lhs: MMD, rhs: MMD) -> Bool {
   let eq = lhs.id == rhs.id && lhs.id != nil
   return eq
 }

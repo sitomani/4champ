@@ -41,7 +41,7 @@ struct PlaylistCell: View {
 }
 
 struct PlaylistSelectorSUI: View {
-    @Binding var show_modal: Bool
+    @Binding var showModal: Bool
     @State private var listId = UUID()
     @Environment(\.managedObjectContext) var managedObjectContext
     @FetchRequest(entity: Playlist.entity(),
@@ -126,7 +126,7 @@ struct PlaylistSelectorSUI: View {
                         if pl.plName != "radioList" {
                             PlaylistCell(pl: pl).contentShape(Rectangle()).onTapGesture {
                                 moduleStorage.currentPlaylist = pl
-                                self.show_modal.toggle()
+                                self.showModal.toggle()
                             }
                             .onLongPressGesture {
                                 self.edit(pl: pl)
@@ -136,7 +136,7 @@ struct PlaylistSelectorSUI: View {
                 }.contentShape(Rectangle()).id(listId)
             }.navigationBarTitle("PlaylistView_Playlists", displayMode: .inline)
                 .navigationBarItems(leading: Button(action: {
-                    self.show_modal.toggle()
+                    self.showModal.toggle()
                 }) {
                     Image(systemName: "xmark").imageScale(.large)
                     },

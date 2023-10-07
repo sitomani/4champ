@@ -114,8 +114,8 @@ class SettingsViewController: UITableViewController, SettingsDisplayLogic {
     
     if let interpolationCell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 1)) as? SettingsInterpolationCell,
       let value = interpolationCell.interpolationSwitch?.isOn {
-      let i = value ? SampleInterpolation.libraryDefault : SampleInterpolation.off
-      valueBag.interpolation = i
+      let ipol = value ? SampleInterpolation.libraryDefault : SampleInterpolation.off
+      valueBag.interpolation = ipol
     }
     
     return valueBag

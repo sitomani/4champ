@@ -37,7 +37,7 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
     let filterString = "plId != 'radioList'"
     fetchRequest.predicate = NSPredicate.init(format: filterString)
     frc = moduleStorage.createFRC(fetchRequest: fetchRequest, entityName: "Playlist")
-    try! frc?.performFetch()
+    try? frc?.performFetch()
     
     if let plObjects = frc?.fetchedObjects {
       var plMetaData = plObjects.map {
@@ -46,7 +46,7 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
       
       for pl in plObjects {
         for mi in pl.modules ?? [] {
-          let modId = (mi as! ModuleInfo).modId?.intValue ?? 0
+          let modId = (mi as? ModuleInfo)?.modId?.intValue ?? 0
           if let index = plMetaData.firstIndex(where: { $0.id == pl.plId }) {
             plMetaData[index].modules.append(modId)
           }
@@ -86,7 +86,7 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
       moduleStorage.saveContext()
       presenter?.presentAppend(response: completed)
     } else {
-      if let _ = module?.localPath {
+      if module?.localPath != nil {
         // 2. Module is downloaded (radio/search) but not yet in database
         moduleStorage.addModule(module: module!)
         if let modInfo = moduleStorage.fetchModuleInfo(modId) {
@@ -112,7 +112,7 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
     let filterString = "plId == '\(id)'"
     fetchRequest.predicate = NSPredicate.init(format: filterString)
     let tmp = moduleStorage.createFRC(fetchRequest: fetchRequest, entityName: "Playlist")
-    try! tmp.performFetch()
+    try? tmp.performFetch()
     return tmp.fetchedObjects?.first
   }
 }

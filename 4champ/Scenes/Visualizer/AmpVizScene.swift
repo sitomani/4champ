@@ -73,15 +73,15 @@ class AmpVizScene: SKScene {
     func setupChannelBars() {
         let channelcount = modulePlayer.renderer.numberOfChannels()
         
-        for i in 0..<channelcount {
-            addChannelBar(i, numChannels: channelcount)
+        for cIndex in 0..<channelcount {
+            addChannelBar(cIndex, numChannels: channelcount)
         }
     }
 
     func addChannelBar(_ channel: Int, numChannels: Int) {
-        let w = Int((frame.size.width - 2.0)/CGFloat(numChannels))
-        let ch = AmpVolumeBar.init(rect: CGRect(x: 0, y: 0, width: CGFloat(w) - 2.0, height: frame.size.height))
-        ch.position = CGPoint(x: 2.0 + CGFloat(channel)*CGFloat(w), y: 0)
+        let cWidth = Int((frame.size.width - 2.0)/CGFloat(numChannels))
+        let ch = AmpVolumeBar.init(rect: CGRect(x: 0, y: 0, width: CGFloat(cWidth) - 2.0, height: frame.size.height))
+        ch.position = CGPoint(x: 2.0 + CGFloat(channel)*CGFloat(cWidth), y: 0)
         ch.fillColor = UIColor.clear
         ch.lineWidth = 0
         ch.channel = channel

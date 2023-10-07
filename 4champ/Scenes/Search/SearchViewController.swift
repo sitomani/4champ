@@ -174,7 +174,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       var onlineOnly = vm.modules.count
       for mod in vm.modules {
         if mod.hasBeenSaved() || mod.supported() == false {
-          onlineOnly = onlineOnly - 1
+          onlineOnly -= 1
         }
       }
       
@@ -523,7 +523,9 @@ extension SearchViewController: ModuleCellDelegate {
   
   func shareTapped(cell: ModuleCell) {
     guard let ip = tableView?.indexPath(for: cell),
-      let module = viewModel?.modules[ip.row], let _ = module.id, module.supported() else {
+          let module = viewModel?.modules[ip.row],
+          module.id != nil,
+          module.supported() else {
         return
     }
     shareUtil.shareMod(mod: module)
@@ -541,7 +543,6 @@ extension SearchViewController: ModuleCellDelegate {
   }
   
   func addAction(moduleId: Int, playlistId: String) {
-    log.error("addAction")
-    // TODO: Add the module to playlist
+    log.error("not expecting addAction")
   }
 }

@@ -46,11 +46,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
       if (sender.velocity(in: self.view).y) > 0 {
         self.presentingViewController?.dismiss(animated: true, completion: nil)
       }
-      break
-    default:
-      var v = 0
-      v = v+1
-      // nop
+    default: ()
     }
   }
   

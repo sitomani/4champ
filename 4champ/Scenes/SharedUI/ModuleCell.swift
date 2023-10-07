@@ -75,9 +75,7 @@ extension ModuleCell {
     lbl.textAlignment = .center
     self.contentView.addSubview(lbl)
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+3.0) {
-      UIView.animate(withDuration: 1.0, animations: {lbl.alpha=0}) { (_) in
-        lbl.removeFromSuperview()
-      }
+      UIView.animate(withDuration: 1.0, animations: {lbl.alpha=0}, completion: {_ in lbl.removeFromSuperview()})
     }
   }
 }

@@ -65,9 +65,9 @@ class MainViewController: UITabBarController {
     npView?.addGestureRecognizer(lpr)
 
     let titles = ["TabBar_Local", "TabBar_Playlist", "TabBar_Search", "TabBar_Radio", "TabBar_About"]
-    for t in tabBar.items! {
-      if let index = tabBar.items!.index(of: t) {
-        t.title = titles[index].l13n()
+    for tab in tabBar.items! {
+      if let index = tabBar.items!.index(of: tab) {
+        tab.title = titles[index].l13n()
       }
     }
   }
@@ -96,13 +96,10 @@ class MainViewController: UITabBarController {
         switch event.subtype {
         case .remoteControlPlay:
           modulePlayer.resume()
-          break
         case .remoteControlPause:
           modulePlayer.pause()
-          break
         case .remoteControlStop:
           modulePlayer.stop()
-          break
         case .remoteControlNextTrack:
           modulePlayer.playNext()
         case .remoteControlPreviousTrack:

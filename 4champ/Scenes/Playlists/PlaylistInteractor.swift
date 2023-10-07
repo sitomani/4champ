@@ -33,19 +33,23 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore {
   var selectedPlaylistId: String?
   var frc: NSFetchedResultsController<Playlist>?
   // var name: String = ""
-
+  
   private var downloadController = DownloadController.init()
   
   override init() {
     super.init()
     let filterString = "plId != 'radioList'"
-
+    
     let fetchRequest = NSFetchRequest<Playlist>.init(entityName: "Playlist")
     fetchRequest.sortDescriptors = []
     fetchRequest.predicate = NSPredicate.init(format: filterString)
     frc = moduleStorage.createFRC(fetchRequest: fetchRequest, entityName: "Playlist")
     frc?.delegate = self
-    try! frc?.performFetch()
+    do {
+      try frc?.performFetch()
+    } catch {
+      log.error("Failed to perform fetch: \(error)")
+    }
     
     if selectedPlaylistId == nil {
       selectedPlaylistId = "default"
@@ -125,11 +129,12 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore {
   private func rebuildQueue() {
     if let pl = frc?.fetchedObjects?.first(where: { ($0 as Playlist).plId == selectedPlaylistId }) {
       var playlistQueue: [MMD] = []
-      if let moduleinfos = pl.modules {
-        for mod in moduleinfos {
-          playlistQueue.append(MMD(cdi: (mod as! ModuleInfo)))
+      pl.modules?.forEach {
+        if let modInfo = $0 as? ModuleInfo {
+          playlistQueue.append(MMD(cdi: modInfo))
         }
       }
+      
       if pl.playmode?.boolValue ?? false {
         playlistQueue.shuffle()
       }
@@ -152,14 +157,14 @@ extension PlaylistInteractor: NSFetchedResultsControllerDelegate {
   }
   
   func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-
+    
     guard modulePlayer.radioOn == false else {
       return
     }
     
     if let pl = anObject as? Playlist, pl.plId == selectedPlaylistId {
       rebuildQueue()
-    }    
+    }
   }
   
   func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {

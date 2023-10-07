@@ -51,7 +51,7 @@ struct SUIModule: View {
 
 struct PlaylistView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
-    @State private var show_modal: Bool = false
+    @State private var showModal: Bool = false
     @State var showNowPlaying: Bool = false
     @State var isEditing: Bool = false
     @State var navigationButtonID = UUID()
@@ -93,13 +93,13 @@ struct PlaylistView: View {
     var body: some View {
         VStack {
             Button(action: {
-                self.show_modal = true
+                self.showModal = true
             }) {
                 Text(store.viewModel.playlistName).underline()
                     .foregroundColor(Color(.white))
                     .padding(EdgeInsets.init(top: 5, leading: 0, bottom: -5, trailing: 0))
-            }.sheet(isPresented: self.$show_modal) {
-                PlaylistSelectorSUI(show_modal: self.$show_modal).environment(\.managedObjectContext, self.managedObjectContext).onDisappear {
+            }.sheet(isPresented: self.$showModal) {
+                PlaylistSelectorSUI(showModal: self.$showModal).environment(\.managedObjectContext, self.managedObjectContext).onDisappear {
                     self.navigationButtonID = UUID()
                 }.background(Color(Appearance.darkBlueColor))
             }
@@ -171,7 +171,7 @@ func randomMMD() -> MMD {
 var st = PlaylistStore(viewModel: Playlists.Select.ViewModel(playlistName: "foo", shuffle: false, modules: [randomMMD(), randomMMD(), randomMMD()])
 )
 
-struct Playlist_Preview: PreviewProvider {
+struct PlaylistPreview: PreviewProvider {
     static var previews: some View {
         Group {
             NavigationView {

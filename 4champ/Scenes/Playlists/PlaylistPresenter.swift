@@ -25,9 +25,9 @@ class PlaylistPresenter: PlaylistPresentationLogic {
     let shuffle = (pl.playmode?.intValue ?? 0) == 1
 
     var mods: [MMD] = []
-    if let moduleinfos = pl.modules {
-      for mod in moduleinfos {
-        mods.append(MMD(cdi: (mod as! ModuleInfo)))
+    pl.modules?.forEach {
+      if let modInfo = $0 as? ModuleInfo {
+        mods.append(MMD(cdi: modInfo))
       }
     }
       

@@ -29,7 +29,7 @@ enum FetcherError: Error {
  ModuleFetcher state delegate.
  Implemented in classes that use a fetcher to download modules, e.g. RadioInteractor and SearchInteractor
  */
-protocol ModuleFetcherDelegate {
+protocol ModuleFetcherDelegate: class {
   /**
    Fetcher calls delegate on state changes.
    - parameters:
@@ -166,8 +166,7 @@ class ModuleFetcher {
    - returns: module data, unzipped
   */
   private func gzipInflate(data: Data) -> Data? {
-    if data.isGzipped {
-      let inflated = try! data.gunzipped()
+    if data.isGzipped, let inflated = try? data.gunzipped() {
       return inflated
     }
     log.error("FAILED TO UNZIP")

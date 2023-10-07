@@ -80,7 +80,6 @@ class AboutViewController: UIViewController, AboutDisplayLogic {
 
   // MARK: Display Logic
   func displayNowPlaying(_ viewModel: About.Status.ViewModel) {
-    // TODO
   }
 
   @objc func reviewNow() {

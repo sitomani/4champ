@@ -20,8 +20,8 @@ extension String {
   private func fallbackL13N(debugPrefix: String) -> String {
     let fallbackLoc: String
     if let bundlePath = Bundle.main.path(forResource: "en", ofType: "lproj"),
-      let b = Bundle.init(path: bundlePath) {
-      fallbackLoc = b.localizedString(forKey: self, value: "", table: nil)
+      let bundle = Bundle.init(path: bundlePath) {
+      fallbackLoc = bundle.localizedString(forKey: self, value: "", table: nil)
     } else {
       fallbackLoc = self
     }

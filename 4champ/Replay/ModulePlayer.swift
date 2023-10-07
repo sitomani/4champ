@@ -275,15 +275,13 @@ class ModulePlayer: NSObject {
   
   /// called when app resigns to clear non-stored modules
   func cleanup() {
-    for mod in playQueue {
-      if mod.hasBeenSaved() == false {
-        if let url = mod.localPath {
-          log.info("Deleting module \(url.lastPathComponent)")
-          do {
-            try FileManager.default.removeItem(at: url)
-          } catch {
-            log.error("Deleting file at \(url) failed, \(error)")
-          }
+    for mod in playQueue where !mod.hasBeenSaved() {
+      if let url = mod.localPath {
+        log.info("Deleting module \(url.lastPathComponent)")
+        do {
+          try FileManager.default.removeItem(at: url)
+        } catch {
+          log.error("Deleting file at \(url) failed, \(error)")
         }
       }
     }
@@ -333,10 +331,8 @@ extension ModulePlayer: ModuleStorageObserver {
       currentModule?.favorite = mmd.favorite
     }
     if playQueue.count == 0 { return }
-    for i in 0...playQueue.count-1 {
-      if playQueue[i] == mmd {
-        playQueue[i].favorite = mmd.favorite
-      }
+    for qIndex in 0...playQueue.count-1 where playQueue[qIndex] == mmd {
+      playQueue[qIndex].favorite = mmd.favorite
     }
     _ = observers.map {
       $0.queueChanged(changeType: .other)

@@ -325,7 +325,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       while(id == 0 || !radioSessionHistory.filter({ mmd in
         mmd.id == id
       }).isEmpty) {
-        id = Int(arc4random_uniform(UInt32(settings.collectionSize)))
+        id = Int.random(in: 1...settings.collectionSize)
       }
       return id
     case .new:
@@ -333,7 +333,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
         lastPlayed = settings.collectionSize
         settings.newestPlayed = lastPlayed
       } else {
-        lastPlayed = lastPlayed - 1
+        lastPlayed -= 1
       }
       return lastPlayed
     case .local:
@@ -375,25 +375,29 @@ extension RadioInteractor: ModuleFetcherDelegate {
       status = .fetching(progress: progress)
       
     case .done(let mmd):
-      switch postFetchAction {
-      case .appendToQueue:
-        modulePlayer.playQueue.append(mmd)
-      case .insertToQueue:
-        modulePlayer.playQueue.insert(mmd, at: 0)
-      case .startPlay:
-        modulePlayer.play(mmd: mmd)
-      }
-      postFetchAction = .appendToQueue // reset to default
-      
-      self.triggerBufferPresentation()
-      if let first = modulePlayer.playQueue.first, first == mmd {
-        modulePlayer.play(at: 0)
-      }
-      self.fillBuffer()
-      self.status = .on
+      handleDownloadComplete(mmd)
       
     default: ()
     }
+  }
+  
+  func handleDownloadComplete(_ mmd: MMD) {
+    switch postFetchAction {
+    case .appendToQueue:
+      modulePlayer.playQueue.append(mmd)
+    case .insertToQueue:
+      modulePlayer.playQueue.insert(mmd, at: 0)
+    case .startPlay:
+      modulePlayer.play(mmd: mmd)
+    }
+    postFetchAction = .appendToQueue // reset to default
+    
+    self.triggerBufferPresentation()
+    if let first = modulePlayer.playQueue.first, first == mmd {
+      modulePlayer.play(at: 0)
+    }
+    self.fillBuffer()
+    self.status = .on
   }
 }
 

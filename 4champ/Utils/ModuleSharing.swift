@@ -17,7 +17,7 @@ class ShareUtility: NSObject, UIActivityItemSource {
   }
   
   func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-    guard let modName = sharedMod?.name, let composer = sharedMod?.composer, let _ = sharedMod?.id else {
+    guard let modName = sharedMod?.name, let composer = sharedMod?.composer, sharedMod?.id != nil else {
       return nil
     }
     let shareString = String.init(format: "Share_DefaultMessage".l13n(), modName, composer)
@@ -25,7 +25,7 @@ class ShareUtility: NSObject, UIActivityItemSource {
   }
   
   func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
-    guard let modName = sharedMod?.name, let composer = sharedMod?.composer, let _ = sharedMod?.id else {
+    guard let modName = sharedMod?.name, let composer = sharedMod?.composer, sharedMod?.id != nil else {
       return ""
     }
     let shareString = String.init(format: "Share_DefaultMessage".l13n(), modName, composer)

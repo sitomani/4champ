@@ -68,11 +68,11 @@ class AmpSlider: UISlider {
         self.setThumbImage(image, for: .highlighted)
     }
     
-    @objc func sliderTapped(_ g: UITapGestureRecognizer) {
+    @objc func sliderTapped(_ gRec: UITapGestureRecognizer) {
         if self.isHighlighted {
             return
         }
-        let pt: CGPoint = g.location(in: self)
+        let pt: CGPoint = gRec.location(in: self)
         let percentage: Float = Float.init(pt.x) / Float.init(self.bounds.size.width)
         let delta: Float = percentage * (self.maximumValue - self.minimumValue)
         let value: Float = self.minimumValue + delta

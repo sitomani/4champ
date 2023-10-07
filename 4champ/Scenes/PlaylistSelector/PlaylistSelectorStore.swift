@@ -23,7 +23,7 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic {
   weak var hostingController: UIHostingController<PlaylistPickerView>?
   
   @Published var viewModel: PlaylistSelector.PrepareSelection.ViewModel
-
+  
   init() {
     self.viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: "<rnd>", currentPlaylistIndex: 0, playlistOptions: [], status: .unknown)
   }
@@ -32,16 +32,16 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic {
     let pls = PlaylistSelectorStore()
     var contentView = PlaylistPickerView(dismissAction: { pls.hostingController?.dismiss(animated: true, completion: nil)},
                                          shareAction: {
-                                          pls.shareModule(module)
+      pls.shareModule(module)
     },
                                          deleteAction: {
-                                          pls.deleteModule(module)
+      pls.deleteModule(module)
     },
                                          store: pls)
     pls.setup()
     pls.doPrepare(mod: module)
-    contentView.addToPlaylistAction = { b in
-        pls.addToPlaylist(playlistIndex: b)
+    contentView.addToPlaylistAction = { pIndex in
+      pls.addToPlaylist(playlistIndex: pIndex)
     }
     let hvc = UIHostingController(rootView: contentView)
     pls.hostingController = hvc
@@ -93,7 +93,7 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic {
     guard viewModel.status == .complete else {
       return
     }
-
+    
     interactor?.deleteModule(request: PlaylistSelector.Delete.Request(module: module))
     hostingController?.dismiss(animated: true, completion: nil)
   }
