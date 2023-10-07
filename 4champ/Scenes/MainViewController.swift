@@ -55,7 +55,6 @@ class MainViewController: UITabBarController {
     if #available(iOS 15.0, *) {
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
     }
-
     
     self.becomeFirstResponder()
     modulePlayer.addPlayerObserver(self)
@@ -185,11 +184,11 @@ extension MainViewController: ModulePlayerObserver {
   }
   
   func errorOccurred(error: PlayerError) {
-    //nop at the moment
+    // nop at the moment
   }
   
   func queueChanged(changeType: QueueChange) {
-    //nop at the moment
+    // nop at the moment
   }
 }
 
@@ -201,7 +200,7 @@ extension MainViewController: ModuleStorageObserver {
   }
   
   func playlistChange() {
-    //NOP
+    // NOP
   }
 }
 

@@ -42,7 +42,6 @@ class Appearance {
     let switchAppearance = UISwitch.appearance()
     switchAppearance.onTintColor = successColor
     
-    
     let barButtonFont = UIFont.systemFont(ofSize: 12.0, weight: .heavy)
     UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: barButtonFont], for: .normal)
     UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: barButtonFont], for: .highlighted)
@@ -73,4 +72,3 @@ class Appearance {
     
     }
 }
-

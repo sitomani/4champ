@@ -1,0 +1,14 @@
+included: # paths to include during linting. `--path` is ignored if present.
+  - 4champ
+excluded: # paths to ignore during linting. Takes precedence over `included`.
+disabled_rules:
+  - trailing_whitespace
+  - line_length
+  - type_body_length
+  - file_length
+  - function_body_length
+  - nesting
+identifier_name:
+  min_length: 2
+  max_length: 40
+line_length: 160

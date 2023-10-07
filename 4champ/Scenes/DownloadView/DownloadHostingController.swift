@@ -146,10 +146,10 @@ class DownloadController: NSObject, ObservableObject {
       var summaryItems: [String] = []
 
       if imported > 0 {
-        if (alreadyImported > 0 || unknown > 0) {
-          summaryItems.append(String.init(format:"Local_Import_Imported".l13n(), "\(imported)"))
+        if alreadyImported > 0 || unknown > 0 {
+          summaryItems.append(String.init(format: "Local_Import_Imported".l13n(), "\(imported)"))
         } else {
-          let names:[String] = model.importIds.compactMap {
+          let names: [String] = model.importIds.compactMap {
             if let mod = moduleStorage.getModuleById($0), let name = mod.name {
               return name
             }
@@ -166,12 +166,12 @@ class DownloadController: NSObject, ObservableObject {
       
       if alreadyImported > 0 {
         let prefixString = summaryItems.count > 0 ? "\n" : ""
-        summaryItems.append(prefixString + String.init(format:"Local_Import_Already_In".l13n(), "\(alreadyImported)"))
+        summaryItems.append(prefixString + String.init(format: "Local_Import_Already_In".l13n(), "\(alreadyImported)"))
       }
       
       if unknown > 0 {
         let prefixString = summaryItems.count > 0 ? "\n" : ""
-        summaryItems.append(prefixString + String.init(format:"Local_Import_Unknown".l13n(), "\(unknown)"))
+        summaryItems.append(prefixString + String.init(format: "Local_Import_Unknown".l13n(), "\(unknown)"))
       }
       model.summary = summaryItems.joined(separator: ", ")
     }
@@ -255,7 +255,7 @@ class DownloadController: NSObject, ObservableObject {
       tf.placeholder = "Local_Import_Composer".l13n()
     }
     
-    av.addAction(UIAlertAction.init(title: "G_OK".l13n(), style: .default, handler: { [unowned av] (action) in
+    av.addAction(UIAlertAction.init(title: "G_OK".l13n(), style: .default, handler: { [unowned av] (_) in
       if let tf = av.textFields, let composerName = tf[0].text {
         let request = Local.Assign.Request(moduleIds: self.model.importIds, composerName: composerName)
         self.doAssignComposer(request: request)
@@ -297,7 +297,7 @@ class DownloadController: NSObject, ObservableObject {
     mmd.serviceId = .local
     mmd.serviceKey = filename
     
-    //store to file and make sure it's not writing over an existing mod
+    // store to file and make sure it's not writing over an existing mod
     var numberExt = 0
     var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(mmd.name!).appendingPathExtension(mmd.type!)
     while FileManager.default.fileExists(atPath: localPath.path) {
@@ -349,7 +349,7 @@ extension DownloadController: ModuleFetcherDelegate {
       self.model = DownloadModel(status: "ShareDialog_DownloadComplete".l13n(),
                                  summary: buildSummary(mod: mmd),
                                  importIds: [mmd.id!],
-                                 importResults:[.importSuccess],
+                                 importResults: [.importSuccess],
                                  importType: .universalLink,
                                  progress: 1.0,
                                  error: nil)

@@ -7,13 +7,11 @@
 
 import UIKit
 
-protocol AboutDisplayLogic: class
-{
+protocol AboutDisplayLogic: class {
   func displayNowPlaying(_ viewModel: About.Status.ViewModel)
 }
 
-class AboutViewController: UIViewController, AboutDisplayLogic
-{
+class AboutViewController: UIViewController, AboutDisplayLogic {
   var interactor: AboutBusinessLogic?
   var router: (NSObjectProtocol & AboutRoutingLogic & AboutDataPassing)?
 
@@ -22,22 +20,19 @@ class AboutViewController: UIViewController, AboutDisplayLogic
 
   // MARK: Object lifecycle
 
-  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-  {
+  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     setup()
   }
 
-  required init?(coder aDecoder: NSCoder)
-  {
+  required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     setup()
   }
 
   // MARK: Setup
 
-  private func setup()
-  {
+  private func setup() {
     let viewController = self
     let interactor = AboutInteractor()
     let presenter = AboutPresenter()
@@ -52,8 +47,7 @@ class AboutViewController: UIViewController, AboutDisplayLogic
 
   // MARK: Routing
 
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-  {
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if let scene = segue.identifier {
       let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
       if let router = router, router.responds(to: selector) {
@@ -63,8 +57,7 @@ class AboutViewController: UIViewController, AboutDisplayLogic
   }
 
   // MARK: View lifecycle
-  override func viewDidLoad()
-  {
+  override func viewDidLoad() {
     log.debug("")
     super.viewDidLoad()
     self.view.backgroundColor = Appearance.ampBgColor
@@ -87,7 +80,7 @@ class AboutViewController: UIViewController, AboutDisplayLogic
 
   // MARK: Display Logic
   func displayNowPlaying(_ viewModel: About.Status.ViewModel) {
-    //TODO
+    // TODO
   }
 
   @objc func reviewNow() {
@@ -115,7 +108,7 @@ extension AboutViewController: UITableViewDataSource {
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     guard let contentKeys = interactor?.details.contents else { return 0 }
-    if section < contentKeys.count  {
+    if section < contentKeys.count {
       return 1
     } else {
       return interactor?.details.licenseNames.count ?? 0

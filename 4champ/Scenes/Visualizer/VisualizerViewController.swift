@@ -9,9 +9,9 @@ import UIKit
 import SpriteKit
 
 struct ViewElement {
-  static let None      : UInt32 = 0
-  static let All       : UInt32 = UInt32.max
-  static let Text      : UInt32 = 0b1       // 1
+  static let None: UInt32 = 0
+  static let All: UInt32 = UInt32.max
+  static let Text: UInt32 = 0b1       // 1
   static let Visualiser: UInt32 = 0b10      // 2
 }
 
@@ -27,16 +27,16 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   @IBOutlet weak var sizeLabel: UILabel!
   @IBOutlet weak var saveButton: UIButton!
   @IBOutlet weak var collectionLabel: UILabel!
-  @IBOutlet weak var separator:UIView!
+  @IBOutlet weak var separator: UIView!
   
-  @IBOutlet weak var textButton:UIButton!
-  @IBOutlet weak var vizButton:UIButton!
+  @IBOutlet weak var textButton: UIButton!
+  @IBOutlet weak var vizButton: UIButton!
   @IBOutlet weak var playButton: UIButton!
-  @IBOutlet weak var vizView:SKView!
+  @IBOutlet weak var vizView: SKView!
   
   @IBOutlet weak var playerView: UIView!
   
-  var hasUpdatedVisibility:Bool = false
+  var hasUpdatedVisibility: Bool = false
   
   private var playbackTimer: Timer?
   
@@ -44,18 +44,18 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     switch sender.state {
     case .began:
       if (sender.velocity(in: self.view).y) > 0 {
-        self.presentingViewController?.dismiss(animated: true, completion: nil);
+        self.presentingViewController?.dismiss(animated: true, completion: nil)
       }
-      break;
+      break
     default:
-      var v = 0;
-      v = v+1;
-      //nop
+      var v = 0
+      v = v+1
+      // nop
     }
   }
   
   override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-    //Fixing issue with launching app on iOS8
+    // Fixing issue with launching app on iOS8
     super.init(nibName: nibNameOrNil ?? "NowPlayingViewController", bundle: nibBundleOrNil)
   }
   
@@ -63,22 +63,22 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     super.init(coder: aDecoder)
   }
   
-  @IBAction func dismissMe (_ sender:UIButton) {
+  @IBAction func dismissMe (_ sender: UIButton) {
     log.debug("")
     modulePlayer.removePlayerObserver(self)
     playbackTimer?.invalidate()
-    self.presentingViewController?.dismiss(animated: true, completion:nil)
+    self.presentingViewController?.dismiss(animated: true, completion: nil)
   }
   
-  @IBAction func prev (_ sender:UIButton) {
+  @IBAction func prev (_ sender: UIButton) {
     modulePlayer.playPrev()
   }
   
-  @IBAction func next (_ sender:UIButton) {
+  @IBAction func next (_ sender: UIButton) {
     modulePlayer.playNext()
   }
   
-  @IBAction func togglePlay (_ sender:UIButton) {
+  @IBAction func togglePlay (_ sender: UIButton) {
     if modulePlayer.status == .playing {
       modulePlayer.pause()
     } else {
@@ -87,31 +87,31 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     sender.isSelected = modulePlayer.status == .paused
   }
   
-  @IBAction func toggleText(_:UIButton) {
+  @IBAction func toggleText(_: UIButton) {
     log.debug("")
     textButton.isSelected = !textButton.isSelected
     UserDefaults.standard.set(textButton.isSelected, forKey: "nowplaying_text")
     updateVisibility(ViewElement.Text)
   }
   
-  func updateVisibility(_ element:UInt32) {
+  func updateVisibility(_ element: UInt32) {
     let textHidden = UserDefaults.standard.bool(forKey: "nowplaying_text")
     let vizHidden = UserDefaults.standard.bool(forKey: "nowplaying_viz")
     
-    //Update button selected status (to have right status when view is loaded)
+    // Update button selected status (to have right status when view is loaded)
     textButton?.isSelected = textHidden
     vizButton?.isSelected = vizHidden
     
-    if (element & ViewElement.Text > 0) {
-      if (textHidden) {
-        fadeOut(scrollV!){}
+    if element & ViewElement.Text > 0 {
+      if textHidden {
+        fadeOut(scrollV!) {}
       } else {
-        fadeIn(scrollV!){}
+        fadeIn(scrollV!) {}
       }
     }
     
-    if (element & ViewElement.Visualiser > 0) {
-      if (vizHidden) {
+    if element & ViewElement.Visualiser > 0 {
+      if vizHidden {
         stopVisualisation()
       } else {
         startVisualisation()
@@ -119,8 +119,8 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     }
   }
   
-  func fadeIn(_ view:UIView, completion:@escaping ()->Void) {
-    if (view.isHidden) {
+  func fadeIn(_ view: UIView, completion: @escaping () -> Void) {
+    if view.isHidden {
       view.alpha = 0
     }
     view.isHidden = false
@@ -131,7 +131,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     })
   }
   
-  func fadeOut(_ view:UIView, completion:@escaping ()->Void) {
+  func fadeOut(_ view: UIView, completion: @escaping () -> Void) {
     UIView.animate(withDuration: 0.3, animations: {
       view.alpha = 0
     }, completion: { (_) in
@@ -140,15 +140,14 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     })
   }
   
-  
-  @IBAction func toggleVisualiser(_:UIButton) {
+  @IBAction func toggleVisualiser(_: UIButton) {
     log.debug("")
     vizButton?.isSelected = !vizButton!.isSelected
     UserDefaults.standard.set(vizButton!.isSelected, forKey: "nowplaying_viz")
     updateVisibility(ViewElement.Visualiser)
   }
   
-  @IBAction func share (_ sender:UIButton) {
+  @IBAction func share (_ sender: UIButton) {
   }
   
   deinit {
@@ -160,17 +159,17 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     let pos = modulePlayer.renderer.currentPosition()
     self.playhead?.maximumValue = Float(length)
     self.playhead?.value = Float(pos)
-    let timeLeft = pos;
+    let timeLeft = pos
     let seconds = timeLeft % 60
     let minutes = (timeLeft - seconds) / 60
-    let txt = String(format:"%d:%02d", minutes, seconds)
+    let txt = String(format: "%d:%02d", minutes, seconds)
     self.playhead?.updatePlayhead(txt)
   }
   
   func updateView(module: MMD?) {
     log.debug("")
     if let sv = self.scrollV {
-      sv.contentOffset = CGPoint(x: 0,y: 0);
+      sv.contentOffset = CGPoint(x: 0, y: 0)
     }
     guard let info = module else { return }
 
@@ -185,20 +184,20 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     saveButton.isHidden = info.hasBeenSaved()
     shareButton.isHidden = true
     
-    var samples:Array<String>
+    var samples: [String]
     samples = modulePlayer.renderer.getInstruments()
-    if (samples.count == 0) {
+    if samples.count == 0 {
       samples = modulePlayer.renderer.getSamples()
     }
     
-    var str:String
+    var str: String
     str = ""
     for sampleName in samples {
       str.append(sampleName)
       str.append("\n")
     }
     self.samplesLabel?.text = str
-    if (hasUpdatedVisibility) {
+    if hasUpdatedVisibility {
       updateVisibility(ViewElement.All)
     }
   }
@@ -231,17 +230,17 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     shareUtil.shareMod(mod: mod, presentingVC: self)
   }
   
-  func animateColLabel(_ visible:Bool) {
-    let alpha:Float = visible ? 0.5 : 0
+  func animateColLabel(_ visible: Bool) {
+    let alpha: Float = visible ? 0.5 : 0
     UIView.animate(withDuration: 0.3, animations: {
       self.collectionLabel?.alpha = CGFloat(alpha)
     })
   }
   
-  func updateFaveStar(_ favorited:Bool) {
-    if (favorited) {
-      self.saveButton?.isHidden = true;
-      animateColLabel(true);
+  func updateFaveStar(_ favorited: Bool) {
+    if favorited {
+      self.saveButton?.isHidden = true
+      animateColLabel(true)
       self.faveStar.isSelected = true
     } else {
       self.faveStar.isSelected = false
@@ -249,11 +248,11 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   }
   
   func shareComplete() {
-    self.updateShareStatus(true);
+    self.updateShareStatus(true)
   }
   
-  func updateShareStatus(_ shared:Bool) {
-    if (shared) {
+  func updateShareStatus(_ shared: Bool) {
+    if shared {
       self.shareButton?.setImage(UIImage.init(named: "shareicon_done.png"), for: UIControl.State())
     } else {
       self.shareButton?.setImage(UIImage.init(named: "shareicon.png"), for: UIControl.State())
@@ -269,7 +268,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     stopVisualisation()
   }
   
-  override var preferredStatusBarStyle : UIStatusBarStyle {
+  override var preferredStatusBarStyle: UIStatusBarStyle {
     return UIStatusBarStyle.lightContent
   }
   
@@ -281,7 +280,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     scrollV.delegate = self
     scrollV.backgroundColor = UIColor.clear
     
-    //Hide UI elements that are currently not supported
+    // Hide UI elements that are currently not supported
     collectionLabel.text = NSLocalizedString("Radio_InLocalCollection", comment: "")
     collectionLabel.isHidden = true
     saveButton.isHidden = false
@@ -308,15 +307,15 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   }
   
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    if (scrollView.contentOffset.y < -60) {
-      self.presentingViewController?.dismiss(animated: true, completion: nil);
+    if scrollView.contentOffset.y < -60 {
+      self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
-    scrollView.contentOffset.x = 0;
+    scrollView.contentOffset.x = 0
   }
   
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
-    if (!hasUpdatedVisibility) {
+    if !hasUpdatedVisibility {
       hasUpdatedVisibility = true
       updateVisibility(ViewElement.All)
     }
@@ -329,14 +328,14 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   func startVisualisation() {
     log.debug("")
     let view = self.vizView
-    fadeIn(view!){}
+    fadeIn(view!) {}
     
     let vizHidden = UserDefaults.standard.bool(forKey: "nowplaying_viz")
     view?.isHidden = vizHidden
     
-    view?.presentScene(nil) //to make sure to release anything previously presented
-    view?.backgroundColor = UIColor(red:0.07, green:0.20, blue:0.34, alpha:1.0)
-    let scene:SKScene = AmpVizScene(size: view!.bounds.size)
+    view?.presentScene(nil) // to make sure to release anything previously presented
+    view?.backgroundColor = UIColor(red: 0.07, green: 0.20, blue: 0.34, alpha: 1.0)
+    let scene: SKScene = AmpVizScene(size: view!.bounds.size)
     view?.presentScene(scene)
   }
   
@@ -370,11 +369,11 @@ extension VisualizerViewController: ModulePlayerObserver {
   }
     
   func errorOccurred(error: PlayerError) {
-    //nop at the moment
+    // nop at the moment
   }
   
   func queueChanged(changeType: QueueChange) {
-    //nop at the moment
+    // nop at the moment
   }
   
   func startPlaybackTimer() {

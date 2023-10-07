@@ -7,8 +7,7 @@
 
 import UIKit
 
-protocol RadioPresentationLogic
-{
+protocol RadioPresentationLogic {
   func presentControlStatus(status: RadioStatus)
   func presentChannelBuffer(buffer: [MMD], history: [MMD])
   func presentSessionHistoryInsert()
@@ -23,8 +22,7 @@ enum NotificationState {
   case disabled
 }
 
-class RadioPresenter: RadioPresentationLogic
-{
+class RadioPresenter: RadioPresentationLogic {
   weak var viewController: RadioDisplayLogic?
   
   // MARK: Do something

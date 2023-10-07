@@ -21,7 +21,7 @@ enum FetcherState {
   case done(mmd: MMD)
 }
 
-enum FetcherError:Error {
+enum FetcherError: Error {
   case unsupportedFormat
 }
 
@@ -131,7 +131,7 @@ class ModuleFetcher {
             return
           }
           do {
-            //store to file and make sure it's not writing over an existing mod
+            // store to file and make sure it's not writing over an existing mod
             var numberExt = 0
             var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(mmd.name!).appendingPathExtension(mmd.type!)
             while FileManager.default.fileExists(atPath: localPath.path) {

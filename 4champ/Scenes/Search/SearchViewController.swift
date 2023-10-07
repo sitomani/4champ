@@ -8,8 +8,7 @@
 import UIKit
 import SwiftUI
 
-protocol SearchDisplayLogic: class
-{
+protocol SearchDisplayLogic: class {
   func displayResult(viewModel: Search.ViewModel)
   func displayDownloadProgress(viewModel: Search.ProgressResponse.ViewModel)
   func displayBatchProgress(viewModel: Search.BatchDownload.ViewModel)
@@ -17,8 +16,7 @@ protocol SearchDisplayLogic: class
   func displayDeletion(viewModel: Search.MetaDataChange.ViewModel)
 }
 
-class SearchViewController: UIViewController, SearchDisplayLogic
-{
+class SearchViewController: UIViewController, SearchDisplayLogic {
   var interactor: SearchBusinessLogic?
   var router: (NSObjectProtocol & SearchRoutingLogic & SearchDataPassing)?
   
@@ -34,7 +32,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   private var pagingRequestActive: Bool = false
   private var batchProgressView: UIAlertController?
   
-  private let progressMarks = ["◐","◓","◑","◒"]
+  private let progressMarks = ["◐", "◓", "◑", "◒"]
   private var progressMarkIndex = 0
   private var spinnerTimer: Timer?
   
@@ -43,22 +41,19 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   @IBOutlet weak var tableView: UITableView?
   // MARK: Object lifecycle
   
-  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-  {
+  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     setup()
   }
   
-  required init?(coder aDecoder: NSCoder)
-  {
+  required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     setup()
   }
   
   // MARK: Setup
   
-  private func setup()
-  {
+  private func setup() {
     let viewController = self
     let interactor = SearchInteractor()
     let presenter = SearchPresenter()
@@ -72,8 +67,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   }
   
   // MARK: Routing
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-  {
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if let scene = segue.identifier {
       let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
       if let router = router, router.responds(to: selector) {
@@ -83,8 +77,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   }
   
   // MARK: View lifecycle
-  override func viewDidLoad()
-  {
+  override func viewDidLoad() {
     super.viewDidLoad()
     modulePlayer.addPlayerObserver(self)
     registerXibs(in: tableView)
@@ -276,7 +269,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic
   
   private func startBatchSpinner() {
     spinnerTimer?.invalidate()
-    spinnerTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { (timer) in
+    spinnerTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { (_) in
       let nextMark = self.progressMarks[self.progressMarkIndex]
       self.batchProgressView?.title = "Search_Downloading".l13n() + nextMark
       self.progressMarkIndex = (self.progressMarkIndex + 1) % self.progressMarks.count
@@ -307,7 +300,7 @@ extension SearchViewController: UISearchBarDelegate {
     NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(triggerSearch), object: nil)
     if keyword.count == 0 {
       searchBar?.searching = false
-      viewModel = Search.ViewModel(modules: [], composers: [], groups: [], text:"")
+      viewModel = Search.ViewModel(modules: [], composers: [], groups: [], text: "")
       tableView?.reloadData()
     } else {
       searchBar?.searching = true

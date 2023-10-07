@@ -5,14 +5,13 @@
 //  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
-
 import Foundation
 import CoreData
 
 protocol ModuleStorageInterface {
   var currentPlaylist: Playlist? { get set }
   
-  func createFRC<T: NSManagedObject>(fetchRequest:NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T>
+  func createFRC<T: NSManagedObject>(fetchRequest: NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T>
   func addStorageObserver(_ observer: ModuleStorageObserver)
   func removeStorageObserver(_ observer: ModuleStorageObserver)
   func addModule(module: MMD)
@@ -104,7 +103,6 @@ class ModuleStorage: NSObject {
     return coordinator
   }()
     
-    
   override init() {
     super.init()
     var _ = persistentStoreCoordinator
@@ -144,10 +142,10 @@ extension ModuleStorage: ModuleStorageInterface {
     }
   }
   
-  func createFRC<T>(fetchRequest: NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T> where T : NSManagedObject {
+  func createFRC<T>(fetchRequest: NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T> where T: NSManagedObject {
 
     // Initialize Fetch Request
-    let fetchedResultsController = NSFetchedResultsController<T>(fetchRequest: fetchRequest, managedObjectContext: managedObjectContext , sectionNameKeyPath: nil, cacheName: nil)
+    let fetchedResultsController = NSFetchedResultsController<T>(fetchRequest: fetchRequest, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
       
     return fetchedResultsController
   }
@@ -170,7 +168,7 @@ extension ModuleStorage: ModuleStorageInterface {
       return // already saved
     }
     
-    let cdModule = ModuleInfo.init(entity: NSEntityDescription.entity(forEntityName: "ModuleInfo", in:managedObjectContext)!, insertInto: managedObjectContext)
+    let cdModule = ModuleInfo.init(entity: NSEntityDescription.entity(forEntityName: "ModuleInfo", in: managedObjectContext)!, insertInto: managedObjectContext)
     cdModule.modAuthor = module.composer
     cdModule.modName = module.name
     cdModule.modId = NSNumber.init(value: module.id!)
@@ -319,4 +317,3 @@ extension ModuleStorage: ModuleStorageInterface {
     return nil
   }
 }
-

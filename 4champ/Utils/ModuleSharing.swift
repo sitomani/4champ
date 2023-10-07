@@ -38,7 +38,7 @@ class ShareUtility: NSObject, UIActivityItemSource {
       return
     }
     
-    var sourceView: UIView? = nil
+    var sourceView: UIView?
     if let mainVC = UIApplication.shared.windows[0].rootViewController as? MainViewController {
       sourceView = mainVC.tabBar
     }

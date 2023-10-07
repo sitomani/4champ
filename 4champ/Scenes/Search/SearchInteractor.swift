@@ -10,8 +10,7 @@ import Alamofire
 import Foundation
 
 /// Search Interactor business logic interface
-protocol SearchBusinessLogic
-{
+protocol SearchBusinessLogic {
   /// Triggers a search towards 4champ.net
   /// - parameters:
   ///    - request: parameters for the search (keyword, type, paging index)
@@ -42,8 +41,7 @@ protocol SearchBusinessLogic
 }
 
 /// Search Interactor datastore
-protocol SearchDataStore
-{
+protocol SearchDataStore {
   var autoListTitle: String? { get set }
   var autoListId: Int? { get set }
   var autoListType: SearchType? { get set }
@@ -51,8 +49,7 @@ protocol SearchDataStore
 }
 
 /// Implementation of Search business logic
-class SearchInteractor: SearchBusinessLogic, SearchDataStore
-{
+class SearchInteractor: SearchBusinessLogic, SearchDataStore {
   var presenter: SearchPresentationLogic?
 
   var autoListTitle: String?
@@ -125,7 +122,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
       AF.request(restRequest).validate().responseData { response in
         if case let .success(jsonData) = response.result,
            let composers = try? JSONDecoder().decode(ComposerResult.self, from: jsonData) {
-            self.presenter?.presentComposers(response: Search.ComposerResponse(result: composers, text:""))
+            self.presenter?.presentComposers(response: Search.ComposerResponse(result: composers, text: ""))
           }
       }
     } else {
@@ -134,7 +131,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore
   }
   
   func download(moduleId: Int) {
-    //reset the download queue if single downloads are triggered
+    // reset the download queue if single downloads are triggered
     originalQueueLenght = 0
     downloadQueue = []
     doDownload(moduleId: moduleId)

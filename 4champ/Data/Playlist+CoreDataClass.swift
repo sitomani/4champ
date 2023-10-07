@@ -18,4 +18,3 @@ public class Playlist: NSManagedObject {
         return self.plName ?? "<no name>"
     }
 }
-

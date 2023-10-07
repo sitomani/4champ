@@ -26,7 +26,6 @@ extension UIColor {
   }
 }
 
-
 extension UIImage {
   func resizeImageWith(newSize: CGSize) -> UIImage {
     let horizontalRatio = newSize.width / size.width
@@ -50,7 +49,7 @@ class AboutHeaderView: UIButton {
     setTitle("  \(titleKey.l13n())", for: .normal)
     imageView?.contentMode = .scaleAspectFit
     backgroundColor = Appearance.ampLightBlueColor
-    tintColor = UIColor.init(rgb: 0xc6c6c6);
+    tintColor = UIColor.init(rgb: 0xc6c6c6)
     if let image = UIImage.init(named: imageKey) {
       
       if titleKey == "Twitter" {
@@ -65,9 +64,9 @@ class AboutHeaderView: UIButton {
         lbl.text = "©"
         lbl.font = UIFont.systemFont(ofSize: 29.0)
         lbl.textColor = UIColor.init(rgb: 0xc6c6c6)
-        UIGraphicsBeginImageContext(lbl.bounds.size);
+        UIGraphicsBeginImageContext(lbl.bounds.size)
         lbl.layer.render(in: UIGraphicsGetCurrentContext()!)
-        let renderedImg = UIGraphicsGetImageFromCurrentImageContext();
+        let renderedImg = UIGraphicsGetImageFromCurrentImageContext()
         setImage(renderedImg, for: .normal)
       }
     }

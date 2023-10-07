@@ -7,19 +7,16 @@
 
 import UIKit
 
-protocol SettingsBusinessLogic
-{
+protocol SettingsBusinessLogic {
   func updateSettings(request: Settings.Update.ValueBag?)
 }
 
-protocol SettingsDataStore
-{
+protocol SettingsDataStore {
   var stereoSeparation: Int { get set }
   var interpolation: SampleInterpolation { get set }
 }
 
-class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore
-{
+class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
 
   private enum SettingKeys {
     static let domainName = "DomainName"
@@ -107,8 +104,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore
   
   // MARK: Do something
   
-  func updateSettings(request: Settings.Update.ValueBag?)
-  {
+  func updateSettings(request: Settings.Update.ValueBag?) {
     var response: Settings.Update.ValueBag
     if let request = request {
       response = request

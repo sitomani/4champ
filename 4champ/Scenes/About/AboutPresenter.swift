@@ -7,13 +7,11 @@
 
 import UIKit
 
-protocol AboutPresentationLogic
-{
+protocol AboutPresentationLogic {
   func presentStatus(_ status: About.Status.Response)
 }
 
-class AboutPresenter: AboutPresentationLogic
-{
+class AboutPresenter: AboutPresentationLogic {
   weak var viewController: AboutDisplayLogic?
   
   // MARK: Do something

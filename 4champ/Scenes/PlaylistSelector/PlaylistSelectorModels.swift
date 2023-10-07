@@ -22,9 +22,9 @@ enum DownloadStatus: Equatable {
             return true
         case (.complete, .complete):
             return true
-        case (.downloading(_), .downloading(_)):
+        case (.downloading, .downloading):
             return true
-        case (.failed(_), .failed(_)):
+        case (.failed, .failed):
             return true
         default:
             return false
@@ -37,21 +37,16 @@ enum DownloadStatus: Equatable {
     case failed(error: Error)
 }
 
-enum PlaylistSelector
-{
-  enum PrepareSelection
-  {
-    struct Request
-    {
+enum PlaylistSelector {
+  enum PrepareSelection {
+    struct Request {
         let module: MMD
     }
-    struct Response
-    {
+    struct Response {
         let module: MMD
         let playlistOptions: [PLMD]
     }
-    struct ViewModel
-    {
+    struct ViewModel {
         var module: String
         var service: ModuleService?
         var currentPlaylistIndex: Int

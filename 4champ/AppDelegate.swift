@@ -104,13 +104,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     return true
   }
   
-  func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+  func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
     if url.scheme == "fourchamp" && url.host == "modules" {
       if let idString = url.path.split(separator: "/").first, let modId = Int(idString) {
         dlController.show(modId: modId)
       }
     } else {
-      dlController.showImport(for: [url]);
+      dlController.showImport(for: [url])
     }
     return true
   }
@@ -157,7 +157,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let req = RESTRoutes.latestId
     AF.request(req).validate().responseString { resp in
       switch resp.result {
-      case .failure(_):
+      case .failure:
         self._bgFetchCallback?(.noData)
         self._bgFetchCallback = nil
       case .success(let str):
@@ -190,5 +190,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     _bgFetchCallback = nil
   }
 }
-
-

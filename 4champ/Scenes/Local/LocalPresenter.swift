@@ -7,8 +7,7 @@
 
 import UIKit
 
-protocol LocalPresentationLogic
-{
+protocol LocalPresentationLogic {
   func presentModules(response: Local.SortFilter.Response)
   func presentPlayerError(_ error: PlayerError)
   func presentDeletion(_ indexPath: IndexPath)
@@ -17,12 +16,10 @@ protocol LocalPresentationLogic
 //  func presentImport(response: Local.Import.Response)
 }
 
-class LocalPresenter: LocalPresentationLogic
-{
+class LocalPresenter: LocalPresentationLogic {
   weak var viewController: LocalDisplayLogic?
   
-  func presentModules(response: Local.SortFilter.Response)
-  {
+  func presentModules(response: Local.SortFilter.Response) {
     let viewModel = Local.SortFilter.ViewModel()
     viewController?.displayModules(viewModel: viewModel)
   }

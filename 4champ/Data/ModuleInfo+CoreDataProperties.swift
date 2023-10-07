@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension ModuleInfo: Identifiable {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<ModuleInfo> {

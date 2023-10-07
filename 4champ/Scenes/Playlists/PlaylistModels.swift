@@ -12,8 +12,7 @@
 
 import UIKit
 
-enum Playlists
-{
+enum Playlists {
   // MARK: Use cases
   
     enum Favorite {

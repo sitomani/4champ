@@ -15,14 +15,13 @@ enum RadioChannel: Int {
 
 enum RadioStatus {
   case off
-  case fetching(progress:Float)
+  case fetching(progress: Float)
   case failure
   case noModulesAvailable
   case on
 }
 
-enum Radio
-{
+enum Radio {
   // MARK: Use cases
   enum Control {
     struct Request {
@@ -39,15 +38,13 @@ enum Radio
     }
   }
   
-  enum Playback
-  {
+  enum Playback {
     struct Response {
       var length: Int
       var elapsed: Int
     }
     
-    struct ViewModel
-    {
+    struct ViewModel {
       var timeLeft: String
     }
   }

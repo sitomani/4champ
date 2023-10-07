@@ -63,8 +63,8 @@ struct MMD: Identifiable {
       if let modNameParts = components.last?.components(separatedBy: ".") {
         type = modNameParts.first ?? "MOD"
         name = modNameParts[1...modNameParts.count - 2].joined(separator: ".")
-        name = name?.replacingOccurrences(of: "%", with: "%25") //replace percent signs with encoding
-        name = name?.removingPercentEncoding //before removing the encoding
+        name = name?.replacingOccurrences(of: "%", with: "%25") // replace percent signs with encoding
+        name = name?.removingPercentEncoding // before removing the encoding
         localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(name!).appendingPathExtension(type!)
       }
     }
@@ -116,5 +116,3 @@ func ==(lhs: MMD, rhs: MMD) -> Bool {
   let eq = lhs.id == rhs.id && lhs.id != nil
   return eq
 }
-
-

@@ -12,14 +12,12 @@
 import UIKit
 import SwiftUI
 
-protocol PlaylistSelectorDisplayLogic: class
-{
+protocol PlaylistSelectorDisplayLogic: class {
   func displaySelector(viewModel: PlaylistSelector.PrepareSelection.ViewModel)
   func displayAppend(viewModel: PlaylistSelector.Append.ViewModel)
 }
 
-class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
-{
+class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic {
   var interactor: PlaylistSelectorBusinessLogic?
   var router: (NSObjectProtocol & PlaylistSelectorRoutingLogic & PlaylistSelectorDataPassing)?
   weak var hostingController: UIHostingController<PlaylistPickerView>?
@@ -53,8 +51,7 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
   }
   
   // MARK: Setup
-  func setup()
-  {
+  func setup() {
     let viewController = self
     let interactor = PlaylistSelectorInteractor()
     let presenter = PlaylistSelectorPresenter()
@@ -66,14 +63,12 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
     router.dataStore = interactor
   }
   
-  func doPrepare(mod: MMD)
-  {
+  func doPrepare(mod: MMD) {
     let request = PlaylistSelector.PrepareSelection.Request(module: mod)
     interactor?.prepare(request: request)
   }
   
-  func displaySelector(viewModel: PlaylistSelector.PrepareSelection.ViewModel)
-  {
+  func displaySelector(viewModel: PlaylistSelector.PrepareSelection.ViewModel) {
     self.viewModel = viewModel
   }
   
@@ -115,5 +110,3 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
   }
   
 }
-
-

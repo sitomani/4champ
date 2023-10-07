@@ -12,7 +12,7 @@ import UIKit
 class RadioSessionCell: UITableViewCell {
     static let ReuseId = "RadioSessionCell"
     
-    let moduleTitle: UILabel = UILabel.init(frame: .zero);
+    let moduleTitle: UILabel = UILabel.init(frame: .zero)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -21,7 +21,7 @@ class RadioSessionCell: UITableViewCell {
         moduleTitle.translatesAutoresizingMaskIntoConstraints = false
         
         moduleTitle.textColor = Appearance.veryLightGray.withAlphaComponent(0.8)
-        let descriptor = UIFontDescriptor.init(fontAttributes: [.family : "DIN Alternate"])
+        let descriptor = UIFontDescriptor.init(fontAttributes: [.family: "DIN Alternate"])
         let fnt = UIFont.init(descriptor: descriptor, size: 13.0)
         moduleTitle.font = fnt
         
@@ -29,7 +29,7 @@ class RadioSessionCell: UITableViewCell {
         separatorView.backgroundColor = Appearance.radioSeparatorColor
         separatorView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(separatorView)
-        contentView.addSubview(moduleTitle);
+        contentView.addSubview(moduleTitle)
         NSLayoutConstraint.activate([
             separatorView.heightAnchor.constraint(equalToConstant: 0.5),
             separatorView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40),
@@ -42,7 +42,6 @@ class RadioSessionCell: UITableViewCell {
             moduleTitle.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
-
     
     required init?(coder: NSCoder) {
         fatalError()

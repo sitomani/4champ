@@ -122,7 +122,7 @@
 		450E506021879347008FB155 /* SettingsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRouter.swift; sourceTree = "<group>"; };
 		450E506121879347008FB155 /* SettingsModels.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SettingsModels.swift; sourceTree = "<group>"; tabWidth = 2; };
 		450E506221879347008FB155 /* SettingsViewController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
-		450E506321879347008FB155 /* SettingsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsInteractor.swift; sourceTree = "<group>"; };
+		450E506321879347008FB155 /* SettingsInteractor.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SettingsInteractor.swift; sourceTree = "<group>"; tabWidth = 2; };
 		450E506C2187A066008FB155 /* SettingsStereoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStereoCell.swift; sourceTree = "<group>"; };
 		451B6A9A2204B6CC001848FA /* LocalPresenter.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = LocalPresenter.swift; sourceTree = "<group>"; tabWidth = 2; };
 		451B6A9C2204B6CC001848FA /* LocalRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalRouter.swift; sourceTree = "<group>"; };

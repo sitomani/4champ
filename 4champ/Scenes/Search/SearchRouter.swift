@@ -8,20 +8,17 @@
 import UIKit
 import SwiftUI
 
-protocol SearchRoutingLogic
-{
+protocol SearchRoutingLogic {
   func toComposerList(title: String, groupId: Int)
   func toModulesList(title: String, composerId: Int)
   func toPlaylistSelector(module: MMD)
 }
 
-protocol SearchDataPassing
-{
+protocol SearchDataPassing {
   var dataStore: SearchDataStore? { get }
 }
 
-class SearchRouter: NSObject, SearchRoutingLogic, SearchDataPassing
-{
+class SearchRouter: NSObject, SearchRoutingLogic, SearchDataPassing {
   weak var viewController: SearchViewController?
   var dataStore: SearchDataStore?
   

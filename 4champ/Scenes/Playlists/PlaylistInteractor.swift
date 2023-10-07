@@ -13,8 +13,7 @@
 import UIKit
 import CoreData
 
-protocol PlaylistBusinessLogic
-{
+protocol PlaylistBusinessLogic {
   func selectPlaylist(request: Playlists.Select.Request)
   func removeModule(request: Playlists.Remove.Request)
   func moveModule(request: Playlists.Move.Request)
@@ -25,20 +24,17 @@ protocol PlaylistBusinessLogic
   func startPlaylist()
 }
 
-protocol PlaylistDataStore
-{
-  //var name: String { get set }
+protocol PlaylistDataStore {
+  // var name: String { get set }
 }
 
-class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore
-{
+class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore {
   var presenter: PlaylistPresentationLogic?
   var selectedPlaylistId: String?
   var frc: NSFetchedResultsController<Playlist>?
-  //var name: String = ""
+  // var name: String = ""
 
   private var downloadController = DownloadController.init()
-
   
   override init() {
     super.init()
@@ -134,7 +130,7 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore
           playlistQueue.append(MMD(cdi: (mod as! ModuleInfo)))
         }
       }
-      if (pl.playmode?.boolValue ?? false) {
+      if pl.playmode?.boolValue ?? false {
         playlistQueue.shuffle()
       }
       

@@ -11,20 +11,17 @@
 
 import UIKit
 
-protocol PlaylistSelectorPresentationLogic
-{
+protocol PlaylistSelectorPresentationLogic {
     func presentSelector(response: PlaylistSelector.PrepareSelection.Response)
     func presentAppend(response: PlaylistSelector.Append.Response)
 }
 
-class PlaylistSelectorPresenter: PlaylistSelectorPresentationLogic
-{
+class PlaylistSelectorPresenter: PlaylistSelectorPresentationLogic {
     weak var viewController: PlaylistSelectorDisplayLogic?
     
-    func presentSelector(response: PlaylistSelector.PrepareSelection.Response)
-    {
+    func presentSelector(response: PlaylistSelector.PrepareSelection.Response) {
         var defaultString = ""
-        var options:[String] = []
+        var options: [String] = []
         var plIndex = 0
         for pl in response.playlistOptions {
             
@@ -51,7 +48,7 @@ class PlaylistSelectorPresenter: PlaylistSelectorPresentationLogic
             moduleName = String.init(format: "LockScreen_Playing".l13n(), mod_name, composer_name)
         }
         
-        let status:DownloadStatus = response.module.hasBeenSaved() ? .complete : .unknown
+        let status: DownloadStatus = response.module.hasBeenSaved() ? .complete : .unknown
         
         let viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: moduleName, service: response.module.serviceId, currentPlaylistIndex: plIndex, playlistOptions: options, status: status)
         viewController?.displaySelector(viewModel: viewModel)

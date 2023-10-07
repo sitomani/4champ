@@ -5,22 +5,18 @@
 //  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
-
 import UIKit
 import SwiftUI
 
-protocol LocalRoutingLogic
-{
+protocol LocalRoutingLogic {
     func toPlaylistSelector(module: MMD)
 }
 
-protocol LocalDataPassing
-{
+protocol LocalDataPassing {
   var dataStore: LocalDataStore? { get }
 }
 
-class LocalRouter: NSObject, LocalRoutingLogic, LocalDataPassing
-{
+class LocalRouter: NSObject, LocalRoutingLogic, LocalDataPassing {
   weak var viewController: LocalViewController?
   var dataStore: LocalDataStore?
   

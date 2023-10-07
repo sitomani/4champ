@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension Playlist: Identifiable {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Playlist> {

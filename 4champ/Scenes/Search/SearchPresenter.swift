@@ -7,8 +7,7 @@
 
 import UIKit
 
-protocol SearchPresentationLogic
-{
+protocol SearchPresentationLogic {
   func presentModules(response: Search.ModuleResponse)
   func presentGroups(response: Search.GroupResponse)
   func presentComposers(response: Search.ComposerResponse)
@@ -20,8 +19,7 @@ protocol SearchPresentationLogic
 
 /// Search result presentation class. Presenter wraps the json originating
 /// objects into presentable structs for `SearchViewController`
-class SearchPresenter: SearchPresentationLogic
-{
+class SearchPresenter: SearchPresentationLogic {
   weak var viewController: SearchDisplayLogic?
   
   func presentGroups(response: Search.GroupResponse) {
@@ -94,7 +92,7 @@ class SearchPresenter: SearchPresentationLogic
     log.debug("")
     let processedCount = response.originalQueueLength - response.queueLength + (response.queueLength > 0 ? 1 : 0)
     let vm = Search.BatchDownload.ViewModel(batchSize: response.originalQueueLength,
-                                            processed:processedCount,
+                                            processed: processedCount,
                                             complete: response.complete,
                                             favoritedModuleId: response.favoritedModuleId)
     DispatchQueue.main.async {

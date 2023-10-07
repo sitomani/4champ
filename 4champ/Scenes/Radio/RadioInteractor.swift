@@ -10,8 +10,7 @@ import Alamofire
 import UserNotifications
 
 /// Radio Interactor business logic protocol
-protocol RadioBusinessLogic
-{
+protocol RadioBusinessLogic {
   /// Radio on/off/channel switch control interface
   /// - parameters:
   ///   - request: Control parameters (on/off/channel) in a `Radio.Control.Request` struct
@@ -60,8 +59,7 @@ protocol RadioRemoteControl: NSObjectProtocol {
 }
 
 /// Radio datastore for keeping currently selected channel and status
-protocol RadioDataStore
-{
+protocol RadioDataStore {
   var channel: RadioChannel { get set }
   var status: RadioStatus { get set }
 }
@@ -72,8 +70,7 @@ enum PostFetchAction {
   case startPlay     // when selecting tune from session history
 }
 
-class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemoteControl
-{
+class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemoteControl {
   
   var presenter: RadioPresentationLogic?
   
@@ -184,7 +181,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     }
     guard mod.serviceId == .amp else {
       radioSessionHistory.remove(at: historyIndex)
-      return;
+      return
     }
     postFetchAction = .startPlay
     let fetcher = ModuleFetcher.init(delegate: self)
@@ -197,7 +194,6 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       presenter?.presentSessionHistoryInsert()
     }
   }
-
   
   @objc func refreshLocalNotificationsStatus() {
     log.debug("")
@@ -218,7 +214,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     }
     
     let un = UNUserNotificationCenter.current()
-    un.requestAuthorization(options: [.badge, .sound, .alert]) { (granted, error) in
+    un.requestAuthorization(options: [.badge, .sound, .alert]) { (_, _) in
       self.refreshLocalNotificationsStatus()
     }
   }
@@ -281,7 +277,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   private func triggerBufferPresentation() {
     log.debug("")
     guard radioOn else {
-      self.presenter?.presentChannelBuffer(buffer: [], history:[])
+      self.presenter?.presentChannelBuffer(buffer: [], history: [])
       return
     }
     self.presenter?.presentChannelBuffer(buffer: modulePlayer.playQueue, history: radioSessionHistory)
@@ -367,7 +363,7 @@ extension RadioInteractor: ModuleFetcherDelegate {
     case .failed(let err):
       if let fetcherErr = err as? FetcherError {
         if fetcherErr == .unsupportedFormat {
-          //keep on loading mods
+          // keep on loading mods
           fillBuffer()
           return
         }
@@ -379,7 +375,7 @@ extension RadioInteractor: ModuleFetcherDelegate {
       status = .fetching(progress: progress)
       
     case .done(let mmd):
-      switch(postFetchAction) {
+      switch postFetchAction {
       case .appendToQueue:
         modulePlayer.playQueue.append(mmd)
       case .insertToQueue:
@@ -416,7 +412,7 @@ extension RadioInteractor: ModulePlayerObserver {
   }
   
   func statusChanged(status: PlayerStatus) {
-    //nop at the moment
+    // nop at the moment
   }
   
   func errorOccurred(error: PlayerError) {

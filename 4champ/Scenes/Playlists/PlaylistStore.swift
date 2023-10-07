@@ -12,14 +12,12 @@
 import UIKit
 import SwiftUI
 
-protocol PlaylistDisplayLogic: class
-{
+protocol PlaylistDisplayLogic: class {
   func displayPlaylist(viewModel: Playlists.Select.ViewModel)
   func displayModeChange(shuffled: Bool)
 }
 
-class PlaylistStore: ObservableObject, PlaylistDisplayLogic
-{
+class PlaylistStore: ObservableObject, PlaylistDisplayLogic {
   var interactor: PlaylistBusinessLogic?
   var router: (NSObjectProtocol & PlaylistRoutingLogic & PlaylistDataPassing)?
   weak var hostingController: UIHostingController<PlaylistView>?
@@ -47,8 +45,7 @@ class PlaylistStore: ObservableObject, PlaylistDisplayLogic
     moduleStorage.removeStorageObserver(self)
   }
   
-  func setup()
-  {
+  func setup() {
     let viewController = self
     let interactor = PlaylistInteractor()
     let presenter = PlaylistPresenter()
@@ -84,17 +81,17 @@ extension PlaylistStore: ModulePlayerObserver {
   }
   
   func errorOccurred(error: PlayerError) {
-    //nop at the moment
+    // nop at the moment
   }
   
   func queueChanged(changeType: QueueChange) {
-    //nop
+    // nop
   }
 }
 
 extension PlaylistStore: ModuleStorageObserver {
   func metadataChange(_ mmd: MMD) {
-    //nop
+    // nop
   }
   
   func playlistChange() {

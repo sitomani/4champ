@@ -5,13 +5,11 @@
 //  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
-
 import UIKit
 import CoreData
 import SwiftUI
 
-protocol LocalDisplayLogic: class
-{
+protocol LocalDisplayLogic: class {
   func displayModules(viewModel: Local.SortFilter.ViewModel)
   func displayPlayerError(message: String)
   func displayRowDeletion(indexPath: IndexPath)
@@ -19,8 +17,7 @@ protocol LocalDisplayLogic: class
   func displayRowInsert(indexPath: IndexPath)
 }
 
-class LocalViewController: UIViewController, LocalDisplayLogic
-{
+class LocalViewController: UIViewController, LocalDisplayLogic {
   var interactor: LocalBusinessLogic?
   var router: (NSObjectProtocol & LocalRoutingLogic & LocalDataPassing)?
   
@@ -33,22 +30,19 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   
   // MARK: Object lifecycle
   
-  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-  {
+  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     setup()
   }
   
-  required init?(coder aDecoder: NSCoder)
-  {
+  required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     setup()
   }
   
   // MARK: Setup
   
-  private func setup()
-  {
+  private func setup() {
     let viewController = self
     let interactor = LocalInteractor()
     let presenter = LocalPresenter()
@@ -66,8 +60,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     view.endEditing(true)
   }
   
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-  {
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if let scene = segue.identifier {
       let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
       if let router = router, router.responds(to: selector) {
@@ -81,8 +74,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     super.viewWillAppear(animated)
   }
   
-  override func viewDidLoad()
-  {
+  override func viewDidLoad() {
     super.viewDidLoad()
     tableView.dataSource = self
     tableView.delegate = self
@@ -133,7 +125,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
       log.debug(key)
       sortKey = key
       let req = Local.SortFilter.Request.init(sortKey: sortKey, filterText: searchBar?.text, ascending: false)
-      interactor?.sortAndFilter(request:req)
+      interactor?.sortAndFilter(request: req)
     } else if let op = SpecialFunctions.init(rawValue: sender.tag) {
       switch op {
       case .filter:
@@ -161,7 +153,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic
     let btn5 = UIBarButtonItem.init(image: UIImage.init(named: "favestar-yellow"), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn5.tag = LocalSortKey.favorite.rawValue
     let btn6 = UIBarButtonItem.init(title: "ModulesView_Filter".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
-    btn6.tag = -1 //No sort key for filter
+    btn6.tag = -1 // No sort key for filter
     
     _ = [addBtn, btn1, btn2, btn3, btn4, btn5, btn6].map {
       if $0.tag == sortKey.rawValue {
@@ -180,14 +172,12 @@ class LocalViewController: UIViewController, LocalDisplayLogic
   }
   
   // MARK: Do something
-  func prepareView()
-  {
+  func prepareView() {
     let request = Local.SortFilter.Request(sortKey: .module, filterText: nil, ascending: true)
     interactor?.sortAndFilter(request: request)
   }
   
-  func displayModules(viewModel: Local.SortFilter.ViewModel)
-  {
+  func displayModules(viewModel: Local.SortFilter.ViewModel) {
     tableView.reloadData()
   }
   
@@ -258,7 +248,6 @@ extension LocalViewController: UITableViewDataSource {
   }
 }
 
-
 // MARK: Module Player Observer
 extension LocalViewController: ModulePlayerObserver {
   func moduleChanged(module: MMD, previous: MMD?) {
@@ -279,7 +268,7 @@ extension LocalViewController: ModulePlayerObserver {
   }
   
   func errorOccurred(error: PlayerError) {
-    //nop at the moment
+    // nop at the moment
   }
   
   func queueChanged(changeType: QueueChange) {
@@ -308,7 +297,7 @@ extension LocalViewController: ModuleCellDelegate {
   
   func shareTapped(cell: ModuleCell) {
     guard let ip = tableView.indexPath(for: cell),
-      let mod = interactor?.getModule(at:ip) else {
+      let mod = interactor?.getModule(at: ip) else {
         return
     }
     shareUtil.shareMod(mod: mod)
@@ -317,7 +306,7 @@ extension LocalViewController: ModuleCellDelegate {
   func longTap(cell: ModuleCell) {
     
     guard let ip = tableView.indexPath(for: cell),
-      let mod = interactor?.getModule(at:ip) else {
+      let mod = interactor?.getModule(at: ip) else {
         return
     }
     router?.toPlaylistSelector(module: mod)

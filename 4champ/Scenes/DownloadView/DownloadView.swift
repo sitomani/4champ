@@ -14,7 +14,7 @@ struct ProgressBar: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
-                Rectangle().frame(width: geometry.size.width , height: geometry.size.height)
+                Rectangle().frame(width: geometry.size.width, height: geometry.size.height)
                     .opacity(0.3)
                     .foregroundColor(Color(.lightGray))
                 
@@ -39,7 +39,7 @@ struct DownloadView: View {
                     .foregroundColor(.black)
                 
                 ProgressBar(value: $store.model.progress)
-                    .frame(height:4)
+                    .frame(height: 4)
                     .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
 
                 Text(store.model.summary)
@@ -54,28 +54,28 @@ struct DownloadView: View {
                         self.store.play()
                     }) {
                         Text("DownloadView_Play")
-                        }.frame(maxWidth:.infinity, minHeight:50).padding(5).contentShape(Rectangle())
+                        }.frame(maxWidth: .infinity, minHeight: 50).padding(5).contentShape(Rectangle())
                         .disabled(self.store.model.progress < 1.0)
                     }
                     if store.model.error == nil && store.model.importType == .universalLink {
                     Button(action: {
                         self.store.keep()
                     }) {
-                        Text("Dialog_Keep") //Image("preview-save")
-                        }.frame(maxWidth:.infinity, minHeight:50).padding(5).contentShape(Rectangle())
+                        Text("Dialog_Keep") // Image("preview-save")
+                        }.frame(maxWidth: .infinity, minHeight: 50).padding(5).contentShape(Rectangle())
                     }
                     if store.model.error == nil && store.model.importType == .documentLink && store.model.importIds.count > 0 {
                         Button(action: {
                             self.store.assignComposer()
                         }) {
                             Text("Local_Import_Assign")
-                        }.frame(maxWidth:.infinity, minHeight:50).padding(5).contentShape(Rectangle())
+                        }.frame(maxWidth: .infinity, minHeight: 50).padding(5).contentShape(Rectangle())
                     }
                     Button(action: {
                         self.store.dismiss()
                     }) {
                         Text("DownloadView_Dismiss")
-                        }.frame(maxWidth:.infinity, minHeight:50).padding(5).contentShape(Rectangle())
+                        }.frame(maxWidth: .infinity, minHeight: 50).padding(5).contentShape(Rectangle())
                 }.padding(5)
             }.background(Color(Appearance.veryLightGray)).cornerRadius(10.0)
             }.padding(EdgeInsets(top: 0, leading: 40, bottom: 0, trailing: 40)).onDisappear(perform: {

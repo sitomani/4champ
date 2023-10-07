@@ -10,9 +10,9 @@ extension String {
   func l13n() -> String {
     var loc = NSLocalizedString(self, comment: "")
     if loc.compare(self) == ComparisonResult.orderedSame {
-      loc = fallbackL13N(debugPrefix: "_") //loc key found but no translation
+      loc = fallbackL13N(debugPrefix: "_") // loc key found but no translation
     } else if loc.count == 0 {
-      loc = fallbackL13N(debugPrefix: "#") //no loc key found in strings
+      loc = fallbackL13N(debugPrefix: "#") // no loc key found in strings
     }
     return finalL13N(locString: loc)
   }
@@ -34,7 +34,7 @@ extension String {
   }
   
   private func finalL13N(locString: String) -> String {
-    //apply format fixes for string parameters
+    // apply format fixes for string parameters
     var loc = locString
     loc = loc.replacingOccurrences(of: "%s", with: "%@")
     loc = loc.replacingOccurrences(of: "$s", with: "$@")

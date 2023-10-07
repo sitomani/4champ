@@ -14,18 +14,18 @@ struct SUIModule: View {
     let module: MMD
     let faveCallback: ((MMD) -> Void)?
     var body: some View {
-        VStack{
+        VStack {
         HStack {
             ZStack {
                 Image(uiImage: UIImage.init(named: "modicon")!).resizable().frame(width: 50, height: 50)
                 Text(module.type?.uppercased() ?? "MOD")
                     .foregroundColor(Color.black)
-                    .font(.system(size:12))
-                    .offset(y:13)
+                    .font(.system(size: 12))
+                    .offset(y: 13)
                 if module.supported() == false {
-                    Image(uiImage: UIImage.init(named:"stopicon")!)
+                    Image(uiImage: UIImage.init(named: "stopicon")!)
                         .resizable()
-                        .frame(width:30, height:30).offset(x:-15)
+                        .frame(width: 30, height: 30).offset(x: -15)
                 }
             }.padding(EdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 0))
             VStack(alignment: .leading) {
@@ -49,8 +49,6 @@ struct SUIModule: View {
     }
 }
 
-
-
 struct PlaylistView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @State private var show_modal: Bool = false
@@ -65,7 +63,7 @@ struct PlaylistView: View {
     @ObservedObject var store: PlaylistStore
     
     func move(from source: IndexSet, to destination: Int) {
-        guard let sourceIndex:Int = source.first else {
+        guard let sourceIndex: Int = source.first else {
             return
         }
         
@@ -74,7 +72,7 @@ struct PlaylistView: View {
     }
     
     func deleteItems(at offsets: IndexSet) {
-        guard let index:Int = offsets.first else {
+        guard let index: Int = offsets.first else {
             return
         }
         store.interactor?.removeModule(request: Playlists.Remove.Request(modIndex: index))
@@ -101,7 +99,7 @@ struct PlaylistView: View {
                     .foregroundColor(Color(.white))
                     .padding(EdgeInsets.init(top: 5, leading: 0, bottom: -5, trailing: 0))
             }.sheet(isPresented: self.$show_modal) {
-                PlaylistSelectorSUI(show_modal: self.$show_modal).environment(\.managedObjectContext,self.managedObjectContext).onDisappear {
+                PlaylistSelectorSUI(show_modal: self.$show_modal).environment(\.managedObjectContext, self.managedObjectContext).onDisappear {
                     self.navigationButtonID = UUID()
                 }.background(Color(Appearance.darkBlueColor))
             }
@@ -122,14 +120,11 @@ struct PlaylistView: View {
                 }
                 .navigationBarTitle(Text("TabBar_Playlist".l13n().uppercased()), displayMode: .inline)
                 .navigationBarItems(leading: HStack {
-                    Button(action: {self.toggleShuffle()})
-                        {Image(store.viewModel.shuffle ? "shuffled" : "sequential")}
-                    Button(action: {self.store.interactor?.startPlaylist()})
-                        {Image("play-small")}
+                    Button(action: {self.toggleShuffle()}) {Image(store.viewModel.shuffle ? "shuffled" : "sequential")}
+                    Button(action: {self.store.interactor?.startPlaylist()}) {Image("play-small")}
                 },
                 trailing: HStack {
-                        Button(action: {self.startImport()})
-                        {Image(systemName: "square.and.arrow.down").padding(EdgeInsets(top: -3, leading: 0, bottom: 0, trailing: 0))
+                        Button(action: {self.startImport()}) {Image(systemName: "square.and.arrow.down").padding(EdgeInsets(top: -3, leading: 0, bottom: 0, trailing: 0))
                             .font(Font.system(size: 20, weight: .light))
                         }
                         EditButton()}).id(self.navigationButtonID)
@@ -139,7 +134,7 @@ struct PlaylistView: View {
             }
             if store.nowPlaying {
                 VStack {
-                    Text("").frame(height:50)
+                    Text("").frame(height: 50)
                 }
             }
         }.background(Color(Appearance.darkBlueColor))
@@ -153,7 +148,7 @@ class PlaylistHostingViewController: UIHostingController<AnyView> {
         store = PlaylistStore()
         let contentView = PlaylistView(store: store).environment(\.managedObjectContext, moduleStorage.managedObjectContext)
         store.setup()
-        super.init(coder: coder, rootView:AnyView(contentView))
+        super.init(coder: coder, rootView: AnyView(contentView))
     }
     
     override func viewDidLoad() {
@@ -173,10 +168,10 @@ func randomMMD() -> MMD {
     return mmd
 }
 
-var st = PlaylistStore(viewModel:         Playlists.Select.ViewModel(playlistName: "foo", shuffle: false, modules: [randomMMD(), randomMMD(), randomMMD()])
+var st = PlaylistStore(viewModel: Playlists.Select.ViewModel(playlistName: "foo", shuffle: false, modules: [randomMMD(), randomMMD(), randomMMD()])
 )
 
-struct Playlist_Preview : PreviewProvider {
+struct Playlist_Preview: PreviewProvider {
     static var previews: some View {
         Group {
             NavigationView {

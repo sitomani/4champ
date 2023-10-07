@@ -7,8 +7,7 @@
 
 import UIKit
 
-protocol RadioDisplayLogic: class
-{
+protocol RadioDisplayLogic: class {
   func displayControlStatus(viewModel: Radio.Control.ViewModel)
   func displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel)
   func displayPlaybackTime(viewModel: Radio.Playback.ViewModel)
@@ -17,8 +16,7 @@ protocol RadioDisplayLogic: class
   func displaySessionHistoryInsert()
 }
 
-class RadioViewController: UIViewController, RadioDisplayLogic
-{
+class RadioViewController: UIViewController, RadioDisplayLogic {
   var interactor: RadioBusinessLogic?
   var router: (NSObjectProtocol & RadioRoutingLogic & RadioDataPassing)?
 
@@ -63,22 +61,19 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   }
   // MARK: Object lifecycle
   
-  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-  {
+  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     setup()
   }
   
-  required init?(coder aDecoder: NSCoder)
-  {
+  required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     setup()
   }
   
   // MARK: Setup
   
-  private func setup()
-  {
+  private func setup() {
     let viewController = self
     let interactor = RadioInteractor()
     let presenter = RadioPresenter()
@@ -94,8 +89,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   
   // MARK: Routing
   
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-  {
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if let scene = segue.identifier {
       let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
       if let router = router, router.responds(to: selector) {
@@ -106,8 +100,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   
   // MARK: View lifecycle
   
-  override func viewDidLoad()
-  {
+  override func viewDidLoad() {
     log.debug("")
     super.viewDidLoad()
     
@@ -120,7 +113,6 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     shareButton?.isHidden = true
     faveButton?.isHidden = false
 //    saveButton?.isHidden = true
-
 
     channelSegments?.setTitle("Radio_All".l13n(), forSegmentAt: 0)
     channelSegments?.setTitle("Radio_New".l13n(), forSegmentAt: 1)
@@ -172,14 +164,13 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
   }
-  
 
   func setupGradientBackground() {
       gradientLayer.colors = [gradientColorTop.withAlphaComponent(0).cgColor, gradientColorBottom.withAlphaComponent(0).cgColor]
       gradientLayer.locations = [0.0, 1.0]
       gradientLayer.drawsAsynchronously = true
       gradientLayer.frame = CGRect.init(x: 0, y: 0, width: view.frame.width, height: currentModuleView?.frame.height ?? 100)
-      currentModuleView?.layer.insertSublayer(gradientLayer, at:0)
+      currentModuleView?.layer.insertSublayer(gradientLayer, at: 0)
   }
   
   func animateGradient(_ direction: GradientAnimationDirection) {
@@ -187,13 +178,13 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     gradientLayer.removeAnimation(forKey: GradientAnimationDirection.in.rawValue)
     gradientLayer.removeAnimation(forKey: GradientAnimationDirection.out.rawValue)
 
-    let startAlphas: [CGFloat] = direction == .in ? [0, 0] : [1,0.4]
+    let startAlphas: [CGFloat] = direction == .in ? [0, 0] : [1, 0.4]
     gradientLayer.colors = [gradientColorTop.withAlphaComponent(startAlphas[0]).cgColor, gradientColorBottom.withAlphaComponent(startAlphas[1]).cgColor]
 
     let gradientChangeAnimation = CABasicAnimation(keyPath: "colors")
     gradientChangeAnimation.duration = 0.5
     
-    let endAlphas: [CGFloat] = direction == .in ? [1, 0.4] : [0,0]
+    let endAlphas: [CGFloat] = direction == .in ? [1, 0.4] : [0, 0]
 
     gradientChangeAnimation.toValue = [
       gradientColorTop.withAlphaComponent(endAlphas[0]).cgColor,
@@ -203,8 +194,6 @@ class RadioViewController: UIViewController, RadioDisplayLogic
     gradientChangeAnimation.isRemovedOnCompletion = false
     gradientLayer.add(gradientChangeAnimation, forKey: direction.rawValue)
   }
- 
-  
   
   func displayControlStatus(viewModel: Radio.Control.ViewModel) {
     switch viewModel.status {
@@ -317,7 +306,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic
   }
   
   @IBAction private func prevTapped(_ sender: UIButton) {
-    interactor?.playPrev();
+    interactor?.playPrev()
   }
   
   @IBAction private func controlSwitchChanged(_ sender: UISwitch) {
@@ -372,4 +361,3 @@ extension RadioViewController: UITableViewDataSource, UITableViewDelegate {
     return 40
   }
 }
-

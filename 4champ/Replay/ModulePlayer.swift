@@ -14,7 +14,7 @@ enum PlayerError: Error {
 }
 
 /// possible states of a ModulePlayer
-enum PlayerStatus:Int {
+enum PlayerStatus: Int {
   case initialised
   case stopped
   case playing
@@ -56,7 +56,7 @@ protocol ModulePlayerObserver: class {
   func errorOccurred(error: PlayerError)
   
   /// called when play queue changes (e.g. due to playlist change, or when modules are added to queue by user)
-  func queueChanged(changeType:QueueChange)
+  func queueChanged(changeType: QueueChange)
 }
 
 class ModulePlayer: NSObject {
@@ -74,7 +74,7 @@ class ModulePlayer: NSObject {
         let songName = mod.name!
         let playlistName = "LockScreen_Radio".l13n()
         
-        let artwork = MPMediaItemArtwork.init(boundsSize: mpImage.size, requestHandler: { (size) -> UIImage in
+        let artwork = MPMediaItemArtwork.init(boundsSize: mpImage.size, requestHandler: { (_) -> UIImage in
           return self.mpImage
         })
         
@@ -106,7 +106,7 @@ class ModulePlayer: NSObject {
   
   override init() {
     super.init()
-    moduleStorage.addStorageObserver(self) //listen to metadata changes
+    moduleStorage.addStorageObserver(self) // listen to metadata changes
     
     renderer.initAudio()
     renderer.streamDelegate = self
@@ -172,7 +172,7 @@ class ModulePlayer: NSObject {
     }
     renderer.stop()
     let mod = playQueue[at]
-    if renderer.loadModule(path, type:mod.type) {
+    if renderer.loadModule(path, type: mod.type) {
         let settings = SettingsInteractor()
         setStereoSeparation(settings.stereoSeparation)
         setInterpolation(settings.interpolation)
@@ -237,7 +237,7 @@ class ModulePlayer: NSObject {
   func playPrev() {
     guard !radioOn else {
       radioRemoteControl?.playPrev()
-      return;
+      return
     }
     guard let current = currentModule, playQueue.count > 0 else {
       return
@@ -290,14 +290,13 @@ class ModulePlayer: NSObject {
     playQueue.removeAll()
     currentModule = nil
   }
-
   
   /// Handle audio route change notifications
   @objc func handleRouteChange(notification: Notification) {
     log.debug("")
     guard let userInfo = notification.userInfo,
       let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
-      let reason = AVAudioSession.RouteChangeReason(rawValue:reasonValue) else {
+      let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) else {
         return
     }
     

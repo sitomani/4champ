@@ -19,8 +19,7 @@ struct GroupInfo {
   var name: String
 }
 
-enum Search
-{
+enum Search {
   struct Request {
     var text: String
     var type: SearchType
@@ -29,10 +28,10 @@ enum Search
   
   struct ProgressResponse {
     var progress: Float
-    var error: Error? = nil
+    var error: Error?
     struct ViewModel {
       var progress: Float
-      var error: String? = nil
+      var error: String?
     }
   }
   
@@ -93,8 +92,6 @@ enum Search
     }
   }
 }
-
-
 
 // MARK: 4champ.net JSON interface objects
 typealias ModuleResult = [SearchResultModule]

@@ -5,12 +5,10 @@
 //  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
-
 import UIKit
 import CoreData
 
-protocol LocalBusinessLogic
-{
+protocol LocalBusinessLogic {
   func playModule(at: IndexPath)
   func sortAndFilter(request: Local.SortFilter.Request)
   func deleteModule(at: IndexPath)
@@ -23,13 +21,11 @@ protocol LocalBusinessLogic
   func getModuleInfo(at: IndexPath) -> ModuleInfo?
 }
 
-protocol LocalDataStore
-{
+protocol LocalDataStore {
   var frc: NSFetchedResultsController<ModuleInfo>? { get }
 }
 
-class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
-{
+class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore {
   var presenter: LocalPresentationLogic?
   var frc: NSFetchedResultsController<ModuleInfo>?
   private var downloadController = DownloadController.init()

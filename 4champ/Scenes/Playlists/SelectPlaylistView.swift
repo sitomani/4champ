@@ -41,14 +41,14 @@ struct PlaylistCell: View {
 }
 
 struct PlaylistSelectorSUI: View {
-    @Binding var show_modal:Bool
+    @Binding var show_modal: Bool
     @State private var listId = UUID()
     @Environment(\.managedObjectContext) var managedObjectContext
     @FetchRequest(entity: Playlist.entity(),
                   sortDescriptors: [NSSortDescriptor(keyPath: \Playlist.plName, ascending: true)]) var playlists: FetchedResults<Playlist>
     @State private var editingName = false
     @State private var name = ""
-    @State private var editedPlaylist:Playlist?
+    @State private var editedPlaylist: Playlist?
     
     func upsertPlaylist(name: String, playlist: Playlist?) {
         self.endEditing()
@@ -95,11 +95,11 @@ struct PlaylistSelectorSUI: View {
             VStack {
                 if editingName {
                     HStack {
-                        TextField("PlaylistView_PlaylistName".l13n(), text:$name)
+                        TextField("PlaylistView_PlaylistName".l13n(), text: $name)
                             .foregroundColor(Color(.white))
-                            .background(RoundedRectangle(cornerRadius:5)
+                            .background(RoundedRectangle(cornerRadius: 5)
                                 .foregroundColor(Color(Appearance.ampTextfieldBgColor))
-                                .frame(minHeight:32)
+                                .frame(minHeight: 32)
                                 .padding(EdgeInsets(top: 0, leading: -10, bottom: 0, trailing: 8)))
                             .padding(EdgeInsets(top: 8, leading: 20, bottom: 2, trailing: 0)).frame(minHeight: 44)
                         Button(action: {
@@ -135,7 +135,7 @@ struct PlaylistSelectorSUI: View {
                     }.onDelete(perform: delete).listRowBackground(Color.clear)
                 }.contentShape(Rectangle()).id(listId)
             }.navigationBarTitle("PlaylistView_Playlists", displayMode: .inline)
-                .navigationBarItems(leading: Button (action: {
+                .navigationBarItems(leading: Button(action: {
                     self.show_modal.toggle()
                 }) {
                     Image(systemName: "xmark").imageScale(.large)
@@ -152,4 +152,3 @@ struct PlaylistSelectorSUI: View {
         }.background(Color(Appearance.darkBlueColor)).navigationViewStyle(StackNavigationViewStyle())
     }
 }
-
