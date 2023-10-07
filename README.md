@@ -27,13 +27,17 @@ You can also follow the [@4champ_app](https://twitter.com/4champ_app) Twitter ac
 
 ### Dependencies
 
-##### A. Frameworks configured through Swift Package Manager
+#### Optional dependencies
+
+The project has build phase for running **[SwiftLint](https://github.com/realm/SwiftLint)** which will be skipped if you do not have swiftlint installed, so you do not need it to build the project.
+
+#### Frameworks configured through Swift Package Manager
 
 **[Alamofire](https://github.com/Alamofire/Alamofire)** is used for network comms.
 **[GzipSwift](https://github.com/1024jp/GzipSwift)** is used to unpack the gzipped module files.
 **[SwiftyBeaver](https://github.com/SwiftyBeaver/SwiftyBeaver)** is used for logging.
 
-##### B. Module Playback Libraries
+#### Module Playback Libraries
 
 4champ uses [libOpenMPT](https://github.com/OpenMPT/openmpt), [Hivelytracker](https://github.com/pete-gordon/hivelytracker) and [UADE](https://gitlab.com/sitomani/uade-ios) for module playback.
 
