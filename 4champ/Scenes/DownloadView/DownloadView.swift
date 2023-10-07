@@ -10,14 +10,14 @@ import SwiftUI
 
 struct ProgressBar: View {
     @Binding var value: Float
-    
+
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Rectangle().frame(width: geometry.size.width, height: geometry.size.height)
                     .opacity(0.3)
                     .foregroundColor(Color(.lightGray))
-                
+
                 Rectangle().frame(width: min(CGFloat(self.value)*geometry.size.width, geometry.size.width), height: geometry.size.height)
                     .foregroundColor(Color(UIColor.systemBlue))
                     .animation(.linear)
@@ -37,15 +37,15 @@ struct DownloadView: View {
                 Text(store.model.status)
                     .padding(EdgeInsets(top: 15, leading: 0, bottom: 0, trailing: 0))
                     .foregroundColor(.black)
-                
+
                 ProgressBar(value: $store.model.progress)
                     .frame(height: 4)
                     .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
-                
+
                 Text(store.model.summary)
                     .padding(EdgeInsets(top: 5, leading: 15, bottom: 0, trailing: 15))
                     .foregroundColor(.black)
-                
+
                 HStack {
                     if store.model.error == nil &&
                         (store.model.importType == .universalLink ||

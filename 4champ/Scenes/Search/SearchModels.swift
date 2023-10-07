@@ -25,7 +25,7 @@ enum Search {
     var type: SearchType
     var pagingIndex: Int = 0
   }
-  
+
   struct ProgressResponse {
     var progress: Float
     var error: Error?
@@ -34,7 +34,7 @@ enum Search {
       var error: String?
     }
   }
-  
+
   struct BatchDownload {
     struct Request {
       var moduleIds: [Int]
@@ -53,7 +53,7 @@ enum Search {
       var favoritedModuleId: Int
     }
   }
-  
+
   struct ModuleResponse {
     var result: [SearchResultModule]
     var text: String
@@ -64,7 +64,7 @@ enum Search {
       return r
     }
   }
-  
+
   struct ComposerResponse {
     var result: [SearchResultComposer]
     var text: String
@@ -74,19 +74,19 @@ enum Search {
     var result: [LabelHref]
     var text: String
   }
-  
+
   struct ViewModel {
     var modules: [MMD]
     var composers: [ComposerInfo]
     var groups: [GroupInfo]
     var text: String
   }
-  
+
   enum MetaDataChange {
     struct Response {
       var module: MMD
     }
-    
+
     struct ViewModel {
       var module: MMD
     }

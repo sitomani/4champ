@@ -16,7 +16,7 @@ extension String {
     }
     return finalL13N(locString: loc)
   }
-  
+
   private func fallbackL13N(debugPrefix: String) -> String {
     let fallbackLoc: String
     if let bundlePath = Bundle.main.path(forResource: "en", ofType: "lproj"),
@@ -25,14 +25,14 @@ extension String {
     } else {
       fallbackLoc = self
     }
-    
+
     #if DEBUG
     return debugPrefix + fallbackLoc
     #else
     return fallbackLoc
     #endif
   }
-  
+
   private func finalL13N(locString: String) -> String {
     // apply format fixes for string parameters
     var loc = locString

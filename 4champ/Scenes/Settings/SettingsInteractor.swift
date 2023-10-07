@@ -17,7 +17,7 @@ protocol SettingsDataStore {
 }
 
 class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
-  
+
   private enum SettingKeys {
     static let domainName = "DomainName"
     static let stereoSeparation = "StereoSeparation"
@@ -26,9 +26,9 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     static let prevCollectionSize = "prevCollectionSize"
     static let interpolation = "interpolation"
   }
-  
+
   var presenter: SettingsPresentationLogic?
-  
+
   var stereoSeparation: Int {
     get {
       if let value = UserDefaults.standard.value(forKey: SettingKeys.stereoSeparation) as? Int {
@@ -40,7 +40,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
       UserDefaults.standard.set(newValue, forKey: SettingKeys.stereoSeparation)
     }
   }
-  
+
   var interpolation: SampleInterpolation {
     get {
       if let value = UserDefaults.standard.value(forKey: SettingKeys.interpolation) as? Int {
@@ -52,7 +52,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
       UserDefaults.standard.set(newValue.rawValue, forKey: SettingKeys.interpolation)
     }
   }
-  
+
   var collectionSize: Int {
     get {
       if let value = UserDefaults.standard.value(forKey: SettingKeys.collectionSize) as? Int {
@@ -66,7 +66,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
       NotificationCenter.default.post(Notification.init(name: Notifications.badgeUpdate))
     }
   }
-  
+
   var newestPlayed: Int {
     get {
       if let value = UserDefaults.standard.value(forKey: SettingKeys.newestPlayed) as? Int {
@@ -80,7 +80,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
       NotificationCenter.default.post(Notification.init(name: Notifications.badgeUpdate))
     }
   }
-  
+
   var prevCollectionSize: Int {
     get {
       if let value = UserDefaults.standard.value(forKey: SettingKeys.prevCollectionSize) as? Int {
@@ -92,7 +92,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
       UserDefaults.standard.set(newValue, forKey: SettingKeys.prevCollectionSize)
     }
   }
-  
+
   var badgeCount: Int {
     if newestPlayed < collectionSize {
       var diff = collectionSize - newestPlayed
@@ -101,9 +101,9 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     }
     return 0
   }
-  
+
   // MARK: Do something
-  
+
   func updateSettings(request: Settings.Update.ValueBag?) {
     var response: Settings.Update.ValueBag
     if let request = request {
@@ -117,7 +117,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     modulePlayer.setInterpolation(interpolation)
     presenter?.presentSettings(response: response)
   }
-  
+
   private func updateBadge() {
     UIApplication.shared.applicationIconBadgeNumber = badgeCount
   }

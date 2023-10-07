@@ -61,35 +61,35 @@ struct PlaylistView: View {
     }
   }
   @ObservedObject var store: PlaylistStore
-  
+
   func move(from source: IndexSet, to destination: Int) {
     guard let sourceIndex: Int = source.first else {
       return
     }
-    
+
     let req = Playlists.Move.Request(modIndex: sourceIndex, newIndex: destination)
     store.interactor?.moveModule(request: req)
   }
-  
+
   func deleteItems(at offsets: IndexSet) {
     guard let index: Int = offsets.first else {
       return
     }
     store.interactor?.removeModule(request: Playlists.Remove.Request(modIndex: index))
   }
-  
+
   func toggleShuffle() {
     store.interactor?.toggleShuffle()
   }
-  
+
   func startImport() {
     store.interactor?.importModules()
   }
-  
+
   func favorite(module: MMD) {
     store.interactor?.toggleFavorite(request: Playlists.Favorite.Request(modId: module.id!))
   }
-  
+
   var body: some View {
     VStack {
       Button(action: {
@@ -124,12 +124,14 @@ struct PlaylistView: View {
           Button(action: {self.store.interactor?.startPlaylist()}, label: {Image("play-small")})
         },
                             trailing: HStack {
-          Button(action: {self.startImport()}, label: {Image(systemName: "square.and.arrow.down").padding(EdgeInsets(top: -3, leading: 0, bottom: 0, trailing: 0))
+          Button(action: {self.startImport()},
+                 label: {Image(systemName: "square.and.arrow.down")
+              .padding(EdgeInsets(top: -3, leading: 0, bottom: 0, trailing: 0))
               .font(Font.system(size: 20, weight: .light))
           })
           EditButton()}).id(self.navigationButtonID)
         if store.viewModel.modules.count == 0 {
-          Text("No modules on the playlist. You can add modules to a playlist by long-tapping a module on any view.").foregroundColor(.white).font(.system(size: 20)).padding(20)
+          Text("PlaylistView_NoModules".l13n()).foregroundColor(.white).font(.system(size: 20)).padding(20)
         }
       }
       if store.nowPlaying {
@@ -142,7 +144,7 @@ struct PlaylistView: View {
 }
 
 class PlaylistHostingViewController: UIHostingController<AnyView> {
-  
+
   let store: PlaylistStore
   required init?(coder: NSCoder) {
     store = PlaylistStore()
@@ -150,7 +152,7 @@ class PlaylistHostingViewController: UIHostingController<AnyView> {
     store.setup()
     super.init(coder: coder, rootView: AnyView(contentView))
   }
-  
+
   override func viewDidLoad() {
     store.router?.viewController = self
     super.viewDidLoad()

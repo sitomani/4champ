@@ -25,7 +25,7 @@ class PlaylistRouter: NSObject, PlaylistRoutingLogic, PlaylistDataPassing {
 //  weak var viewController: PlaylistViewController?
   var dataStore: PlaylistDataStore?
   var viewController: UIViewController?
-    
+
   // MARK: Routing
   func toPlaylistSelector(module: MMD) {
       let hvc = PlaylistSelectorStore.buildPicker(module: module)

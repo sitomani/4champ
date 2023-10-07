@@ -16,7 +16,7 @@ enum About {
     var licenseNames: [String]
   }
   // MARK: Use cases
-  
+
   enum Status {
     struct Request {
     }

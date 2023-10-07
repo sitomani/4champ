@@ -20,28 +20,28 @@ protocol LocalDisplayLogic: class {
 class LocalViewController: UIViewController, LocalDisplayLogic {
   var interactor: LocalBusinessLogic?
   var router: (NSObjectProtocol & LocalRoutingLogic & LocalDataPassing)?
-  
+
   @IBOutlet var tableView: UITableView!
   @IBOutlet var tableBottomConstraint: NSLayoutConstraint!
   @IBOutlet var noModulesLabel: UILabel!
-  
+
   private var searchBar: UISearchBar?
   private var sortKey: LocalSortKey = .module
-  
+
   // MARK: Object lifecycle
-  
+
   override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     setup()
   }
-  
+
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     setup()
   }
-  
+
   // MARK: Setup
-  
+
   private func setup() {
     let viewController = self
     let interactor = LocalInteractor()
@@ -54,12 +54,12 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
     router.viewController = viewController
     router.dataStore = interactor
   }
-  
+
   // MARK: Routing
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     view.endEditing(true)
   }
-  
+
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if let scene = segue.identifier {
       let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
@@ -68,12 +68,12 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
       }
     }
   }
-  
+
   // MARK: View lifecycle
   override func viewDidAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
   }
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
     tableView.dataSource = self
@@ -81,7 +81,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
     tableView.register(UINib(nibName: "ModuleCell", bundle: nil), forCellReuseIdentifier: "ModuleCell")
     modulePlayer.addPlayerObserver(self)
     prepareView()
-    
+
     searchBar = UISearchBar.init(frame: CGRect.init(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
     searchBar?.searchTextField.textColor = .white
     if let tf = searchBar?.searchTextField {
@@ -90,24 +90,23 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
     }
     self.tableView.tableHeaderView = searchBar
     searchBar?.delegate = self
-    
+
     tableView.backgroundColor = Appearance.ampBgColor
     tableView.contentOffset = CGPoint.init(x: 0, y: 44)
-    //    let btn1 = UIBarButtonItem.init(image: UIImage.init(named: "modicon")?.resizeImageWith(newSize: CGSize.init(width: 30, height: 30)), style: .plain, target: nil, action: nil)
     updateBarButtons()
     tableView.rowHeight = UITableView.automaticDimension
     tableView.estimatedRowHeight = 76
-    
+
     noModulesLabel.text = "ModulesView_NoModules".l13n()
-    
+
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
     self.view.addGestureRecognizer(longPressRecognizer)
   }
-  
+
   deinit {
     modulePlayer.removePlayerObserver(self)
   }
-  
+
   @objc func longPressed(sender: UILongPressGestureRecognizer) {
     if sender.state == UIGestureRecognizer.State.began {
       let touchPoint = sender.location(in: self.tableView)
@@ -119,7 +118,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
       }
     }
   }
-  
+
   @objc func handleBarButtonPress(sender: UIBarButtonItem) {
     if let key = LocalSortKey.init(rawValue: sender.tag) {
       log.debug(key)
@@ -136,25 +135,31 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
     }
     updateBarButtons()
   }
-  
+
   func updateBarButtons() {
     let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .light, scale: .large)
     let importImage = UIImage.init(systemName: "square.and.arrow.down", withConfiguration: config)
-    let addBtn = UIBarButtonItem.init(image: importImage, style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
+    let addBtn = UIBarButtonItem.init(image: importImage, style: .plain, target: self,
+                                      action: #selector(handleBarButtonPress(sender:)))
     addBtn.tag = -2 // no sort key for import button
-    let btn1 = UIBarButtonItem.init(title: "ModuleInfo_Type".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
+    let btn1 = UIBarButtonItem.init(title: "ModuleInfo_Type".l13n(), style: .plain, target: self,
+                                    action: #selector(handleBarButtonPress(sender:)))
     btn1.tag = LocalSortKey.type.rawValue
-    let btn2 = UIBarButtonItem.init(title: "G_Module".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
+    let btn2 = UIBarButtonItem.init(title: "G_Module".l13n(), style: .plain, target: self,
+                                    action: #selector(handleBarButtonPress(sender:)))
     btn2.tag = LocalSortKey.module.rawValue
     let btn3 = UIBarButtonItem.init(title: "ModuleInfo_Handle".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
     btn3.tag = LocalSortKey.composer.rawValue
-    let btn4 = UIBarButtonItem.init(title: "ModuleInfo_Size".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
+    let btn4 = UIBarButtonItem.init(title: "ModuleInfo_Size".l13n(), style: .plain, target: self,
+                                    action: #selector(handleBarButtonPress(sender:)))
     btn4.tag = LocalSortKey.size.rawValue
-    let btn5 = UIBarButtonItem.init(image: UIImage.init(named: "favestar-yellow"), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
+    let btn5 = UIBarButtonItem.init(image: UIImage.init(named: "favestar-yellow"), style: .plain, target: self,
+                                    action: #selector(handleBarButtonPress(sender:)))
     btn5.tag = LocalSortKey.favorite.rawValue
-    let btn6 = UIBarButtonItem.init(title: "ModulesView_Filter".l13n(), style: .plain, target: self, action: #selector(handleBarButtonPress(sender:)))
+    let btn6 = UIBarButtonItem.init(title: "ModulesView_Filter".l13n(), style: .plain, target: self,
+                                    action: #selector(handleBarButtonPress(sender:)))
     btn6.tag = -1 // No sort key for filter
-    
+
     _ = [addBtn, btn1, btn2, btn3, btn4, btn5, btn6].map {
       if $0.tag == sortKey.rawValue {
         $0.tintColor = UIColor.white
@@ -166,21 +171,21 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
         $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: Appearance.barTitleColor], for: .highlighted)
       }
     }
-    
+
     self.navigationItem.leftBarButtonItems = [addBtn, btn1, btn2, btn3]
     self.navigationItem.rightBarButtonItems = [btn6, btn5, btn4]
   }
-  
+
   // MARK: Do something
   func prepareView() {
     let request = Local.SortFilter.Request(sortKey: .module, filterText: nil, ascending: true)
     interactor?.sortAndFilter(request: request)
   }
-  
+
   func displayModules(viewModel: Local.SortFilter.ViewModel) {
     tableView.reloadData()
   }
-  
+
   func displayPlayerError(message: String) {
     let av = UIAlertController.init(title: nil, message: message, preferredStyle: .alert)
     self.present(av, animated: true)
@@ -188,15 +193,15 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
       av.dismiss(animated: true, completion: nil)
     }
   }
-  
+
   func displayRowDeletion(indexPath: IndexPath) {
     tableView.deleteRows(at: [indexPath], with: .fade)
   }
-  
+
   func displayRowUpdate(indexPath: IndexPath) {
     tableView.reloadRows(at: [indexPath], with: .automatic)
   }
-  
+
   func displayRowInsert(indexPath: IndexPath) {
     tableView.insertRows(at: [indexPath], with: .automatic)
   }
@@ -221,11 +226,11 @@ extension LocalViewController: UITableViewDataSource {
     }
     return count
   }
-  
+
   func numberOfSections(in tableView: UITableView) -> Int {
     return 1
   }
-  
+
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     if let cell = tableView.dequeueReusableCell(withIdentifier: "ModuleCell") as? ModuleCell {
       if let module = interactor?.getModule(at: indexPath) {
@@ -236,11 +241,11 @@ extension LocalViewController: UITableViewDataSource {
     }
     return UITableViewCell()
   }
-  
+
   func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
     return "ModulesView_Delete".l13n()
   }
-  
+
   func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
     if editingStyle == .delete {
       interactor?.deleteModule(at: indexPath)
@@ -253,7 +258,7 @@ extension LocalViewController: ModulePlayerObserver {
   func moduleChanged(module: MMD, previous: MMD?) {
     //    tableView?.reloadData()
   }
-  
+
   func statusChanged(status: PlayerStatus) {
     if status == .stopped || status == .initialised {
       tableBottomConstraint?.constant = 0
@@ -266,11 +271,11 @@ extension LocalViewController: ModulePlayerObserver {
   func doHandleStatusChange(_ status: PlayerStatus) {
 
   }
-  
+
   func errorOccurred(error: PlayerError) {
     // nop at the moment
   }
-  
+
   func queueChanged(changeType: QueueChange) {
   }
 }
@@ -290,11 +295,11 @@ extension LocalViewController: ModuleCellDelegate {
     }
     interactor?.toggleFavorite(at: ip)
   }
-  
+
   func saveTapped(cell: ModuleCell) {
-    
+
   }
-  
+
   func shareTapped(cell: ModuleCell) {
     guard let ip = tableView.indexPath(for: cell),
       let mod = interactor?.getModule(at: ip) else {
@@ -302,9 +307,9 @@ extension LocalViewController: ModuleCellDelegate {
     }
     shareUtil.shareMod(mod: mod)
   }
-  
+
   func longTap(cell: ModuleCell) {
-    
+
     guard let ip = tableView.indexPath(for: cell),
       let mod = interactor?.getModule(at: ip) else {
         return

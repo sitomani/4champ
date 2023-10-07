@@ -30,7 +30,7 @@ enum DownloadStatus: Equatable {
             return false
         }
     }
-    
+
     case unknown
     case downloading(progress: Int)
     case complete
@@ -54,7 +54,7 @@ enum PlaylistSelector {
         var status: DownloadStatus
     }
   }
-    
+
     enum Append {
         struct Request {
             let module: MMD
@@ -67,7 +67,7 @@ enum PlaylistSelector {
             let status: DownloadStatus
         }
     }
-    
+
     enum Delete {
         struct Request {
             let module: MMD

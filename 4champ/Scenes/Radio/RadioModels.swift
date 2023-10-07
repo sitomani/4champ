@@ -28,39 +28,39 @@ enum Radio {
       var powerOn: Bool
       var channel: RadioChannel
     }
-    
+
     struct Response {
       var status: RadioStatus
     }
-    
+
     struct ViewModel {
       var status: RadioStatus
     }
   }
-  
+
   enum Playback {
     struct Response {
       var length: Int
       var elapsed: Int
     }
-    
+
     struct ViewModel {
       var timeLeft: String
     }
   }
-  
+
   enum ChannelBuffer {
     struct Response {
       var buffer: [MMD]
     }
-    
+
     struct ViewModel {
       var nowPlaying: MMD?
       var nextUp: String?
       var historyAvailable: Bool
     }
   }
-  
+
   enum LocalNotifications {
     struct Request {}
     struct Response {
@@ -71,7 +71,7 @@ enum Radio {
       var imageName: String
     }
   }
-  
+
   enum NewModules {
     struct Response {
       let badgeValue: Int

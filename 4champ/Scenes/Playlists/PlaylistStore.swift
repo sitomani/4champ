@@ -25,26 +25,26 @@ class PlaylistStore: ObservableObject, PlaylistDisplayLogic {
 
   @Published var viewModel: Playlists.Select.ViewModel
   @Published var nowPlaying: Bool
-  
+
   // MARK: Setup
-  
+
   init() {
     viewModel = Playlists.Select.ViewModel(playlistName: "", shuffle: false, modules: [])
     nowPlaying = false
     modulePlayer.addPlayerObserver(self)
     moduleStorage.addStorageObserver(self)
   }
-  
+
   init(viewModel: Playlists.Select.ViewModel) {
     nowPlaying = false
     self.viewModel = viewModel
   }
-  
+
   deinit {
     modulePlayer.removePlayerObserver(self)
     moduleStorage.removeStorageObserver(self)
   }
-  
+
   func setup() {
     let viewController = self
     let interactor = PlaylistInteractor()
@@ -57,11 +57,11 @@ class PlaylistStore: ObservableObject, PlaylistDisplayLogic {
     router.dataStore = interactor
     interactor.selectPlaylist(request: Playlists.Select.Request(playlistId: ""))
   }
-  
+
   func displayPlaylist(viewModel: Playlists.Select.ViewModel) {
     self.viewModel = viewModel
   }
-  
+
   func displayModeChange(shuffled: Bool) {
     self.viewModel.shuffle = shuffled
   }
@@ -71,7 +71,7 @@ extension PlaylistStore: ModulePlayerObserver {
   func moduleChanged(module: MMD, previous: MMD?) {
     hostingController?.rootView.navigationButtonID = UUID()
   }
-  
+
   func statusChanged(status: PlayerStatus) {
     if status == .stopped || status == .initialised {
       nowPlaying = false
@@ -79,11 +79,11 @@ extension PlaylistStore: ModulePlayerObserver {
       nowPlaying = true
     }
   }
-  
+
   func errorOccurred(error: PlayerError) {
     // nop at the moment
   }
-  
+
   func queueChanged(changeType: QueueChange) {
     // nop
   }
@@ -93,7 +93,7 @@ extension PlaylistStore: ModuleStorageObserver {
   func metadataChange(_ mmd: MMD) {
     // nop
   }
-  
+
   func playlistChange() {
     let req = Playlists.Select.Request(playlistId: moduleStorage.currentPlaylist?.plId ?? "default")
     interactor?.selectPlaylist(request: req)

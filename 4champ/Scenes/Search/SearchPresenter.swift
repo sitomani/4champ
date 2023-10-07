@@ -21,7 +21,7 @@ protocol SearchPresentationLogic {
 /// objects into presentable structs for `SearchViewController`
 class SearchPresenter: SearchPresentationLogic {
   weak var viewController: SearchDisplayLogic?
-  
+
   func presentGroups(response: Search.GroupResponse) {
     let groups: [GroupInfo] = response.result.compactMap { g in
       guard let gUri = URL.init(string: g.href),
@@ -35,7 +35,7 @@ class SearchPresenter: SearchPresentationLogic {
                                                               groups: groups,
                                                               text: response.text))
   }
-  
+
   func presentComposers(response: Search.ComposerResponse) {
     let composers: [ComposerInfo] = response.result.compactMap { c in
       guard let cUri = URL.init(string: c.handle.href) else { return nil }
@@ -49,7 +49,7 @@ class SearchPresenter: SearchPresentationLogic {
                                                               groups: [],
                                                               text: response.text))
   }
-  
+
   func presentModules(response: Search.ModuleResponse) {
     let mods: [MMD] = response.result.map {
       let modUri = URL.init(string: $0.name.href)
@@ -73,13 +73,13 @@ class SearchPresenter: SearchPresentationLogic {
         }.sorted { (a, b) -> Bool in
         return a.name!.compare(b.name!, options: .caseInsensitive) == .orderedAscending
     }
-    
+
     viewController?.displayResult(viewModel: Search.ViewModel(modules: mods,
                                                               composers: [],
                                                               groups: [],
                                                               text: response.text))
   }
-  
+
   func presentDownloadProgress(response: Search.ProgressResponse) {
     var vm = Search.ProgressResponse.ViewModel(progress: response.progress)
     if let _ = response.error {
@@ -87,7 +87,7 @@ class SearchPresenter: SearchPresentationLogic {
     }
     viewController?.displayDownloadProgress(viewModel: vm)
   }
-  
+
   func presentBatchProgress(response: Search.BatchDownload.Response) {
     log.debug("")
     let processedCount = response.originalQueueLength - response.queueLength + (response.queueLength > 0 ? 1 : 0)
@@ -99,14 +99,14 @@ class SearchPresenter: SearchPresentationLogic {
       self.viewController?.displayBatchProgress(viewModel: vm)
     }
   }
-  
+
   func presentMetadataChange(response: Search.MetaDataChange.Response) {
     let vm = Search.MetaDataChange.ViewModel(module: response.module)
     DispatchQueue.main.async {
       self.viewController?.displayMetaDataChange(viewModel: vm)
     }
   }
-  
+
   func presentDeletion(response: Search.MetaDataChange.Response) {
     let vm = Search.MetaDataChange.ViewModel(module: response.module)
     DispatchQueue.main.async {

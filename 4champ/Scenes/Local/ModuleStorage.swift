@@ -10,7 +10,7 @@ import CoreData
 
 protocol ModuleStorageInterface {
   var currentPlaylist: Playlist? { get set }
-  
+
   func createFRC<T: NSManagedObject>(fetchRequest: NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T>
   func addStorageObserver(_ observer: ModuleStorageObserver)
   func removeStorageObserver(_ observer: ModuleStorageObserver)
@@ -19,12 +19,12 @@ protocol ModuleStorageInterface {
   func getModuleById(_ id: Int) -> MMD?
   func getRandomModule() -> MMD?
   func deleteModule(module: MMD)
-  
+
   func createPlaylist(name: String, id: String?) -> Playlist
   func saveContext()
   func fetchModuleInfo(_ id: Int) -> ModuleInfo?
   func fetchModuleInfoByKey(_ key: String) -> ModuleInfo?
-  
+
   /// Get unique id for a module
   /// - parameter service: Identifies the service for which to get the id for. Valid services are all non-amp ones.
   func getNextModuleId(service: ModuleService) -> Int
@@ -44,20 +44,20 @@ class ModuleStorage: NSObject {
     ModuleService.amp: 0..<1000000,
     ModuleService.local: 1000000..<2000000
   ]
-  
+
     // MARK: Core Data lazy initialisers
   private lazy var managedObjectModel: NSManagedObjectModel = {
     let modelURL = Bundle.main.url(forResource: "AmpCDModel", withExtension: "momd")!
     return NSManagedObjectModel(contentsOf: modelURL)!
   }()
-  
+
   private lazy var applicationDocumentsDirectory: URL = {
     // The directory the application uses to store the Core Data store file.
     // This code uses a directory named in the application's documents Application Support directory.
     let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
     return urls[urls.count-1]
   }()
-  
+
   lazy var managedObjectContext: NSManagedObjectContext = {
     var moc: NSManagedObjectContext?
 //    if #available(iOS 10.0, *) {
@@ -70,7 +70,7 @@ class ModuleStorage: NSObject {
 //    }
     return moc!
   }()
-  
+
   @available(iOS 10.0, *)
   private lazy var persistentContainer: NSPersistentContainer = {
     let container = NSPersistentContainer(name: "AmpCDModel")
@@ -81,7 +81,7 @@ class ModuleStorage: NSObject {
     })
     return container
   }()
-  
+
   private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
     let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
     let url = self.applicationDocumentsDirectory.appendingPathComponent("bbbb.sqlite")
@@ -95,23 +95,23 @@ class ModuleStorage: NSObject {
       var dict = [String: AnyObject]()
       dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data" as AnyObject?
       dict[NSLocalizedFailureReasonErrorKey] = failureReason as AnyObject?
-      
+
       dict[NSUnderlyingErrorKey] = error as NSError
       log.error("Unresolved error \(dict)")
       abort()
     }
     return coordinator
   }()
-    
+
   override init() {
     super.init()
     var _ = persistentStoreCoordinator
     let name = managedObjectContext.name
     log.info(name ?? "noname")
-    
+
     setCurrentPlaylist(playlist: getDefaultPlaylist())
   }
-  
+
   private func getDefaultPlaylist() -> Playlist {
     let fetchRequest = NSFetchRequest<Playlist>.init(entityName: "Playlist")
     fetchRequest.sortDescriptors = []
@@ -125,7 +125,7 @@ class ModuleStorage: NSObject {
     }
     return defaultPl
   }
-  
+
   private func setCurrentPlaylist(playlist: Playlist?) {
     _currentPlaylist = playlist
     _ = observers.map { $0.playlistChange() }
@@ -141,19 +141,22 @@ extension ModuleStorage: ModuleStorageInterface {
       setCurrentPlaylist(playlist: newValue)
     }
   }
-  
-  func createFRC<T>(fetchRequest: NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T> where T: NSManagedObject {
+
+  func createFRC<T>(fetchRequest: NSFetchRequest<T>,
+                    entityName: String) -> NSFetchedResultsController<T> where T: NSManagedObject {
 
     // Initialize Fetch Request
-    let fetchedResultsController = NSFetchedResultsController<T>(fetchRequest: fetchRequest, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-      
+    let fetchedResultsController = NSFetchedResultsController<T>(fetchRequest: fetchRequest,
+                                                                 managedObjectContext: managedObjectContext,
+                                                                 sectionNameKeyPath: nil, cacheName: nil)
+
     return fetchedResultsController
   }
-  
+
   func addStorageObserver(_ observer: ModuleStorageObserver) {
     observers.append(observer)
   }
-  
+
   func removeStorageObserver(_ observer: ModuleStorageObserver) {
     if let index = observers.firstIndex(where: { mso -> Bool in
       return mso === observer
@@ -161,13 +164,13 @@ extension ModuleStorage: ModuleStorageInterface {
       observers.remove(at: index)
     }
   }
-  
+
   func addModule(module: MMD) {
     log.debug("")
     guard getModuleById(module.id!) == nil else {
       return // already saved
     }
-    
+
     let cdModule = ModuleInfo.init(entity: NSEntityDescription.entity(forEntityName: "ModuleInfo", in: managedObjectContext)!, insertInto: managedObjectContext)
     cdModule.modAuthor = module.composer
     cdModule.modName = module.name
@@ -187,13 +190,13 @@ extension ModuleStorage: ModuleStorageInterface {
     cdModule.serviceId = NSNumber.init(value: module.serviceId?.rawValue ?? 1)
     cdModule.serviceKey = module.serviceKey
     saveContext()
-    
+
     let mmd = MMD.init(cdi: cdModule)
     _ = observers.map {
       $0.metadataChange(mmd)
     }
   }
-  
+
   func deleteModule(module: MMD) {
     if let moduleInfo = fetchModuleInfo(module.id!) {
       if let localPath = moduleInfo.modLocalPath {
@@ -212,7 +215,7 @@ extension ModuleStorage: ModuleStorageInterface {
       }
     }
   }
-  
+
   func getRandomModule() -> MMD? {
     guard let allModules = try? managedObjectContext.fetch(NSFetchRequest.init(entityName: "ModuleInfo")),
     allModules.count > 0 else {
@@ -224,14 +227,14 @@ extension ModuleStorage: ModuleStorageInterface {
     }
     return nil
   }
-  
+
   func getModuleById(_ id: Int) -> MMD? {
     if let moduleInfo = fetchModuleInfo(id) {
       return MMD.init(cdi: moduleInfo)
     }
     return nil
   }
-  
+
   func toggleFavorite(module: MMD) -> MMD? {
     addModule(module: module)
     if let cdModule = fetchModuleInfo(module.id!),
@@ -251,20 +254,20 @@ extension ModuleStorage: ModuleStorageInterface {
     }
     return nil
   }
-  
+
   func createPlaylist(name: String, id: String?) -> Playlist {
     let cdPlaylist = Playlist.init(entity: NSEntityDescription.entity(forEntityName: "Playlist", in: managedObjectContext)!, insertInto: managedObjectContext)
-    
+
     let plId = id ?? UUID().uuidString
     cdPlaylist.plId = plId
     cdPlaylist.plName = name
     cdPlaylist.locked = false
 
     saveContext()
-    
+
     return cdPlaylist
   }
-  
+
   func saveContext() {
     do {
       try managedObjectContext.save()
@@ -272,21 +275,21 @@ extension ModuleStorage: ModuleStorageInterface {
       log.error(error)
     }
   }
-  
+
   func fetchModuleInfo(_ id: Int) -> ModuleInfo? {
     let fetchRequest = NSFetchRequest<ModuleInfo>.init(entityName: "ModuleInfo")
     let predicate = NSPredicate.init(format: "modId == \(id)")
     fetchRequest.predicate = predicate
     return fetchModuleInfo(fetchRequest)
   }
-  
+
   func fetchModuleInfoByKey(_ key: String) -> ModuleInfo? {
     let fetchRequest = NSFetchRequest<ModuleInfo>.init(entityName: "ModuleInfo")
     let predicate = NSPredicate.init(format: "serviceKey == %@", key)
     fetchRequest.predicate = predicate
     return fetchModuleInfo(fetchRequest)
   }
-  
+
   func getNextModuleId(service: ModuleService) -> Int {
     guard let range = idRanges[service] else {
       fatalError("Invalid service or no range found")
@@ -297,14 +300,14 @@ extension ModuleStorage: ModuleStorageInterface {
     request.fetchLimit = 1
     let sortDescriptor = NSSortDescriptor(key: "modId", ascending: false)
     request.sortDescriptors = [sortDescriptor]
-    
+
     if let modInfo = fetchModuleInfo(request), let modId = modInfo.modId?.intValue {
       return modId + 1
     }
     // no IDs yet for this service range
     return range.lowerBound
   }
-    
+
   private func fetchModuleInfo(_ request: NSFetchRequest<ModuleInfo>) -> ModuleInfo? {
     do {
       let match = try managedObjectContext.fetch(request)

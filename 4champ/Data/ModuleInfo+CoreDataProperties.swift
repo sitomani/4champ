@@ -33,7 +33,7 @@ extension ModuleInfo: Identifiable {
     @NSManaged public var playlists: NSSet?
     @NSManaged public var serviceId: NSNumber?
     @NSManaged public var serviceKey: String?
-    
+
     public var id: Int {
         return modId?.intValue ?? 0
     }

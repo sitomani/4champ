@@ -13,9 +13,9 @@ protocol AboutPresentationLogic {
 
 class AboutPresenter: AboutPresentationLogic {
   weak var viewController: AboutDisplayLogic?
-  
+
   // MARK: Do something
-  
+
   func presentStatus(_ status: About.Status.Response) {
     let vm = About.Status.ViewModel(isPlaying: status.isPlaying)
     viewController?.displayNowPlaying(vm)

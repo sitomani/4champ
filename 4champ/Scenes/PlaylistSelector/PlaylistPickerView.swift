@@ -26,11 +26,11 @@ struct PlaylistPickerView: View {
     var deleteAction: (() -> Void)
     @ObservedObject var store: PlaylistSelectorStore
     @Environment(\.presentationMode) var presentationMode
-    
+
     func addModuleToPlaylist() {
         addToPlaylistAction?(store.viewModel.currentPlaylistIndex)
     }
-    
+
     var body: some View {
         ZStack {
             Color.clear
@@ -48,7 +48,10 @@ struct PlaylistPickerView: View {
                                 Image("trashcan").renderingMode(.template).foregroundColor(.red)
                                 Text("ModulesView_Delete")
                             }.frame(maxWidth: .infinity, minHeight: 50)
-                        }).background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 8, leading: 5, bottom: -12, trailing: 5)).foregroundColor(.red)
+                        }).background(Color(Appearance.veryLightGray))
+                            .cornerRadius(5)
+                            .padding(EdgeInsets(top: 8, leading: 5, bottom: -12, trailing: 5))
+                            .foregroundColor(.red)
                     }
                     if store.viewModel.service == .amp {
                     Button(action: {
@@ -71,7 +74,9 @@ struct PlaylistPickerView: View {
                                 Text(self.store.viewModel.playlistOptions[$0]).foregroundColor(Color(.black))
                             }
                         }.labelsHidden().background(Color(Appearance.veryLightGray))
-                    }.frame(maxWidth: .infinity).background(Color(Appearance.veryLightGray)).cornerRadius(5).padding(EdgeInsets(top: 5, leading: 5, bottom: -5, trailing: 5))
+                    }.frame(maxWidth: .infinity)
+                        .background(Color(Appearance.veryLightGray)).cornerRadius(5)
+                        .padding(EdgeInsets(top: 5, leading: 5, bottom: -5, trailing: 5))
                     HStack {
                         Button(action: addModuleToPlaylist, label: {
                             Text("PlaylistSelector_Add").frame(maxWidth: .infinity, minHeight: 50).background(Color(Appearance.veryLightGray))
@@ -82,7 +87,7 @@ struct PlaylistPickerView: View {
                     }.background(Color.black.opacity(0.0))
                 }.background(Color(.black).opacity(0.25))
             }
-            
+
             if self.store.viewModel.status == .downloading(progress: 0) {
                 withAnimation {
                     ZStack {

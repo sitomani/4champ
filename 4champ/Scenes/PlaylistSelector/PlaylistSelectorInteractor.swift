@@ -24,26 +24,26 @@ protocol PlaylistSelectorDataStore {
 class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelectorDataStore {
   var presenter: PlaylistSelectorPresentationLogic?
   var frc: NSFetchedResultsController<Playlist>?
-  
+
   private var playlists: [PLMD] = []
   private var module: MMD?
   private var selectedPlaylist: Playlist?
-  
+
   func prepare(request: PlaylistSelector.PrepareSelection.Request) {
     self.module = request.module
     let fetchRequest = NSFetchRequest<Playlist>.init(entityName: "Playlist")
     fetchRequest.sortDescriptors = []
-    
+
     let filterString = "plId != 'radioList'"
     fetchRequest.predicate = NSPredicate.init(format: filterString)
     frc = moduleStorage.createFRC(fetchRequest: fetchRequest, entityName: "Playlist")
     try? frc?.performFetch()
-    
+
     if let plObjects = frc?.fetchedObjects {
       var plMetaData = plObjects.map {
         PLMD(id: $0.plId, name: $0.plName, current: false, modules: [] )
       }
-      
+
       for pl in plObjects {
         for mi in pl.modules ?? [] {
           let modId = (mi as? ModuleInfo)?.modId?.intValue ?? 0
@@ -52,7 +52,7 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
           }
         }
       }
-      
+
       plMetaData.sort { (pla, plb) -> Bool in
         if pla.id == "default" {
           return true
@@ -62,9 +62,9 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
         }
         return pla.name! < plb.name!
       }
-      
+
       playlists = plMetaData
-      
+
       let response = PlaylistSelector.PrepareSelection.Response(module: request.module, playlistOptions: plMetaData)
       presenter?.presentSelector(response: response)
     }
@@ -73,11 +73,11 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
     guard let modId = module?.id else {
       return
     }
-    
+
     let target = playlists[request.playlistIndex].id ?? "default"
     let pl = getPlaylist(with: target)
     let completed = PlaylistSelector.Append.Response(status: DownloadStatus.complete)
-    
+
     selectedPlaylist = pl
     // Three scenarios:
     if let modInfo = moduleStorage.fetchModuleInfo(modId) {
@@ -101,11 +101,11 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
       }
     }
   }
-  
+
   func deleteModule(request: PlaylistSelector.Delete.Request) {
     moduleStorage.deleteModule(module: request.module)
   }
-  
+
   private func getPlaylist(with id: String) -> Playlist? {
     let fetchRequest = NSFetchRequest<Playlist>.init(entityName: "Playlist")
     fetchRequest.sortDescriptors = []

@@ -19,9 +19,9 @@ protocol LocalDataPassing {
 class LocalRouter: NSObject, LocalRoutingLogic, LocalDataPassing {
   weak var viewController: LocalViewController?
   var dataStore: LocalDataStore?
-  
+
   // MARK: Routing
-  
+
     func toPlaylistSelector(module: MMD) {
         let hvc = PlaylistSelectorStore.buildPicker(module: module)
         viewController?.present(hvc, animated: true, completion: nil)

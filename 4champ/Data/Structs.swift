@@ -29,9 +29,9 @@ struct Notifications {
 struct MMD: Identifiable {
   init() {
   }
-  
+
   static let supportedTypes: [String] = Replay.supportedFormats
-    
+
   init(cdi: ModuleInfo) {
     self.init()
     self.composer = cdi.modAuthor
@@ -51,7 +51,7 @@ struct MMD: Identifiable {
     self.serviceKey = cdi.serviceKey
     self.favorite = cdi.modFavorite?.boolValue ?? false
   }
-  
+
   init(path: String, modId: Int) {
     self.init()
     downloadPath = URL.init(string: path)
@@ -69,7 +69,7 @@ struct MMD: Identifiable {
       }
     }
   }
-  
+
   var id: Int?
   var name: String?
   var type: String?
@@ -87,7 +87,7 @@ struct MMD: Identifiable {
     }
     return false
   }
-  
+
   func hasBeenSaved() -> Bool {
     guard let modId = self.id else {
       return false
@@ -95,14 +95,14 @@ struct MMD: Identifiable {
     let saved = moduleStorage.getModuleById(modId)
     return saved != nil
   }
-  
+
   func queueIndex() -> Int? {
     if let queueIndex = modulePlayer.playQueue.firstIndex(of: self) {
       return queueIndex
     }
     return nil
   }
-  
+
   func supported() -> Bool {
     if MMD.supportedTypes.contains(self.type ?? "") && (self.note?.count ?? 0) == 0 {
       return true

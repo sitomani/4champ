@@ -14,7 +14,7 @@ extension Playlist: Identifiable {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Playlist> {
         return NSFetchRequest<Playlist>(entityName: "Playlist")
     }
-    
+
     @NSManaged public var locked: NSNumber?
     @NSManaged public var playhead: NSNumber?
     @NSManaged public var playmode: NSNumber?

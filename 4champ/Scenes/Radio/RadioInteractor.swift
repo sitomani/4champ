@@ -15,38 +15,38 @@ protocol RadioBusinessLogic {
   /// - parameters:
   ///   - request: Control parameters (on/off/channel) in a `Radio.Control.Request` struct
   func controlRadio(request: Radio.Control.Request)
-  
+
   /// Set current playing song favorite status
   func toggleFavorite()
-  
+
   /// Skips current module and starts playing the next one
   func playNext()
-  
+
   /// Goes back in current radio session history to previous tune
   /// May trigger re-fetch for a module
   func playPrev()
-    
+
   /// Refresh the new module notifications status
   func refreshLocalNotificationsStatus()
-  
+
   /// Request local notifications
   func requestLocalNotifications()
-  
+
   /// Refresh badge
   func refreshBadge()
-  
+
   /// Trigger save for current module
   func saveCurrentModule()
-  
+
   /// Trigger share for current module
   func shareCurrentModule()
-  
+
   /// Get number of modules in play queue + radio session history
   func getSessionLength() -> Int
-  
+
   /// Get a given module in the session.
   func getModule(at: IndexPath) -> MMD?
-  
+
   /// Play a module from session history (play queue will not be touched)
   /// - parameters:
   ///    - at: Specifies indexpath (=> row) in session history
@@ -71,9 +71,9 @@ enum PostFetchAction {
 }
 
 class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemoteControl {
-  
+
   var presenter: RadioPresentationLogic?
-  
+
   private var lastPlayed: Int = 0 // identifier of the last module id played (used in New channel)
   private var postFetchAction: PostFetchAction = .appendToQueue // determines how to handle module at fetch complete
   private var ntfAuthorization: UNAuthorizationStatus = .notDetermined
@@ -91,7 +91,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       return true
     }
   }
-  
+
   var channel: RadioChannel = .all
   var status: RadioStatus = .off {
     didSet {
@@ -99,21 +99,22 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       modulePlayer.radioOn = self.radioOn
     }
   }
-  
+
   override init() {
     super.init()
     NotificationCenter.default.addObserver(self, selector: #selector(doBadgeUpdate(_:)), name: Notifications.badgeUpdate, object: nil)
-    NotificationCenter.default.addObserver(self, selector: #selector(refreshLocalNotificationsStatus), name: UIApplication.willEnterForegroundNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(refreshLocalNotificationsStatus),
+                                           name: UIApplication.willEnterForegroundNotification, object: nil)
   }
-  
+
   deinit {
     NotificationCenter.default.removeObserver(self)
   }
-  
+
   @objc func doBadgeUpdate(_ notification: Notification?) {
     self.presenter?.presentNewModules(response: Radio.NewModules.Response(badgeValue: settings.badgeCount))
   }
-  
+
   // MARK: Request handling
   func controlRadio(request: Radio.Control.Request) {
     log.debug(request)
@@ -129,7 +130,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       radioSessionHistory.removeAll()
       return
     }
-    
+
     modulePlayer.radioRemoteControl = self
     modulePlayer.addPlayerObserver(self)
     modulePlayer.cleanup()
@@ -143,7 +144,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     status = .on
     fillBuffer()
   }
-  
+
   func toggleFavorite() {
 
     guard let mod = modulePlayer.currentModule else {
@@ -152,12 +153,12 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     }
     _ = moduleStorage.toggleFavorite(module: mod)
   }
-  
+
   func playNext() {
     guard radioOn && modulePlayer.playQueue.count > 0 else { return }
     modulePlayer.playNext()
   }
-  
+
   func playPrev() {
     guard radioOn && radioSessionHistory.count > 0, let currentMod = modulePlayer.currentModule else { return }
 
@@ -171,7 +172,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       fetcher.fetchModule(ampId: prevId)
     }
   }
-  
+
   func playFromSessionHistory(at: IndexPath) {
     let historyIndex = at.row
     let mod = radioSessionHistory[historyIndex]
@@ -187,14 +188,14 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     let fetcher = ModuleFetcher.init(delegate: self)
     fetcher.fetchModule(ampId: radioSessionHistory[historyIndex].id!)
   }
-    
+
   func addToSessionHistory(module: MMD) {
     if !radioSessionHistory.contains(module) {
       radioSessionHistory.insert(module, at: 0)
       presenter?.presentSessionHistoryInsert()
     }
   }
-  
+
   @objc func refreshLocalNotificationsStatus() {
     log.debug("")
     let un = UNUserNotificationCenter.current()
@@ -206,54 +207,54 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       self.presenter?.presentNotificationStatus(response: response)
     }
   }
-  
+
   func requestLocalNotifications() {
     if self.ntfAuthorization == .authorized || self.ntfAuthorization == .denied {
       UIApplication.shared.open(URL.init(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
       return
     }
-    
+
     let un = UNUserNotificationCenter.current()
     un.requestAuthorization(options: [.badge, .sound, .alert]) { (_, _) in
       self.refreshLocalNotificationsStatus()
     }
   }
-  
+
   func refreshBadge() {
     log.debug("")
     doBadgeUpdate(nil)
   }
-  
+
   func shareCurrentModule() {
     guard radioOn, let mod = modulePlayer.currentModule else {
       return
     }
     shareUtil.shareMod(mod: mod)
   }
-  
+
   func saveCurrentModule() {
     guard radioOn, let mod = modulePlayer.currentModule else {
       return
     }
     moduleStorage.addModule(module: mod)
   }
-  
+
   func getSessionLength() -> Int {
     return radioSessionHistory.count
   }
-  
+
   func getModule(at: IndexPath) -> MMD? {
     guard radioSessionHistory.count > at.row else { return nil }
     return radioSessionHistory[at.row]
   }
-  
+
   // MARK: private functions
-  
+
   /// Stops current playback when radio is turned off, or channel is changed
   private func stopPlayback() {
     log.debug("")
     playbackTimer?.invalidate()
-    
+
     AF.session.getAllTasks { (tasks) in
       tasks.forEach {
         if !$0.currentRequest!.url!.absoluteString.contains("get_latest") {
@@ -261,7 +262,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
         }
       }
     }
-    
+
     status = .off
     lastPlayed = 0
     while modulePlayer.playQueue.count > 0 {
@@ -272,7 +273,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     periodicUpdate()
     triggerBufferPresentation()
   }
-  
+
   /// Triggers current radio playlist presentation
   private func triggerBufferPresentation() {
     log.debug("")
@@ -287,12 +288,12 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   private func removeBufferHead() {
     log.debug("")
     let current = modulePlayer.playQueue.removeFirst()
-    
+
     guard moduleStorage.getModuleById(current.id!) == nil else {
         // Not removing modules in local storage
         return
     }
-    
+
     if let url = current.localPath {
       log.info("Deleting module \(url.lastPathComponent)")
       do {
@@ -302,7 +303,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       }
     }
   }
-  
+
   /// Fills the radio buffer as needed (called when radio is turned on
   /// and when current module changes, to keep the buffer populated
   private func fillBuffer() {
@@ -314,7 +315,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       fetcher.fetchModule(ampId: id)
     }
   }
-  
+
   /// Returns next module id for buffer filling based on current radio channel selection
   /// - returns: id for the next module to load into buffer
   private func getNextModuleId() -> Int {
@@ -344,7 +345,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       return mod.id!
     }
   }
-  
+
   /// Playback time update periodic called from `playbackTimer`
   private func periodicUpdate() {
     var length = 0
@@ -373,14 +374,14 @@ extension RadioInteractor: ModuleFetcherDelegate {
       }
     case .downloading(let progress):
       status = .fetching(progress: progress)
-      
+
     case .done(let mmd):
       handleDownloadComplete(mmd)
-      
+
     default: ()
     }
   }
-  
+
   func handleDownloadComplete(_ mmd: MMD) {
     switch postFetchAction {
     case .appendToQueue:
@@ -391,7 +392,7 @@ extension RadioInteractor: ModuleFetcherDelegate {
       modulePlayer.play(mmd: mmd)
     }
     postFetchAction = .appendToQueue // reset to default
-    
+
     self.triggerBufferPresentation()
     if let first = modulePlayer.playQueue.first, first == mmd {
       modulePlayer.play(at: 0)
@@ -414,11 +415,11 @@ extension RadioInteractor: ModulePlayerObserver {
       addToSessionHistory(module: previous)
     }
   }
-  
+
   func statusChanged(status: PlayerStatus) {
     // nop at the moment
   }
-  
+
   func errorOccurred(error: PlayerError) {
     // Skip to next mod.
     guard radioOn else { return }
@@ -432,10 +433,10 @@ extension RadioInteractor: ModulePlayerObserver {
     default:
       log.error("Unknown error occurred")
     }
-    
+
     playNext()
   }
-  
+
   func queueChanged(changeType: QueueChange) {
     if changeType == .newPlaylist && radioOn {
       status = .off

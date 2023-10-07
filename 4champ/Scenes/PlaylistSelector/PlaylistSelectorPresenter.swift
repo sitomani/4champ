@@ -18,13 +18,13 @@ protocol PlaylistSelectorPresentationLogic {
 
 class PlaylistSelectorPresenter: PlaylistSelectorPresentationLogic {
     weak var viewController: PlaylistSelectorDisplayLogic?
-    
+
     func presentSelector(response: PlaylistSelector.PrepareSelection.Response) {
         var defaultString = ""
         var options: [String] = []
         var plIndex = 0
         for pl in response.playlistOptions {
-            
+
             let modTick = pl.modules.contains(response.module.id ?? 0) ? "✓" : ""
             let modPlay: String
             if pl.id == moduleStorage.currentPlaylist?.plId {
@@ -34,7 +34,7 @@ class PlaylistSelectorPresenter: PlaylistSelectorPresentationLogic {
                 modPlay = ""
             }
             let plstring = "\(modTick)\(modPlay) \(pl.name!) (\(pl.modules.count))"
-            
+
             if pl.id == "default" {
                 defaultString = "\(modTick)\(modPlay) \("PlaylistView_DefaultPlaylist".l13n()) (\(pl.modules.count))"
                 options.append(defaultString)
@@ -47,13 +47,17 @@ class PlaylistSelectorPresenter: PlaylistSelectorPresentationLogic {
         if let mName = response.module.name, let cName = response.module.composer, cName.count > 0 {
             moduleName = String.init(format: "LockScreen_Playing".l13n(), mName, cName)
         }
-        
+
         let status: DownloadStatus = response.module.hasBeenSaved() ? .complete : .unknown
-        
-        let viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: moduleName, service: response.module.serviceId, currentPlaylistIndex: plIndex, playlistOptions: options, status: status)
+
+        let viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: moduleName,
+                                                                    service: response.module.serviceId,
+                                                                    currentPlaylistIndex: plIndex,
+                                                                    playlistOptions: options,
+                                                                    status: status)
         viewController?.displaySelector(viewModel: viewModel)
     }
-    
+
     func presentAppend(response: PlaylistSelector.Append.Response) {
         let viewModel = PlaylistSelector.Append.ViewModel(status: response.status)
         viewController?.displayAppend(viewModel: viewModel)

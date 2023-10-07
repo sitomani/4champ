@@ -14,7 +14,7 @@ class NowPlayingView: UIView {
   @IBOutlet weak var saveButton: UIButton?
   @IBOutlet weak var faveButton: UIButton?
   @IBOutlet weak var shareButton: UIButton?
-  
+
   func setModule(_ module: MMD) {
     titleLabel?.text = "\(module.name!) (\(module.type!))"
     composerLabel?.text = module.composer!

@@ -19,40 +19,40 @@ protocol SearchDisplayLogic: class {
 class SearchViewController: UIViewController, SearchDisplayLogic {
   var interactor: SearchBusinessLogic?
   var router: (NSObjectProtocol & SearchRoutingLogic & SearchDataPassing)?
-  
+
   var searchScopes = [SearchType.composer, SearchType.module, SearchType.group, SearchType.meta]
-  
+
   var shouldDisplaySearchBar: Bool = true
-  
+
   @IBOutlet weak var tableBottomConstraint: NSLayoutConstraint?
   @IBOutlet weak var spinner: UIActivityIndicatorView?
   @IBOutlet weak var progressBar: UIProgressView?
-  
+
   var viewModel: Search.ViewModel?
   private var pagingRequestActive: Bool = false
   private var batchProgressView: UIAlertController?
-  
+
   private let progressMarks = ["◐", "◓", "◑", "◒"]
   private var progressMarkIndex = 0
   private var spinnerTimer: Timer?
-  
+
   @IBOutlet weak var searchBar: UISearchBar?
-  
+
   @IBOutlet weak var tableView: UITableView?
   // MARK: Object lifecycle
-  
+
   override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     setup()
   }
-  
+
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     setup()
   }
-  
+
   // MARK: Setup
-  
+
   private func setup() {
     let viewController = self
     let interactor = SearchInteractor()
@@ -65,7 +65,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     router.viewController = viewController
     router.dataStore = interactor
   }
-  
+
   // MARK: Routing
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if let scene = segue.identifier {
@@ -75,7 +75,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       }
     }
   }
-  
+
   // MARK: View lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -100,7 +100,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
         tf.leftView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
         tf.leftView?.tintColor = .lightGray
       }
-      
+
       searchBar?.scopeButtonTitles = searchScopes.map { $0.l13n() }
     } else {
       searchBar?.removeFromSuperview()
@@ -109,11 +109,11 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       spinner?.startAnimating()
       interactor?.triggerAutoFetchList()
     }
-    
+
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
     self.view.addGestureRecognizer(longPressRecognizer)
   }
-  
+
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     if shouldDisplaySearchBar {
@@ -125,19 +125,19 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     }
     self.statusChanged(status: modulePlayer.status)
   }
-  
+
   override func viewWillDisappear(_ animated: Bool) {
     if searchBar?.text?.count == 0 {
       navigationController?.setNavigationBarHidden(false, animated: animated)
       searchBar?.showsScopeBar = false
     }
   }
-  
+
   deinit {
     log.verbose("")
     modulePlayer.removePlayerObserver(self)
   }
-  
+
   // MARK: Display Logic
   func displayResult(viewModel: Search.ViewModel) {
     log.debug("")
@@ -146,7 +146,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       log.info("Search request result in after change in query. Canceling display")
       return
     }
-    
+
     if let pi = router?.dataStore?.pagingIndex, pi > 0 {
       log.debug("Appending to model")
       self.viewModel?.composers.append(contentsOf: viewModel.composers)
@@ -164,7 +164,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     }
     updateDownloadAllButton()
   }
-  
+
   func updateDownloadAllButton() {
     guard let vm = self.viewModel else {
       return
@@ -177,7 +177,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
           onlineOnly -= 1
         }
       }
-      
+
       let dlbutton = UIButton.init(type: .system)
       dlbutton.setImage(UIImage.init(named: "downloadall"), for: .normal)
       dlbutton.layoutMargins = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
@@ -187,11 +187,11 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       dlbutton.semanticContentAttribute = UIApplication.shared
         .userInterfaceLayoutDirection == .rightToLeft ? .forceLeftToRight : .forceRightToLeft
       navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: dlbutton)
-      
+
       dlbutton.isHidden = onlineOnly <= 0
     }
   }
-  
+
   func displayDownloadProgress(viewModel: Search.ProgressResponse.ViewModel) {
     if viewModel.progress < 1.0 {
       progressBar?.isHidden = false
@@ -207,7 +207,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       }
     }
   }
-  
+
   func displayBatchProgress(viewModel: Search.BatchDownload.ViewModel) {
     batchProgressView?.message = "(\(viewModel.processed) / \(viewModel.batchSize))"
     if viewModel.complete {
@@ -219,7 +219,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     }
     updateDownloadAllButton()
   }
-  
+
   func displayMetaDataChange(viewModel: Search.MetaDataChange.ViewModel) {
     self.viewModel?.updateModule(module: viewModel.module)
     if let modIndex = self.viewModel?.modules.index(of: viewModel.module) {
@@ -228,7 +228,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       tableView?.reloadData()
     }
   }
-  
+
   func displayDeletion(viewModel: Search.MetaDataChange.ViewModel) {
     self.viewModel?.updateModule(module: viewModel.module)
     if let modIndex = self.viewModel?.modules.index(of: viewModel.module) {
@@ -238,10 +238,10 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     }
     updateDownloadAllButton()
   }
-  
+
   @objc private func triggerDownloadAll(_ sender: UIBarButtonItem) {
     guard let vm = viewModel else { return }
-    
+
     // dismiss first just in case
     batchProgressView?.dismiss(animated: false, completion: nil)
     batchProgressView = UIAlertController.init(title: "Search_Downloading".l13n(), message: "()", preferredStyle: .alert)
@@ -254,7 +254,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     let request = Search.BatchDownload.Request(moduleIds: modids)
     interactor?.downloadModules(request)
   }
-  
+
   @objc func longPressed(sender: UILongPressGestureRecognizer) {
     if sender.state == UIGestureRecognizer.State.began {
       let touchPoint = sender.location(in: self.tableView)
@@ -266,7 +266,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       }
     }
   }
-  
+
   private func startBatchSpinner() {
     spinnerTimer?.invalidate()
     spinnerTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { (_) in
@@ -275,9 +275,9 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       self.progressMarkIndex = (self.progressMarkIndex + 1) % self.progressMarks.count
     })
   }
-  
+
   private func stopBatchSpinner() {
-    
+
   }
 }
 
@@ -286,16 +286,16 @@ extension SearchViewController: UISearchBarDelegate {
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     prepareSearch(keyword: searchText)
   }
-  
+
   func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
     searchBar.showsScopeBar = true
     navigationController?.setNavigationBarHidden(true, animated: true)
   }
-  
+
   func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
     prepareSearch(keyword: searchBar.text ?? "")
   }
-  
+
   private func prepareSearch(keyword: String) {
     NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(triggerSearch), object: nil)
     if keyword.count == 0 {
@@ -307,7 +307,7 @@ extension SearchViewController: UISearchBarDelegate {
       perform(#selector(triggerSearch), with: nil, afterDelay: Constants.searchDelay)
     }
   }
-  
+
   @objc private func triggerSearch() {
     log.debug("")
     guard let text = searchBar?.text, text.count > 0 else {
@@ -316,7 +316,7 @@ extension SearchViewController: UISearchBarDelegate {
     }
     interactor?.search(Search.Request(text: text, type: searchScopes[searchBar?.selectedScopeButtonIndex ?? 0], pagingIndex: 0))
   }
-  
+
 }
 
 // MARK: Datasource
@@ -327,17 +327,17 @@ extension SearchViewController: UITableViewDataSource {
     tableView.register(UINib(nibName: "ComposerCell", bundle: nil), forCellReuseIdentifier: "ComposerCell")
     tableView.register(UINib(nibName: "GroupCell", bundle: nil), forCellReuseIdentifier: "GroupCell")
   }
-  
+
   func numberOfSections(in tableView: UITableView) -> Int {
     return 1
   }
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return viewModel?.numberOfRows() ?? 0
   }
-  
+
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let vm = viewModel else { return UITableViewCell() }
-    
+
     let rows = vm.numberOfRows()
     let pagingIndex = router?.dataStore?.pagingIndex ?? 0
     if pagingIndex != rows &&
@@ -356,7 +356,7 @@ extension SearchViewController: UITableViewDataSource {
     }
     return cell
   }
-  
+
   func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
     guard (viewModel?.modules.count ?? 0) > 0 else {
       return nil
@@ -379,12 +379,12 @@ extension SearchViewController: UITableViewDataSource {
     guard (viewModel?.modules.count ?? 0) > 0 else {
       return
     }
-    
+
     if editingStyle == .delete {
       interactor?.deleteModule(at: indexPath)
     }
   }
-  
+
 }
 
 // MARK: Table view delegate
@@ -412,7 +412,7 @@ extension SearchViewController: UITableViewDelegate {
       router?.toModulesList(title: title, composerId: id)
     }
   }
-  
+
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     searchBar?.endEditing(true)
   }
@@ -423,7 +423,7 @@ extension SearchViewController: ModulePlayerObserver {
   func moduleChanged(module: MMD, previous: MMD?) {
     tableView?.reloadData()
   }
-  
+
   func statusChanged(status: PlayerStatus) {
     DispatchQueue.main.async {
       self.doHandleStatusChange(status: status)
@@ -438,12 +438,12 @@ extension SearchViewController: ModulePlayerObserver {
     }
     tableView?.reloadData()
   }
-  
+
   func errorOccurred(error: PlayerError) {
     let vm = Search.ProgressResponse.ViewModel(progress: 0, error: "Error_PlaybackFailed".l13n())
     displayDownloadProgress(viewModel: vm)
   }
-  
+
   func queueChanged(changeType: QueueChange) {
     // nop
   }
@@ -472,11 +472,11 @@ extension Search.ViewModel {
         cell.nameLabel?.text = group.name
         return cell
       }
-      
+
     }
     return UITableViewCell()
   }
-  
+
   func numberOfRows() -> Int {
     if modules.count > 0 {
       return modules.count
@@ -487,7 +487,7 @@ extension Search.ViewModel {
     }
     return 0
   }
-  
+
   mutating func updateModule(module: MMD) {
     if let index = self.modules.firstIndex(where: { (mmd) -> Bool in
       mmd.id == module.id
@@ -503,7 +503,7 @@ extension SearchViewController: ModuleCellDelegate {
       let module = viewModel?.modules[ip.row], let modId = module.id, module.supported() else {
         return
     }
-    
+
     if module.hasBeenSaved() {
       _ = moduleStorage.toggleFavorite(module: module)
     } else {
@@ -511,7 +511,7 @@ extension SearchViewController: ModuleCellDelegate {
       interactor?.downloadModules(request)
     }
   }
-  
+
   func saveTapped(cell: ModuleCell) {
     guard let ip = tableView?.indexPath(for: cell),
       let module = viewModel?.modules[ip.row], let modId = module.id, module.supported() else {
@@ -520,7 +520,7 @@ extension SearchViewController: ModuleCellDelegate {
     let request = Search.BatchDownload.Request(moduleIds: [modId])
     interactor?.downloadModules(request)
   }
-  
+
   func shareTapped(cell: ModuleCell) {
     guard let ip = tableView?.indexPath(for: cell),
           let module = viewModel?.modules[ip.row],
@@ -530,18 +530,18 @@ extension SearchViewController: ModuleCellDelegate {
     }
     shareUtil.shareMod(mod: module)
   }
-  
+
   func longTap(cell: ModuleCell) {
     if let ip = tableView?.indexPath(for: cell),
       let mmd = viewModel?.modules[ip.row] {
       router?.toPlaylistSelector(module: mmd)
     }
   }
-  
+
   func dismissAction() {
     self.dismiss( animated: true, completion: nil )
   }
-  
+
   func addAction(moduleId: Int, playlistId: String) {
     log.error("not expecting addAction")
   }

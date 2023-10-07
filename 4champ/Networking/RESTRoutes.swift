@@ -21,7 +21,7 @@ enum SearchType: String {
   case group
   case composer
   case meta
-  
+
   /**
    Returns the localized name for the search type (shown on search view)
   */
@@ -45,7 +45,7 @@ enum RESTRoutes: URLRequestConvertible {
   case search(type: SearchType, text: String, position: Int)
   case listComposers(groupId: Int)
   case listModules(composerId: Int)
-  
+
   /// network route tuple variable
   var route: (path: String, parameters: [String: Any]?) {
     switch self {
@@ -61,17 +61,17 @@ enum RESTRoutes: URLRequestConvertible {
       return("list_modules", ["t": composerId])
     }
   }
-  
+
   // URLRequestConvertible protocol implementation
   func asURLRequest() throws -> URLRequest {
     guard let url = URL.init(string: self.route.path, relativeTo: URL.init(string: "https://4champ.net")) else {
 //    guard let url = URL.init(string: self.route.path, relativeTo: URL.init(string: "http://localhost:8081")) else {
       throw NSError.init()
     }
-    
+
     var request = URLRequest(url: url)
     request.httpMethod = HTTPMethod.get.rawValue
-    
+
     let urlRequest = try Alamofire.URLEncoding.default.encode(request, with: route.parameters)
     return urlRequest
   }

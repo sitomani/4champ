@@ -19,7 +19,7 @@ protocol ModuleCellDelegate: class {
  */
 class ModuleCell: UITableViewCell {
   weak var delegate: ModuleCellDelegate?
-    
+
   @IBOutlet weak var nameLabel: UILabel?
   @IBOutlet weak var composerLabel: UILabel?
   @IBOutlet weak var sizeLabel: UILabel?
@@ -28,15 +28,15 @@ class ModuleCell: UITableViewCell {
   @IBOutlet weak var stopImage: UIImageView?
   @IBOutlet weak var saveButton: UIButton?
   @IBOutlet weak var shareButton: UIButton?
-  
+
   @IBAction func faveTapped(_ sender: UIButton) {
     delegate?.faveTapped(cell: self)
   }
-  
+
   @IBAction func saveTapped(_ sender: UIButton) {
     delegate?.saveTapped(cell: self)
   }
-  
+
   @IBAction func shareTapped(_ sender: UIButton) {
     delegate?.shareTapped(cell: self)
   }
@@ -48,7 +48,7 @@ extension ModuleCell {
     composerLabel?.text = module.composer!
     typeLabel?.text = module.type!
     stopImage?.isHidden = module.supported()
-    
+
     if module.hasBeenSaved() || module.supported() == false {
       sizeLabel?.text = "\(module.size!) Kb"
       saveButton?.isHidden = true
@@ -63,7 +63,7 @@ extension ModuleCell {
     faveButton?.isSelected = module.favorite
     faveButton?.isHidden = !module.supported()
   }
-  
+
   func showMessageOverlay(message: String) {
     let lbl = UILabel.init(frame: self.contentView.frame)
     lbl.backgroundColor = Appearance.errorColor

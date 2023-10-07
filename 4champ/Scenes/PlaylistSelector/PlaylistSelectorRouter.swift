@@ -18,9 +18,9 @@ protocol PlaylistSelectorDataPassing {
 
 class PlaylistSelectorRouter: NSObject, PlaylistSelectorRoutingLogic, PlaylistSelectorDataPassing {
   var dataStore: PlaylistSelectorDataStore?
-  
+
   // MARK: Routing
-  
+
   // func routeToSomewhere(segue: UIStoryboardSegue?)
   // {
   //  if let segue = segue {
@@ -37,14 +37,14 @@ class PlaylistSelectorRouter: NSObject, PlaylistSelectorRoutingLogic, PlaylistSe
   // }
 
   // MARK: Navigation
-  
+
   // func navigateToSomewhere(source: PlaylistSelectorViewController, destination: SomewhereViewController)
   // {
   //  source.show(destination, sender: nil)
   // }
-  
+
   // MARK: Passing data
-  
+
   // func passDataToSomewhere(source: PlaylistSelectorDataStore, destination: inout SomewhereDataStore)
   // {
   //  destination.name = source.name

@@ -113,7 +113,7 @@ extension AboutViewController: UITableViewDataSource {
       return interactor?.details.licenseNames.count ?? 0
     }
   }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 && indexPath.section == 1 {
             let twitterUrl = URL(string: "https://twitter.com/4champ_app")!
@@ -149,7 +149,8 @@ extension AboutViewController: UITableViewDelegate {
       let images = interactor?.details.images,
       section < titles.count && section < images.count else { return UIView() }
 
-    return AboutHeaderView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.size.width, height: 40), titleKey: titles[section], imageKey: images[section])
+    return AboutHeaderView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.size.width, height: 40),
+                                titleKey: titles[section], imageKey: images[section])
   }
 
   func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {

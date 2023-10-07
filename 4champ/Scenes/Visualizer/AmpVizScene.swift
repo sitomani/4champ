@@ -15,11 +15,11 @@ struct VizConstants {
 class AmpVolumeBar: SKShapeNode {
     var channel: Int = 0
     var rlTimer: Timer = Timer.init()
-    
+
     deinit {
         rlTimer.invalidate()
     }
-    
+
     func startDrawing() {
         // Drawing callback on timer rather than performselector, otherwise
         // the drawing stops while a scrollview scrolls
@@ -27,11 +27,11 @@ class AmpVolumeBar: SKShapeNode {
         rlTimer = Timer.scheduledTimer(timeInterval: 0.017, target: self, selector: #selector(AmpVolumeBar.updateBar), userInfo: nil, repeats: true)
         RunLoop.current.add(rlTimer, forMode: RunLoop.Mode.common)
     }
-    
+
     func stopDrawing() {
         rlTimer.invalidate()
     }
-    
+
     @objc func updateBar() {
         let vol = modulePlayer.renderer.volume(onChannel: channel)
         yScale = CGFloat(vol) / 100
@@ -47,7 +47,7 @@ class AmpVolumeBar: SKShapeNode {
 
 class AmpVizScene: SKScene {
     var sceneInited: Bool = false
-    
+
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         self.backgroundColor = UIColor(red: 0.07, green: 0.20, blue: 0.34, alpha: 1.0)
@@ -56,10 +56,10 @@ class AmpVizScene: SKScene {
             sceneInited = true
         }
     }
-    
+
     override func willMove(from view: SKView) {
         super.willMove(from: view)
-        
+
         // must explicitly stop drawing in all child nodes since they're
         // using a timer for redraws
         for node in children {
@@ -69,10 +69,10 @@ class AmpVizScene: SKScene {
         }
         self.removeAllChildren()
     }
-    
+
     func setupChannelBars() {
         let channelcount = modulePlayer.renderer.numberOfChannels()
-        
+
         for cIndex in 0..<channelcount {
             addChannelBar(cIndex, numChannels: channelcount)
         }

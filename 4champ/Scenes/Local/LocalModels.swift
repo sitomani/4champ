@@ -50,13 +50,13 @@ enum Local {
       let moduleIds: [Int]
     }
   }
-  
+
   enum Delete {
     struct Request {
       let moduleIds: [Int]
     }
   }
-  
+
   enum Assign {
     struct Request {
       let moduleIds: [Int]

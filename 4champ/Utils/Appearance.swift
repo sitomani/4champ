@@ -26,7 +26,7 @@ class Appearance {
   static var veryLightGray = UIColor.init(rgb: 0xf0f0f0)
   static var cellColor = UIColor.clear
   static var radioSeparatorColor = UIColor.init(rgb: 0x294976)
-  
+
   class func setup() {
     let navigationBarAppearace = UINavigationBar.appearance()
     navigationBarAppearace.tintColor = UIColor.white
@@ -35,40 +35,40 @@ class Appearance {
     navigationBarAppearace.backgroundColor = darkBlueColor
     navigationBarAppearace.titleTextAttributes = [.foregroundColor: barTitleColor,
                                                   .font: UIFont.systemFont(ofSize: 16.0, weight: .heavy)]
-    
+
     let tabBarAppearance = UITabBar.appearance()
     tabBarAppearance.barTintColor = Appearance.tabColor
-    
+
     let switchAppearance = UISwitch.appearance()
     switchAppearance.onTintColor = successColor
-    
+
     let barButtonFont = UIFont.systemFont(ofSize: 12.0, weight: .heavy)
     UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: barButtonFont], for: .normal)
     UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: barButtonFont], for: .highlighted)
 
     let indicatorAppearance = NowPlayingView.appearance()
     indicatorAppearance.backgroundColor = Appearance.tabColor
-    
+
     let tableCellAppearance = UITableViewCell.appearance()
     tableCellAppearance.backgroundColor = cellColor
     tableCellAppearance.selectionStyle = .none
-    
+
     let tableViewAppearance = UITableView.appearance()
     tableViewAppearance.backgroundColor = ampBgColor
     tableViewAppearance.separatorColor = separatorColor
-    
+
     let settingsCellAppearance = SettingsCell.appearance()
     settingsCellAppearance.backgroundColor = ampLightBlueColor
-    
+
     let sclabelAppearance = UILabel.appearance(whenContainedInInstancesOf: [SettingsCell.self])
     sclabelAppearance.textColor = UIColor.white
-    
+
     let sbAppearance = UISearchBar.appearance()
     sbAppearance.barTintColor = darkBlueColor
-    
+
     let sgAppearance = UISegmentedControl.appearance()
     sgAppearance.tintColor = .white
     sgAppearance.selectedSegmentTintColor = .white
-    
+
     }
 }

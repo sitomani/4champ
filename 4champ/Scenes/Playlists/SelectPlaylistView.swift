@@ -49,7 +49,7 @@ struct PlaylistSelectorSUI: View {
     @State private var editingName = false
     @State private var name = ""
     @State private var editedPlaylist: Playlist?
-    
+
     func upsertPlaylist(name: String, playlist: Playlist?) {
         self.endEditing()
 
@@ -71,7 +71,7 @@ struct PlaylistSelectorSUI: View {
             self.editingName = false
         }
     }
-    
+
     func edit(pl: Playlist) {
         if pl.plId == "default" {
             return
@@ -82,14 +82,14 @@ struct PlaylistSelectorSUI: View {
             editingName = true
         }
     }
-    
+
     func delete(at offsets: IndexSet) {
         let indices = Array(offsets)
         let pl = self.playlists[indices[0]]
         self.managedObjectContext.delete(pl)
         try? self.managedObjectContext.save()
     }
-    
+
     var body: some View {
         NavigationView {
             VStack {
