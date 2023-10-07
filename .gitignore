@@ -3,5 +3,6 @@ Cartfile.resolved
 .DS_Store
 fastlane/report.xml
 xcuserdata
+xcshareddata
 *.ipa
 *.dSYM.zip

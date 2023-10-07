@@ -1,5 +1,6 @@
 included: # paths to include during linting. `--path` is ignored if present.
   - 4champ
+  - SamplePlayer
 excluded: # paths to ignore during linting. Takes precedence over `included`.
 disabled_rules:
   - type_body_length
