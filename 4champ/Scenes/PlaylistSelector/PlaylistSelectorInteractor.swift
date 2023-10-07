@@ -12,51 +12,47 @@
 import UIKit
 import CoreData
 
-protocol PlaylistSelectorBusinessLogic
-{
+protocol PlaylistSelectorBusinessLogic {
   func prepare(request: PlaylistSelector.PrepareSelection.Request)
   func appendToPlaylist(request: PlaylistSelector.Append.Request)
   func deleteModule(request: PlaylistSelector.Delete.Request)
 }
 
-protocol PlaylistSelectorDataStore
-{
+protocol PlaylistSelectorDataStore {
 }
 
-class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelectorDataStore
-{
+class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelectorDataStore {
   var presenter: PlaylistSelectorPresentationLogic?
   var frc: NSFetchedResultsController<Playlist>?
-  
-  private var playlists:[PLMD] = []
+
+  private var playlists: [PLMD] = []
   private var module: MMD?
   private var selectedPlaylist: Playlist?
-  
-  func prepare(request: PlaylistSelector.PrepareSelection.Request)
-  {
+
+  func prepare(request: PlaylistSelector.PrepareSelection.Request) {
     self.module = request.module
     let fetchRequest = NSFetchRequest<Playlist>.init(entityName: "Playlist")
     fetchRequest.sortDescriptors = []
-    
+
     let filterString = "plId != 'radioList'"
     fetchRequest.predicate = NSPredicate.init(format: filterString)
     frc = moduleStorage.createFRC(fetchRequest: fetchRequest, entityName: "Playlist")
-    try! frc?.performFetch()
-    
+    try? frc?.performFetch()
+
     if let plObjects = frc?.fetchedObjects {
       var plMetaData = plObjects.map {
         PLMD(id: $0.plId, name: $0.plName, current: false, modules: [] )
       }
-      
+
       for pl in plObjects {
         for mi in pl.modules ?? [] {
-          let modId = (mi as! ModuleInfo).modId?.intValue ?? 0
-          if let index = plMetaData.firstIndex (where: { $0.id == pl.plId }) {
+          let modId = (mi as? ModuleInfo)?.modId?.intValue ?? 0
+          if let index = plMetaData.firstIndex(where: { $0.id == pl.plId }) {
             plMetaData[index].modules.append(modId)
           }
         }
       }
-      
+
       plMetaData.sort { (pla, plb) -> Bool in
         if pla.id == "default" {
           return true
@@ -66,9 +62,9 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
         }
         return pla.name! < plb.name!
       }
-      
+
       playlists = plMetaData
-      
+
       let response = PlaylistSelector.PrepareSelection.Response(module: request.module, playlistOptions: plMetaData)
       presenter?.presentSelector(response: response)
     }
@@ -77,11 +73,11 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
     guard let modId = module?.id else {
       return
     }
-    
+
     let target = playlists[request.playlistIndex].id ?? "default"
     let pl = getPlaylist(with: target)
     let completed = PlaylistSelector.Append.Response(status: DownloadStatus.complete)
-    
+
     selectedPlaylist = pl
     // Three scenarios:
     if let modInfo = moduleStorage.fetchModuleInfo(modId) {
@@ -90,7 +86,7 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
       moduleStorage.saveContext()
       presenter?.presentAppend(response: completed)
     } else {
-      if let _ = module?.localPath {
+      if module?.localPath != nil {
         // 2. Module is downloaded (radio/search) but not yet in database
         moduleStorage.addModule(module: module!)
         if let modInfo = moduleStorage.fetchModuleInfo(modId) {
@@ -105,18 +101,18 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
       }
     }
   }
-  
+
   func deleteModule(request: PlaylistSelector.Delete.Request) {
     moduleStorage.deleteModule(module: request.module)
   }
-  
+
   private func getPlaylist(with id: String) -> Playlist? {
     let fetchRequest = NSFetchRequest<Playlist>.init(entityName: "Playlist")
     fetchRequest.sortDescriptors = []
     let filterString = "plId == '\(id)'"
     fetchRequest.predicate = NSPredicate.init(format: filterString)
     let tmp = moduleStorage.createFRC(fetchRequest: fetchRequest, entityName: "Playlist")
-    try! tmp.performFetch()
+    try? tmp.performFetch()
     return tmp.fetchedObjects?.first
   }
 }

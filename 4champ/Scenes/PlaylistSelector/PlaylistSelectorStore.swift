@@ -12,38 +12,36 @@
 import UIKit
 import SwiftUI
 
-protocol PlaylistSelectorDisplayLogic: class
-{
+protocol PlaylistSelectorDisplayLogic: class {
   func displaySelector(viewModel: PlaylistSelector.PrepareSelection.ViewModel)
   func displayAppend(viewModel: PlaylistSelector.Append.ViewModel)
 }
 
-class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
-{
+class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic {
   var interactor: PlaylistSelectorBusinessLogic?
   var router: (NSObjectProtocol & PlaylistSelectorRoutingLogic & PlaylistSelectorDataPassing)?
   weak var hostingController: UIHostingController<PlaylistPickerView>?
-  
+
   @Published var viewModel: PlaylistSelector.PrepareSelection.ViewModel
 
   init() {
     self.viewModel = PlaylistSelector.PrepareSelection.ViewModel(module: "<rnd>", currentPlaylistIndex: 0, playlistOptions: [], status: .unknown)
   }
-  
+
   public static func buildPicker(module: MMD) -> UIHostingController<PlaylistPickerView> {
     let pls = PlaylistSelectorStore()
     var contentView = PlaylistPickerView(dismissAction: { pls.hostingController?.dismiss(animated: true, completion: nil)},
                                          shareAction: {
-                                          pls.shareModule(module)
+      pls.shareModule(module)
     },
                                          deleteAction: {
-                                          pls.deleteModule(module)
+      pls.deleteModule(module)
     },
                                          store: pls)
     pls.setup()
     pls.doPrepare(mod: module)
-    contentView.addToPlaylistAction = { b in
-        pls.addToPlaylist(playlistIndex: b)
+    contentView.addToPlaylistAction = { pIndex in
+      pls.addToPlaylist(playlistIndex: pIndex)
     }
     let hvc = UIHostingController(rootView: contentView)
     pls.hostingController = hvc
@@ -51,10 +49,9 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
     hvc.view.backgroundColor = .clear
     return hvc
   }
-  
+
   // MARK: Setup
-  func setup()
-  {
+  func setup() {
     let viewController = self
     let interactor = PlaylistSelectorInteractor()
     let presenter = PlaylistSelectorPresenter()
@@ -65,26 +62,24 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
     presenter.viewController = viewController
     router.dataStore = interactor
   }
-  
-  func doPrepare(mod: MMD)
-  {
+
+  func doPrepare(mod: MMD) {
     let request = PlaylistSelector.PrepareSelection.Request(module: mod)
     interactor?.prepare(request: request)
   }
-  
-  func displaySelector(viewModel: PlaylistSelector.PrepareSelection.ViewModel)
-  {
+
+  func displaySelector(viewModel: PlaylistSelector.PrepareSelection.ViewModel) {
     self.viewModel = viewModel
   }
-  
+
   func displayAppend(viewModel: PlaylistSelector.Append.ViewModel) {
     self.viewModel.status = viewModel.status
-    
+
     if viewModel.status == .complete {
       hostingController?.dismiss(animated: true, completion: nil)
     }
   }
-  
+
   func addToPlaylist(playlistIndex: Int) {
     switch viewModel.status {
     case .downloading:
@@ -93,7 +88,7 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
       interactor?.appendToPlaylist(request: PlaylistSelector.Append.Request(module: MMD(), playlistIndex: playlistIndex))
     }
   }
-  
+
   func deleteModule(_ module: MMD) {
     guard viewModel.status == .complete else {
       return
@@ -102,7 +97,7 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
     interactor?.deleteModule(request: PlaylistSelector.Delete.Request(module: module))
     hostingController?.dismiss(animated: true, completion: nil)
   }
-  
+
   func shareModule(_ module: MMD) {
     switch viewModel.status {
     case .downloading:
@@ -113,7 +108,5 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic
       })
     }
   }
-  
+
 }
-
-

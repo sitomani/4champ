@@ -5,12 +5,10 @@
 //  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
-
 import UIKit
 import CoreData
 
-protocol LocalBusinessLogic
-{
+protocol LocalBusinessLogic {
   func playModule(at: IndexPath)
   func sortAndFilter(request: Local.SortFilter.Request)
   func deleteModule(at: IndexPath)
@@ -23,17 +21,15 @@ protocol LocalBusinessLogic
   func getModuleInfo(at: IndexPath) -> ModuleInfo?
 }
 
-protocol LocalDataStore
-{
+protocol LocalDataStore {
   var frc: NSFetchedResultsController<ModuleInfo>? { get }
 }
 
-class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
-{
+class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore {
   var presenter: LocalPresentationLogic?
   var frc: NSFetchedResultsController<ModuleInfo>?
   private var downloadController = DownloadController.init()
-  
+
   // MARK: API
   func sortAndFilter(request: Local.SortFilter.Request) {
     var sortkey = "modName"
@@ -54,7 +50,7 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
     } else {
       sortDescriptor = NSSortDescriptor(key: sortkey, ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
     }
-    
+
     let fetchRequest = NSFetchRequest<ModuleInfo>.init(entityName: "ModuleInfo")
     fetchRequest.sortDescriptors = [sortDescriptor]
 
@@ -65,14 +61,18 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
     fetchRequest.predicate = NSPredicate.init(format: filterString)
     frc = moduleStorage.createFRC(fetchRequest: fetchRequest, entityName: "ModuleInfo")
     frc?.delegate = self
-    try! frc?.performFetch()
+    do {
+      try frc?.performFetch()
+    } catch {
+      log.error("Fetch failed \(error)")
+    }
     presenter?.presentModules(response: Local.SortFilter.Response())
   }
-  
+
   func moduleCount() -> Int {
     return frc?.fetchedObjects?.count ?? 0
   }
-  
+
   func getModule(at: IndexPath) -> MMD {
     if let mi = frc?.fetchedObjects?[at.row] {
       var module = MMD()
@@ -93,17 +93,17 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
     }
     return MMD()
   }
-  
+
   func getModuleInfo(at: IndexPath) -> ModuleInfo? {
      if let mi = frc?.fetchedObjects?[at.row] {
       return mi
     }
     return nil
   }
-  
+
   func playModule(at: IndexPath) {
     let mmd = getModule(at: at)
-    
+
     if mmd.fileExists() {
         modulePlayer.play(mmd: mmd)
     } else {
@@ -111,19 +111,19 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
       moduleStorage.deleteModule(module: mmd)
     }
   }
-  
+
   func deleteModule(at: IndexPath) {
     let mmd = getModule(at: at)
     moduleStorage.deleteModule(module: mmd)
   }
-  
+
   func toggleFavorite(at: IndexPath) {
     let mmd = getModule(at: at)
     if mmd.fileExists() {
       _ = moduleStorage.toggleFavorite(module: mmd)
     }
   }
-  
+
   func importModules() {
     downloadController.rootViewController = ShareUtility.topMostController()
     downloadController.selectImportModules()
@@ -132,14 +132,18 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore
 
 extension LocalInteractor: NSFetchedResultsControllerDelegate {
   func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    
+
   }
-  
+
   func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
 //    presenter?.presentModules(response: Local.SortFilter.Response())
   }
-  
-  func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+
+  func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+                  didChange anObject: Any,
+                  at indexPath: IndexPath?,
+                  for type: NSFetchedResultsChangeType,
+                  newIndexPath: IndexPath?) {
 
     switch type {
     case .insert:
@@ -152,8 +156,11 @@ extension LocalInteractor: NSFetchedResultsControllerDelegate {
       presenter?.presentModules(response: Local.SortFilter.Response())
     }
   }
-  
-  func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+
+  func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+                  didChange sectionInfo: NSFetchedResultsSectionInfo,
+                  atSectionIndex sectionIndex: Int,
+                  for type: NSFetchedResultsChangeType) {
 //    presenter?.presentModules(response: Local.SortFilter.Response())
   }
 }

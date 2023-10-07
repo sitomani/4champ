@@ -12,38 +12,36 @@
 
 import UIKit
 
-protocol PlaylistPresentationLogic
-{
+protocol PlaylistPresentationLogic {
   func presentPlaylist(response: Playlists.Select.Response)
   func presentModeChange(shuffled: Bool)
 }
 
-class PlaylistPresenter: PlaylistPresentationLogic
-{
+class PlaylistPresenter: PlaylistPresentationLogic {
   weak var viewController: PlaylistDisplayLogic?
-    
+
   func presentPlaylist(response: Playlists.Select.Response) {
     let pl = response.selectedPlaylist
     let shuffle = (pl.playmode?.intValue ?? 0) == 1
 
-    var mods:[MMD] = []
-    if let moduleinfos = pl.modules {
-      for mod in moduleinfos {
-        mods.append(MMD(cdi: (mod as! ModuleInfo)))
+    var mods: [MMD] = []
+    pl.modules?.forEach {
+      if let modInfo = $0 as? ModuleInfo {
+        mods.append(MMD(cdi: modInfo))
       }
     }
-      
+
     let name: String
     if pl.plId == "default" {
       name = "PlaylistView_DefaultPlaylist".l13n()
     } else {
       name = pl.plName ?? "<no name>"
     }
-    
+
     let vm = Playlists.Select.ViewModel(playlistName: name, shuffle: shuffle, modules: mods)
     viewController?.displayPlaylist(viewModel: vm)
   }
-  
+
   func presentModeChange(shuffled: Bool) {
     viewController?.displayModeChange(shuffled: shuffled)
   }

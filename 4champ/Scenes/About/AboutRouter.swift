@@ -7,18 +7,15 @@
 
 import UIKit
 
-@objc protocol AboutRoutingLogic
-{
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
+@objc protocol AboutRoutingLogic {
+  // func routeToSomewhere(segue: UIStoryboardSegue?)
 }
 
-protocol AboutDataPassing
-{
+protocol AboutDataPassing {
   var dataStore: AboutDataStore? { get }
 }
 
-class AboutRouter: NSObject, AboutRoutingLogic, AboutDataPassing
-{
+class AboutRouter: NSObject, AboutRoutingLogic, AboutDataPassing {
   weak var viewController: AboutViewController?
   var dataStore: AboutDataStore?
 }

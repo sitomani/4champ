@@ -19,23 +19,22 @@ struct GroupInfo {
   var name: String
 }
 
-enum Search
-{
+enum Search {
   struct Request {
     var text: String
     var type: SearchType
     var pagingIndex: Int = 0
   }
-  
+
   struct ProgressResponse {
     var progress: Float
-    var error: Error? = nil
+    var error: Error?
     struct ViewModel {
       var progress: Float
-      var error: String? = nil
+      var error: String?
     }
   }
-  
+
   struct BatchDownload {
     struct Request {
       var moduleIds: [Int]
@@ -54,7 +53,7 @@ enum Search
       var favoritedModuleId: Int
     }
   }
-  
+
   struct ModuleResponse {
     var result: [SearchResultModule]
     var text: String
@@ -65,7 +64,7 @@ enum Search
       return r
     }
   }
-  
+
   struct ComposerResponse {
     var result: [SearchResultComposer]
     var text: String
@@ -75,26 +74,24 @@ enum Search
     var result: [LabelHref]
     var text: String
   }
-  
+
   struct ViewModel {
     var modules: [MMD]
     var composers: [ComposerInfo]
     var groups: [GroupInfo]
     var text: String
   }
-  
+
   enum MetaDataChange {
     struct Response {
       var module: MMD
     }
-    
+
     struct ViewModel {
       var module: MMD
     }
   }
 }
-
-
 
 // MARK: 4champ.net JSON interface objects
 typealias ModuleResult = [SearchResultModule]

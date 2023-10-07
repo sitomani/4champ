@@ -12,7 +12,7 @@ import SwiftUI
 struct ContentView: View {
     // 1.
     @State private var numbers = ["One", "Two", "Three", "Four", "Five"]
-    
+
     var body: some View {
         NavigationView {
             List {
@@ -25,7 +25,7 @@ struct ContentView: View {
                     self.numbers.move(fromOffsets: indexSet,
                                     toOffset: index)
                 }
-            
+
             .navigationBarTitle(Text("Numbers"))
             }
             // 4.
@@ -34,7 +34,7 @@ struct ContentView: View {
     }
 }
 #if DEBUG
-struct ContentView_Previews : PreviewProvider {
+struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }

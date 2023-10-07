@@ -7,17 +7,14 @@
 
 import UIKit
 
-protocol SettingsPresentationLogic
-{
+protocol SettingsPresentationLogic {
   func presentSettings(response: Settings.Update.ValueBag)
 }
 
-class SettingsPresenter: SettingsPresentationLogic
-{
+class SettingsPresenter: SettingsPresentationLogic {
   weak var viewController: SettingsDisplayLogic?
 
-  func presentSettings(response: Settings.Update.ValueBag)
-  {
+  func presentSettings(response: Settings.Update.ValueBag) {
     viewController?.displaySettings(viewModel: response)
   }
 }

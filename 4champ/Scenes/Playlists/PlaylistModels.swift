@@ -12,10 +12,9 @@
 
 import UIKit
 
-enum Playlists
-{
+enum Playlists {
   // MARK: Use cases
-  
+
     enum Favorite {
         struct Request {
             let modId: Int
@@ -25,13 +24,13 @@ enum Playlists
         struct ViewModel {
         }
     }
-    
+
     enum Play {
         struct Request {
             let mmd: MMD
         }
     }
-    
+
     enum Select {
         struct Request {
             let playlistId: String
@@ -45,13 +44,13 @@ enum Playlists
             var modules: [MMD]
         }
     }
-    
+
     enum Remove {
         struct Request {
             let modIndex: Int
         }
     }
-    
+
     enum Move {
         struct Request {
             let modIndex: Int
@@ -66,5 +65,5 @@ enum Playlists
             let newIndex: Int
         }
     }
-    
+
 }

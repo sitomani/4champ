@@ -13,10 +13,10 @@ extension UIColor {
     assert(red >= 0 && red <= 255, "Invalid red component")
     assert(green >= 0 && green <= 255, "Invalid green component")
     assert(blue >= 0 && blue <= 255, "Invalid blue component")
-    
+
     self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
   }
-  
+
   convenience init(rgb: Int) {
     self.init(
       red: (rgb >> 16) & 0xFF,
@@ -25,7 +25,6 @@ extension UIColor {
     )
   }
 }
-
 
 extension UIImage {
   func resizeImageWith(newSize: CGSize) -> UIImage {
@@ -42,7 +41,7 @@ extension UIImage {
 }
 
 class AboutHeaderView: UIButton {
-  
+
   convenience init(frame: CGRect, titleKey: String, imageKey: String) {
     self.init(frame: frame)
     titleLabel?.font = UIFont.boldSystemFont(ofSize: 15.0)
@@ -50,9 +49,9 @@ class AboutHeaderView: UIButton {
     setTitle("  \(titleKey.l13n())", for: .normal)
     imageView?.contentMode = .scaleAspectFit
     backgroundColor = Appearance.ampLightBlueColor
-    tintColor = UIColor.init(rgb: 0xc6c6c6);
+    tintColor = UIColor.init(rgb: 0xc6c6c6)
     if let image = UIImage.init(named: imageKey) {
-      
+
       if titleKey == "Twitter" {
         let scaledImage = image.resizeImageWith(newSize: CGSize.init(width: 30, height: 25))
         setImage(scaledImage.withRenderingMode(.alwaysTemplate), for: .normal)
@@ -65,9 +64,9 @@ class AboutHeaderView: UIButton {
         lbl.text = "©"
         lbl.font = UIFont.systemFont(ofSize: 29.0)
         lbl.textColor = UIColor.init(rgb: 0xc6c6c6)
-        UIGraphicsBeginImageContext(lbl.bounds.size);
+        UIGraphicsBeginImageContext(lbl.bounds.size)
         lbl.layer.render(in: UIGraphicsGetCurrentContext()!)
-        let renderedImg = UIGraphicsGetImageFromCurrentImageContext();
+        let renderedImg = UIGraphicsGetImageFromCurrentImageContext()
         setImage(renderedImg, for: .normal)
       }
     }

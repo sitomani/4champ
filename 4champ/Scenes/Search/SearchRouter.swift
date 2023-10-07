@@ -8,23 +8,20 @@
 import UIKit
 import SwiftUI
 
-protocol SearchRoutingLogic
-{
+protocol SearchRoutingLogic {
   func toComposerList(title: String, groupId: Int)
   func toModulesList(title: String, composerId: Int)
   func toPlaylistSelector(module: MMD)
 }
 
-protocol SearchDataPassing
-{
+protocol SearchDataPassing {
   var dataStore: SearchDataStore? { get }
 }
 
-class SearchRouter: NSObject, SearchRoutingLogic, SearchDataPassing
-{
+class SearchRouter: NSObject, SearchRoutingLogic, SearchDataPassing {
   weak var viewController: SearchViewController?
   var dataStore: SearchDataStore?
-  
+
   // MARK: Routing
   func toComposerList(title: String, groupId: Int) {
     spawnSearch(title: title, type: .group, id: groupId)
@@ -32,12 +29,12 @@ class SearchRouter: NSObject, SearchRoutingLogic, SearchDataPassing
   func toModulesList(title: String, composerId: Int) {
     spawnSearch(title: title, type: .composer, id: composerId)
   }
-  
+
   func toPlaylistSelector(module: MMD) {
-    
+
     let hvc = PlaylistSelectorStore.buildPicker(module: module)
     viewController?.present(hvc, animated: true, completion: nil)
-    
+
 //    let pls = PlaylistSelectorStore()
 //    var contentView = PlaylistPickerView(dismissAction: { self.viewController?.dismiss(animated: true, completion: nil)}, store: pls)
 //    pls.setup()
@@ -49,7 +46,7 @@ class SearchRouter: NSObject, SearchRoutingLogic, SearchDataPassing
 //    pls.hostingController = hvc
 //    viewController?.present(hvc, animated: true, completion: nil)
   }
-  
+
   /// Instantiate another SearchViewController and prepare it for
   /// composer/group list display by setting the autoList parameters
   private func spawnSearch(title: String, type: SearchType, id: Int) {

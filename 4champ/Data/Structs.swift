@@ -29,9 +29,9 @@ struct Notifications {
 struct MMD: Identifiable {
   init() {
   }
-  
+
   static let supportedTypes: [String] = Replay.supportedFormats
-    
+
   init(cdi: ModuleInfo) {
     self.init()
     self.composer = cdi.modAuthor
@@ -51,7 +51,7 @@ struct MMD: Identifiable {
     self.serviceKey = cdi.serviceKey
     self.favorite = cdi.modFavorite?.boolValue ?? false
   }
-  
+
   init(path: String, modId: Int) {
     self.init()
     downloadPath = URL.init(string: path)
@@ -63,13 +63,13 @@ struct MMD: Identifiable {
       if let modNameParts = components.last?.components(separatedBy: ".") {
         type = modNameParts.first ?? "MOD"
         name = modNameParts[1...modNameParts.count - 2].joined(separator: ".")
-        name = name?.replacingOccurrences(of: "%", with: "%25") //replace percent signs with encoding
-        name = name?.removingPercentEncoding //before removing the encoding
+        name = name?.replacingOccurrences(of: "%", with: "%25") // replace percent signs with encoding
+        name = name?.removingPercentEncoding // before removing the encoding
         localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(name!).appendingPathExtension(type!)
       }
     }
   }
-  
+
   var id: Int?
   var name: String?
   var type: String?
@@ -87,7 +87,7 @@ struct MMD: Identifiable {
     }
     return false
   }
-  
+
   func hasBeenSaved() -> Bool {
     guard let modId = self.id else {
       return false
@@ -95,14 +95,14 @@ struct MMD: Identifiable {
     let saved = moduleStorage.getModuleById(modId)
     return saved != nil
   }
-  
+
   func queueIndex() -> Int? {
     if let queueIndex = modulePlayer.playQueue.firstIndex(of: self) {
       return queueIndex
     }
     return nil
   }
-  
+
   func supported() -> Bool {
     if MMD.supportedTypes.contains(self.type ?? "") && (self.note?.count ?? 0) == 0 {
       return true
@@ -112,9 +112,7 @@ struct MMD: Identifiable {
 }
 
 extension MMD: Equatable {}
-func ==(lhs: MMD, rhs: MMD) -> Bool {
+func == (lhs: MMD, rhs: MMD) -> Bool {
   let eq = lhs.id == rhs.id && lhs.id != nil
   return eq
 }
-
-

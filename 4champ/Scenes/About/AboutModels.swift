@@ -7,28 +7,23 @@
 
 import UIKit
 
-enum About
-{
+enum About {
   struct Details {
-    var titles:[String]
-    var contents:[String]
-    var images:[String]
-    var licenseLinks:[String]
-    var licenseNames:[String]
+    var titles: [String]
+    var contents: [String]
+    var images: [String]
+    var licenseLinks: [String]
+    var licenseNames: [String]
   }
   // MARK: Use cases
-  
-  enum Status
-  {
-    struct Request
-    {
+
+  enum Status {
+    struct Request {
     }
-    struct Response
-    {
+    struct Response {
       var isPlaying: Bool = false
     }
-    struct ViewModel
-    {
+    struct ViewModel {
       var isPlaying: Bool = false
     }
   }

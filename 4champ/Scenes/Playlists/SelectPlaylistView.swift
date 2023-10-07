@@ -41,15 +41,15 @@ struct PlaylistCell: View {
 }
 
 struct PlaylistSelectorSUI: View {
-    @Binding var show_modal:Bool
+    @Binding var showModal: Bool
     @State private var listId = UUID()
     @Environment(\.managedObjectContext) var managedObjectContext
     @FetchRequest(entity: Playlist.entity(),
                   sortDescriptors: [NSSortDescriptor(keyPath: \Playlist.plName, ascending: true)]) var playlists: FetchedResults<Playlist>
     @State private var editingName = false
     @State private var name = ""
-    @State private var editedPlaylist:Playlist?
-    
+    @State private var editedPlaylist: Playlist?
+
     func upsertPlaylist(name: String, playlist: Playlist?) {
         self.endEditing()
 
@@ -71,7 +71,7 @@ struct PlaylistSelectorSUI: View {
             self.editingName = false
         }
     }
-    
+
     func edit(pl: Playlist) {
         if pl.plId == "default" {
             return
@@ -82,31 +82,31 @@ struct PlaylistSelectorSUI: View {
             editingName = true
         }
     }
-    
+
     func delete(at offsets: IndexSet) {
         let indices = Array(offsets)
         let pl = self.playlists[indices[0]]
         self.managedObjectContext.delete(pl)
         try? self.managedObjectContext.save()
     }
-    
+
     var body: some View {
         NavigationView {
             VStack {
                 if editingName {
                     HStack {
-                        TextField("PlaylistView_PlaylistName".l13n(), text:$name)
+                        TextField("PlaylistView_PlaylistName".l13n(), text: $name)
                             .foregroundColor(Color(.white))
-                            .background(RoundedRectangle(cornerRadius:5)
+                            .background(RoundedRectangle(cornerRadius: 5)
                                 .foregroundColor(Color(Appearance.ampTextfieldBgColor))
-                                .frame(minHeight:32)
+                                .frame(minHeight: 32)
                                 .padding(EdgeInsets(top: 0, leading: -10, bottom: 0, trailing: 8)))
                             .padding(EdgeInsets(top: 8, leading: 20, bottom: 2, trailing: 0)).frame(minHeight: 44)
                         Button(action: {
                                 self.upsertPlaylist(name: self.name, playlist: self.editedPlaylist)
-                            }) {
+                        }, label: {
                             Image(uiImage: UIImage(named: "save_playlist")!)
-                        }.accentColor(Color(Appearance.successColor))
+                        }).accentColor(Color(Appearance.successColor))
                             .disabled(self.name.count == 0)
                         Button(action: {
                             self.name = ""
@@ -115,9 +115,9 @@ struct PlaylistSelectorSUI: View {
                             withAnimation {
                                 self.editingName = false
                             }
-                            }) {
+                        }, label: {
                             Image(uiImage: UIImage(named: "cancel_save")!)
-                            }.accentColor(Color(Appearance.errorColor)).padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 4))
+                            }) .accentColor(Color(Appearance.errorColor)).padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 4))
                         .contentShape(Rectangle())
                     }.background(Color(Appearance.darkBlueColor)).transition(.slide)
                 }
@@ -126,7 +126,7 @@ struct PlaylistSelectorSUI: View {
                         if pl.plName != "radioList" {
                             PlaylistCell(pl: pl).contentShape(Rectangle()).onTapGesture {
                                 moduleStorage.currentPlaylist = pl
-                                self.show_modal.toggle()
+                                self.showModal.toggle()
                             }
                             .onLongPressGesture {
                                 self.edit(pl: pl)
@@ -135,21 +135,20 @@ struct PlaylistSelectorSUI: View {
                     }.onDelete(perform: delete).listRowBackground(Color.clear)
                 }.contentShape(Rectangle()).id(listId)
             }.navigationBarTitle("PlaylistView_Playlists", displayMode: .inline)
-                .navigationBarItems(leading: Button (action: {
-                    self.show_modal.toggle()
-                }) {
+                .navigationBarItems(leading: Button(action: {
+                    self.showModal.toggle()
+                }, label: {
                     Image(systemName: "xmark").imageScale(.large)
-                    },
+                    }),
                     trailing: Button(action: {
                 withAnimation {
                     self.editedPlaylist = nil
                     self.name = ""
                     self.editingName.toggle()
                 }
-            }) {
-                Image(systemName: "plus").imageScale(.large)
-            }).background(Color(Appearance.darkBlueColor))
+                }, label: {
+                    Image(systemName: "plus").imageScale(.large)
+                })).background(Color(Appearance.darkBlueColor))
         }.background(Color(Appearance.darkBlueColor)).navigationViewStyle(StackNavigationViewStyle())
     }
 }
-

@@ -20,7 +20,7 @@ extension UISearchBar {
     return hostView?.subviews.compactMap {
       return $0 as? UIActivityIndicatorView }.first
   }
-  
+
   public var queryField: UITextField? {
     if #available(iOS 13, *) {
         return self.searchTextField
@@ -29,7 +29,7 @@ extension UISearchBar {
       $0 as? UITextField
       }.first
   }
-  
+
   /// Property that controls whether the search spinner is shown or not
   var searching: Bool {
     get {

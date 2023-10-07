@@ -15,17 +15,17 @@ class ShareUtility: NSObject, UIActivityItemSource {
   func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
     return ""
   }
-  
+
   func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-    guard let modName = sharedMod?.name, let composer = sharedMod?.composer, let _ = sharedMod?.id else {
+    guard let modName = sharedMod?.name, let composer = sharedMod?.composer, sharedMod?.id != nil else {
       return nil
     }
     let shareString = String.init(format: "Share_DefaultMessage".l13n(), modName, composer)
     return shareString
   }
-  
+
   func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
-    guard let modName = sharedMod?.name, let composer = sharedMod?.composer, let _ = sharedMod?.id else {
+    guard let modName = sharedMod?.name, let composer = sharedMod?.composer, sharedMod?.id != nil else {
       return ""
     }
     let shareString = String.init(format: "Share_DefaultMessage".l13n(), modName, composer)
@@ -37,8 +37,8 @@ class ShareUtility: NSObject, UIActivityItemSource {
       log.error("Can't share without a host view")
       return
     }
-    
-    var sourceView: UIView? = nil
+
+    var sourceView: UIView?
     if let mainVC = UIApplication.shared.windows[0].rootViewController as? MainViewController {
       sourceView = mainVC.tabBar
     }
@@ -62,7 +62,7 @@ class ShareUtility: NSObject, UIActivityItemSource {
       hostVC.present(activityVC, animated: true)
     }
   }
-  
+
   static func topMostController() -> UIViewController? {
      let window = UIApplication.shared.windows[0]
      guard let rootViewController = window.rootViewController else {

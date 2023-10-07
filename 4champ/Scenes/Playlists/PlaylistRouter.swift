@@ -16,18 +16,16 @@ protocol PlaylistRoutingLogic {
   func toPlaylistSelector(module: MMD)
 }
 
-protocol PlaylistDataPassing
-{
+protocol PlaylistDataPassing {
   var dataStore: PlaylistDataStore? { get }
   var viewController: UIViewController? { get set }
 }
 
-class PlaylistRouter: NSObject, PlaylistRoutingLogic, PlaylistDataPassing
-{
+class PlaylistRouter: NSObject, PlaylistRoutingLogic, PlaylistDataPassing {
 //  weak var viewController: PlaylistViewController?
   var dataStore: PlaylistDataStore?
   var viewController: UIViewController?
-    
+
   // MARK: Routing
   func toPlaylistSelector(module: MMD) {
       let hvc = PlaylistSelectorStore.buildPicker(module: module)

@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 enum Settings {
   enum Update {
     struct ValueBag {

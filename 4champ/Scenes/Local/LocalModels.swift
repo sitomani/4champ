@@ -5,7 +5,6 @@
 //  Copyright © 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
-
 import UIKit
 
 enum LocalSortKey: Int {
@@ -24,8 +23,7 @@ enum SpecialFunctions: Int {
   case `import` = -2
 }
 
-enum Local
-{
+enum Local {
   // MARK: Use cases
   enum SortFilter {
     struct Request {
@@ -52,16 +50,16 @@ enum Local
       let moduleIds: [Int]
     }
   }
-  
+
   enum Delete {
     struct Request {
-      let moduleIds:[Int]
+      let moduleIds: [Int]
     }
   }
-  
+
   enum Assign {
     struct Request {
-      let moduleIds:[Int]
+      let moduleIds: [Int]
       let composerName: String
     }
   }

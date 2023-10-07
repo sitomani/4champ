@@ -39,19 +39,19 @@ struct DownloadModel {
 
 class DownloadController: NSObject, ObservableObject {
   @Published var model: DownloadModel = DownloadModel()
-  
+
   lazy var hostingVC: UIHostingController<DownloadView> = UIHostingController<DownloadView>(rootView: DownloadView(store: self))
   weak var rootViewController: UIViewController?
   private var showing: Bool = false
   private var documentPickerVC: UIDocumentPickerViewController?
   private var downloadedModule: MMD?
   private var addToCurrentPlaylist: Bool = false
-  
+
   convenience init(rootVC: UIViewController) {
     self.init()
     self.rootViewController = rootVC
   }
-  
+
   func selectImportModules(addToPlaylist: Bool = false) {
     self.addToCurrentPlaylist = addToPlaylist
     if documentPickerVC == nil {
@@ -62,7 +62,7 @@ class DownloadController: NSObject, ObservableObject {
     }
     rootViewController?.present(documentPickerVC!, animated: true)
   }
-  
+
   func show(modId: Int) {
     log.debug("")
     model.importType = .universalLink
@@ -84,7 +84,7 @@ class DownloadController: NSObject, ObservableObject {
     hostingVC.view.backgroundColor = .clear
     rootViewController?.present(hostingVC, animated: true, completion: nil)
   }
-  
+
   private func buildSummary(mod: MMD) -> String {
     if let name = mod.name, let composer = mod.composer, composer.count > 0 {
       return "\(name) by \(composer)"
@@ -94,33 +94,40 @@ class DownloadController: NSObject, ObservableObject {
     }
     return "..."
   }
-  
+
   func showImport(for urls: [URL]) {
     log.debug("")
     rootViewController = ShareUtility.topMostController()
     model.importResults = []
     model.importType = .documentLink
     model.importIds.removeAll()
-    var result: ImportResultType? = .unknownType
     showing = true
     hostingVC.view.backgroundColor = .clear
     rootViewController?.present(hostingVC, animated: true, completion: nil)
 
     for url in urls {
-      if let mod = importModule(at: url, &result) {
-        if result == ImportResultType.importSuccess || result == .alreadyImported {
-          model.progress = 1.0
-          if addToCurrentPlaylist, let modId = mod.id, let modInfo = moduleStorage.fetchModuleInfo(modId) {
-            moduleStorage.currentPlaylist?.addToModules(modInfo)
-          }
-        }
-        model.error = nil
-        model.importResults.append(result!)
-        model.importIds.append(mod.id!)
-      } else {
-        model.importResults.append(result!)
-      }
+      handleImport(for: url)
     }
+
+    updateStatusAndSummary()
+  }
+
+  private func handleImport(for url: URL) {
+    var result: ImportResultType? = .unknownType
+    if let mod = importModule(at: url, &result) {
+      if addToCurrentPlaylist, let modId = mod.id, let modInfo = moduleStorage.fetchModuleInfo(modId) {
+        moduleStorage.currentPlaylist?.addToModules(modInfo)
+      }
+      model.progress = 1.0
+      model.error = nil
+      model.importResults.append(.importSuccess)
+      model.importIds.append(mod.id!)
+    } else {
+      model.importResults.append(result!)
+    }
+  }
+
+  private func updateStatusAndSummary() {
     let imported = model.importResults.filter { $0 == .importSuccess }.count
 
     let l13nkey: String
@@ -139,50 +146,54 @@ class DownloadController: NSObject, ObservableObject {
         model.summary = buildSummary(mod: mod)
       }
     } else {
-      let imported = model.importResults.filter { $0 == .importSuccess }.count
-      let alreadyImported = model.importResults.filter { $0 == .alreadyImported }.count
-      let unknown = model.importResults.filter { $0 == .unknownType }.count
-      
-      var summaryItems: [String] = []
-
-      if imported > 0 {
-        if (alreadyImported > 0 || unknown > 0) {
-          summaryItems.append(String.init(format:"Local_Import_Imported".l13n(), "\(imported)"))
-        } else {
-          let names:[String] = model.importIds.compactMap {
-            if let mod = moduleStorage.getModuleById($0), let name = mod.name {
-              return name
-            }
-            return nil
-          }
-          if names.count > 10 {
-            summaryItems.append(names.joined(separator: ", ") + ", ...")
-
-          } else {
-            summaryItems.append(names.joined(separator: ", "))
-          }
-        }
-      }
-      
-      if alreadyImported > 0 {
-        let prefixString = summaryItems.count > 0 ? "\n" : ""
-        summaryItems.append(prefixString + String.init(format:"Local_Import_Already_In".l13n(), "\(alreadyImported)"))
-      }
-      
-      if unknown > 0 {
-        let prefixString = summaryItems.count > 0 ? "\n" : ""
-        summaryItems.append(prefixString + String.init(format:"Local_Import_Unknown".l13n(), "\(unknown)"))
-      }
-      model.summary = summaryItems.joined(separator: ", ")
+      updateSummary()
     }
   }
-  
+
+  private func updateSummary() {
+    let imported = model.importResults.filter { $0 == .importSuccess }.count
+    let alreadyImported = model.importResults.filter { $0 == .alreadyImported }.count
+    let unknown = model.importResults.filter { $0 == .unknownType }.count
+
+    var summaryItems: [String] = []
+
+    if imported > 0 {
+      if alreadyImported > 0 || unknown > 0 {
+        summaryItems.append(String.init(format: "Local_Import_Imported".l13n(), "\(imported)"))
+      } else {
+        let names: [String] = model.importIds.compactMap {
+          if let mod = moduleStorage.getModuleById($0), let name = mod.name {
+            return name
+          }
+          return nil
+        }
+        if names.count > 10 {
+          summaryItems.append(names.joined(separator: ", ") + ", ...")
+
+        } else {
+          summaryItems.append(names.joined(separator: ", "))
+        }
+      }
+    }
+
+    if alreadyImported > 0 {
+      let prefixString = summaryItems.count > 0 ? "\n" : ""
+      summaryItems.append(prefixString + String.init(format: "Local_Import_Already_In".l13n(), "\(alreadyImported)"))
+    }
+
+    if unknown > 0 {
+      let prefixString = summaryItems.count > 0 ? "\n" : ""
+      summaryItems.append(prefixString + String.init(format: "Local_Import_Unknown".l13n(), "\(unknown)"))
+    }
+    model.summary = summaryItems.joined(separator: ", ")
+  }
+
   func dismiss() {
     log.debug("")
     discardModule()
     dismissView()
   }
-  
+
   func play() {
     log.debug("")
     switch model.importType {
@@ -208,7 +219,7 @@ class DownloadController: NSObject, ObservableObject {
     }
     dismissView()
   }
-  
+
   func keep() {
     log.debug("")
     guard let modId = model.importIds.first, let mod = moduleStorage.getModuleById(modId) else {
@@ -220,18 +231,18 @@ class DownloadController: NSObject, ObservableObject {
     moduleStorage.addModule(module: mod)
     dismissView()
   }
-  
+
   func assignComposer() {
     rootViewController?.dismiss(animated: false, completion: {
                                   self.displayAssignDialog()
                                   self.showing = false })
   }
-  
+
   func dismissView() {
     log.debug("")
     rootViewController?.dismiss(animated: true, completion: { self.showing = false })
   }
-  
+
   func swipeDismissed() {
     log.debug("")
     if showing {
@@ -239,7 +250,7 @@ class DownloadController: NSObject, ObservableObject {
       showing = false
     }
   }
-  
+
   private func doAssignComposer(request: Local.Assign.Request) {
     request.moduleIds.forEach {
       if let modInfo = moduleStorage.fetchModuleInfo($0) {
@@ -248,14 +259,14 @@ class DownloadController: NSObject, ObservableObject {
     }
     moduleStorage.saveContext()
   }
-  
+
   private func displayAssignDialog() {
     let av = UIAlertController.init(title: "Local_Import_Assign".l13n(), message: model.status, preferredStyle: .alert)
     av.addTextField { (tf) in
       tf.placeholder = "Local_Import_Composer".l13n()
     }
-    
-    av.addAction(UIAlertAction.init(title: "G_OK".l13n(), style: .default, handler: { [unowned av] (action) in
+
+    av.addAction(UIAlertAction.init(title: "G_OK".l13n(), style: .default, handler: { [unowned av] (_) in
       if let tf = av.textFields, let composerName = tf[0].text {
         let request = Local.Assign.Request(moduleIds: self.model.importIds, composerName: composerName)
         self.doAssignComposer(request: request)
@@ -264,7 +275,7 @@ class DownloadController: NSObject, ObservableObject {
     av.addAction(UIAlertAction.init(title: "G_Cancel".l13n(), style: .cancel, handler: nil))
     rootViewController?.present(av, animated: true)
   }
-  
+
   private func importModule(at url: URL, _ status: inout ImportResultType?) -> MMD? {
     var pathElements = url.path.split(separator: "/")
     status = .unknownType
@@ -272,23 +283,23 @@ class DownloadController: NSObject, ObservableObject {
       return nil
     }
     let filename = String(pathElements.popLast()!)
-    
+
     guard let suffix = filename.split(separator: ".").last else {
       return nil
     }
-    
+
     let filetype = String(suffix).uppercased()
     guard MMD.supportedTypes.contains(filetype) else {
       return nil
     }
-    
+
     if let previouslyImported = moduleStorage.fetchModuleInfoByKey(filename) {
       log.info("File \(filename) already imported")
       // already imported file with this name
       status = .alreadyImported
       return MMD.init(cdi: previouslyImported)
     }
-    
+
     var mmd = MMD.init()
     mmd.downloadPath = nil
     mmd.name = filename
@@ -296,16 +307,29 @@ class DownloadController: NSObject, ObservableObject {
     mmd.composer = ""
     mmd.serviceId = .local
     mmd.serviceKey = filename
-    
-    //store to file and make sure it's not writing over an existing mod
+
+    guard let localPath = copyFileToDocumentsDirectory(from: url, with: &mmd, status: &status) else {
+      return nil
+    }
+
+    mmd.localPath = localPath
+    mmd.id = moduleStorage.getNextModuleId(service: .local)
+    moduleStorage.addModule(module: mmd)
+    status = .importSuccess
+    return mmd
+  }
+
+  private func copyFileToDocumentsDirectory(from url: URL, with mmd: inout MMD, status: inout ImportResultType?) -> URL? {
     var numberExt = 0
-    var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(mmd.name!).appendingPathExtension(mmd.type!)
+    var localPath = FileManager.default.urls(for: .documentDirectory,
+                         in: .userDomainMask).last!.appendingPathComponent(mmd.name!).appendingPathExtension(mmd.type!)
     while FileManager.default.fileExists(atPath: localPath.path) {
       numberExt += 1
       let filename = mmd.name! + "_\(numberExt)"
-      localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
+      localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        .last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
     }
-    
+
     // Copy to documents dir from the picker temp folder
     do {
       try FileManager.default.copyItem(at: url, to: localPath)
@@ -315,14 +339,10 @@ class DownloadController: NSObject, ObservableObject {
       status = .importFailed
       return nil
     }
-    
-    mmd.localPath = localPath
-    mmd.id = moduleStorage.getNextModuleId(service: .local)
-    moduleStorage.addModule(module: mmd)
-    status = .importSuccess
-    return mmd
+
+    return localPath
   }
-  
+
   private func discardModule() {
     guard let modId = model.importIds.first, let mod = moduleStorage.getModuleById(modId) else {
       return
@@ -339,7 +359,7 @@ class DownloadController: NSObject, ObservableObject {
       }
     }
   }
-  
+
 }
 
 extension DownloadController: ModuleFetcherDelegate {
@@ -349,7 +369,7 @@ extension DownloadController: ModuleFetcherDelegate {
       self.model = DownloadModel(status: "ShareDialog_DownloadComplete".l13n(),
                                  summary: buildSummary(mod: mmd),
                                  importIds: [mmd.id!],
-                                 importResults:[.importSuccess],
+                                 importResults: [.importSuccess],
                                  importType: .universalLink,
                                  progress: 1.0,
                                  error: nil)
@@ -366,7 +386,7 @@ extension DownloadController: ModuleFetcherDelegate {
 }
 
 extension DownloadController: UIDocumentPickerDelegate {
-  
+
   func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
     showImport(for: urls)
   }

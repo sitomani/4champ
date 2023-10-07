@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -122,7 +122,7 @@
 		450E506021879347008FB155 /* SettingsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRouter.swift; sourceTree = "<group>"; };
 		450E506121879347008FB155 /* SettingsModels.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SettingsModels.swift; sourceTree = "<group>"; tabWidth = 2; };
 		450E506221879347008FB155 /* SettingsViewController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
-		450E506321879347008FB155 /* SettingsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsInteractor.swift; sourceTree = "<group>"; };
+		450E506321879347008FB155 /* SettingsInteractor.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = SettingsInteractor.swift; sourceTree = "<group>"; tabWidth = 2; };
 		450E506C2187A066008FB155 /* SettingsStereoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStereoCell.swift; sourceTree = "<group>"; };
 		451B6A9A2204B6CC001848FA /* LocalPresenter.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = LocalPresenter.swift; sourceTree = "<group>"; tabWidth = 2; };
 		451B6A9C2204B6CC001848FA /* LocalRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalRouter.swift; sourceTree = "<group>"; };
@@ -180,7 +180,7 @@
 		454F520F21610F83007011F3 /* ComposerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComposerCell.xib; sourceTree = "<group>"; };
 		455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
 		4569AC8A21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchBar+ActivityIndicator.swift"; sourceTree = "<group>"; };
-		456E6F2D240A5FAF0034BDA2 /* PlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistView.swift; sourceTree = "<group>"; };
+		456E6F2D240A5FAF0034BDA2 /* PlaylistView.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = PlaylistView.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45855FC624444C9B0079C767 /* ampplayer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ampplayer.entitlements; sourceTree = "<group>"; };
 		45855FC8244467420079C767 /* DownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadView.swift; sourceTree = "<group>"; };
 		45855FCA244475050079C767 /* DownloadHostingController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = DownloadHostingController.swift; sourceTree = "<group>"; tabWidth = 2; };
@@ -543,6 +543,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 45D392B520B1DDEE00EEF4E3 /* Build configuration list for PBXNativeTarget "ampplayer" */;
 			buildPhases = (
+				73CD16E12AD16C3400987AD6 /* ShellScript */,
 				45D3929D20B1DDEC00EEF4E3 /* Sources */,
 				45D3929E20B1DDEC00EEF4E3 /* Frameworks */,
 				45D3929F20B1DDEC00EEF4E3 /* Resources */,
@@ -630,6 +631,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		73CD16E12AD16C3400987AD6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\n\nif which swiftlint; then\n    swiftlint —-fix --format\n    swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		45D3929D20B1DDEC00EEF4E3 /* Sources */ = {

@@ -8,24 +8,21 @@
 
 import UIKit
 
-@objc protocol PlaylistSelectorRoutingLogic
-{
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
+@objc protocol PlaylistSelectorRoutingLogic {
+  // func routeToSomewhere(segue: UIStoryboardSegue?)
 }
 
-protocol PlaylistSelectorDataPassing
-{
+protocol PlaylistSelectorDataPassing {
   var dataStore: PlaylistSelectorDataStore? { get }
 }
 
-class PlaylistSelectorRouter: NSObject, PlaylistSelectorRoutingLogic, PlaylistSelectorDataPassing
-{
+class PlaylistSelectorRouter: NSObject, PlaylistSelectorRoutingLogic, PlaylistSelectorDataPassing {
   var dataStore: PlaylistSelectorDataStore?
-  
+
   // MARK: Routing
-  
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
-  //{
+
+  // func routeToSomewhere(segue: UIStoryboardSegue?)
+  // {
   //  if let segue = segue {
   //    let destinationVC = segue.destination as! SomewhereViewController
   //    var destinationDS = destinationVC.router!.dataStore!
@@ -37,19 +34,19 @@ class PlaylistSelectorRouter: NSObject, PlaylistSelectorRoutingLogic, PlaylistSe
   //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
   //    navigateToSomewhere(source: viewController!, destination: destinationVC)
   //  }
-  //}
+  // }
 
   // MARK: Navigation
-  
-  //func navigateToSomewhere(source: PlaylistSelectorViewController, destination: SomewhereViewController)
-  //{
+
+  // func navigateToSomewhere(source: PlaylistSelectorViewController, destination: SomewhereViewController)
+  // {
   //  source.show(destination, sender: nil)
-  //}
-  
+  // }
+
   // MARK: Passing data
-  
-  //func passDataToSomewhere(source: PlaylistSelectorDataStore, destination: inout SomewhereDataStore)
-  //{
+
+  // func passDataToSomewhere(source: PlaylistSelectorDataStore, destination: inout SomewhereDataStore)
+  // {
   //  destination.name = source.name
-  //}
+  // }
 }

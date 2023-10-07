@@ -7,18 +7,15 @@
 
 import UIKit
 
-@objc protocol SettingsRoutingLogic
-{
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
+@objc protocol SettingsRoutingLogic {
+  // func routeToSomewhere(segue: UIStoryboardSegue?)
 }
 
-protocol SettingsDataPassing
-{
+protocol SettingsDataPassing {
   var dataStore: SettingsDataStore? { get }
 }
 
-class SettingsRouter: NSObject, SettingsRoutingLogic, SettingsDataPassing
-{
+class SettingsRouter: NSObject, SettingsRoutingLogic, SettingsDataPassing {
   weak var viewController: SettingsViewController?
   var dataStore: SettingsDataStore?
 }

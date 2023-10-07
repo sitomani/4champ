@@ -8,21 +8,18 @@
 import UIKit
 import SwiftUI
 
-protocol RadioRoutingLogic
-{
+protocol RadioRoutingLogic {
   func toPlaylistSelector(module: MMD)
 }
 
-protocol RadioDataPassing
-{
+protocol RadioDataPassing {
   var dataStore: RadioDataStore? { get }
 }
 
-class RadioRouter: NSObject, RadioRoutingLogic, RadioDataPassing
-{
+class RadioRouter: NSObject, RadioRoutingLogic, RadioDataPassing {
   weak var viewController: RadioViewController?
   var dataStore: RadioDataStore?
-    
+
     func toPlaylistSelector(module: MMD) {
         let hvc = PlaylistSelectorStore.buildPicker(module: module)
         viewController?.present(hvc, animated: true, completion: nil)
