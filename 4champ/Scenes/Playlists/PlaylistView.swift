@@ -10,6 +10,20 @@ import Foundation
 import UIKit
 import SwiftUI
 
+struct ListBackgroundModifier: ViewModifier {
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if #available(iOS 16.0, *) {
+            content
+            .background(Color(Appearance.ampBgColor))
+            .scrollContentBackground(.hidden)
+        } else {
+            content
+        }
+    }
+}
+
 struct SUIModule: View {
     let module: MMD
     let faveCallback: ((MMD) -> Void)?
@@ -27,7 +41,7 @@ struct SUIModule: View {
                         .resizable()
                         .frame(width: 30, height: 30).offset(x: -15)
                 }
-            }.padding(EdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 0))
+            }
             VStack(alignment: .leading) {
                 Text("\(module.name)")
                     .font(.system(size: 18))
@@ -43,7 +57,7 @@ struct SUIModule: View {
             Image(module.favorite ? "favestar-yellow" : "favestar-grey").padding(8).onTapGesture {
                 self.faveCallback?(self.module)
             }.padding(7)
-        }
+        }.padding(.init(top: 2, leading: 0, bottom: 6, trailing: 0))
         Divider().background(Color(Appearance.separatorColor))
         }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
     }
@@ -101,7 +115,7 @@ struct PlaylistView: View {
       }) .sheet(isPresented: self.$showModal) {
         PlaylistSelectorSUI(showModal: self.$showModal).environment(\.managedObjectContext, self.managedObjectContext).onDisappear {
           self.navigationButtonID = UUID()
-        }.background(Color(Appearance.darkBlueColor))
+        }
       }
       ZStack {
         List {
@@ -113,17 +127,20 @@ struct PlaylistView: View {
               }.onLongPressGesture {
                 self.store.router?.toPlaylistSelector(module: mod)
               }
+              .listRowBackground(Color(Appearance.ampBgColor))
+              .listRowInsets(.init(top: 0, leading: 8, bottom: 0, trailing: 8))
           }.onMove(perform: move)
             .onDelete(perform: deleteItems)
-            .listRowBackground(Color.clear)
-            .listRowInsets(EdgeInsets())
         }
+        .padding(.top)
+        .listStyle(.plain)
+        .modifier(ListBackgroundModifier())
         .navigationBarTitle(Text("TabBar_Playlist".l13n().uppercased()), displayMode: .inline)
         .navigationBarItems(leading: HStack {
           Button(action: {self.toggleShuffle()}, label: {Image(store.viewModel.shuffle ? "shuffled" : "sequential")})
           Button(action: {self.store.interactor?.startPlaylist()}, label: {Image("play-small")})
         },
-                            trailing: HStack {
+          trailing: HStack {
           Button(action: {self.startImport()},
                  label: {Image(systemName: "square.and.arrow.down")
               .padding(EdgeInsets(top: -3, leading: 0, bottom: 0, trailing: 0))
@@ -170,7 +187,7 @@ func randomMMD() -> MMD {
   return mmd
 }
 
-var st = PlaylistStore(viewModel: Playlists.Select.ViewModel(playlistName: "foo", shuffle: false, modules: [randomMMD(), randomMMD(), randomMMD()])
+var st = PlaylistStore(viewModel: Playlists.Select.ViewModel(playlistName: "foo", shuffle: false, modules: [randomMMD(), randomMMD(), randomMMD(), randomMMD()])
 )
 
 struct PlaylistPreview: PreviewProvider {
