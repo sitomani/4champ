@@ -11,42 +11,42 @@ import UIKit
 import SwiftUI
 
 struct SUIModule: View {
-  let module: MMD
-  let faveCallback: ((MMD) -> Void)?
-  var body: some View {
-    VStack {
-      HStack {
-        ZStack {
-          Image(uiImage: UIImage.init(named: "modicon")!).resizable().frame(width: 50, height: 50)
-          Text(module.type?.uppercased() ?? "MOD")
-            .foregroundColor(Color.black)
-            .font(.system(size: 12))
-            .offset(y: 13)
-          if module.supported() == false {
-            Image(uiImage: UIImage.init(named: "stopicon")!)
-              .resizable()
-              .frame(width: 30, height: 30).offset(x: -15)
-          }
-        }.padding(EdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 0))
-        VStack(alignment: .leading) {
-          Text("\(module.name ?? "no name")")
-            .font(.system(size: 18))
-            .foregroundColor(.white)
-          if let composer = module.composer, composer.count > 0 {
-            Text(module.composer ?? "no name").font(.system(size: 12))
-              .foregroundColor(.white)
-          }
-          Text("\(module.size ?? 0) kb").font(.system(size: 12))
-            .foregroundColor(.white)
+    let module: MMD
+    let faveCallback: ((MMD) -> Void)?
+    var body: some View {
+        VStack {
+        HStack {
+            ZStack {
+                Image(uiImage: UIImage.init(named: "modicon")!).resizable().frame(width: 50, height: 50)
+                Text(module.type?.uppercased() ?? "MOD")
+                    .foregroundColor(Color.black)
+                    .font(.system(size: 12))
+                    .offset(y: 13)
+                if module.supported() == false {
+                    Image(uiImage: UIImage.init(named: "stopicon")!)
+                        .resizable()
+                        .frame(width: 30, height: 30).offset(x: -15)
+                }
+            }.padding(EdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 0))
+            VStack(alignment: .leading) {
+                Text("\(module.name)")
+                    .font(.system(size: 18))
+                    .foregroundColor(.white)
+                if let composer = module.composer, composer.count > 0 {
+                    Text(module.composer ?? "no name").font(.system(size: 12))
+                    .foregroundColor(.white)
+                }
+                Text("\(module.size ?? 0) kb").font(.system(size: 12))
+                    .foregroundColor(.white)
+            }
+            Spacer()
+            Image(module.favorite ? "favestar-yellow" : "favestar-grey").padding(8).onTapGesture {
+                self.faveCallback?(self.module)
+            }.padding(7)
         }
-        Spacer()
-        Image(module.favorite ? "favestar-yellow" : "favestar-grey").padding(8).onTapGesture {
-          self.faveCallback?(self.module)
-        }.padding(7)
-      }
-      Divider().background(Color(Appearance.separatorColor))
-    }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-  }
+        Divider().background(Color(Appearance.separatorColor))
+        }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+    }
 }
 
 struct PlaylistView: View {

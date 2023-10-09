@@ -37,9 +37,7 @@ class RadioPresenter: RadioPresentationLogic {
     log.debug("")
     var nextUp: String?
     if buffer.count > 1 {
-      nextUp = "Radio_NextUp".l13n() + " " + String.init(format: "Radio_NByN".l13n(),
-                                                         buffer[1].name ?? "G_untitled".l13n(),
-                                                         buffer[1].composer ?? "G_untitled".l13n() )
+      nextUp = "Radio_NextUp".l13n() + " " + String.init(format: "Radio_NByN".l13n(), buffer[1].name, buffer[1].composer ?? "G_untitled".l13n() )
     }
 
     let canStepBack = history.count > 0 && buffer.first != history.last

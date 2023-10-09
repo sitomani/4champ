@@ -81,7 +81,7 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore {
       if let path = mi.modLocalPath {
         module.localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(path)
       } else {
-        log.error("file not available for module \(module.name ?? "no name available")")
+        log.error("file not available for module \(module.name)")
       }
       module.name = mi.modName ?? ""
       module.size = mi.modSize?.intValue ?? 0

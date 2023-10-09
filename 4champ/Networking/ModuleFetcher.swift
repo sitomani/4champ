@@ -134,10 +134,10 @@ class ModuleFetcher {
             // store to file and make sure it's not writing over an existing mod
             var numberExt = 0
             var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-              .last!.appendingPathComponent(mmd.name!).appendingPathExtension(mmd.type!)
+              .last!.appendingPathComponent(mmd.name).appendingPathExtension(mmd.type!)
             while FileManager.default.fileExists(atPath: localPath.path) {
                 numberExt += 1
-                let filename = mmd.name! + "_\(numberExt)"
+                let filename = mmd.name + "_\(numberExt)"
                 localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
                 .last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
             }

@@ -7,14 +7,18 @@
 
 import UIKit
 
-struct ComposerInfo {
+protocol NameComparable {
+  var name: String { get set }
+}
+
+struct ComposerInfo: NameComparable {
   var id: Int
   var name: String
   var realName: String
   var groups: String
 }
 
-struct GroupInfo {
+struct GroupInfo: NameComparable {
   var id: Int
   var name: String
 }
@@ -54,24 +58,8 @@ enum Search {
     }
   }
 
-  struct ModuleResponse {
-    var result: [SearchResultModule]
-    var text: String
-    func sortedResult() -> [SearchResultModule] {
-      let r = result.sorted { (a, b) -> Bool in
-        return a.name.label.compare(b.name.label, options: .caseInsensitive) == .orderedAscending
-      }
-      return r
-    }
-  }
-
-  struct ComposerResponse {
-    var result: [SearchResultComposer]
-    var text: String
-  }
-
-  struct GroupResponse {
-    var result: [LabelHref]
+  struct Response<T> {
+    var result: [T]
     var text: String
   }
 
@@ -94,9 +82,7 @@ enum Search {
 }
 
 // MARK: 4champ.net JSON interface objects
-typealias ModuleResult = [SearchResultModule]
-
-struct SearchResultModule: Codable {
+struct ModuleResult: Codable {
   let name, composer: LabelHref
   let format: String
   let size, downloadCount: String
@@ -117,11 +103,21 @@ struct LabelHref: Codable {
   let href: String
 }
 
-typealias ComposerResult = [SearchResultComposer]
-
-struct SearchResultComposer: Codable {
+struct ComposerResult: Codable {
   let handle: LabelHref
   let realname, groups: String
 }
 
-typealias GroupResult = [LabelHref]
+struct GroupResult: Codable {
+  let label: String
+  let href: String
+}
+
+extension Search.Response where T == ModuleResult {
+  func sortedResult() -> [ModuleResult] {
+    let result = result.sorted { (resA, resB) -> Bool in
+      return resA.name.label.compare(resB.name.label, options: .caseInsensitive) == .orderedAscending
+    }
+    return result
+  }
+}

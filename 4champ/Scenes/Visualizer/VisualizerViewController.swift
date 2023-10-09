@@ -171,7 +171,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
 
     startPlaybackTimer()
 
-    titleLabel.text = info.name! + " (" + info.type! + ")"
+    titleLabel.text = info.name + " (" + info.type! + ")"
     sizeLabel.text = "\(info.size!) Kb"
 
     let playlistName = modulePlayer.radioOn ? " | Radio" : ""

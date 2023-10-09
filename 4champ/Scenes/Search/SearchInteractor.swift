@@ -62,7 +62,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
   private var favoritedModuleId: Int = 0
   private var originalQueueLenght: Int = 0
   private var fetcher: ModuleFetcher?
-  private var latestModuleResponse: Search.ModuleResponse = Search.ModuleResponse(result: [], text: "")
+  private var latestModuleResponse = Search.Response<ModuleResult>(result: [], text: "")
 
   init() {
     moduleStorage.addStorageObserver(self)
@@ -87,22 +87,37 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
       if case let .success(jsonData) = response.result {
         log.info("\(response.result) \(request.text)")
         self.pagingIndex = request.pagingIndex
-        if let modules = try? JSONDecoder().decode(ModuleResult.self, from: jsonData) {
-          self.latestModuleResponse = Search.ModuleResponse(result: modules, text: request.text)
-          self.presenter?.presentModules(response: self.latestModuleResponse)
-        } else if let composers = try? JSONDecoder().decode(ComposerResult.self, from: jsonData) {
-          self.presenter?.presentComposers(response: Search.ComposerResponse(result: composers, text: request.text))
-        } else if let groups = try? JSONDecoder().decode(GroupResult.self, from: jsonData) {
-          self.presenter?.presentGroups(response: Search.GroupResponse(result: groups, text: request.text))
-        } else {
-          self.latestModuleResponse = Search.ModuleResponse(result: [], text: request.text)
-          self.presenter?.presentModules(response: self.latestModuleResponse)
+        if false == self.processResponse(request: request, responseData: jsonData) {
+          self.latestModuleResponse = Search.Response<ModuleResult>(result: [], text: request.text)
+          self.presenter?.presentSearchResponse(self.latestModuleResponse)
         }
       } else {
         log.error(String.init(describing: response.error))
       }
       self.currentRequest = nil
     }
+  }
+
+  private func processResponse(request: Search.Request, responseData: Data) -> Bool {
+    switch request.type {
+    case SearchType.module, SearchType.meta:
+      if let modules = try? JSONDecoder().decode([ModuleResult].self, from: responseData) {
+        self.latestModuleResponse = Search.Response<ModuleResult>(result: modules, text: request.text)
+        self.presenter?.presentSearchResponse(self.latestModuleResponse)
+        return true
+      }
+    case SearchType.composer:
+      if let composers = try? JSONDecoder().decode([ComposerResult].self, from: responseData) {
+        self.presenter?.presentSearchResponse(Search.Response<ComposerResult>(result: composers, text: request.text))
+        return true
+      }
+    case SearchType.group:
+      if let groups = try? JSONDecoder().decode([GroupResult].self, from: responseData) {
+        self.presenter?.presentSearchResponse(Search.Response<GroupResult>(result: groups, text: request.text))
+        return true
+      }
+    }
+    return false
   }
 
   func triggerAutoFetchList() {
@@ -112,17 +127,17 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
       let restRequest = RESTRoutes.listModules(composerId: id)
       AF.request(restRequest).validate().responseData { response in
         if case let .success(jsonData) = response.result,
-           let modules = try? JSONDecoder().decode(ModuleResult.self, from: jsonData) {
-            self.latestModuleResponse = Search.ModuleResponse(result: modules, text: "")
-            self.presenter?.presentModules(response: self.latestModuleResponse)
+           let modules = try? JSONDecoder().decode([ModuleResult].self, from: jsonData) {
+            self.latestModuleResponse = Search.Response<ModuleResult>(result: modules, text: "")
+            self.presenter?.presentSearchResponse(self.latestModuleResponse)
           }
       }
     } else if type == .group {
       let restRequest = RESTRoutes.listComposers(groupId: id)
       AF.request(restRequest).validate().responseData { response in
         if case let .success(jsonData) = response.result,
-           let composers = try? JSONDecoder().decode(ComposerResult.self, from: jsonData) {
-            self.presenter?.presentComposers(response: Search.ComposerResponse(result: composers, text: ""))
+           let composers = try? JSONDecoder().decode([ComposerResult].self, from: jsonData) {
+            self.presenter?.presentSearchResponse(Search.Response<ComposerResult>(result: composers, text: ""))
           }
       }
     } else {

@@ -26,8 +26,10 @@ struct Notifications {
   static let badgeUpdate = Notification.Name("badge_update")
 }
 
-struct MMD: Identifiable {
+struct MMD: Identifiable, NameComparable {
+
   init() {
+    name = ""
   }
 
   static let supportedTypes: [String] = Replay.supportedFormats
@@ -42,9 +44,9 @@ struct MMD: Identifiable {
     if let path = cdi.modLocalPath {
       self.localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(path)
     } else {
-      log.error("Module \(cdi.modName ?? "noname") file not available")
+      log.error("Module \(cdi.modName ?? "") file not available")
     }
-    self.name = cdi.modName
+    self.name = cdi.modName ?? ""
     self.size = cdi.modSize?.intValue
     self.type = cdi.modType
     self.serviceId = ModuleService.init(rawValue: cdi.serviceId?.intValue ?? 1) ?? .amp
@@ -63,15 +65,15 @@ struct MMD: Identifiable {
       if let modNameParts = components.last?.components(separatedBy: ".") {
         type = modNameParts.first ?? "MOD"
         name = modNameParts[1...modNameParts.count - 2].joined(separator: ".")
-        name = name?.replacingOccurrences(of: "%", with: "%25") // replace percent signs with encoding
-        name = name?.removingPercentEncoding // before removing the encoding
-        localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(name!).appendingPathExtension(type!)
+        name = name.replacingOccurrences(of: "%", with: "%25") // replace percent signs with encoding
+        name = name.removingPercentEncoding ?? "" // before removing the encoding
+        localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(name).appendingPathExtension(type!)
       }
     }
   }
 
   var id: Int?
-  var name: String?
+  var name: String
   var type: String?
   var composer: String?
   var size: Int?
