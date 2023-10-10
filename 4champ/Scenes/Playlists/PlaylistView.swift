@@ -132,7 +132,7 @@ struct PlaylistView: View {
           }.onMove(perform: move)
             .onDelete(perform: deleteItems)
         }
-        .padding(.top)
+        .padding(.init(top: 8, leading: 0, bottom: 0, trailing: 0))
         .listStyle(.plain)
         .modifier(ListBackgroundModifier())
         .navigationBarTitle(Text("TabBar_Playlist".l13n().uppercased()), displayMode: .inline)
