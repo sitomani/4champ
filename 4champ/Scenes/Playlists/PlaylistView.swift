@@ -119,18 +119,23 @@ struct PlaylistView: View {
       }
       ZStack {
         List {
-          ForEach(store.viewModel.modules) { mod in
-            SUIModule(module: mod, faveCallback: self.favorite(module:))
-              .contentShape(Rectangle())
-              .onTapGesture {
-                self.store.interactor?.playModule(request: Playlists.Play.Request(mmd: mod))
-              }.onLongPressGesture {
-                self.store.router?.toPlaylistSelector(module: mod)
-              }
-              .listRowBackground(Color(Appearance.ampBgColor))
-              .listRowInsets(.init(top: 0, leading: 8, bottom: 0, trailing: 8))
-          }.onMove(perform: move)
-            .onDelete(perform: deleteItems)
+          Group {
+            ForEach(store.viewModel.modules) { mod in
+              SUIModule(module: mod, faveCallback: self.favorite(module:))
+                .contentShape(Rectangle())
+                .onTapGesture {
+                  self.store.interactor?.playModule(request: Playlists.Play.Request(mmd: mod))
+                }.onLongPressGesture {
+                  self.store.router?.toPlaylistSelector(module: mod)
+                }
+                .listRowBackground(Color(Appearance.ampBgColor))
+                .listRowInsets(.init(top: 0, leading: 10, bottom: 0, trailing: 10))
+            }.onMove(perform: move)
+              .onDelete(perform: deleteItems)
+            if store.viewModel.modules.count == 0 {
+              Spacer().listRowBackground(Color(Appearance.ampBgColor))
+            }
+          }
         }
         .padding(.init(top: 8, leading: 0, bottom: 0, trailing: 0))
         .listStyle(.plain)

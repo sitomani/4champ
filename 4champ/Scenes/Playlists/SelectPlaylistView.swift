@@ -99,7 +99,7 @@ struct PlaylistSelectorSUI: View {
                             .foregroundColor(Color(.white))
                             .background(RoundedRectangle(cornerRadius: 5)
                                 .foregroundColor(Color(Appearance.ampTextfieldBgColor))
-                                .frame(minHeight: 32)
+                                .frame(minHeight: 48)
                                 .padding(EdgeInsets(top: 0, leading: -10, bottom: 0, trailing: 8)))
                             .padding(EdgeInsets(top: 8, leading: 20, bottom: 2, trailing: 0)).frame(minHeight: 44)
                         Button(action: {
@@ -133,7 +133,9 @@ struct PlaylistSelectorSUI: View {
                             }
                         }
                     }.onDelete(perform: delete).listRowBackground(Color.clear)
-                }.contentShape(Rectangle()).id(listId)
+                }.listStyle(.plain).contentShape(Rectangle()).id(listId)
+                .modifier(ListBackgroundModifier())
+
             }.navigationBarTitle("PlaylistView_Playlists", displayMode: .inline)
                 .navigationBarItems(leading: Button(action: {
                     self.showModal.toggle()
