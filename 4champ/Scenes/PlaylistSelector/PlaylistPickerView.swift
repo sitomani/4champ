@@ -66,12 +66,12 @@ struct PlaylistPickerView: View {
                 }.background(Color.black.opacity(0.25))
                 VStack {
                     VStack {
-                        Spacer()
-                        Text(self.store.viewModel.module).foregroundColor(Color(.black))
+                        Text(self.store.viewModel.module).foregroundColor(Color(.black)).padding(.init(top: 16, leading: 0, bottom: 0, trailing: 0))
                         Text("PlaylistSelector_Title").foregroundColor(Color(.black))
                         Picker(selection: $store.viewModel.currentPlaylistIndex, label: Text("")) {
-                            ForEach(0..<self.store.viewModel.playlistOptions.count) {
-                                Text(self.store.viewModel.playlistOptions[$0]).foregroundColor(Color(.black))
+                            ForEach(0..<self.store.viewModel.playlistOptions.count, id: \.self) { index in
+                                Text(self.store.viewModel.playlistOptions[index])
+                                    .foregroundColor(Color(.black))
                             }
                         }.labelsHidden().background(Color(Appearance.veryLightGray))
                     }.frame(maxWidth: .infinity)
