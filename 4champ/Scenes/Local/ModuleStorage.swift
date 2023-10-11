@@ -8,16 +8,15 @@
 import Foundation
 import CoreData
 
-enum StorageError:Error {
+enum StorageError: Error {
   case migrationFailed
 }
-
 
 protocol ModuleStorageInterface {
   var currentPlaylist: Playlist? { get set }
   var coordinatorError: StorageError? { get }
-  
-  func createFRC<T: NSManagedObject>(fetchRequest:NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T>
+
+  func createFRC<T: NSManagedObject>(fetchRequest: NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T>
   func addStorageObserver(_ observer: ModuleStorageObserver)
   func removeStorageObserver(_ observer: ModuleStorageObserver)
   func addModule(module: MMD)
@@ -26,7 +25,7 @@ protocol ModuleStorageInterface {
   func getRandomModule() -> MMD?
   func deleteModule(module: MMD)
   func resetCoordinatorError()
-  func rebuildDatabaseFromDisk()  
+  func rebuildDatabaseFromDisk()
   func createPlaylist(name: String, id: String?) -> Playlist
   func saveContext()
   func fetchModuleInfo(_ id: Int) -> ModuleInfo?
@@ -146,7 +145,7 @@ class ModuleStorage: NSObject {
     _currentPlaylist = playlist
     _ = observers.map { $0.playlistChange() }
   }
-  
+
 }
 
 extension ModuleStorage: ModuleStorageInterface {
@@ -158,18 +157,16 @@ extension ModuleStorage: ModuleStorageInterface {
       setCurrentPlaylist(playlist: newValue)
     }
   }
-  
+
   var coordinatorError: StorageError? {
-    get {
-      return _storageError
-    }
+    _storageError
   }
-  
+
   func resetCoordinatorError() {
     _storageError = nil
   }
-  
-  func createFRC<T>(fetchRequest: NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T> where T : NSManagedObject {
+
+  func createFRC<T>(fetchRequest: NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T> where T: NSManagedObject {
 
     // Initialize Fetch Request
     let fetchedResultsController = NSFetchedResultsController<T>(fetchRequest: fetchRequest,
@@ -333,32 +330,16 @@ extension ModuleStorage: ModuleStorageInterface {
     // no IDs yet for this service range
     return range.lowerBound
   }
-  
+
   func rebuildDatabaseFromDisk() {
     if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
       do {
         let fileURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
         for fileURL in fileURLs {
-          let filename = fileURL.lastPathComponent
-          
-          if filename.contains("bbbb.sqlite") { continue }
-          let nameComponents = filename.components(separatedBy: ".")
-          guard let suffix = filename.split(separator: ".").last else { continue }
-
-          let filetype = String(suffix).uppercased()
-          guard MMD.supportedTypes.contains(filetype) else { continue }
-          
-          var mmd = MMD.init()
-          mmd.localPath = fileURL
-          mmd.name = nameComponents.dropLast().joined(separator: ".")
-          mmd.serviceId = .local
-          mmd.serviceKey = fileURL.lastPathComponent
-          mmd.id = moduleStorage.getNextModuleId(service: .local)
-          mmd.type = filetype
-          mmd.composer = " "
-          let attrs = try FileManager.default.attributesOfItem(atPath: fileURL.path)
-          mmd.size = ((attrs[FileAttributeKey.size] as? Int) ?? 0) / 1024
-          
+          guard !fileURL.lastPathComponent.contains("bbbb.sqlite") else { continue }
+          guard let suffix = fileURL.lastPathComponent.split(separator: ".").last else { continue }
+          guard MMD.supportedTypes.contains(String(suffix).uppercased()) else { continue }
+          let mmd = MMD.init(fileURL: fileURL)
           addModule(module: mmd)
         }
       } catch {
@@ -367,7 +348,7 @@ extension ModuleStorage: ModuleStorageInterface {
       resetCoordinatorError()
     }
   }
-    
+
   private func fetchModuleInfo(_ request: NSFetchRequest<ModuleInfo>) -> ModuleInfo? {
     do {
       let match = try managedObjectContext.fetch(request)
@@ -378,5 +359,23 @@ extension ModuleStorage: ModuleStorageInterface {
       log.error(error)
     }
     return nil
+  }
+}
+
+extension MMD {
+  init(fileURL: URL) {
+    self.init()
+    let filename = fileURL.lastPathComponent
+    let nameComponents = filename.components(separatedBy: ".")
+    localPath = fileURL
+    name = nameComponents.dropLast().joined(separator: ".")
+    serviceId = .local
+    serviceKey = fileURL.lastPathComponent
+    id = moduleStorage.getNextModuleId(service: .local)
+    type = filename.split(separator: ".").last?.uppercased()
+    composer = nil
+    if let attrs = try? FileManager.default.attributesOfItem(atPath: fileURL.path) {
+      size = ((attrs[FileAttributeKey.size] as? Int) ?? 0) / 1024
+    }
   }
 }
