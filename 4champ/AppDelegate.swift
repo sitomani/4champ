@@ -11,6 +11,7 @@ import AVFoundation
 import Alamofire
 import UserNotifications
 import SwiftUI
+import BackgroundTasks
 
 // Global
 let modulePlayer = ModulePlayer()
@@ -22,11 +23,9 @@ let shareUtil = ShareUtility()
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-  private var _bgFetchCallback: ((UIBackgroundFetchResult) -> Void)?
-
   private var sharedMod: MMD?
-
   private lazy var dlController: DownloadController = DownloadController()
+  private var bgQueue = OperationQueue()
 
   var window: UIWindow?
 
@@ -35,20 +34,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     Appearance.setup()
     setupLogging()
     setupAVSession()
+    setupBackgroundTask()
     cleanupFiles()
+
     // UNCOMMENT BELOW TWO LINES TO TEST LOCAL NOTIFICATIONS
     //    settings.prevCollectionSize = 0
     //    settings.newestPlayed = 152890
 
-    updateLatest()
+    // Refresh the latest
+    bgQueue.maxConcurrentOperationCount = 1
+    bgQueue.addOperation(RefershLatestOperation())
     UIApplication.shared.beginReceivingRemoteControlEvents()
 
-    #if DEBUG
+#if DEBUG
     ReviewActions.reset()
-    #endif
-
-    application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+#endif
     return true
+  }
+
+  func setupBackgroundTask() {
+    let scheduled = BGTaskScheduler.shared.register(forTaskWithIdentifier: "fourchamp.latest.refresh", using: nil) { task in
+      log.debug("BG Task triggered")
+      self.handleBackgroundTask(task: task)
+    }
+    if scheduled {
+      log.debug("Task scheduled")
+      scheduleAppRefresh()
+    }
   }
 
   func setupAVSession() {
@@ -77,20 +89,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     modulePlayer.cleanup()
   }
 
-  func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-    log.debug("performFetch")
-    _bgFetchCallback = completionHandler
-    updateLatest()
-  }
-
   func application(_ application: UIApplication,
                    continue userActivity: NSUserActivity,
                    restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
 
     guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
-      let url = userActivity.webpageURL,
-      let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
-        return false
+          let url = userActivity.webpageURL,
+          let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+      return false
     }
 
     if components.path == "/mod", let idString = components.queryItems?.first?.value, let modId = Int(idString) {
@@ -116,6 +122,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     return true
   }
 
+  func scheduleAppRefresh() {
+    let taskRequest = BGAppRefreshTaskRequest(identifier: "fourchamp.latest.refresh")
+    taskRequest.earliestBeginDate = Date(timeIntervalSinceNow: 5*60)
+    do {
+      try BGTaskScheduler.shared.submit(taskRequest)
+    } catch {
+      print("Unable to schedule app refresh task: \(error)")
+    }
+  }
+
+  func handleBackgroundTask(task: BGTask) {
+    log.debug("")
+    scheduleAppRefresh()
+
+    let operation = RefershLatestOperation()
+    bgQueue.addOperation(operation)
+
+    task.expirationHandler = {
+      operation.cancel()
+    }
+
+    operation.completionBlock = {
+      task.setTaskCompleted(success: !operation.isCancelled)
+    }
+  }
+
   /// Set up SwiftyBeaver logging
   func setupLogging() {
     let console = ConsoleDestination()  // log to Xcode Console
@@ -129,9 +161,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     log.addDestination(console)
 
     console.minLevel = .warning
-    #if DEBUG
+#if DEBUG
     console.minLevel = .debug
-    #endif
+#endif
     log.info("Logger initialized")
   }
 
@@ -147,43 +179,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     } catch {
       log.error("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
     }
-  }
-
-  func updateLatest() {
-    log.debug("")
-    let req = RESTRoutes.latestId
-    AF.request(req).validate().responseString { resp in
-      switch resp.result {
-      case .failure:
-        self._bgFetchCallback?(.noData)
-        self._bgFetchCallback = nil
-      case .success(let str):
-        guard let collectionSize = Int(str) else { return }
-        log.info("Collection Size: \(collectionSize)")
-        self.updateCollectionSize(size: collectionSize)
-      }
-    }
-  }
-
-  func updateCollectionSize(size: Int) {
-    log.debug("")
-    settings.collectionSize = size
-    let prevSize = settings.prevCollectionSize
-
-    // Only fire the request once per a given collectionSize/diff
-    if prevSize < size && settings.badgeCount < Constants.maxBadgeValue {
-      let fmt = "Radio_Notification".l13n()
-      let content = UNMutableNotificationContent()
-      content.body = String.init(format: fmt, "\(settings.badgeCount)")
-      content.categoryIdentifier = "newmodules"
-      let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 0.1, repeats: false)
-      let req = UNNotificationRequest.init(identifier: "newmodules-usernotif", content: content, trigger: trigger)
-      UNUserNotificationCenter.current().add(req, withCompletionHandler: nil)
-      settings.prevCollectionSize = settings.collectionSize
-      _bgFetchCallback?(.newData)
-    } else {
-      _bgFetchCallback?(.noData)
-    }
-    _bgFetchCallback = nil
   }
 }
