@@ -71,7 +71,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
 
   // MARK: View lifecycle
   override func viewDidAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
+    super.viewDidAppear(animated)
   }
 
   override func viewDidLoad() {

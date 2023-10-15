@@ -8,8 +8,13 @@
 import Foundation
 import CoreData
 
+enum StorageError: Error {
+  case migrationFailed
+}
+
 protocol ModuleStorageInterface {
   var currentPlaylist: Playlist? { get set }
+  var coordinatorError: StorageError? { get }
 
   func createFRC<T: NSManagedObject>(fetchRequest: NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T>
   func addStorageObserver(_ observer: ModuleStorageObserver)
@@ -19,7 +24,8 @@ protocol ModuleStorageInterface {
   func getModuleById(_ id: Int) -> MMD?
   func getRandomModule() -> MMD?
   func deleteModule(module: MMD)
-
+  func resetCoordinatorError()
+  func rebuildDatabaseFromDisk()
   func createPlaylist(name: String, id: String?) -> Playlist
   func saveContext()
   func fetchModuleInfo(_ id: Int) -> ModuleInfo?
@@ -38,6 +44,7 @@ protocol ModuleStorageObserver: class {
 class ModuleStorage: NSObject {
   private var observers: [ModuleStorageObserver] = []
   private var _currentPlaylist: Playlist?
+  private var _storageError: StorageError?
 
   /// Identifier ranges for different services
   private let idRanges = [
@@ -95,10 +102,18 @@ class ModuleStorage: NSObject {
       var dict = [String: AnyObject]()
       dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data" as AnyObject?
       dict[NSLocalizedFailureReasonErrorKey] = failureReason as AnyObject?
-
       dict[NSUnderlyingErrorKey] = error as NSError
       log.error("Unresolved error \(dict)")
-      abort()
+
+      // Instead of aborting, delete the SQLite file and try again
+      try? FileManager.default.removeItem(at: url)
+      do {
+        try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url)
+        _storageError = .migrationFailed
+      } catch {
+        let nserror = error as NSError
+        fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+      }
     }
     return coordinator
   }()
@@ -130,6 +145,7 @@ class ModuleStorage: NSObject {
     _currentPlaylist = playlist
     _ = observers.map { $0.playlistChange() }
   }
+
 }
 
 extension ModuleStorage: ModuleStorageInterface {
@@ -142,8 +158,15 @@ extension ModuleStorage: ModuleStorageInterface {
     }
   }
 
-  func createFRC<T>(fetchRequest: NSFetchRequest<T>,
-                    entityName: String) -> NSFetchedResultsController<T> where T: NSManagedObject {
+  var coordinatorError: StorageError? {
+    _storageError
+  }
+
+  func resetCoordinatorError() {
+    _storageError = nil
+  }
+
+  func createFRC<T>(fetchRequest: NSFetchRequest<T>, entityName: String) -> NSFetchedResultsController<T> where T: NSManagedObject {
 
     // Initialize Fetch Request
     let fetchedResultsController = NSFetchedResultsController<T>(fetchRequest: fetchRequest,
@@ -308,6 +331,21 @@ extension ModuleStorage: ModuleStorageInterface {
     return range.lowerBound
   }
 
+  func rebuildDatabaseFromDisk() {
+    guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+    guard let fileURLs = try? FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil) else { return }
+
+    for fileURL in fileURLs {
+      guard !fileURL.lastPathComponent.contains("bbbb.sqlite") else { continue }
+      guard let suffix = fileURL.lastPathComponent.split(separator: ".").last else { continue }
+      guard MMD.supportedTypes.contains(String(suffix).uppercased()) else { continue }
+      let mmd = MMD.init(fileURL: fileURL)
+      addModule(module: mmd)
+    }
+
+    resetCoordinatorError()
+  }
+
   private func fetchModuleInfo(_ request: NSFetchRequest<ModuleInfo>) -> ModuleInfo? {
     do {
       let match = try managedObjectContext.fetch(request)
@@ -318,5 +356,23 @@ extension ModuleStorage: ModuleStorageInterface {
       log.error(error)
     }
     return nil
+  }
+}
+
+extension MMD {
+  init(fileURL: URL) {
+    self.init()
+    let filename = fileURL.lastPathComponent
+    let nameComponents = filename.components(separatedBy: ".")
+    localPath = fileURL
+    name = nameComponents.dropLast().joined(separator: ".")
+    serviceId = .local
+    serviceKey = fileURL.lastPathComponent
+    id = moduleStorage.getNextModuleId(service: .local)
+    type = filename.split(separator: ".").last?.uppercased()
+    composer = nil
+    if let attrs = try? FileManager.default.attributesOfItem(atPath: fileURL.path) {
+      size = ((attrs[FileAttributeKey.size] as? Int) ?? 0) / 1024
+    }
   }
 }
