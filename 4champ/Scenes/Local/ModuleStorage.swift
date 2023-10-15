@@ -332,21 +332,18 @@ extension ModuleStorage: ModuleStorageInterface {
   }
 
   func rebuildDatabaseFromDisk() {
-    if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-      do {
-        let fileURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
-        for fileURL in fileURLs {
-          guard !fileURL.lastPathComponent.contains("bbbb.sqlite") else { continue }
-          guard let suffix = fileURL.lastPathComponent.split(separator: ".").last else { continue }
-          guard MMD.supportedTypes.contains(String(suffix).uppercased()) else { continue }
-          let mmd = MMD.init(fileURL: fileURL)
-          addModule(module: mmd)
-        }
-      } catch {
-        log.error("Error in enumerating files: \(error.localizedDescription)")
-      }
-      resetCoordinatorError()
+    guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+    guard let fileURLs = try? FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil) else { return }
+
+    for fileURL in fileURLs {
+      guard !fileURL.lastPathComponent.contains("bbbb.sqlite") else { continue }
+      guard let suffix = fileURL.lastPathComponent.split(separator: ".").last else { continue }
+      guard MMD.supportedTypes.contains(String(suffix).uppercased()) else { continue }
+      let mmd = MMD.init(fileURL: fileURL)
+      addModule(module: mmd)
     }
+
+    resetCoordinatorError()
   }
 
   private func fetchModuleInfo(_ request: NSFetchRequest<ModuleInfo>) -> ModuleInfo? {
