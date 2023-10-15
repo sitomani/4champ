@@ -2,8 +2,7 @@
 //  RadioSessionCell.swift
 //  ampplayer
 //
-//  Created by Aleksi Sitomaniemi on 20.10.2021.
-//  Copyright © 2021 boogie. All rights reserved.
+//  Copyright © 2021 Aleksi Sitomaniemi. All rights reserved.
 //
 
 import Foundation

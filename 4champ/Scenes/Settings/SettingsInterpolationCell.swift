@@ -2,8 +2,7 @@
 //  SettingsInterpolationCell.swift
 //  ampplayer
 //
-//  Created by Aleksi Sitomaniemi on 2.5.2020.
-//  Copyright © 2020 boogie. All rights reserved.
+//  Copyright © 2020 Aleksi Sitomaniemi. All rights reserved.
 //
 
 import UIKit
