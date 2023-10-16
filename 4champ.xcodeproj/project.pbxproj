@@ -97,6 +97,7 @@
 		7397C1E729091D9D002D5CDB /* uade_ios.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7397C1E129091BC3002D5CDB /* uade_ios.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		739B4BF42720850200C2D69F /* RadioSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739B4BF32720850200C2D69F /* RadioSessionCell.swift */; };
 		73CE92E52AAF03D1000BFC1C /* PlaylistPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CE92E42AAF03D1000BFC1C /* PlaylistPresenter.swift */; };
+		73E4FBF02ADC4D01009A985A /* RefreshLatestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E4FBEF2ADC4D01009A985A /* RefreshLatestOperation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -228,6 +229,7 @@
 		7397C1E129091BC3002D5CDB /* uade_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = uade_ios.xcframework; path = "../uade-ios/uade_ios.xcframework"; sourceTree = "<group>"; };
 		739B4BF32720850200C2D69F /* RadioSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioSessionCell.swift; sourceTree = "<group>"; };
 		73CE92E42AAF03D1000BFC1C /* PlaylistPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistPresenter.swift; sourceTree = "<group>"; };
+		73E4FBEF2ADC4D01009A985A /* RefreshLatestOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshLatestOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -511,6 +513,7 @@
 				45D61F5A20E1780D00869814 /* Appearance.swift */,
 				45855FCC2444AC6B0079C767 /* ModuleSharing.swift */,
 				45B5FC25255D997000282550 /* ReviewActions.swift */,
+				73E4FBEF2ADC4D01009A985A /* RefreshLatestOperation.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -726,6 +729,7 @@
 				45AA910620FF36C200794147 /* MPTReplayer.m in Sources */,
 				451B6AA72204BBBB001848FA /* ModuleStorage.swift in Sources */,
 				4543983620D0344F00991ADC /* AboutInteractor.swift in Sources */,
+				73E4FBF02ADC4D01009A985A /* RefreshLatestOperation.swift in Sources */,
 				451B6AA32204B6CC001848FA /* LocalModels.swift in Sources */,
 				45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */,
 				456E6F2E240A5FAF0034BDA2 /* PlaylistView.swift in Sources */,
