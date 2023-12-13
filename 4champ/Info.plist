@@ -135,52 +135,65 @@
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
+					<string>667</string>
 					<string>669</string>
+					<string>AHX</string>
 					<string>AMF</string>
 					<string>AMS</string>
+					<string>C67</string>
 					<string>DBM</string>
 					<string>DIGI</string>
 					<string>DMF</string>
 					<string>DSM</string>
+					<string>DSYM</string>
 					<string>DTM</string>
 					<string>FAR</string>
-					<string>IT</string>
+					<string>FMT</string>
+					<string>FST</string>
 					<string>GDM</string>
-					<string>ST26</string>
+					<string>GTK</string>
+					<string>GT2</string>
+					<string>HVL</string>
+					<string>ICE</string>
+					<string>IT</string>
 					<string>IMF</string>
 					<string>J2B</string>
 					<string>M15</string>
-					<string>MED</string>
 					<string>MDL</string>
+					<string>MED</string>
+					<string>MMCMP</string>
+					<string>MMS</string>
+					<string>MO3</string>
 					<string>MOD</string>
+					<string>MPTM</string>
+					<string>MT2</string>
 					<string>MTM</string>
 					<string>NST</string>
 					<string>OCT</string>
+					<string>OK</string>
 					<string>OKT</string>
 					<string>OSS</string>
-					<string>PTM</string>
+					<string>OXM</string>
+					<string>PLM</string>
+					<string>PPM</string>
 					<string>PSM</string>
+					<string>PT36</string>
+					<string>PTM</string>
 					<string>S3M</string>
-					<string>STM</string>
 					<string>SFX</string>
 					<string>SFX2</string>
+					<string>ST26</string>
+					<string>STK</string>
+					<string>STM</string>
+					<string>STP</string>
+					<string>STX</string>
+					<string>SYMMOD</string>
+					<string>THX</string>
 					<string>ULT</string>
 					<string>UMX</string>
 					<string>WOW</string>
 					<string>XM</string>
-					<string>FST</string>
-					<string>STK</string>
-					<string>MMCMP</string>
-					<string>MMS</string>
-					<string>MO3</string>
-					<string>MPTM</string>
-					<string>OK</string>
-					<string>PLM</string>
-					<string>PPM</string>
-					<string>PT36</string>
-					<string>AHX</string>
-					<string>THX</string>
-					<string>HVL</string>
+					<string>XMF</string>
 				</array>
 			</dict>
 		</dict>
