@@ -204,8 +204,4 @@ static int iHivelyBufPos = 0;
   return true;
 }
 
-- (NSString*) replayerName {
-    return @"Hively";
-}
-
 @end

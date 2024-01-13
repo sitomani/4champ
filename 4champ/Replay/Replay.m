@@ -52,7 +52,7 @@ static SInt16* bufRight;
   self=[super init];
   if (self) {
     self.replayers = @[[MPTReplayer class], [HVLReplayer class], [UADEReplayer class]];
-    _name = @"n/a";
+    _name = @"";
   }
   return self;
 }

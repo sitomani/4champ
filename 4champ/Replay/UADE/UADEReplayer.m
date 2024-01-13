@@ -352,10 +352,6 @@ static volatile int uadethread_running;
     return @[@"UADE Player:", playerName];
 }
 
-- (NSString*) replayerName {
-    return @"UADE";
-}
-
 - (int)moduleLength {
     if(ustate) {
         const struct uade_song_info *info = uade_get_song_info(ustate);
