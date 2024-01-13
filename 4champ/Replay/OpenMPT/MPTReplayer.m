@@ -11,6 +11,7 @@
 @implementation MPTReplayer {
   openmpt_module* currentOMPTFile;
 }
+@synthesize name = _name;
 
 + (NSArray<NSString*>*)supportedFormats {
     return @[@"669",
@@ -57,6 +58,12 @@
             @"PLM",
             @"PPM",
             @"PT36"];
+}
+
+- (MPTReplayer*) init {
+    self = [super init];
+    _name = @"OpenMPT";
+    return self;
 }
 
 - (bool) loadModule:(NSString *)path type:(NSString*)type {
@@ -163,5 +170,6 @@
   NSInteger volInt = vol * 100;
   return volInt;
 }
+
 
 @end

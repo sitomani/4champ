@@ -10,6 +10,7 @@ import UIKit
 protocol RadioPresentationLogic {
   func presentControlStatus(status: RadioStatus)
   func presentChannelBuffer(buffer: [MMD], history: [MMD])
+  func presentReplayer(name: String)
   func presentSessionHistoryInsert()
   func presentPlaybackTime(length: Int, elapsed: Int)
   func presentNotificationStatus(response: Radio.LocalNotifications.Response)
@@ -33,6 +34,13 @@ class RadioPresenter: RadioPresentationLogic {
     }
   }
 
+  func presentReplayer(name: String) {
+    DispatchQueue.main.async {
+      let vm = Radio.Playback.ViewModel(name: name)
+      self.viewController?.displayPlaybackInfo(viewModel: vm)
+    }
+  }
+
   func presentChannelBuffer(buffer: [MMD], history: [MMD]) {
     log.debug("")
     var nextUp: String?
@@ -52,13 +60,13 @@ class RadioPresenter: RadioPresentationLogic {
   }
 
   func presentPlaybackTime(length: Int, elapsed: Int) {
-    let timeLeft = length - elapsed
+    let timeLeft = length > 0 ? length - elapsed : elapsed
     let seconds = timeLeft % 60
     let minutes = (timeLeft - seconds) / 60
     let timeString = String.init(format: "%d:%02d", minutes, seconds)
     let vm = Radio.Playback.ViewModel(timeLeft: timeString)
     DispatchQueue.main.async {
-      self.viewController?.displayPlaybackTime(viewModel: vm)
+      self.viewController?.displayPlaybackInfo(viewModel: vm)
     }
   }
 

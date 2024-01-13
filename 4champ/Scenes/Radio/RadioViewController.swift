@@ -10,7 +10,7 @@ import UIKit
 protocol RadioDisplayLogic: class {
   func displayControlStatus(viewModel: Radio.Control.ViewModel)
   func displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel)
-  func displayPlaybackTime(viewModel: Radio.Playback.ViewModel)
+  func displayPlaybackInfo(viewModel: Radio.Playback.ViewModel)
   func displayLocalNotificationStatus(viewModel: Radio.LocalNotifications.ViewModel)
   func displayNewModules(viewModel: Radio.NewModules.ViewModel)
   func displaySessionHistoryInsert()
@@ -34,6 +34,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
   @IBOutlet weak var composerLabel: UILabel?
   @IBOutlet weak var sizeLabel: UILabel?
   @IBOutlet weak var timeLabel: UILabel?
+  @IBOutlet weak var playerLabel: UILabel?
 
   @IBOutlet weak var localLabel: UILabel?
   @IBOutlet weak var saveButton: UIButton?
@@ -238,7 +239,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
       currentModule = current
       currentModuleView?.alpha = 1
       composerLabel?.text = current.composer
-      nameLabel?.text = current.name
+      nameLabel?.text = "\(current.name) (\(current.type ?? ""))"
       sizeLabel?.text = "\(current.size ?? 0) kb"
       localLabel?.isHidden = !current.hasBeenSaved()
       faveButton?.isSelected = current.favorite
@@ -262,11 +263,17 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
       radioTable?.reloadData()
       animateGradient(.out)
       historyTitle?.text = ""
+      playerLabel?.text = ""
     }
   }
 
-  func displayPlaybackTime(viewModel: Radio.Playback.ViewModel) {
-    timeLabel?.text = viewModel.timeLeft
+  func displayPlaybackInfo(viewModel: Radio.Playback.ViewModel) {
+    if let time = viewModel.timeLeft {
+      timeLabel?.text = time
+    }
+    if let replayer = viewModel.name {
+      playerLabel?.text = replayer
+    }
   }
 
   func displayLocalNotificationStatus(viewModel: Radio.LocalNotifications.ViewModel) {

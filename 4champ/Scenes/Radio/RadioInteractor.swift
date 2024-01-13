@@ -414,6 +414,7 @@ extension RadioInteractor: ModulePlayerObserver {
     if let previous = previous {
       addToSessionHistory(module: previous)
     }
+    presenter?.presentReplayer(name: modulePlayer.renderer.name)
   }
 
   func statusChanged(status: PlayerStatus) {

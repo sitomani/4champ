@@ -29,6 +29,8 @@ static volatile int uadethread_running;
     int fds[2];
 }
 
+@synthesize name = _name;
+
 + (NSArray<NSString*>*)supportedFormats {
     return @[@"AAM", // ArtAndMagic,
              @"ABK", // Amos ABK
@@ -121,6 +123,7 @@ static volatile int uadethread_running;
              @"PM40",// Promizer
              @"PN",  // Pokey Noise
              @"POWT", @"PT", // Laxity
+             @"PRT", // Pretracker
              @"PRU1",// ProRunner
              @"PRU2",// ProRunner
              @"PS",  // Paul Shields
@@ -188,6 +191,7 @@ static volatile int uadethread_running;
 - (UADEReplayer*) init {
     self = [super init];
     if (self) {
+        _name = @"UADE";
         NSString* bu = [NSBundle mainBundle].resourcePath;
         NSString* bd = [bu stringByAppendingString:@"/Frameworks/uade_ios.framework/UADERes.bundle"];
         
@@ -328,6 +332,13 @@ static volatile int uadethread_running;
 }
 
 - (int)currentPosition {
+    if(ustate) {
+        const struct uade_song_info *info = uade_get_song_info(ustate);
+        int bytespersecond = UADE_BYTES_PER_FRAME *
+                         uade_get_sampling_rate(ustate);
+        int64_t playTime = (info->subsongbytes) / bytespersecond;
+        return (int)playTime;
+    }
     return 0;
 }
 
@@ -341,8 +352,13 @@ static volatile int uadethread_running;
     return @[@"UADE Player:", playerName];
 }
 
+- (NSString*) replayerName {
+    return @"UADE";
+}
+
 - (int)moduleLength {
     if(ustate) {
+        const struct uade_song_info *info = uade_get_song_info(ustate);
         return ustate->song.info.duration;
     }
     return 0;
@@ -359,7 +375,17 @@ static volatile int uadethread_running;
 - (int)readFrames:(size_t)count bufLeft:(int16_t *)bufLeft bufRight:(int16_t *)bufRight {
     int16_t buf[count*2];
     ssize_t retVal = uade_read(&buf, sizeof buf, ustate);
-    
+
+    struct uade_notification n;
+    // Check for song end
+    if (uade_read_notification(&n, ustate)) {
+        bool atEnd = n.type == UADE_NOTIFICATION_SONG_END;
+        uade_cleanup_notification(&n);
+        if(atEnd) {
+            return 0;
+        }
+    }
+
     if(retVal<0) {
         NSLog(@"Error reading data");
         return 0;
