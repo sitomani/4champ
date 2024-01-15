@@ -227,6 +227,7 @@ class ModulePlayer: NSObject {
       nextIndex += 1
     }
     if play(at: nextIndex) == false {
+      guard playQueue.count > nextIndex else { return }
       playQueue.remove(at: nextIndex)
     }
   }

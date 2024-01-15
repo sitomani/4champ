@@ -45,7 +45,8 @@ enum Radio {
     }
 
     struct ViewModel {
-      var timeLeft: String
+      var timeLeft: String?
+      var name: String?
     }
   }
 

@@ -25,6 +25,8 @@
     
     int hvlStereoSeparation;
 }
+
+@synthesize name = _name;
 static int iHivelyBufPos = 0;
 
 + (NSArray<NSString*>*)supportedFormats {
@@ -34,6 +36,7 @@ static int iHivelyBufPos = 0;
 - (HVLReplayer*) init {
     self = [super init];
     if (self) {
+        _name = @"Hively";
         hvl_InitReplayer();
         
         iHivelyBufPos = kHivelyRenderSamples;
@@ -200,6 +203,5 @@ static int iHivelyBufPos = 0;
   hvl_InitSubsong(currentHVLtune, 0);
   return true;
 }
-
 
 @end

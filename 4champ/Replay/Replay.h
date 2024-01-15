@@ -51,8 +51,9 @@
 
 /// Visualisation API getters
 @protocol ReplayInformation <NSObject>
-- (int) currentPosition; //returns current position in current module
-- (int) moduleLength; //returns current mod length in seconds
+@property (nonatomic, strong, readonly) NSString* name; // name of the replayer lib
+- (int) currentPosition; //returns current position in current module in seconds. 0 if not known
+- (int) moduleLength; //returns current mod length in seconds. 0 if not known
 - (NSInteger) volumeOnChannel:(NSInteger)channel; //returns current volume on requested channel
 - (NSInteger) numberOfChannels; //returns number of channels in current module
 - (NSArray<NSString*>*) getSamples; //returns sample names of current mod

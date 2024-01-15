@@ -33,6 +33,8 @@ NSLog(@"Error in audio %@", @(err));\
 
 @implementation Replay
 
+@synthesize name = _name;
+
 // Static byte buffers for reading render data into
 static SInt16* bufLeft;
 static SInt16* bufRight;
@@ -50,6 +52,7 @@ static SInt16* bufRight;
   self=[super init];
   if (self) {
     self.replayers = @[[MPTReplayer class], [HVLReplayer class], [UADEReplayer class]];
+    _name = @"";
   }
   return self;
 }
@@ -146,6 +149,7 @@ static SInt16* bufRight;
       }
     renderer = [[replayerClass alloc] init];
   }
+  _name = renderer.name;
   return [renderer loadModule:path type:type];
 }
 
@@ -314,4 +318,5 @@ static OSStatus playbackCallback(void *inRefCon,
   
   return noErr;
 }
+
 @end
