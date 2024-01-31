@@ -122,3 +122,7 @@ Radio session play history added to enable moving back in the session.
 ### Version 3.5 November 2022
 
 UADE player integration
+
+### Version 3.6 January 2024
+
+Update UADE library with PRT (PreTracker) support.

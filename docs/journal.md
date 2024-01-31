@@ -1,5 +1,13 @@
 # 4champ Development Journal
 
+### January 2024 Stability update + PreTracker support + first PR from a contributor!
+
+During the #hacktoberfest campaign in 2023 I did a handful of stability fixes and migrated the app to latest iOS SDK. These changes did not yet make it to a release, but in January I noticed that UADE now has PreTracker support!
+
+The latest UADE releases have changed the project structure and tooling in a way that will require a while to adjust my fork. For now I went on by merely cherry-picking the commits that enable playback for Pretracker modules. After this update, it was time to push out 4champ 3.6.
+
+Around the turn of the year the 4champ github repo got the first pull request from a contributor besides myself: **Mothcompute** kindly added some missing file extensions to the supported formats list in [PR #28](https://github.com/sitomani/4champ/pull/28). This change required some additional edits in the code, so it did not make it to the 3.6 release. The updated OpenMPT formats list will be part of the next app update release later in 2024.
+
 ### 1-31 October 2022 Some esoteric formats anyone?
 
 For the Hacktoberfest campaign I took up the challenge to finalise my integration of UADE replayer to 4champ. A big body of work had to first be done on the UADE side. 

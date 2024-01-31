@@ -14,7 +14,7 @@ If you're interested to test new features when they're getting implemented befor
 
 You can read more about the history of the app and follow my work on the app at the development journal that I created for this project: [sitomani.github.io/4champ](https://sitomani.github.io/4champ).
 
-You can also follow the [@4champ_app](https://twitter.com/4champ_app) Twitter account to stay up to date on what's happening with the app.
+You can also follow the 4champ accounts on [X (4champ_app)](https://x.com/4champ_app) or [Mastodon (@4champ@mastodon.social)](https://mastodon.social/@4champ) to stay up to date on what's happening with the app.
 
 ### Main Features of the app
 
