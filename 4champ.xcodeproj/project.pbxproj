@@ -223,6 +223,8 @@
 		45D61F5C20E17D8F00869814 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		45D61F6220E1863600869814 /* Gzip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Gzip.framework; path = Carthage/Build/iOS/Gzip.framework; sourceTree = "<group>"; };
 		735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 9 (imports).xcdatamodel"; sourceTree = "<group>"; };
+		7364535E2B6C1F9E009A0F7A /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		7364535F2B6C1F9E009A0F7A /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		73759FD128EB34DF00535F8E /* libopenmpt.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libopenmpt.xcframework; path = ../openmpt/libopenmpt.xcframework; sourceTree = "<group>"; };
 		7397C1DA29091504002D5CDB /* UADEReplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UADEReplayer.h; sourceTree = "<group>"; };
 		7397C1DC29091504002D5CDB /* UADEReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UADEReplayer.m; sourceTree = "<group>"; };
@@ -601,6 +603,7 @@
 				sv,
 				ru,
 				fi,
+				"pt-BR",
 			);
 			mainGroup = 45D3929820B1DDEC00EEF4E3;
 			packageReferences = (
@@ -754,6 +757,7 @@
 				4543984520D0366E00991ADC /* da */,
 				4543984920D0366E00991ADC /* ru */,
 				4543984B20D0366E00991ADC /* fi */,
+				7364535E2B6C1F9E009A0F7A /* pt-BR */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -769,6 +773,7 @@
 				4543984720D0366E00991ADC /* sv */,
 				4543984A20D0366E00991ADC /* ru */,
 				4543984C20D0366E00991ADC /* fi */,
+				7364535F2B6C1F9E009A0F7A /* pt-BR */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
