@@ -6,6 +6,6 @@
   Copyright © 2016 Aleksi Sitomaniemi. All rights reserved.
 */
 
-"RADIO_NEW" = "Radio: New in AMP";
-"RADIO_ALL" = "Radio: All";
-"RADIO_LOCAL" = "Radio: Local collection";
+"RADIO_NEW" = "Radio: Novas no AMP";
+"RADIO_ALL" = "Radio: Todas";
+"RADIO_LOCAL" = "Radio: coleção local";
