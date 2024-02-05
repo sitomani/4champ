@@ -263,7 +263,7 @@
 "Error_PlaylistLocked" = "Module está numa playlist travada";
 
 /* Download failed for composer modules list info label */
-"Error_ModuleListFailed" = "Falha em buscar lsta de modules. O servidor não está respondendo ou você pode estar sem conexão. Tente novamente mais tarde.";
+"Error_ModuleListFailed" = "Falha em buscar lista de modules. O servidor não está respondendo ou você pode estar sem conexão. Tente novamente mais tarde.";
 
 /* Module table: Error shown when data indicates restricted download */
 "Error_ComposerDisabled" = "O Compositor desabilitou o download desse module";
@@ -324,7 +324,7 @@
 
 "AboutView_Local" = "Os modules que você baixou estão listados na aba Coleção. Toque em um módulo para começar a reproduzi-lo. Um toque longo abrirá o seletor de playlist para adicionar um mod a uma playlist. \n\nDeslize para a esquerda/direita na parte superior de um module para excluí-lo. \n\nVocê pode classificar a lista de modules locais por tipo de módulo, compositor, título, tamanho ou status de favorito. Use o botão de filtro na página de Modules Locais para encontrar rapidamente o módulo que você está procurando.";
 
-"AboutView_Search" = "Use search to find modules to play. You can search by composer, group or module name, or search from the texts contained in modules. If group search finds only one group, all composers associated with that group are listed. If multiple groups are found, matching groups are listed and selecting one will list the composers. \n\nTap a module to download for playing. \n\nIf you want to keep the module in local collection, tap save icon next right to the module name or set the module as favorite by tapping the star icon. Search results header has a button for downloading all results at one go. This will also add the modules to local collection.";
+"AboutView_Search" = "Use a pesquisa para encontrar modules para tocar. Você pode pesquisar por compositor, grupo ou nome de module, ou pesquisar nos textos contidos nos modules. Se a pesquisa de grupo encontrar apenas um grupo, todos os compositores associados a esse grupo serão listados. Se vários grupos forem encontrados, os grupos correspondentes serão listados e a seleção de um deles listará os compositores. \n\nToque em um module para baixar e tocar. \n\nSe você quiser manter o module na coleção local, toque no ícone salvar próximo ao nome do module ou defina o module como favorito tocando no ícone de estrela. O cabeçalho dos resultados da pesquisa possui um botão para baixar todos os resultados de uma só vez. Isso também adicionará os modules à coleção local.";
 
 "AboutView_Playlists" = "A visualização da Playlist mostra a fila de reprodução atual. Ao visualizar modules em qualquer aba, um toque longo abre o seletor de playlist onde você pode adicionar o module a qualquer playlist.\n\nNa visualização da playlist você pode controlar a reprodução e criar/selecionar/limpar playlists. Você também pode selecionar o modo de reprodução (sequencial/aleatório). \n\nDeslizar para a esquerda removerá o module selecionado da playlist (mas não da Coleção).";
 
