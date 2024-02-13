@@ -100,20 +100,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     if components.path == "/mod", let idString = components.queryItems?.first?.value, let modId = Int(idString) {
-      dlController.rootViewController = UIApplication.shared.windows[0].rootViewController
+          guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                let window = windowScene.windows.first else {
+            return false
+          }
+      dlController.rootViewController = window.rootViewController
       dlController.show(modId: modId)
     }
-
     return true
   }
 
   func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-    if url.scheme == "fourchamp" && url.host == "modules" {
-      if let idString = url.path.split(separator: "/").first, let modId = Int(idString) {
-        dlController.show(modId: modId)
+    DispatchQueue.main.async {
+      if url.scheme == "fourchamp" && url.host == "modules" {
+        if let idString = url.path.split(separator: "/").first, let modId = Int(idString) {
+          self.dlController.show(modId: modId)
+        }
+      } else {
+        self.dlController.showImport(for: [url])
       }
-    } else {
-      dlController.showImport(for: [url])
     }
     return true
   }
