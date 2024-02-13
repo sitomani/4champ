@@ -39,7 +39,8 @@ class ShareUtility: NSObject, UIActivityItemSource {
     }
 
     var sourceView: UIView?
-    if let mainVC = UIApplication.shared.windows[0].rootViewController as? MainViewController {
+    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+       let window = windowScene.windows.first, let mainVC = window.rootViewController as? MainViewController {
       sourceView = mainVC.tabBar
     }
 
@@ -64,17 +65,21 @@ class ShareUtility: NSObject, UIActivityItemSource {
   }
 
   static func topMostController() -> UIViewController? {
-     let window = UIApplication.shared.windows[0]
-     guard let rootViewController = window.rootViewController else {
-          return nil
-      }
+    guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+          let window = windowScene.windows.first else {
+      return nil
+    }
 
-      var topController = rootViewController
+    guard let rootViewController = window.rootViewController else {
+      return nil
+    }
 
-      while let newTopController = topController.presentedViewController {
-          topController = newTopController
-      }
+    var topController = rootViewController
 
-      return topController
+    while let newTopController = topController.presentedViewController {
+      topController = newTopController
+    }
+
+    return topController
   }
 }
