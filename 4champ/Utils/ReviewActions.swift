@@ -8,6 +8,16 @@
 import Foundation
 import StoreKit
 
+extension SKStoreReviewController {
+    public static func requestReviewInCurrentScene() {
+        if let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
+            DispatchQueue.main.async {
+                requestReview(in: scene)
+            }
+        }
+    }
+}
+
 /// Enumeration used to trigger AppStore review requests
 enum ReviewActions: String {
 
@@ -46,7 +56,7 @@ enum ReviewActions: String {
             return
         }
 
-        SKStoreReviewController.requestReview()
+        SKStoreReviewController.requestReviewInCurrentScene()
 
         // Reset the defaults
         defaults.set(0, forKey: ReviewActions.noteworthyActionCount.rawValue)
