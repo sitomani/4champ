@@ -147,7 +147,7 @@
   }
   return sampleArray;
 }
-
+    
 - (NSArray<NSString*>*) getInstruments
 {
   if (!currentOMPTFile) {
