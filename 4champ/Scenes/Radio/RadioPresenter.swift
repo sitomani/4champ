@@ -56,7 +56,9 @@ class RadioPresenter: RadioPresentationLogic {
   }
 
   func presentSessionHistoryInsert() {
-    self.viewController?.displaySessionHistoryInsert()
+    DispatchQueue.main.async {
+      self.viewController?.displaySessionHistoryInsert()
+    }
   }
 
   func presentPlaybackTime(length: Int, elapsed: Int) {

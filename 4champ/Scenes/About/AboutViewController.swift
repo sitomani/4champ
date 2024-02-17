@@ -71,12 +71,15 @@ class AboutViewController: UIViewController, AboutDisplayLogic {
     UIUtils.roundCornersInView(tableView)
     navigationItem.title = "AboutView_Title".l13n().uppercased()
 
-    toggleNowPlaying(modulePlayer.status.rawValue > PlayerStatus.stopped.rawValue)
-
     let img = UIImage(named: "favestar-grey")?.withRenderingMode(.alwaysTemplate)
     let buttonItem = UIBarButtonItem.init(image: img, landscapeImagePhone: img, style: .plain, target: self, action: #selector(reviewNow))
     self.navigationItem.leftBarButtonItem = buttonItem
   }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        toggleNowPlaying(modulePlayer.status.rawValue > PlayerStatus.stopped.rawValue)
+    }
 
   // MARK: Display Logic
   func displayNowPlaying(_ viewModel: About.Status.ViewModel) {
@@ -88,12 +91,14 @@ class AboutViewController: UIViewController, AboutDisplayLogic {
 }
 
 extension AboutViewController: NowPlayingContainer {
+
   func toggleNowPlaying(_ value: Bool) {
+    guard view.window != nil else { return }
     log.debug("")
-      if value {
-        bottomAnchor?.constant = -(50.0 + 10.0)
-      } else {
-        bottomAnchor?.constant = -10.0
+    if value {
+      bottomAnchor?.constant = -(50.0 + 10.0)
+    } else {
+      bottomAnchor?.constant = -10.0
     }
     view.layoutIfNeeded()
   }

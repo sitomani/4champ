@@ -39,10 +39,14 @@ class PlaylistPresenter: PlaylistPresentationLogic {
     }
 
     let vm = Playlists.Select.ViewModel(playlistName: name, shuffle: shuffle, modules: mods)
-    viewController?.displayPlaylist(viewModel: vm)
+    DispatchQueue.main.async {
+      self.viewController?.displayPlaylist(viewModel: vm)
+    }
   }
 
   func presentModeChange(shuffled: Bool) {
-    viewController?.displayModeChange(shuffled: shuffled)
+    DispatchQueue.main.async {
+      self.viewController?.displayModeChange(shuffled: shuffled)
+    }
   }
 }

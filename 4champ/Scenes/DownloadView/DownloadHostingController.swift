@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import UniformTypeIdentifiers
 
 enum ImportResultType {
   case importSuccess
@@ -55,7 +56,14 @@ class DownloadController: NSObject, ObservableObject {
   func selectImportModules(addToPlaylist: Bool = false) {
     self.addToCurrentPlaylist = addToPlaylist
     if documentPickerVC == nil {
-      documentPickerVC = UIDocumentPickerViewController(documentTypes: ["public.item"], in: .import)
+
+      if #available(iOS 14, *) {
+        let supportedTypes: [UTType] = [UTType.item]
+        documentPickerVC = UIDocumentPickerViewController(forOpeningContentTypes: supportedTypes)
+      } else {
+        let supportedTypes: [String] = ["public.item"]
+        documentPickerVC = UIDocumentPickerViewController(documentTypes: supportedTypes, in: .import)
+      }
       documentPickerVC?.delegate = self
       documentPickerVC?.modalPresentationStyle = .formSheet
       documentPickerVC?.allowsMultipleSelection = true

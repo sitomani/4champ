@@ -60,9 +60,9 @@ static SInt16* bufRight;
 -(void) initAudio
 {
   //set up audio buffers for rendering
-  bufLeft = malloc(maxFrameSize * 2 * sizeof(UInt16));
-  bufRight = malloc(maxFrameSize * 2 * sizeof(UInt16));
-  
+  bufLeft = malloc(maxFrameSize * 2 * sizeof(SInt16));
+  bufRight = malloc(maxFrameSize * 2 * sizeof(SInt16));
+
   OSStatus status;
   
   // Describe audio component
@@ -78,7 +78,7 @@ static SInt16* bufRight;
   
   // Get audio units
   status = AudioComponentInstanceNew(inputComponent, &audioUnit);
-  //checkStatus(status);
+  checkStatus(status);
   
   UInt32 flag = 1;
   const int kOutputBus = 0;

@@ -355,7 +355,7 @@ static volatile int uadethread_running;
 - (int)moduleLength {
     if(ustate) {
         const struct uade_song_info *info = uade_get_song_info(ustate);
-        return ustate->song.info.duration;
+        return info->duration;
     }
     return 0;
 }
