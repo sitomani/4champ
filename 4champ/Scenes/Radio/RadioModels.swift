@@ -7,10 +7,26 @@
 
 import UIKit
 
-enum RadioChannel: Int {
+enum RadioChannel: Equatable {
+  static func == (lhs: RadioChannel, rhs: RadioChannel) -> Bool {
+    switch (lhs, rhs) {
+    case (.all, .all):
+      return true
+    case (.new, .new):
+      return true
+    case (.local, .local):
+      return true
+    case (.artist, .artist):
+      return true
+    default:
+      return false
+    }
+  }
+
   case all
   case new
   case local
+  case artist(name: String, ids: [Int])
 }
 
 enum RadioStatus {
@@ -23,6 +39,7 @@ enum RadioStatus {
 
 enum Radio {
   // MARK: Use cases
+
   enum Control {
     struct Request {
       var powerOn: Bool
@@ -68,6 +85,7 @@ enum Radio {
       var notificationsEnabled: Bool
       var notificationsRequested: Bool
     }
+
     struct ViewModel {
       var imageName: String
     }
@@ -77,6 +95,7 @@ enum Radio {
     struct Response {
       let badgeValue: Int
     }
+
     struct ViewModel {
       let badgeText: String?
     }

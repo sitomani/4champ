@@ -17,7 +17,6 @@ protocol SettingsDataStore {
 }
 
 class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
-
   private enum SettingKeys {
     static let domainName = "DomainName"
     static let stereoSeparation = "StereoSeparation"
@@ -25,6 +24,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     static let newestPlayed = "newestPlayed"
     static let prevCollectionSize = "prevCollectionSize"
     static let interpolation = "interpolation"
+    static let resultShuffle = "resultShuffle"
   }
 
   var presenter: SettingsPresentationLogic?
@@ -63,7 +63,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     set {
       UserDefaults.standard.set(newValue, forKey: SettingKeys.collectionSize)
       updateBadge()
-      NotificationCenter.default.post(Notification.init(name: Notifications.badgeUpdate))
+      NotificationCenter.default.post(Notification(name: Notifications.badgeUpdate))
     }
   }
 
@@ -77,7 +77,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     set {
       UserDefaults.standard.set(newValue, forKey: SettingKeys.newestPlayed)
       updateBadge()
-      NotificationCenter.default.post(Notification.init(name: Notifications.badgeUpdate))
+      NotificationCenter.default.post(Notification(name: Notifications.badgeUpdate))
     }
   }
 
@@ -90,6 +90,18 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     }
     set {
       UserDefaults.standard.set(newValue, forKey: SettingKeys.prevCollectionSize)
+    }
+  }
+
+  var resultShuffle: Bool {
+    get {
+      if let value = UserDefaults.standard.value(forKey: SettingKeys.resultShuffle) as? Bool {
+        return value
+      }
+      return false
+    }
+    set {
+      UserDefaults.standard.set(newValue, forKey: SettingKeys.resultShuffle)
     }
   }
 

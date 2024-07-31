@@ -40,6 +40,7 @@
                                             <segment title="All"/>
                                             <segment title="New in AMP"/>
                                             <segment title="Local"/>
+                                            <segment title="Composer"/>
                                         </segments>
                                         <connections>
                                             <action selector="segmentChanged:" destination="9pv-A4-QxB" eventType="valueChanged" id="ieY-IW-J86"/>

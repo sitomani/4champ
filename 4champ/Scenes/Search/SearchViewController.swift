@@ -5,8 +5,8 @@
 //  Copyright (c) 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
-import UIKit
 import SwiftUI
+import UIKit
 
 protocol SearchDisplayLogic: class {
   func displayResult(viewModel: Search.ViewModel)
@@ -24,9 +24,9 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
 
   var shouldDisplaySearchBar: Bool = true
 
-  @IBOutlet weak var tableBottomConstraint: NSLayoutConstraint?
-  @IBOutlet weak var spinner: UIActivityIndicatorView?
-  @IBOutlet weak var progressBar: UIProgressView?
+  @IBOutlet var tableBottomConstraint: NSLayoutConstraint?
+  @IBOutlet var spinner: UIActivityIndicatorView?
+  @IBOutlet var progressBar: UIProgressView?
 
   var viewModel: Search.ViewModel?
   private var pagingRequestActive: Bool = false
@@ -36,9 +36,10 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   private var progressMarkIndex = 0
   private var spinnerTimer: Timer?
 
-  @IBOutlet weak var searchBar: UISearchBar?
+  @IBOutlet var searchBar: UISearchBar?
 
-  @IBOutlet weak var tableView: UITableView?
+  @IBOutlet var tableView: UITableView?
+
   // MARK: Object lifecycle
 
   override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -67,7 +68,8 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   }
 
   // MARK: Routing
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+  override func prepare(for segue: UIStoryboardSegue, sender _: Any?) {
     if let scene = segue.identifier {
       let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
       if let router = router, router.responds(to: selector) {
@@ -77,6 +79,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   }
 
   // MARK: View lifecycle
+
   override func viewDidLoad() {
     super.viewDidLoad()
     modulePlayer.addPlayerObserver(self)
@@ -111,7 +114,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     }
 
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
-    self.view.addGestureRecognizer(longPressRecognizer)
+    view.addGestureRecognizer(longPressRecognizer)
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -123,7 +126,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     } else {
       navigationController?.setNavigationBarHidden(false, animated: animated)
     }
-    self.statusChanged(status: modulePlayer.status)
+    statusChanged(status: modulePlayer.status)
   }
 
   override func viewWillDisappear(_ animated: Bool) {
@@ -139,6 +142,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   }
 
   // MARK: Display Logic
+
   func displayResult(viewModel: Search.ViewModel) {
     log.debug("")
     pagingRequestActive = false
@@ -153,7 +157,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       self.viewModel?.groups.append(contentsOf: viewModel.groups)
       self.viewModel?.modules.append(contentsOf: viewModel.modules)
     } else {
-      self.tableView?.setContentOffset(.zero, animated: false)
+      tableView?.setContentOffset(.zero, animated: false)
       self.viewModel = viewModel
     }
     searchBar?.searching = false
@@ -166,7 +170,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   }
 
   func updateDownloadAllButton() {
-    guard let vm = self.viewModel else {
+    guard let vm = viewModel else {
       return
     }
 
@@ -178,17 +182,26 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
         }
       }
 
-      let dlbutton = UIButton.init(type: .system)
-      dlbutton.setImage(UIImage.init(named: "downloadall"), for: .normal)
-      dlbutton.layoutMargins = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
+      let dlbutton = UIButton(type: .system)
+      dlbutton.setImage(UIImage(named: "downloadall"), for: .normal)
+      dlbutton.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
       dlbutton.setTitle("\(onlineOnly)", for: .normal)
       dlbutton.sizeToFit()
       dlbutton.addTarget(self, action: #selector(triggerDownloadAll(_:)), for: .touchUpInside)
       dlbutton.semanticContentAttribute = UIApplication.shared
         .userInterfaceLayoutDirection == .rightToLeft ? .forceLeftToRight : .forceRightToLeft
-      navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: dlbutton)
 
-      dlbutton.isHidden = onlineOnly <= 0
+      let playButton = UIButton(type: .system)
+      playButton.setImage(UIImage(named: "play-small"), for: .normal)
+      playButton.addTarget(self, action: #selector(startArtistRadio(_:)), for: .touchUpInside)
+      var navItems: [UIBarButtonItem] = []
+      if vm.modules.count > 0 {
+        navItems.append(UIBarButtonItem(customView: playButton))
+      }
+      if onlineOnly > 0 {
+        navItems.append(UIBarButtonItem(customView: dlbutton))
+      }
+      navigationItem.rightBarButtonItems = navItems
     }
   }
 
@@ -202,7 +215,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     }
     if let err = viewModel.error {
       if let ip = tableView?.indexPathForSelectedRow,
-        let cell = tableView?.cellForRow(at: ip) as? ModuleCell {
+         let cell = tableView?.cellForRow(at: ip) as? ModuleCell {
         cell.showMessageOverlay(message: err)
       }
     }
@@ -239,13 +252,13 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     updateDownloadAllButton()
   }
 
-  @objc private func triggerDownloadAll(_ sender: UIBarButtonItem) {
+  @objc private func triggerDownloadAll(_: UIBarButtonItem) {
     guard let vm = viewModel else { return }
 
     // dismiss first just in case
     batchProgressView?.dismiss(animated: false, completion: nil)
-    batchProgressView = UIAlertController.init(title: "Search_Downloading".l13n(), message: "()", preferredStyle: .alert)
-    batchProgressView?.addAction(UIAlertAction.init(title: "G_Cancel".l13n(), style: .cancel, handler: { _ in
+    batchProgressView = UIAlertController(title: "Search_Downloading".l13n(), message: "()", preferredStyle: .alert)
+    batchProgressView?.addAction(UIAlertAction(title: "G_Cancel".l13n(), style: .cancel, handler: { _ in
       self.interactor?.cancelDownload()
     }))
     present(batchProgressView!, animated: true, completion: nil)
@@ -255,13 +268,17 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     interactor?.downloadModules(request)
   }
 
+  @objc private func startArtistRadio(_: UIBarButtonItem) {
+    interactor?.startArtistRadio()
+  }
+
   @objc func longPressed(sender: UILongPressGestureRecognizer) {
     if sender.state == UIGestureRecognizer.State.began {
-      let touchPoint = sender.location(in: self.tableView)
+      let touchPoint = sender.location(in: tableView)
       if let indexPath = tableView?.indexPathForRow(at: touchPoint) {
         log.debug("Long pressed row: \(indexPath.row)")
         if let cell = tableView?.cellForRow(at: indexPath) as? ModuleCell {
-          longTap(cell: cell )
+          longTap(cell: cell)
         }
       }
     }
@@ -269,21 +286,20 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
 
   private func startBatchSpinner() {
     spinnerTimer?.invalidate()
-    spinnerTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { (_) in
+    spinnerTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { _ in
       let nextMark = self.progressMarks[self.progressMarkIndex]
       self.batchProgressView?.title = "Search_Downloading".l13n() + nextMark
       self.progressMarkIndex = (self.progressMarkIndex + 1) % self.progressMarks.count
     })
   }
 
-  private func stopBatchSpinner() {
-
-  }
+  private func stopBatchSpinner() {}
 }
 
 // MARK: SearchBar Delegate
+
 extension SearchViewController: UISearchBarDelegate {
-  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+  func searchBar(_: UISearchBar, textDidChange searchText: String) {
     prepareSearch(keyword: searchText)
   }
 
@@ -292,7 +308,7 @@ extension SearchViewController: UISearchBarDelegate {
     navigationController?.setNavigationBarHidden(true, animated: true)
   }
 
-  func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+  func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange _: Int) {
     prepareSearch(keyword: searchBar.text ?? "")
   }
 
@@ -316,10 +332,10 @@ extension SearchViewController: UISearchBarDelegate {
     }
     interactor?.search(Search.Request(text: text, type: searchScopes[searchBar?.selectedScopeButtonIndex ?? 0], pagingIndex: 0))
   }
-
 }
 
 // MARK: Datasource
+
 extension SearchViewController: UITableViewDataSource {
   func registerXibs(in tableView: UITableView?) {
     guard let tableView = tableView else { return }
@@ -328,10 +344,11 @@ extension SearchViewController: UITableViewDataSource {
     tableView.register(UINib(nibName: "GroupCell", bundle: nil), forCellReuseIdentifier: "GroupCell")
   }
 
-  func numberOfSections(in tableView: UITableView) -> Int {
+  func numberOfSections(in _: UITableView) -> Int {
     return 1
   }
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+  func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
     return viewModel?.numberOfRows() ?? 0
   }
 
@@ -357,14 +374,14 @@ extension SearchViewController: UITableViewDataSource {
     return cell
   }
 
-  func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+  func tableView(_: UITableView, titleForDeleteConfirmationButtonForRowAt _: IndexPath) -> String? {
     guard (viewModel?.modules.count ?? 0) > 0 else {
       return nil
     }
     return "SearchView_Remove".l13n()
   }
 
-  func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+  func tableView(_: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
     guard let modules = viewModel?.modules, modules.count > indexPath.row else {
       return .none
     }
@@ -375,7 +392,7 @@ extension SearchViewController: UITableViewDataSource {
     }
   }
 
-  func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+  func tableView(_: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
     guard (viewModel?.modules.count ?? 0) > 0 else {
       return
     }
@@ -384,10 +401,10 @@ extension SearchViewController: UITableViewDataSource {
       interactor?.deleteModule(at: indexPath)
     }
   }
-
 }
 
 // MARK: Table view delegate
+
 extension SearchViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     log.debug("")
@@ -413,14 +430,15 @@ extension SearchViewController: UITableViewDelegate {
     }
   }
 
-  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+  func scrollViewDidScroll(_: UIScrollView) {
     searchBar?.endEditing(true)
   }
 }
 
 // MARK: Module Player Observer
+
 extension SearchViewController: ModulePlayerObserver {
-  func moduleChanged(module: MMD, previous: MMD?) {
+  func moduleChanged(module _: MMD, previous _: MMD?) {
     tableView?.reloadData()
   }
 
@@ -439,17 +457,18 @@ extension SearchViewController: ModulePlayerObserver {
     tableView?.reloadData()
   }
 
-  func errorOccurred(error: PlayerError) {
+  func errorOccurred(error _: PlayerError) {
     let vm = Search.ProgressResponse.ViewModel(progress: 0, error: "Error_PlaybackFailed".l13n())
     displayDownloadProgress(viewModel: vm)
   }
 
-  func queueChanged(changeType: QueueChange) {
+  func queueChanged(changeType _: QueueChange) {
     // nop
   }
 }
 
 // MARK: ViewModel extensions for tableview
+
 extension Search.ViewModel {
   func dequeueCell(for tableView: UITableView, at row: Int) -> UITableViewCell {
     if modules.count > row {
@@ -472,7 +491,6 @@ extension Search.ViewModel {
         cell.nameLabel?.text = group.name
         return cell
       }
-
     }
     return UITableViewCell()
   }
@@ -489,7 +507,7 @@ extension Search.ViewModel {
   }
 
   mutating func updateModule(module: MMD) {
-    if let index = self.modules.firstIndex(where: { (mmd) -> Bool in
+    if let index = modules.firstIndex(where: { mmd -> Bool in
       mmd.id == module.id
     }) {
       modules[index] = module
@@ -500,8 +518,9 @@ extension Search.ViewModel {
 extension SearchViewController: ModuleCellDelegate {
   func faveTapped(cell: ModuleCell) {
     guard let ip = tableView?.indexPath(for: cell),
-      let module = viewModel?.modules[ip.row], let modId = module.id, module.supported() else {
-        return
+          let module = viewModel?.modules[ip.row], let modId = module.id, module.supported()
+    else {
+      return
     }
 
     if module.hasBeenSaved() {
@@ -514,8 +533,9 @@ extension SearchViewController: ModuleCellDelegate {
 
   func saveTapped(cell: ModuleCell) {
     guard let ip = tableView?.indexPath(for: cell),
-      let module = viewModel?.modules[ip.row], let modId = module.id, module.supported() else {
-        return
+          let module = viewModel?.modules[ip.row], let modId = module.id, module.supported()
+    else {
+      return
     }
     let request = Search.BatchDownload.Request(moduleIds: [modId])
     interactor?.downloadModules(request)
@@ -525,24 +545,25 @@ extension SearchViewController: ModuleCellDelegate {
     guard let ip = tableView?.indexPath(for: cell),
           let module = viewModel?.modules[ip.row],
           module.id != nil,
-          module.supported() else {
-        return
+          module.supported()
+    else {
+      return
     }
     shareUtil.shareMod(mod: module)
   }
 
   func longTap(cell: ModuleCell) {
     if let ip = tableView?.indexPath(for: cell),
-      let mmd = viewModel?.modules[ip.row] {
+       let mmd = viewModel?.modules[ip.row] {
       router?.toPlaylistSelector(module: mmd)
     }
   }
 
   func dismissAction() {
-    self.dismiss( animated: true, completion: nil )
+    dismiss(animated: true, completion: nil)
   }
 
-  func addAction(moduleId: Int, playlistId: String) {
+  func addAction(moduleId _: Int, playlistId _: String) {
     log.error("not expecting addAction")
   }
 }

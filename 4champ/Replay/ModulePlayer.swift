@@ -63,7 +63,7 @@ class ModulePlayer: NSObject {
   var radioOn: Bool = false
   var playQueue: [MMD] = []
   let renderer = Replay()
-  let mpImage = UIImage.init(named: "albumart")!
+  let mpImage = UIImage(named: "albumart")!
   weak var radioRemoteControl: RadioRemoteControl?
 
   var currentModule: MMD? {
@@ -74,18 +74,17 @@ class ModulePlayer: NSObject {
         let songName = mod.name
         let playlistName = "LockScreen_Radio".l13n()
 
-        let artwork = MPMediaItemArtwork.init(boundsSize: mpImage.size, requestHandler: { (_) -> UIImage in
-          return self.mpImage
+        let artwork = MPMediaItemArtwork(boundsSize: mpImage.size, requestHandler: { _ -> UIImage in
+          self.mpImage
         })
 
         let dict: [String: Any] =
-          [ MPMediaItemPropertyArtwork: artwork,
-            MPMediaItemPropertyAlbumTitle: playlistName,
-            MPMediaItemPropertyTitle: songName,
-            MPMediaItemPropertyArtist: author ?? "",
-            MPMediaItemPropertyPlaybackDuration: NSNumber.init(value: renderer.moduleLength()),
-            MPNowPlayingInfoPropertyElapsedPlaybackTime: NSNumber.init(value: renderer.currentPosition())
-        ]
+          [MPMediaItemPropertyArtwork: artwork,
+           MPMediaItemPropertyAlbumTitle: playlistName,
+           MPMediaItemPropertyTitle: songName,
+           MPMediaItemPropertyArtist: author ?? "",
+           MPMediaItemPropertyPlaybackDuration: NSNumber(value: renderer.moduleLength()),
+           MPNowPlayingInfoPropertyElapsedPlaybackTime: NSNumber(value: renderer.currentPosition())]
         MPNowPlayingInfoCenter.default().nowPlayingInfo = dict
 
         _ = observers.map {
@@ -102,6 +101,7 @@ class ModulePlayer: NSObject {
       }
     }
   }
+
   private var observers: [ModulePlayerObserver] = []
 
   override init() {
@@ -114,10 +114,9 @@ class ModulePlayer: NSObject {
     renderer.setStereoSeparation(settings.stereoSeparation)
     renderer.setInterpolationFilterLength(settings.interpolation.rawValue)
     NotificationCenter.default.addObserver(self,
-                                   selector: #selector(handleRouteChange),
-                                   name: AVAudioSession.routeChangeNotification,
-                                   object: nil)
-
+                                           selector: #selector(handleRouteChange),
+                                           name: AVAudioSession.routeChangeNotification,
+                                           object: nil)
   }
 
   /// Adds an status change observer to ModulePlayer. Object registering as observer
@@ -133,10 +132,14 @@ class ModulePlayer: NSObject {
   ///    - observer: Object implementing ModulePlayerObserver` protocol
   func removePlayerObserver(_ observer: ModulePlayerObserver) {
     if let index = observers.firstIndex(where: { mp -> Bool in
-      return mp === observer
+      mp === observer
     }) {
       observers.remove(at: index)
     }
+  }
+
+  func controlRadio(_ request: Radio.Control.Request) {
+    radioRemoteControl?.controlRadio(request: request)
   }
 
   /// Starts playing a module immediately. If there are modules in play queue,
@@ -158,7 +161,7 @@ class ModulePlayer: NSObject {
       play(at: index)
     } else {
       playQueue.append(mmd)
-      play(at: playQueue.count-1)
+      play(at: playQueue.count - 1)
     }
   }
 
@@ -173,18 +176,18 @@ class ModulePlayer: NSObject {
     renderer.stop()
     let mod = playQueue[at]
     if renderer.loadModule(path, type: mod.type) {
-        let settings = SettingsInteractor()
-        setStereoSeparation(settings.stereoSeparation)
-        setInterpolation(settings.interpolation)
-        currentModule = mod
-        renderer.play()
-        status = .playing
-        return true
+      let settings = SettingsInteractor()
+      setStereoSeparation(settings.stereoSeparation)
+      setInterpolation(settings.interpolation)
+      currentModule = mod
+      renderer.play()
+      status = .playing
+      return true
     } else {
       log.error("Could not load tune: \(path)")
-        _ = observers.map {
-          $0.errorOccurred(error: .loadFailed(mmd: playQueue[at]))
-        }
+      _ = observers.map {
+        $0.errorOccurred(error: .loadFailed(mmd: playQueue[at]))
+      }
       return false
     }
   }
@@ -223,7 +226,7 @@ class ModulePlayer: NSObject {
       nextIndex = (index + 1) % playQueue.count
     }
     // make sure we can move on in playlist even if there's same mod multiple times
-    while playQueue[nextIndex] == currentModule && nextIndex < playQueue.count-1 {
+    while playQueue[nextIndex] == currentModule && nextIndex < playQueue.count - 1 {
       nextIndex += 1
     }
     if play(at: nextIndex) == false {
@@ -294,9 +297,10 @@ class ModulePlayer: NSObject {
   @objc func handleRouteChange(notification: Notification) {
     log.debug("")
     guard let userInfo = notification.userInfo,
-      let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
-      let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) else {
-        return
+          let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
+          let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue)
+    else {
+      return
     }
 
     // Pause current playback if user unplugs headphones
@@ -316,7 +320,7 @@ class ModulePlayer: NSObject {
 }
 
 extension ModulePlayer: ReplayStreamDelegate {
-  func reachedEnd(ofStream replay: Replay!) {
+  func reachedEnd(ofStream _: Replay!) {
     log.debug("")
     DispatchQueue.main.async {
       self.playNext()
@@ -332,7 +336,7 @@ extension ModulePlayer: ModuleStorageObserver {
       currentModule?.favorite = mmd.favorite
     }
     if playQueue.count == 0 { return }
-    for qIndex in 0...playQueue.count-1 where playQueue[qIndex] == mmd {
+    for qIndex in 0 ... playQueue.count - 1 where playQueue[qIndex] == mmd {
       playQueue[qIndex].favorite = mmd.favorite
     }
     _ = observers.map {
