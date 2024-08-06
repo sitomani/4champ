@@ -191,12 +191,12 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       dlbutton.semanticContentAttribute = UIApplication.shared
         .userInterfaceLayoutDirection == .rightToLeft ? .forceLeftToRight : .forceRightToLeft
 
-      let playButton = UIButton(type: .system)
-      playButton.setImage(UIImage(named: "play-small"), for: .normal)
-      playButton.addTarget(self, action: #selector(startArtistRadio(_:)), for: .touchUpInside)
+      let radioButton = UIButton(type: .system)
+      radioButton.setImage(UIImage(named: "radio"), for: .normal)
+      radioButton.addTarget(self, action: #selector(startArtistRadio(_:)), for: .touchUpInside)
       var navItems: [UIBarButtonItem] = []
       if vm.modules.count > 0 {
-        navItems.append(UIBarButtonItem(customView: playButton))
+        navItems.append(UIBarButtonItem(customView: radioButton))
       }
       if onlineOnly > 0 {
         navItems.append(UIBarButtonItem(customView: dlbutton))
@@ -235,7 +235,8 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
 
   func displayMetaDataChange(viewModel: Search.MetaDataChange.ViewModel) {
     self.viewModel?.updateModule(module: viewModel.module)
-    if let modIndex = self.viewModel?.modules.index(of: viewModel.module) {
+    if let modIndex = self.viewModel?.modules.index(of: viewModel.module),
+       nil != tableView?.window {
       tableView?.reloadRows(at: [IndexPath(row: modIndex, section: 0)], with: .fade)
     } else {
       tableView?.reloadData()
@@ -244,7 +245,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
 
   func displayDeletion(viewModel: Search.MetaDataChange.ViewModel) {
     self.viewModel?.updateModule(module: viewModel.module)
-    if let modIndex = self.viewModel?.modules.index(of: viewModel.module) {
+    if let modIndex = self.viewModel?.modules.index(of: viewModel.module), nil != tableView?.window {
       tableView?.reloadRows(at: [IndexPath(row: modIndex, section: 0)], with: .left)
     } else {
       tableView?.reloadData()
@@ -518,8 +519,7 @@ extension Search.ViewModel {
 extension SearchViewController: ModuleCellDelegate {
   func faveTapped(cell: ModuleCell) {
     guard let ip = tableView?.indexPath(for: cell),
-          let module = viewModel?.modules[ip.row], let modId = module.id, module.supported()
-    else {
+          let module = viewModel?.modules[ip.row], let modId = module.id, module.supported() else {
       return
     }
 
@@ -533,8 +533,7 @@ extension SearchViewController: ModuleCellDelegate {
 
   func saveTapped(cell: ModuleCell) {
     guard let ip = tableView?.indexPath(for: cell),
-          let module = viewModel?.modules[ip.row], let modId = module.id, module.supported()
-    else {
+          let module = viewModel?.modules[ip.row], let modId = module.id, module.supported() else {
       return
     }
     let request = Search.BatchDownload.Request(moduleIds: [modId])
@@ -545,9 +544,8 @@ extension SearchViewController: ModuleCellDelegate {
     guard let ip = tableView?.indexPath(for: cell),
           let module = viewModel?.modules[ip.row],
           module.id != nil,
-          module.supported()
-    else {
-      return
+          module.supported() else {
+        return
     }
     shareUtil.shareMod(mod: module)
   }

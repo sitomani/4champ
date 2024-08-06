@@ -17,8 +17,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radio OFF" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUj-fw-iU8">
-                                <rect key="frame" x="78" y="25" width="223" height="21"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="500" text="Benutzerdefinierten Kanal über die Suche starten" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUj-fw-iU8">
+                                <rect key="frame" x="78" y="5" width="179" height="61"/>
                                 <inset key="insetFor6xAndEarlier" minX="-30" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -241,16 +241,16 @@
                             <constraint firstItem="QUj-fw-iU8" firstAttribute="centerY" secondItem="AIU-Eo-k1H" secondAttribute="centerY" id="T2I-Kk-iKD"/>
                             <constraint firstItem="PQr-Ze-W5v" firstAttribute="trailing" secondItem="YZW-HR-7AL" secondAttribute="trailing" constant="10" id="VeX-Mh-tp5"/>
                             <constraint firstItem="xOC-w0-98Y" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="20" id="Wc0-En-mfq"/>
-                            <constraint firstItem="PQr-Ze-W5v" firstAttribute="trailing" secondItem="QUj-fw-iU8" secondAttribute="trailing" constant="74" id="XHa-uh-TaM"/>
                             <constraint firstItem="xOC-w0-98Y" firstAttribute="top" secondItem="RQm-Tf-BLL" secondAttribute="bottom" constant="2" id="buj-Jc-cVx"/>
                             <constraint firstItem="TVg-ts-xlz" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="20" id="cVD-Fa-67C"/>
                             <constraint firstItem="YZW-HR-7AL" firstAttribute="top" secondItem="PQr-Ze-W5v" secondAttribute="top" constant="9" id="eaS-8A-lRx"/>
                             <constraint firstItem="zEe-nb-Fcg" firstAttribute="top" secondItem="F68-Dd-9Qo" secondAttribute="bottom" constant="2" id="jfW-yn-67d"/>
-                            <constraint firstItem="QUj-fw-iU8" firstAttribute="leading" secondItem="AIU-Eo-k1H" secondAttribute="trailing" constant="9" id="qVF-Xg-rSA"/>
+                            <constraint firstItem="QUj-fw-iU8" firstAttribute="leading" secondItem="AIU-Eo-k1H" secondAttribute="trailing" constant="9" id="jvP-8n-P7k"/>
                             <constraint firstAttribute="bottom" secondItem="zEe-nb-Fcg" secondAttribute="bottom" id="rNa-XF-MUM"/>
                             <constraint firstItem="F68-Dd-9Qo" firstAttribute="trailing" secondItem="PQr-Ze-W5v" secondAttribute="trailing" constant="-20" id="sUs-GF-JTL"/>
                             <constraint firstItem="F68-Dd-9Qo" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" constant="4" id="spc-IF-1dS"/>
                             <constraint firstItem="RQm-Tf-BLL" firstAttribute="top" secondItem="Ac5-pb-fyE" secondAttribute="bottom" constant="4" id="sz2-Ap-mMN"/>
+                            <constraint firstItem="qcG-Wi-evM" firstAttribute="leading" secondItem="QUj-fw-iU8" secondAttribute="trailing" constant="10" id="tWO-1Q-Sj5"/>
                             <constraint firstItem="F68-Dd-9Qo" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="20" id="twK-CW-5rG"/>
                             <constraint firstItem="RQm-Tf-BLL" firstAttribute="top" secondItem="TVg-ts-xlz" secondAttribute="bottom" constant="8" id="ucR-wn-bN9"/>
                             <constraint firstItem="F68-Dd-9Qo" firstAttribute="top" secondItem="xOC-w0-98Y" secondAttribute="bottom" constant="2" id="ucy-9c-rkQ"/>

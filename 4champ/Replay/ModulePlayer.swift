@@ -138,6 +138,7 @@ class ModulePlayer: NSObject {
     }
   }
 
+  /// Radio Control proxy to remotecontrol
   func controlRadio(_ request: Radio.Control.Request) {
     radioRemoteControl?.controlRadio(request: request)
   }

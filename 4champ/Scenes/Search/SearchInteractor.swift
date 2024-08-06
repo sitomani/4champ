@@ -129,8 +129,9 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
       mr.getId()
     }.shuffled()
 
-    let channel = RadioChannel.artist(name: autoListTitle ?? "n/a", ids: modIDs)
-    modulePlayer.controlRadio(Radio.Control.Request(powerOn: true, channel: channel))
+    let channel = RadioChannel.selection
+    let selection = CustomSelection(name: autoListTitle ?? "n/a", ids: modIDs)
+    modulePlayer.controlRadio(Radio.Control.Request(powerOn: true, channel: channel, selection: selection))
   }
 
   func triggerAutoFetchList() {

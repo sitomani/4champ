@@ -61,8 +61,9 @@ protocol RadioRemoteControl: NSObjectProtocol {
 
 /// Radio datastore for keeping currently selected channel and status
 protocol RadioDataStore {
-  var channel: RadioChannel { get set }
-  var status: RadioStatus { get set }
+  var channel: RadioChannel { get }
+  var status: RadioStatus { get }
+  var customSelection: CustomSelection { get }
 }
 
 enum PostFetchAction {
@@ -80,6 +81,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   private var activeRequest: Alamofire.DataRequest?
   private var playbackTimer: Timer?
   private var artistRadioIndex = 0 // index of module in artist radio
+  private var artistRadioIds: [Int] = []
 
   // Keep session history for getting back to modules listened in the radio mode.
   private var radioSessionHistory: [MMD] = []
@@ -100,6 +102,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       modulePlayer.radioOn = self.radioOn
     }
   }
+  var customSelection: CustomSelection = CustomSelection(name: "", ids: [])
 
   override init() {
     super.init()
@@ -141,6 +144,9 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     playbackTimer?.invalidate()
     playbackTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
       self?.periodicUpdate()
+    }
+    if let selection = request.selection {
+      customSelection = selection
     }
     channel = request.channel
     status = .on
@@ -345,7 +351,12 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
         return -1
       }
       return mod.id!
-    case let .artist(_, ids):
+    case .selection:
+      guard customSelection.ids.count > 0 else {
+        presenter?.presentControlStatus(status: .noSelectionAvailable)
+        return -1
+      }
+      let ids = customSelection.ids
       artistRadioIndex = (artistRadioIndex + 1) % ids.count
       return ids[artistRadioIndex]
     }
