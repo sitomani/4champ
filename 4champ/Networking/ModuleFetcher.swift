@@ -73,7 +73,10 @@ class ModuleFetcher {
     state = .resolvingPath
 
     if let mmd = moduleStorage.getModuleById(ampId) {
-        state = .done(mmd: mmd)
+      // update state asynchronously to avoid UI collisions on local collection radio fetch
+      DispatchQueue.main.asyncAfter(deadline: DispatchTime.now(), execute: {
+        self.state = .done(mmd: mmd)
+      })
         return
     }
 
