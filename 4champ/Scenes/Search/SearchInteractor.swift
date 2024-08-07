@@ -39,7 +39,7 @@ protocol SearchBusinessLogic {
 
   func deleteModule(at indexPath: IndexPath)
 
-  func startArtistRadio()
+  func startArtistRadio(_ selection: Radio.CustomSelection?)
 }
 
 /// Search Interactor datastore
@@ -123,15 +123,21 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
     return false
   }
 
-  func startArtistRadio() {
+  func startArtistRadio(_ selection: Radio.CustomSelection?) {
+    // handle the text/module name search case
+    if let selection = selection, selection.ids.count > 0 {
+      modulePlayer.controlRadio(Radio.Control.Request(powerOn: true, channel: RadioChannel.selection, selection: selection))
+      return
+    }
+
+    // handle the composer results case
     guard latestModuleResponse.result.count > 0 else { return }
     let modIDs = latestModuleResponse.result.map { mr in
       mr.getId()
     }.shuffled()
 
-    let channel = RadioChannel.selection
-    let selection = CustomSelection(name: autoListTitle ?? "n/a", ids: modIDs)
-    modulePlayer.controlRadio(Radio.Control.Request(powerOn: true, channel: channel, selection: selection))
+    let selection = Radio.CustomSelection(name: autoListTitle ?? "n/a", ids: modIDs)
+    modulePlayer.controlRadio(Radio.Control.Request(powerOn: true, channel: RadioChannel.selection, selection: selection))
   }
 
   func triggerAutoFetchList() {

@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="500" text="Benutzerdefinierten Kanal über die Suche starten" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUj-fw-iU8">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="500" text="Radio OFF" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUj-fw-iU8">
                                 <rect key="frame" x="78" y="5" width="179" height="61"/>
                                 <inset key="insetFor6xAndEarlier" minX="-30" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -40,7 +40,7 @@
                                             <segment title="All"/>
                                             <segment title="New in AMP"/>
                                             <segment title="Local"/>
-                                            <segment title="Composer"/>
+                                            <segment title="Custom"/>
                                         </segments>
                                         <connections>
                                             <action selector="segmentChanged:" destination="9pv-A4-QxB" eventType="valueChanged" id="ieY-IW-J86"/>
@@ -1027,7 +1027,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" placeholder="Type to search" showsScopeBar="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gaD-2L-PpF">
-                                <rect key="frame" x="0.0" y="20" width="375" height="103"/>
+                                <rect key="frame" x="0.0" y="20" width="327" height="103"/>
                                 <color key="barTintColor" red="0.047058823530000002" green="0.14901960780000001" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <scopeButtonTitles>
@@ -1051,6 +1051,18 @@
                                     <constraint firstAttribute="height" constant="2" id="ACz-yK-7To"/>
                                 </constraints>
                             </progressView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KYF-Yv-Qdh">
+                                <rect key="frame" x="325" y="24" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="ZYW-jb-UnR"/>
+                                    <constraint firstAttribute="height" constant="44" id="kq1-i3-eBL"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="radio"/>
+                                <connections>
+                                    <action selector="startResultsRadio:" destination="5NB-MB-32y" eventType="touchUpInside" id="8yG-IA-dAV"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="jaP-X9-oRu"/>
                         <constraints>
@@ -1060,12 +1072,15 @@
                             <constraint firstItem="gaD-2L-PpF" firstAttribute="top" secondItem="jaP-X9-oRu" secondAttribute="top" id="Alf-SK-PNh"/>
                             <constraint firstItem="8wg-n4-mQe" firstAttribute="top" secondItem="CIQ-bO-rf0" secondAttribute="top" constant="10" id="CVS-2n-gt1"/>
                             <constraint firstItem="CIQ-bO-rf0" firstAttribute="top" secondItem="jaP-X9-oRu" secondAttribute="top" priority="250" id="KNj-D8-BML"/>
+                            <constraint firstItem="KYF-Yv-Qdh" firstAttribute="top" secondItem="jaP-X9-oRu" secondAttribute="top" constant="4" id="M5F-AK-V4y"/>
                             <constraint firstAttribute="trailing" secondItem="ymZ-1X-6xh" secondAttribute="trailing" id="P90-nd-Xfu"/>
                             <constraint firstItem="8wg-n4-mQe" firstAttribute="centerX" secondItem="Did-kb-ykx" secondAttribute="centerX" id="Rh4-7s-2CQ"/>
                             <constraint firstItem="ymZ-1X-6xh" firstAttribute="bottom" secondItem="CIQ-bO-rf0" secondAttribute="bottom" id="XM9-x9-PmO"/>
                             <constraint firstAttribute="bottom" secondItem="CIQ-bO-rf0" secondAttribute="bottom" id="XT2-MN-FT7"/>
+                            <constraint firstItem="jaP-X9-oRu" firstAttribute="trailing" secondItem="KYF-Yv-Qdh" secondAttribute="trailing" constant="6" id="aGj-0x-qSu"/>
                             <constraint firstItem="CIQ-bO-rf0" firstAttribute="trailing" secondItem="jaP-X9-oRu" secondAttribute="trailing" id="amu-Mw-zAu"/>
-                            <constraint firstItem="gaD-2L-PpF" firstAttribute="trailing" secondItem="jaP-X9-oRu" secondAttribute="trailing" id="jfP-JN-ssb"/>
+                            <constraint firstItem="gaD-2L-PpF" firstAttribute="trailing" secondItem="jaP-X9-oRu" secondAttribute="trailing" priority="750" constant="-48" id="jfP-JN-ssb"/>
+                            <constraint firstItem="jaP-X9-oRu" firstAttribute="trailing" secondItem="gaD-2L-PpF" secondAttribute="trailing" priority="500" id="qfy-eu-gP8"/>
                             <constraint firstItem="gaD-2L-PpF" firstAttribute="leading" secondItem="jaP-X9-oRu" secondAttribute="leading" id="vIa-xd-aug"/>
                         </constraints>
                     </view>
@@ -1075,7 +1090,9 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="progressBar" destination="ymZ-1X-6xh" id="saa-OB-9aE"/>
+                        <outlet property="radioButton" destination="KYF-Yv-Qdh" id="qM6-1u-1gP"/>
                         <outlet property="searchBar" destination="gaD-2L-PpF" id="R1l-1G-N1W"/>
+                        <outlet property="searchBarToEdgeConstraint" destination="qfy-eu-gP8" id="get-Tr-pgJ"/>
                         <outlet property="spinner" destination="8wg-n4-mQe" id="Py5-f3-p9B"/>
                         <outlet property="tableBottomConstraint" destination="XT2-MN-FT7" id="O31-rL-twh"/>
                         <outlet property="tableView" destination="CIQ-bO-rf0" id="XEZ-rn-VjW"/>

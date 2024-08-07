@@ -66,6 +66,9 @@ class Appearance {
     let sbAppearance = UISearchBar.appearance()
     sbAppearance.barTintColor = darkBlueColor
 
+    let searchLabel = UILabel.appearance(whenContainedInInstancesOf: [UISearchBar.self])
+    searchLabel.textColor = separatorColor
+
     let sgAppearance = UISegmentedControl.appearance()
     sgAppearance.tintColor = .white
     sgAppearance.selectedSegmentTintColor = .white

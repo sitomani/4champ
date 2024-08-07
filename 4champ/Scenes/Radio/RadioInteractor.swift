@@ -63,7 +63,7 @@ protocol RadioRemoteControl: NSObjectProtocol {
 protocol RadioDataStore {
   var channel: RadioChannel { get }
   var status: RadioStatus { get }
-  var customSelection: CustomSelection { get }
+  var customSelection: Radio.CustomSelection { get }
 }
 
 enum PostFetchAction {
@@ -102,7 +102,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       modulePlayer.radioOn = self.radioOn
     }
   }
-  var customSelection: CustomSelection = CustomSelection(name: "", ids: [])
+  var customSelection: Radio.CustomSelection = Radio.CustomSelection(name: "", ids: [])
 
   override init() {
     super.init()

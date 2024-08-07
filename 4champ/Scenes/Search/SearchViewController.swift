@@ -39,6 +39,8 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   @IBOutlet var searchBar: UISearchBar?
 
   @IBOutlet var tableView: UITableView?
+  @IBOutlet var searchBarToEdgeConstraint: NSLayoutConstraint?
+  @IBOutlet var radioButton: UIButton?
 
   // MARK: Object lifecycle
 
@@ -112,7 +114,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       spinner?.startAnimating()
       interactor?.triggerAutoFetchList()
     }
-
+    animateRadioButton(false)
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
     view.addGestureRecognizer(longPressRecognizer)
   }
@@ -165,8 +167,30 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     spinner?.isHidden = true
     DispatchQueue.main.async {
       self.tableView?.reloadData()
+      self.animateRadioButton()
     }
     updateDownloadAllButton()
+  }
+
+  func animateRadioButton(_ animated: Bool = true) {
+    var modules: [MMD] = []
+    if searchBar?.superview != nil {
+      modules = viewModel?.modules ?? []
+    }
+    var targetAlpha = 1.0
+    var targetConstant = 48.0
+    let animTime = animated ? 0.3 : 0
+    self.searchBarToEdgeConstraint?.priority = .required
+
+    if modules.isEmpty {
+      targetAlpha = 0.0
+      targetConstant = 0
+    }
+    UIView.animate(withDuration: animTime) {
+      self.radioButton?.alpha = targetAlpha
+      self.searchBarToEdgeConstraint?.constant = targetConstant
+    }
+
   }
 
   func updateDownloadAllButton() {
@@ -270,7 +294,13 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   }
 
   @objc private func startArtistRadio(_: UIBarButtonItem) {
-    interactor?.startArtistRadio()
+    interactor?.startArtistRadio(nil)
+  }
+
+  @IBAction func startResultsRadio(_: UIButton) {
+    let mods = viewModel?.modules ?? []
+    let selection = Radio.CustomSelection(name: viewModel?.text ?? "n/a", ids: mods.map { $0.id ?? 0 }.shuffled())
+    interactor?.startArtistRadio(selection)
   }
 
   @objc func longPressed(sender: UILongPressGestureRecognizer) {
@@ -319,6 +349,7 @@ extension SearchViewController: UISearchBarDelegate {
       searchBar?.searching = false
       viewModel = Search.ViewModel(modules: [], composers: [], groups: [], text: "")
       tableView?.reloadData()
+      animateRadioButton()
     } else {
       searchBar?.searching = true
       perform(#selector(triggerSearch), with: nil, afterDelay: Constants.searchDelay)

@@ -7,11 +7,6 @@
 
 import UIKit
 
-struct CustomSelection {
-  let name: String
-  let ids: [Int]
-}
-
 enum RadioChannel: Equatable {
   static func == (lhs: RadioChannel, rhs: RadioChannel) -> Bool {
     switch (lhs, rhs) {
@@ -44,6 +39,11 @@ enum RadioStatus {
 }
 
 enum Radio {
+
+  struct CustomSelection {
+    let name: String
+    let ids: [Int]
+  }
   // MARK: Use cases
 
   enum Control {
