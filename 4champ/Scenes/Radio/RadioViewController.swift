@@ -7,6 +7,38 @@
 
 import UIKit
 
+extension UIImage {
+
+    class func textEmbededImage(image: UIImage,
+                                string: String,
+                                color: UIColor,
+                                imageAlignment: Int = 0,
+                                segFont: UIFont? = nil) -> UIImage {
+        let font = segFont ?? UIFont.systemFont(ofSize: 14.0)
+        let expectedTextSize: CGSize = (string as NSString).size(withAttributes: [NSAttributedString.Key.font: font])
+        let width: CGFloat = expectedTextSize.width + image.size.width + 5.0
+        let height: CGFloat = max(expectedTextSize.height, image.size.width)
+        let size: CGSize = CGSize(width: width, height: height)
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        let context: CGContext = UIGraphicsGetCurrentContext()!
+        context.setFillColor(color.cgColor)
+        let fontTopPosition: CGFloat = (height - expectedTextSize.height) / 2.0
+        let textOrigin: CGFloat = (imageAlignment == 0) ? image.size.width + 5 : 0
+        let textPoint: CGPoint = CGPoint.init(x: textOrigin, y: fontTopPosition)
+        string.draw(at: textPoint, withAttributes: [NSAttributedString.Key.font: font])
+        let flipVertical: CGAffineTransform = CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: size.height)
+        context.concatenate(flipVertical)
+        let alignment: CGFloat =  (imageAlignment == 0) ? 0.0 : expectedTextSize.width + 5.0
+        context.draw(image.cgImage!, in: CGRect.init(x: alignment, y: ((height - image.size.height) / 2.0), width: image.size.width, height: image.size.height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return newImage!
+    }
+
+}
+
+
 protocol RadioDisplayLogic: class {
   func displayControlStatus(viewModel: Radio.Control.ViewModel)
   func displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel)
@@ -120,7 +152,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     channelSegments?.setTitle("Radio_All".l13n(), forSegmentAt: 0)
     channelSegments?.setTitle("Radio_New".l13n(), forSegmentAt: 1)
     channelSegments?.setTitle("Radio_Local".l13n(), forSegmentAt: 2)
-    channelSegments?.setTitle("Radio_Custom".l13n(), forSegmentAt: 3)
+    updateCustomChannelSegment(title: "Radio_Custom".l13n())
 
     channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
     channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
@@ -148,6 +180,13 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     updateUIElements()
   }
 
+  private func updateCustomChannelSegment(title: String) {
+    channelSegments?.setImage(UIImage.textEmbededImage(image: UIImage.init(systemName: "magnifyingglass.circle") ?? UIImage(),
+                                                       string: title,
+                                                       color: Appearance.barTitleColor,
+                                                       segFont: UIFont.systemFont(ofSize: 13)), forSegmentAt: 3)
+  }
+
   private func updateUIElements() {
     displayControlStatus(viewModel: Radio.Control.ViewModel(status: router?.dataStore?.status ?? .off))
     displayChannelBuffer(viewModel: currentChannelBuffer)
@@ -156,7 +195,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     }) {
       channelSegments?.selectedSegmentIndex = channelIndex.key
       if channel == .selection {
-        channelSegments?.setTitle(router?.dataStore?.customSelection.name, forSegmentAt: 3)
+        updateCustomChannelSegment(title: router?.dataStore?.customSelection.name ?? "")
       }
     }
   }
