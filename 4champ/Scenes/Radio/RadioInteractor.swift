@@ -5,8 +5,8 @@
 //  Copyright (c) 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
-import Alamofire
 import UIKit
+import Alamofire
 import UserNotifications
 
 /// Radio Interactor business logic protocol
@@ -69,10 +69,11 @@ protocol RadioDataStore {
 enum PostFetchAction {
   case appendToQueue // default
   case insertToQueue // when backstepping to session history
-  case startPlay // when selecting tune from session history
+  case startPlay     // when selecting tune from session history
 }
 
 class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemoteControl {
+
   var presenter: RadioPresentationLogic?
 
   private var lastPlayed: Int = 0 // identifier of the last module id played (used in New channel)
@@ -116,8 +117,8 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     NotificationCenter.default.removeObserver(self)
   }
 
-  @objc func doBadgeUpdate(_: Notification?) {
-    presenter?.presentNewModules(response: Radio.NewModules.Response(badgeValue: settings.badgeCount))
+  @objc func doBadgeUpdate(_ notification: Notification?) {
+    self.presenter?.presentNewModules(response: Radio.NewModules.Response(badgeValue: settings.badgeCount))
   }
 
   // MARK: Request handling
@@ -154,6 +155,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   }
 
   func toggleFavorite() {
+
     guard let mod = modulePlayer.currentModule else {
       log.error("no current module => cannot toggle favorite")
       return
@@ -175,7 +177,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     }
     if radioSessionHistory.count > nextIndex, let prevId = radioSessionHistory[nextIndex].id {
       postFetchAction = .insertToQueue
-      let fetcher = ModuleFetcher(delegate: self)
+      let fetcher = ModuleFetcher.init(delegate: self)
       fetcher.fetchModule(ampId: prevId)
     }
   }
@@ -192,7 +194,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       return
     }
     postFetchAction = .startPlay
-    let fetcher = ModuleFetcher(delegate: self)
+    let fetcher = ModuleFetcher.init(delegate: self)
     fetcher.fetchModule(ampId: radioSessionHistory[historyIndex].id!)
   }
 
@@ -206,24 +208,23 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   @objc func refreshLocalNotificationsStatus() {
     log.debug("")
     let un = UNUserNotificationCenter.current()
-    un.getNotificationSettings { settings in
+    un.getNotificationSettings { (settings) in
       self.ntfAuthorization = settings.authorizationStatus
       let response = Radio.LocalNotifications.Response(
         notificationsEnabled: self.ntfAuthorization == .authorized,
-        notificationsRequested: self.ntfAuthorization != .notDetermined
-      )
+        notificationsRequested: self.ntfAuthorization != .notDetermined)
       self.presenter?.presentNotificationStatus(response: response)
     }
   }
 
   func requestLocalNotifications() {
-    if ntfAuthorization == .authorized || ntfAuthorization == .denied {
-      UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
+    if self.ntfAuthorization == .authorized || self.ntfAuthorization == .denied {
+      UIApplication.shared.open(URL.init(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
       return
     }
 
     let un = UNUserNotificationCenter.current()
-    un.requestAuthorization(options: [.badge, .sound, .alert]) { _, _ in
+    un.requestAuthorization(options: [.badge, .sound, .alert]) { (_, _) in
       self.refreshLocalNotificationsStatus()
     }
   }
@@ -263,7 +264,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     log.debug("")
     playbackTimer?.invalidate()
 
-    AF.session.getAllTasks { tasks in
+    AF.session.getAllTasks { (tasks) in
       tasks.forEach {
         if !$0.currentRequest!.url!.absoluteString.contains("get_latest") {
           $0.cancel()
@@ -286,10 +287,10 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   private func triggerBufferPresentation() {
     log.debug("")
     guard radioOn else {
-      presenter?.presentChannelBuffer(buffer: [], history: [])
+      self.presenter?.presentChannelBuffer(buffer: [], history: [])
       return
     }
-    presenter?.presentChannelBuffer(buffer: modulePlayer.playQueue, history: radioSessionHistory)
+    self.presenter?.presentChannelBuffer(buffer: modulePlayer.playQueue, history: radioSessionHistory)
   }
 
   /// Removes the first module in current playlist and deletes the related local file
@@ -298,8 +299,8 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     let current = modulePlayer.playQueue.removeFirst()
 
     guard moduleStorage.getModuleById(current.id!) == nil else {
-      // Not removing modules in local storage
-      return
+        // Not removing modules in local storage
+        return
     }
 
     if let url = current.localPath {
@@ -319,7 +320,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     if Constants.radioBufferLen > modulePlayer.playQueue.count {
       let id = getNextModuleId()
       if id < 0 { return } // failed to determine next module id
-      let fetcher = ModuleFetcher(delegate: self)
+      let fetcher = ModuleFetcher.init(delegate: self)
       fetcher.fetchModule(ampId: id)
     }
   }
@@ -331,10 +332,10 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     switch channel {
     case .all:
       var id: Int = 0
-      while id == 0 || !radioSessionHistory.filter({ mmd in
+      while(id == 0 || !radioSessionHistory.filter({ mmd in
         mmd.id == id
-      }).isEmpty {
-        id = Int.random(in: 1 ... settings.collectionSize)
+      }).isEmpty) {
+        id = Int.random(in: 1...settings.collectionSize)
       }
       return id
     case .new:
@@ -375,9 +376,9 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
 }
 
 extension RadioInteractor: ModuleFetcherDelegate {
-  func fetcherStateChanged(_: ModuleFetcher, state: FetcherState) {
+  func fetcherStateChanged(_ fetcher: ModuleFetcher, state: FetcherState) {
     switch state {
-    case let .failed(err):
+    case .failed(let err):
       if let fetcherErr = err as? FetcherError {
         if fetcherErr == .unsupportedFormat {
           // keep on loading mods
@@ -388,10 +389,10 @@ extension RadioInteractor: ModuleFetcherDelegate {
       if radioOn {
         status = .failure
       }
-    case let .downloading(progress):
+    case .downloading(let progress):
       status = .fetching(progress: progress)
 
-    case let .done(mmd):
+    case .done(let mmd):
       handleDownloadComplete(mmd)
 
     default: ()
@@ -409,12 +410,12 @@ extension RadioInteractor: ModuleFetcherDelegate {
     }
     postFetchAction = .appendToQueue // reset to default
 
-    triggerBufferPresentation()
+    self.triggerBufferPresentation()
     if let first = modulePlayer.playQueue.first, first == mmd {
       modulePlayer.play(at: 0)
     }
-    fillBuffer()
-    status = .on
+    self.fillBuffer()
+    self.status = .on
   }
 }
 
@@ -433,7 +434,7 @@ extension RadioInteractor: ModulePlayerObserver {
     presenter?.presentReplayer(name: modulePlayer.renderer.name)
   }
 
-  func statusChanged(status _: PlayerStatus) {
+  func statusChanged(status: PlayerStatus) {
     // nop at the moment
   }
 
@@ -445,7 +446,7 @@ extension RadioInteractor: ModulePlayerObserver {
     fillBuffer()
 
     switch error {
-    case let .loadFailed(mmd):
+    case .loadFailed(let mmd):
       modulePlayer.playQueue.removeAll(where: { $0.id == mmd.id })
     default:
       log.error("Unknown error occurred")

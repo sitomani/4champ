@@ -63,7 +63,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     set {
       UserDefaults.standard.set(newValue, forKey: SettingKeys.collectionSize)
       updateBadge()
-      NotificationCenter.default.post(Notification(name: Notifications.badgeUpdate))
+      NotificationCenter.default.post(Notification.init(name: Notifications.badgeUpdate))
     }
   }
 
@@ -77,7 +77,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     set {
       UserDefaults.standard.set(newValue, forKey: SettingKeys.newestPlayed)
       updateBadge()
-      NotificationCenter.default.post(Notification(name: Notifications.badgeUpdate))
+      NotificationCenter.default.post(Notification.init(name: Notifications.badgeUpdate))
     }
   }
 

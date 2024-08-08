@@ -92,7 +92,6 @@ enum Radio {
       var notificationsEnabled: Bool
       var notificationsRequested: Bool
     }
-
     struct ViewModel {
       var imageName: String
     }
@@ -102,7 +101,6 @@ enum Radio {
     struct Response {
       let badgeValue: Int
     }
-
     struct ViewModel {
       let badgeText: String?
     }

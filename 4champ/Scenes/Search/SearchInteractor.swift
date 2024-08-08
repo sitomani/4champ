@@ -5,9 +5,9 @@
 //  Copyright (c) 2018 Aleksi Sitomaniemi. All rights reserved.
 //
 
+import UIKit
 import Alamofire
 import Foundation
-import UIKit
 
 /// Search Interactor business logic interface
 protocol SearchBusinessLogic {
@@ -90,12 +90,12 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
       if case let .success(jsonData) = response.result {
         log.info("\(response.result) \(request.text)")
         self.pagingIndex = request.pagingIndex
-        if self.processResponse(request: request, responseData: jsonData) == false {
+        if false == self.processResponse(request: request, responseData: jsonData) {
           self.latestModuleResponse = Search.Response<ModuleResult>(result: [], text: request.text)
           self.presenter?.presentSearchResponse(self.latestModuleResponse)
         }
       } else {
-        log.error(String(describing: response.error))
+        log.error(String.init(describing: response.error))
       }
       self.currentRequest = nil
     }
@@ -105,18 +105,18 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
     switch request.type {
     case SearchType.module, SearchType.meta:
       if let modules = try? JSONDecoder().decode([ModuleResult].self, from: responseData) {
-        latestModuleResponse = Search.Response<ModuleResult>(result: modules, text: request.text)
-        presenter?.presentSearchResponse(latestModuleResponse)
+        self.latestModuleResponse = Search.Response<ModuleResult>(result: modules, text: request.text)
+        self.presenter?.presentSearchResponse(self.latestModuleResponse)
         return true
       }
     case SearchType.composer:
       if let composers = try? JSONDecoder().decode([ComposerResult].self, from: responseData) {
-        presenter?.presentSearchResponse(Search.Response<ComposerResult>(result: composers, text: request.text))
+        self.presenter?.presentSearchResponse(Search.Response<ComposerResult>(result: composers, text: request.text))
         return true
       }
     case SearchType.group:
       if let groups = try? JSONDecoder().decode([GroupResult].self, from: responseData) {
-        presenter?.presentSearchResponse(Search.Response<GroupResult>(result: groups, text: request.text))
+        self.presenter?.presentSearchResponse(Search.Response<GroupResult>(result: groups, text: request.text))
         return true
       }
     }
@@ -148,17 +148,17 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
       AF.request(restRequest).validate().responseData { response in
         if case let .success(jsonData) = response.result,
            let modules = try? JSONDecoder().decode([ModuleResult].self, from: jsonData) {
-          self.latestModuleResponse = Search.Response<ModuleResult>(result: modules, text: "")
-          self.presenter?.presentSearchResponse(self.latestModuleResponse)
-        }
+            self.latestModuleResponse = Search.Response<ModuleResult>(result: modules, text: "")
+            self.presenter?.presentSearchResponse(self.latestModuleResponse)
+          }
       }
     } else if type == .group {
       let restRequest = RESTRoutes.listComposers(groupId: id)
       AF.request(restRequest).validate().responseData { response in
         if case let .success(jsonData) = response.result,
            let composers = try? JSONDecoder().decode([ComposerResult].self, from: jsonData) {
-          self.presenter?.presentSearchResponse(Search.Response<ComposerResult>(result: composers, text: ""))
-        }
+            self.presenter?.presentSearchResponse(Search.Response<ComposerResult>(result: composers, text: ""))
+          }
       }
     } else {
       log.error("Invalid type for auto fetch \(type)")
@@ -202,7 +202,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
   private func doDownload(moduleId: Int) {
     // Always create a new fetcher. Fetchers will be released
     // Once the fetch is complete
-    fetcher = ModuleFetcher(delegate: self)
+    fetcher = ModuleFetcher.init(delegate: self)
 
     // First check if the mod is already downloaded to play queue => in the case, bypass fetch
     // and go directly to done state.
@@ -230,7 +230,9 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
     fetcher?.cancel()
   }
 
-  func addToPlaylist(moduleId _: Int, playlistId _: String) {}
+  func addToPlaylist(moduleId: Int, playlistId: String) {
+
+  }
 
   private func fetchNextQueuedModule() {
     var resp = Search.BatchDownload.Response(originalQueueLength: originalQueueLenght,
@@ -246,13 +248,14 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
     presenter?.presentBatchProgress(response: resp)
     doDownload(moduleId: nextId)
   }
+
 }
 
 extension SearchInteractor: ModuleFetcherDelegate {
-  func fetcherStateChanged(_: ModuleFetcher, state: FetcherState) {
+  func fetcherStateChanged(_ fetcher: ModuleFetcher, state: FetcherState) {
     log.debug(state)
     switch state {
-    case var .done(mmd):
+    case .done(var mmd):
       presenter?.presentDownloadProgress(response: Search.ProgressResponse(progress: 1.0))
       if originalQueueLenght == 0 {
         modulePlayer.play(mmd: mmd)
@@ -265,10 +268,10 @@ extension SearchInteractor: ModuleFetcherDelegate {
         presenter?.presentMetadataChange(response: Search.MetaDataChange.Response(module: mmd))
         fetchNextQueuedModule()
       }
-    case let .downloading(progress):
+    case .downloading(let progress):
       log.debug(progress)
       presenter?.presentDownloadProgress(response: Search.ProgressResponse(progress: progress))
-    case let .failed(err):
+    case .failed(let err):
       log.error(err.debugDescription)
       if downloadQueue.count == 0 {
         presenter?.presentDownloadProgress(response: Search.ProgressResponse(progress: 0, error: err))
@@ -285,8 +288,8 @@ extension SearchInteractor: ModuleFetcherDelegate {
     let current = modulePlayer.playQueue.removeFirst()
 
     guard moduleStorage.getModuleById(current.id!) == nil else {
-      // Not removing modules in local storage
-      return
+        // Not removing modules in local storage
+        return
     }
 
     if let url = current.localPath {

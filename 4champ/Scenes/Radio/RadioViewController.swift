@@ -38,7 +38,6 @@ extension UIImage {
 
 }
 
-
 protocol RadioDisplayLogic: class {
   func displayControlStatus(viewModel: Radio.Control.ViewModel)
   func displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel)
@@ -55,45 +54,44 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
   private var currentModule: MMD?
   private var currentChannelBuffer = Radio.ChannelBuffer.ViewModel(nowPlaying: nil, nextUp: nil, historyAvailable: false)
 
-  @IBOutlet var currentModuleView: UIView?
-  @IBOutlet var channelSegments: UISegmentedControl?
-  @IBOutlet var downloadProgress: UIProgressView?
+  @IBOutlet weak var currentModuleView: UIView?
+  @IBOutlet weak var channelSegments: UISegmentedControl?
+  @IBOutlet weak var downloadProgress: UIProgressView?
 
-  @IBOutlet var switchTitle: UILabel?
-  @IBOutlet var nextUpTitle: UILabel?
-  @IBOutlet var historyTitle: UILabel?
+  @IBOutlet weak var switchTitle: UILabel?
+  @IBOutlet weak var nextUpTitle: UILabel?
+  @IBOutlet weak var historyTitle: UILabel?
 
-  @IBOutlet var nameLabel: UILabel?
-  @IBOutlet var composerLabel: UILabel?
-  @IBOutlet var sizeLabel: UILabel?
-  @IBOutlet var timeLabel: UILabel?
-  @IBOutlet var playerLabel: UILabel?
+  @IBOutlet weak var nameLabel: UILabel?
+  @IBOutlet weak var composerLabel: UILabel?
+  @IBOutlet weak var sizeLabel: UILabel?
+  @IBOutlet weak var timeLabel: UILabel?
+  @IBOutlet weak var playerLabel: UILabel?
 
-  @IBOutlet var localLabel: UILabel?
-  @IBOutlet var saveButton: UIButton?
-  @IBOutlet var faveButton: UIButton?
-  @IBOutlet var shareButton: UIButton?
+  @IBOutlet weak var localLabel: UILabel?
+  @IBOutlet weak var saveButton: UIButton?
+  @IBOutlet weak var faveButton: UIButton?
+  @IBOutlet weak var shareButton: UIButton?
 
-  @IBOutlet var radioSwitch: UISwitch?
-  @IBOutlet var prevButton: UIButton?
-  @IBOutlet var nextButton: UIButton?
+  @IBOutlet weak var radioSwitch: UISwitch?
+  @IBOutlet weak var prevButton: UIButton?
+  @IBOutlet weak var nextButton: UIButton?
 
-  @IBOutlet var tableDivider: UIView? // view between table currentModuleView
-  @IBOutlet var radioTable: UITableView?
-  @IBOutlet var tableBottomConstraint: NSLayoutConstraint?
+  @IBOutlet weak var tableDivider: UIView? // view between table currentModuleView
+  @IBOutlet weak var radioTable: UITableView?
+  @IBOutlet weak var tableBottomConstraint: NSLayoutConstraint?
 
   var notifyItem: UIBarButtonItem?
   private var segmentDict = [0: RadioChannel.all, 1: RadioChannel.new, 2: RadioChannel.local, 3: RadioChannel.selection]
   private let gradientLayer = CAGradientLayer()
-  let gradientColorTop = UIColor(rgb: 0x16538A)
-  let gradientColorBottom = UIColor(rgb: 0x16538A)
+  let gradientColorTop =  UIColor.init(rgb: 0x16538a)
+  let gradientColorBottom = UIColor.init(rgb: 0x16538a)
 
   enum GradientAnimationDirection: String {
     case none
     case `in` = "colorIn"
     case out = "colorOut"
   }
-
   // MARK: Object lifecycle
 
   override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -124,7 +122,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 
   // MARK: Routing
 
-  override func prepare(for segue: UIStoryboardSegue, sender _: Any?) {
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if let scene = segue.identifier {
       let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
       if let router = router, router.responds(to: selector) {
@@ -139,7 +137,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     log.debug("")
     super.viewDidLoad()
 
-    view.backgroundColor = Appearance.ampBgColor
+    self.view.backgroundColor = Appearance.ampBgColor
 
     UIUtils.roundCornersInView(currentModuleView)
     navigationItem.title = "RadioView_Title".l13n().uppercased()
@@ -175,8 +173,8 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     currentModuleView?.addGestureRecognizer(longPressRecognizer)
 
     let img = UIImage(named: "notifications-add")?.withRenderingMode(.alwaysTemplate)
-    notifyItem = UIBarButtonItem(image: img, landscapeImagePhone: img, style: .plain, target: self, action: #selector(notificationsPressed))
-    navigationItem.rightBarButtonItem = notifyItem
+    notifyItem = UIBarButtonItem.init(image: img, landscapeImagePhone: img, style: .plain, target: self, action: #selector(notificationsPressed))
+    self.navigationItem.rightBarButtonItem = notifyItem
     updateUIElements()
   }
 
@@ -210,10 +208,10 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 
   override func viewWillLayoutSubviews() {
     super.viewWillLayoutSubviews()
-    gradientLayer.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: currentModuleView?.frame.height ?? 100)
+    gradientLayer.frame = CGRect.init(x: 0, y: 0, width: view.frame.width, height: currentModuleView?.frame.height ?? 100)
   }
 
-  @objc func notificationsPressed(sender _: UINavigationItem) {
+  @objc func notificationsPressed(sender: UINavigationItem) {
     interactor?.requestLocalNotifications()
   }
 
@@ -223,11 +221,11 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
   }
 
   func setupGradientBackground() {
-    gradientLayer.colors = [gradientColorTop.withAlphaComponent(0).cgColor, gradientColorBottom.withAlphaComponent(0).cgColor]
-    gradientLayer.locations = [0.0, 1.0]
-    gradientLayer.drawsAsynchronously = true
-    gradientLayer.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: currentModuleView?.frame.height ?? 100)
-    currentModuleView?.layer.insertSublayer(gradientLayer, at: 0)
+      gradientLayer.colors = [gradientColorTop.withAlphaComponent(0).cgColor, gradientColorBottom.withAlphaComponent(0).cgColor]
+      gradientLayer.locations = [0.0, 1.0]
+      gradientLayer.drawsAsynchronously = true
+      gradientLayer.frame = CGRect.init(x: 0, y: 0, width: view.frame.width, height: currentModuleView?.frame.height ?? 100)
+      currentModuleView?.layer.insertSublayer(gradientLayer, at: 0)
   }
 
   func animateGradient(_ direction: GradientAnimationDirection) {
@@ -277,7 +275,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
       switchTitle?.text = "Radio_FetchFailed".l13n()
       switchTitle?.textColor = Appearance.errorColor
       radioSwitch?.onTintColor = Appearance.errorColor
-    case let .fetching(progress):
+    case .fetching(let progress):
       nextUpTitle?.text = "Radio_Fetching".l13n()
       downloadProgress?.progress = progress
       downloadProgress?.setNeedsDisplay()
@@ -349,7 +347,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     if let text = viewModel.badgeText {
       navigationController?.tabBarItem.badgeValue = viewModel.badgeText
       let fmt = "Radio_New_Count".l13n()
-      let title = String(format: fmt, text)
+      let title = String.init(format: fmt, text)
       channelSegments?.setTitle(title, forSegmentAt: 1)
     } else {
       channelSegments?.setTitle("Radio_New".l13n(), forSegmentAt: 1)
@@ -362,23 +360,23 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     if radioTable?.window == nil {
       radioTable?.reloadData()
     } else {
-      radioTable?.insertRows(at: [IndexPath(item: 0, section: 0)], with: .automatic)
+      radioTable?.insertRows(at: [IndexPath.init(item: 0, section: 0)], with: .top)
     }
   }
 
-  @IBAction private func saveTapped(_: UIButton) {
+  @IBAction private func saveTapped(_ sender: UIButton) {
     interactor?.saveCurrentModule()
   }
 
-  @IBAction private func shareTapped(_: UIButton) {
+  @IBAction private func shareTapped(_ sender: UIButton) {
     interactor?.shareCurrentModule()
   }
 
-  @IBAction private func nextTapped(_: UIButton) {
+  @IBAction private func nextTapped(_ sender: UIButton) {
     interactor?.playNext()
   }
 
-  @IBAction private func prevTapped(_: UIButton) {
+  @IBAction private func prevTapped(_ sender: UIButton) {
     interactor?.playPrev()
   }
 
@@ -390,11 +388,11 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     }
   }
 
-  @IBAction private func faveTapped(_: UIButton) {
+  @IBAction private func faveTapped(_ sender: UIButton) {
     interactor?.toggleFavorite()
   }
 
-  @IBAction private func segmentChanged(_: UISegmentedControl) {
+  @IBAction private func segmentChanged(_ sender: UISegmentedControl) {
     log.debug("")
     if let channelSelection = segmentDict[channelSegments?.selectedSegmentIndex ?? 0] {
       let req = Radio.Control.Request(powerOn: radioSwitch?.isOn ?? false, channel: channelSelection)
@@ -404,7 +402,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 }
 
 extension RadioViewController: UITableViewDataSource, UITableViewDelegate {
-  func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return interactor?.getSessionLength() ?? 0
   }
 
@@ -413,7 +411,7 @@ extension RadioViewController: UITableViewDataSource, UITableViewDelegate {
       let modName = mod.name
       let composer = mod.composer ?? "n/a"
 
-      let title = String(format: "Radio_NByN".l13n(), modName.trimmingCharacters(in: .whitespaces), composer)
+      let title = String.init(format: "Radio_NByN".l13n(), modName.trimmingCharacters(in: .whitespaces), composer)
       cell.moduleTitle.text = title
       return cell
     } else {
@@ -421,16 +419,15 @@ extension RadioViewController: UITableViewDataSource, UITableViewDelegate {
     }
   }
 
-  func tableView(_: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-    log.debug("foo")
+  func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
     return indexPath
   }
 
-  func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     interactor?.playFromSessionHistory(at: indexPath)
   }
 
-  func tableView(_: UITableView, heightForRowAt _: IndexPath) -> CGFloat {
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     return 40
   }
 }
