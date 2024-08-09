@@ -215,6 +215,9 @@
 /* Radio channel: Local collection (offline play) */
 "Radio_Local" = "Coleção";
 
+/* Custom radio channel is started from search - preferably a abbreviated / shorter term needed here. */
+"Radio_Custom" = "Personalizado";
+
 /* Radio view: Label shown if local channel selected but no local modules in database */
 "Radio_NoLocalModules" = "Sem modules locais";
 
@@ -326,11 +329,11 @@
 
 "AboutView_Local" = "Os modules que você baixou estão listados na aba Coleção. Toque em um módulo para começar a reproduzi-lo. Um toque longo abrirá o seletor de playlist para adicionar um mod a uma playlist. \n\nDeslize para a esquerda/direita na parte superior de um module para excluí-lo. \n\nVocê pode classificar a lista de modules locais por tipo de módulo, compositor, título, tamanho ou status de favorito. Use o botão de filtro na página de Modules Locais para encontrar rapidamente o módulo que você está procurando.";
 
-"AboutView_Search" = "Use a pesquisa para encontrar modules para tocar. Você pode pesquisar por compositor, grupo ou nome de module, ou pesquisar nos textos contidos nos modules. Se a pesquisa de grupo encontrar apenas um grupo, todos os compositores associados a esse grupo serão listados. Se vários grupos forem encontrados, os grupos correspondentes serão listados e a seleção de um deles listará os compositores. \n\nToque em um module para baixar e tocar. \n\nSe você quiser manter o module na coleção local, toque no ícone salvar próximo ao nome do module ou defina o module como favorito tocando no ícone de estrela. O cabeçalho dos resultados da pesquisa possui um botão para baixar todos os resultados de uma só vez. Isso também adicionará os modules à coleção local.";
+"AboutView_Search" = "Use a pesquisa para encontrar modules para tocar. Você pode pesquisar por compositor, grupo ou nome de module, ou pesquisar nos textos contidos nos modules. Se a pesquisa de grupo encontrar apenas um grupo, todos os compositores associados a esse grupo serão listados. Se vários grupos forem encontrados, os grupos correspondentes serão listados e a seleção de um deles listará os compositores. \n\nToque em um module para baixar e tocar. \n\nSe você quiser manter o module na coleção local, toque no ícone salvar próximo ao nome do module ou defina o module como favorito tocando no ícone de estrela. O cabeçalho dos resultados da pesquisa possui um botão para baixar todos os resultados de uma só vez. Isso também adicionará os modules à coleção local. Você também pode iniciar uma estação de rádio a partir dos resultados da pesquisa sempre que houver modules na lista de resultados.";
 
 "AboutView_Playlists" = "A visualização da Playlist mostra a fila de reprodução atual. Ao visualizar modules em qualquer aba, um toque longo abre o seletor de playlist onde você pode adicionar o module a qualquer playlist.\n\nNa visualização da playlist você pode controlar a reprodução e criar/selecionar/limpar playlists. Você também pode selecionar o modo de reprodução (sequencial/aleatório). \n\nDeslizar para a esquerda removerá o module selecionado da playlist (mas não da Coleção).";
 
-"AboutView_Radio" = "A Rádio 4champ traz aleatoriamente músicas de todo o banco de dados AMP para o seu dispositivo. \n\nSe você gostar de uma música que está tocando e desejar guardá-la para mais tarde, toque no ícone de favorito (estrela) na visualização da Rádio 4champ ou dê um toque longo no module para adicionar a uma playlist. \n\nVocê pode escolher de três canais: Todos (embaralhar todo o conteúdo), Novos (adicionados recentemente ao banco de dados da AMP) e Coleção (mods da coleção local)";
+"AboutView_Radio" = "A Rádio 4champ traz aleatoriamente músicas de todo o banco de dados AMP para o seu dispositivo. \n\nSe você gostar de uma música que está tocando e desejar guardá-la para mais tarde, toque no ícone de favorito (estrela) na visualização da Rádio 4champ ou dê um toque longo no module para adicionar a uma playlist. \n\nVocê pode escolher de quatro canais: Todos (embaralhar todo o conteúdo), Novos (adicionados recentemente ao banco de dados da AMP), Coleção (mods da coleção local) e Personalizado (criado a partir de um resultado de pesquisa).";
 
 "AboutView_Twitter" ="Você pode encontrar o 4champ no Twitter! Siga @4champ_app para obter as últimas notícias sobre o aplicativo, versões futuras, interrupções de serviço, etc. O feed do 4champ geralmente também traz músicas legais postadas para seu entretenimento. Toque aqui para seguir.";
 
