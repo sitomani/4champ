@@ -51,12 +51,19 @@ protocol RadioBusinessLogic {
   /// - parameters:
   ///    - at: Specifies indexpath (=> row) in session history
   func playFromSessionHistory(at: IndexPath)
+
+  /// Append the given selection to current custom channel
+  /// If custom channel is not on, calling this will turn on the custom channel with the selection
+  /// - parameters:
+  ///     - customSelection: The selection of mods to append
+  func appendSelection(_ selection: Radio.CustomSelection)
 }
 
 /// Protocol to handle play history in radio mode + start artist radio
 protocol RadioRemoteControl: NSObjectProtocol {
   func playPrev()
   func controlRadio(request: Radio.Control.Request)
+  func appendSelection(_ selection: Radio.CustomSelection)
 }
 
 /// Radio datastore for keeping currently selected channel and status
@@ -83,6 +90,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   private var playbackTimer: Timer?
   private var artistRadioIndex = 0 // index of module in artist radio
   private var artistRadioIds: [Int] = []
+  var customSelection: Radio.CustomSelection = Radio.CustomSelection(name: "", ids: [])
 
   // Keep session history for getting back to modules listened in the radio mode.
   private var radioSessionHistory: [MMD] = []
@@ -103,7 +111,6 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       modulePlayer.radioOn = self.radioOn
     }
   }
-  var customSelection: Radio.CustomSelection = Radio.CustomSelection(name: "", ids: [])
 
   override init() {
     super.init()
@@ -122,13 +129,26 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   }
 
   // MARK: Request handling
+  func appendSelection(_ selection: Radio.CustomSelection) {
+    switch channel {
+    case .selection:
+      let combined = customSelection.ids + selection.ids
+      self.customSelection = Radio.CustomSelection(name: self.customSelection.name, ids: combined.shuffled())
+      if radioOn {
+        break
+      }
+    default:
+      controlRadio(request: Radio.Control.Request(state: .on, channel: .selection, selection: customSelection))
+    }
+  }
 
   func controlRadio(request: Radio.Control.Request) {
     log.debug(request)
-    if modulePlayer.radioOn || request.powerOn {
+
+    if modulePlayer.radioOn || request.state == .on {
       stopPlayback()
     }
-    guard request.powerOn == true else {
+    guard [Radio.Control.State.on, Radio.Control.State.append].contains(request.state) else {
       modulePlayer.removePlayerObserver(self)
       // modulePlayer.radioRemoteControl = nil
 
@@ -147,7 +167,12 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       self?.periodicUpdate()
     }
     if let selection = request.selection {
-      customSelection = selection
+      if request.state == .append {
+        let combined = Array(Set(customSelection.ids + selection.ids))
+        customSelection = Radio.CustomSelection(name: self.customSelection.name, ids: combined.shuffled())
+      } else {
+        customSelection = selection
+      }
     }
     channel = request.channel
     status = .on

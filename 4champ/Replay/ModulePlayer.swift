@@ -102,7 +102,6 @@ class ModulePlayer: NSObject {
       }
     }
   }
-
   private var observers: [ModulePlayerObserver] = []
 
   override init() {

@@ -39,7 +39,7 @@ protocol SearchBusinessLogic {
 
   func deleteModule(at indexPath: IndexPath)
 
-  func startArtistRadio(_ selection: Radio.CustomSelection?)
+  func startCustomChannel(selection: Radio.CustomSelection?, appending: Bool?)
 }
 
 /// Search Interactor datastore
@@ -50,8 +50,9 @@ protocol SearchDataStore {
   var pagingIndex: Int { get }
 }
 
-/// Implementation of Search business logic
+/// Implementation of Search business logic∂a
 class SearchInteractor: SearchBusinessLogic, SearchDataStore {
+
   var presenter: SearchPresentationLogic?
   var settingsInteractor = SettingsInteractor()
 
@@ -123,10 +124,12 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
     return false
   }
 
-  func startArtistRadio(_ selection: Radio.CustomSelection?) {
+  func startCustomChannel(selection: Radio.CustomSelection?, appending: Bool? = false) {
     // handle the text/module name search case
+    let newState: Radio.Control.State = (appending ?? false) ? .append : .on
+
     if let selection = selection, selection.ids.count > 0 {
-      modulePlayer.controlRadio(Radio.Control.Request(powerOn: true, channel: RadioChannel.selection, selection: selection))
+      modulePlayer.controlRadio(Radio.Control.Request(state: newState, channel: RadioChannel.selection, selection: selection))
       return
     }
 
@@ -137,7 +140,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
     }.shuffled()
 
     let selection = Radio.CustomSelection(name: autoListTitle ?? "n/a", ids: modIDs)
-    modulePlayer.controlRadio(Radio.Control.Request(powerOn: true, channel: RadioChannel.selection, selection: selection))
+    modulePlayer.controlRadio(Radio.Control.Request(state: newState, channel: RadioChannel.selection, selection: selection))
   }
 
   func triggerAutoFetchList() {

@@ -16,6 +16,12 @@ protocol SearchDisplayLogic: class {
   func displayDeletion(viewModel: Search.MetaDataChange.ViewModel)
 }
 
+extension SearchViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+}
+
 class SearchViewController: UIViewController, SearchDisplayLogic {
   var interactor: SearchBusinessLogic?
   var router: (NSObjectProtocol & SearchRoutingLogic & SearchDataPassing)?
@@ -35,6 +41,10 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   private let progressMarks = ["◐", "◓", "◑", "◒"]
   private var progressMarkIndex = 0
   private var spinnerTimer: Timer?
+
+  private lazy var radioButtonLPR: UILongPressGestureRecognizer = UILongPressGestureRecognizer(
+    target: self,
+    action: #selector(radioButtonLongPressed(sender:)))
 
   @IBOutlet weak var searchBar: UISearchBar?
 
@@ -89,6 +99,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     tableView?.delegate = self
     spinner?.isHidden = true
     progressBar?.isHidden = true
+
     view.backgroundColor = Appearance.darkBlueColor
     tableView?.backgroundColor = Appearance.ampBgColor
     // Based on the context, either show search bar (root level search) or
@@ -115,6 +126,8 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     animateRadioButton(false)
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
     self.view.addGestureRecognizer(longPressRecognizer)
+
+    radioButton?.addGestureRecognizer(radioButtonLPR)
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -215,6 +228,8 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       let radioButton = UIButton(type: .system)
       radioButton.setImage(UIImage(named: "radio"), for: .normal)
       radioButton.addTarget(self, action: #selector(startArtistRadio(_:)), for: .touchUpInside)
+      radioButton.addGestureRecognizer(radioButtonLPR)
+
       var navItems: [UIBarButtonItem] = []
       if vm.modules.count > 0 {
         navItems.append(UIBarButtonItem(customView: radioButton))
@@ -291,13 +306,13 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   }
 
   @objc private func startArtistRadio(_: UIBarButtonItem) {
-    interactor?.startArtistRadio(nil)
+    interactor?.startCustomChannel(selection: nil, appending: false)
   }
 
   @IBAction func startResultsRadio(_: UIButton) {
     let mods = viewModel?.modules ?? []
     let selection = Radio.CustomSelection(name: viewModel?.text ?? "n/a", ids: mods.map { $0.id ?? 0 }.shuffled())
-    interactor?.startArtistRadio(selection)
+    interactor?.startCustomChannel(selection: selection, appending: false)
   }
 
   @objc func longPressed(sender: UILongPressGestureRecognizer) {
@@ -309,6 +324,14 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
           longTap(cell: cell )
         }
       }
+    }
+  }
+
+  @objc func radioButtonLongPressed(sender: UILongPressGestureRecognizer) {
+    if sender.state == .began {
+      let mods = viewModel?.modules ?? []
+      let selection = Radio.CustomSelection(name: viewModel?.text ?? "n/a", ids: mods.map { $0.id ?? 0 }.shuffled())
+      interactor?.startCustomChannel(selection: selection, appending: true)
     }
   }
 

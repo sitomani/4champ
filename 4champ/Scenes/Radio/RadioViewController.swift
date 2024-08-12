@@ -383,7 +383,8 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
   @IBAction private func controlSwitchChanged(_ sender: UISwitch) {
     log.debug("")
     if let channelSelection = segmentDict[channelSegments?.selectedSegmentIndex ?? 0] {
-      let req = Radio.Control.Request(powerOn: sender.isOn, channel: channelSelection)
+      let powerState: Radio.Control.State = sender.isOn ? .on : .off
+      let req = Radio.Control.Request(state: powerState, channel: channelSelection)
       interactor?.controlRadio(request: req)
     }
   }
@@ -395,7 +396,8 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
   @IBAction private func segmentChanged(_ sender: UISegmentedControl) {
     log.debug("")
     if let channelSelection = segmentDict[channelSegments?.selectedSegmentIndex ?? 0] {
-      let req = Radio.Control.Request(powerOn: radioSwitch?.isOn ?? false, channel: channelSelection)
+      let powerState: Radio.Control.State = (radioSwitch?.isOn ?? false) ? .on : .off
+      let req = Radio.Control.Request(state: powerState, channel: channelSelection)
       interactor?.controlRadio(request: req)
     }
   }

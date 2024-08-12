@@ -39,7 +39,6 @@ enum RadioStatus {
 }
 
 enum Radio {
-
   struct CustomSelection {
     let name: String
     let ids: [Int]
@@ -47,8 +46,14 @@ enum Radio {
   // MARK: Use cases
 
   enum Control {
+    enum State {
+      case on
+      case off
+      case append
+    }
+
     struct Request {
-      var powerOn: Bool
+      var state: Radio.Control.State
       var channel: RadioChannel
       var selection: CustomSelection?
     }
