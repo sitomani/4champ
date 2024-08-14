@@ -347,7 +347,6 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       hvc.view.translatesAutoresizingMaskIntoConstraints = false
       hvc.view.backgroundColor = .clear
       toastParent.addChild(hvc)
-      toastParent.addChild(hvc)
       toastParent.view.addSubview(hvc.view)
       // Setup constraints
       NSLayoutConstraint.activate([
