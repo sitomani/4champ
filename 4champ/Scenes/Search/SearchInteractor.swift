@@ -39,7 +39,7 @@ protocol SearchBusinessLogic {
 
   func deleteModule(at indexPath: IndexPath)
 
-  func startCustomChannel(selection: Radio.CustomSelection?, appending: Bool?)
+  func setupRadio(_ request: Search.RadioSetup.Request)
 }
 
 /// Search Interactor datastore
@@ -124,23 +124,30 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
     return false
   }
 
-  func startCustomChannel(selection: Radio.CustomSelection?, appending: Bool? = false) {
+  func setupRadio(_ request: Search.RadioSetup.Request) {
     // handle the text/module name search case
-    let newState: Radio.Control.State = (appending ?? false) ? .append : .on
+    let newState: Radio.Control.State = (request.appending) ? .append : .on
 
-    if let selection = selection, selection.ids.count > 0 {
-      modulePlayer.controlRadio(Radio.Control.Request(state: newState, channel: RadioChannel.selection, selection: selection))
+    let newSelection: Radio.CustomSelection
+
+    if let selection = request.selection, selection.ids.count > 0 {
+      newSelection = selection
+    } else if latestModuleResponse.result.count > 0 {
+      let supportedMods = latestModuleResponse.result.filter { MMD.supportedTypes.contains($0.format) }
+      let modIDs = supportedMods.map { mr in
+        mr.getId()
+      }.shuffled()
+      newSelection = Radio.CustomSelection(name: autoListTitle, ids: modIDs)
+    } else {
+      log.error("Attempted to start custom channel with no data")
       return
     }
 
-    // handle the composer results case
-    guard latestModuleResponse.result.count > 0 else { return }
-    let modIDs = latestModuleResponse.result.map { mr in
-      mr.getId()
-    }.shuffled()
-
-    let selection = Radio.CustomSelection(name: autoListTitle ?? "n/a", ids: modIDs)
-    modulePlayer.controlRadio(Radio.Control.Request(state: newState, channel: RadioChannel.selection, selection: selection))
+    let count = modulePlayer.controlRadio(Radio.Control.Request(state: newState, channel: RadioChannel.selection, selection: newSelection))
+    let response = Search.RadioSetup.Response(channelName: newSelection.name,
+                                              moduleCount: count,
+                                              appending: request.appending)
+    presenter?.presentRadioResponse(response: response)
   }
 
   func triggerAutoFetchList() {

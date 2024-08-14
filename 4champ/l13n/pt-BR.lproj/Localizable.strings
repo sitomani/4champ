@@ -253,6 +253,9 @@
 /* Search did not find anything info label */
 "Search_NoResult" = "Sem resultados. Tente outra pesquisa";
 
+"Search_RadioMessage_Add" = "O canal '%1$@' foi iniciado com %2$d modulos";
+"Search_RadioMessage_Append" = "%2$d modulos adicionados ao canal '%1$@'";
+
 /* Playlist view: Local database cleanup dialog button for deleting modules */
 "Dialog_Delete" = "Apagar";
 

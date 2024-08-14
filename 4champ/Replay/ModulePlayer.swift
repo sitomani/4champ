@@ -140,8 +140,8 @@ class ModulePlayer: NSObject {
   }
 
   /// Radio Control proxy to remotecontrol
-  func controlRadio(_ request: Radio.Control.Request) {
-    radioRemoteControl?.controlRadio(request: request)
+  func controlRadio(_ request: Radio.Control.Request) -> Int {
+    return radioRemoteControl?.controlRadio(request: request) ?? 0
   }
 
   /// Starts playing a module immediately. If there are modules in play queue,

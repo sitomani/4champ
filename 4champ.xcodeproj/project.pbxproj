@@ -98,6 +98,7 @@
 		739B4BF42720850200C2D69F /* RadioSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739B4BF32720850200C2D69F /* RadioSessionCell.swift */; };
 		73CE92E52AAF03D1000BFC1C /* PlaylistPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CE92E42AAF03D1000BFC1C /* PlaylistPresenter.swift */; };
 		73E4FBF02ADC4D01009A985A /* RefreshLatestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E4FBEF2ADC4D01009A985A /* RefreshLatestOperation.swift */; };
+		73F564CE2C6A866D000B34A3 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F564CD2C6A866D000B34A3 /* Toast.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -232,6 +233,7 @@
 		739B4BF32720850200C2D69F /* RadioSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioSessionCell.swift; sourceTree = "<group>"; };
 		73CE92E42AAF03D1000BFC1C /* PlaylistPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistPresenter.swift; sourceTree = "<group>"; };
 		73E4FBEF2ADC4D01009A985A /* RefreshLatestOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshLatestOperation.swift; sourceTree = "<group>"; };
+		73F564CD2C6A866D000B34A3 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -477,6 +479,7 @@
 		45D392A320B1DDEC00EEF4E3 /* 4champ */ = {
 			isa = PBXGroup;
 			children = (
+				73F564CC2C6A863A000B34A3 /* Components */,
 				45AA910C20FF5E6300794147 /* Data */,
 				45AA910B20FF3A3B00794147 /* 4champ-bridging-header.h */,
 				45AA90F620FF36C200794147 /* Replay */,
@@ -539,6 +542,14 @@
 				7397C1DC29091504002D5CDB /* UADEReplayer.m */,
 			);
 			path = UADE;
+			sourceTree = "<group>";
+		};
+		73F564CC2C6A863A000B34A3 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				73F564CD2C6A866D000B34A3 /* Toast.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -677,6 +688,7 @@
 				450E506721879347008FB155 /* SettingsModels.swift in Sources */,
 				45D61F5120E1647300869814 /* RadioPresenter.swift in Sources */,
 				453D9BBC241BF286002EEBAB /* PlaylistSelectorStore.swift in Sources */,
+				73F564CE2C6A866D000B34A3 /* Toast.swift in Sources */,
 				4535A4662114BB2D005FBB8B /* SearchRouter.swift in Sources */,
 				4535A4642114BB2D005FBB8B /* SearchPresenter.swift in Sources */,
 				45855FCD2444AC6B0079C767 /* ModuleSharing.swift in Sources */,

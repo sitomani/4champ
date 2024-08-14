@@ -14,7 +14,7 @@ protocol RadioBusinessLogic {
   /// Radio on/off/channel switch control interface
   /// - parameters:
   ///   - request: Control parameters (on/off/channel) in a `Radio.Control.Request` struct
-  func controlRadio(request: Radio.Control.Request)
+  func controlRadio(request: Radio.Control.Request) -> Int
 
   /// Set current playing song favorite status
   func toggleFavorite()
@@ -51,19 +51,12 @@ protocol RadioBusinessLogic {
   /// - parameters:
   ///    - at: Specifies indexpath (=> row) in session history
   func playFromSessionHistory(at: IndexPath)
-
-  /// Append the given selection to current custom channel
-  /// If custom channel is not on, calling this will turn on the custom channel with the selection
-  /// - parameters:
-  ///     - customSelection: The selection of mods to append
-  func appendSelection(_ selection: Radio.CustomSelection)
 }
 
 /// Protocol to handle play history in radio mode + start artist radio
 protocol RadioRemoteControl: NSObjectProtocol {
   func playPrev()
-  func controlRadio(request: Radio.Control.Request)
-  func appendSelection(_ selection: Radio.CustomSelection)
+  func controlRadio(request: Radio.Control.Request) -> Int
 }
 
 /// Radio datastore for keeping currently selected channel and status
@@ -88,8 +81,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   private var ntfAuthorization: UNAuthorizationStatus = .notDetermined
   private var activeRequest: Alamofire.DataRequest?
   private var playbackTimer: Timer?
-  private var artistRadioIndex = 0 // index of module in artist radio
-  private var artistRadioIds: [Int] = []
+  private var customChannelIndex = 0 // index of module in custom channel
   var customSelection: Radio.CustomSelection = Radio.CustomSelection(name: "", ids: [])
 
   // Keep session history for getting back to modules listened in the radio mode.
@@ -129,22 +121,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   }
 
   // MARK: Request handling
-  func appendSelection(_ selection: Radio.CustomSelection) {
-    switch channel {
-    case .selection:
-      let combined = customSelection.ids + selection.ids
-      self.customSelection = Radio.CustomSelection(name: self.customSelection.name, ids: combined.shuffled())
-      if radioOn {
-        break
-      }
-    default:
-      controlRadio(request: Radio.Control.Request(state: .on, channel: .selection, selection: customSelection))
-    }
-  }
-
-  func controlRadio(request: Radio.Control.Request) {
-    log.debug(request)
-
+  func controlRadio(request: Radio.Control.Request) -> Int {
     if modulePlayer.radioOn || request.state == .on {
       stopPlayback()
     }
@@ -155,7 +132,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       presenter?.presentChannelBuffer(buffer: [], history: [])
       modulePlayer.cleanup()
       radioSessionHistory.removeAll()
-      return
+      return 0
     }
 
     modulePlayer.addPlayerObserver(self)
@@ -166,6 +143,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     playbackTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
       self?.periodicUpdate()
     }
+    let originalCount = customSelection.ids.count
     if let selection = request.selection {
       if request.state == .append {
         let combined = Array(Set(customSelection.ids + selection.ids))
@@ -177,6 +155,8 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     channel = request.channel
     status = .on
     fillBuffer()
+    let customCount = request.state == .append ? customSelection.ids.count - originalCount : customSelection.ids.count
+    return customCount
   }
 
   func toggleFavorite() {
@@ -383,8 +363,8 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
         return -1
       }
       let ids = customSelection.ids
-      artistRadioIndex = (artistRadioIndex + 1) % ids.count
-      return ids[artistRadioIndex]
+      customChannelIndex = (customChannelIndex + 1) % ids.count
+      return ids[customChannelIndex]
     }
   }
 

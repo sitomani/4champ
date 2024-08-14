@@ -199,7 +199,11 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
   }
 
   func displayRowUpdate(indexPath: IndexPath) {
-    tableView.reloadRows(at: [indexPath], with: .automatic)
+    if tableView.window != nil {
+      tableView.reloadRows(at: [indexPath], with: .automatic)
+    } else {
+      tableView.reloadData()
+    }
   }
 
   func displayRowInsert(indexPath: IndexPath) {

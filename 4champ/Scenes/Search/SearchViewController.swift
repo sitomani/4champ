@@ -14,6 +14,7 @@ protocol SearchDisplayLogic: class {
   func displayBatchProgress(viewModel: Search.BatchDownload.ViewModel)
   func displayMetaDataChange(viewModel: Search.MetaDataChange.ViewModel)
   func displayDeletion(viewModel: Search.MetaDataChange.ViewModel)
+  func displayRadioSetup(viewModel: Search.RadioSetup.ViewModel)
 }
 
 extension SearchViewController: UIGestureRecognizerDelegate {
@@ -182,10 +183,16 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     updateDownloadAllButton()
   }
 
+  func displayRadioSetup(viewModel: Search.RadioSetup.ViewModel) {
+    showRadioToast(message: viewModel.message)
+  }
+
   func animateRadioButton(_ animated: Bool = true) {
     var modules: [MMD] = []
     if searchBar?.superview != nil {
-      modules = viewModel?.modules ?? []
+      modules = viewModel?.modules.filter({ mod in
+        mod.supported()
+      }) ?? []
     }
     var targetAlpha = 1.0
     var targetConstant = 48.0
@@ -306,13 +313,13 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   }
 
   @objc private func startArtistRadio(_: UIBarButtonItem) {
-    interactor?.startCustomChannel(selection: nil, appending: false)
+    interactor?.setupRadio(Search.RadioSetup.Request(selection: nil, appending: false))
   }
 
-  @IBAction func startResultsRadio(_: UIButton) {
-    let mods = viewModel?.modules ?? []
-    let selection = Radio.CustomSelection(name: viewModel?.text ?? "n/a", ids: mods.map { $0.id ?? 0 }.shuffled())
-    interactor?.startCustomChannel(selection: selection, appending: false)
+  @IBAction func startResultsRadio(_ sender: UIButton) {
+    let mods = (viewModel?.modules ?? []).filter { $0.supported() }
+    let selection = Radio.CustomSelection(name: viewModel?.text, ids: mods.map { $0.id ?? 0 }.shuffled())
+    interactor?.setupRadio(Search.RadioSetup.Request(selection: selection, appending: sender !== radioButton))
   }
 
   @objc func longPressed(sender: UILongPressGestureRecognizer) {
@@ -329,9 +336,31 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
 
   @objc func radioButtonLongPressed(sender: UILongPressGestureRecognizer) {
     if sender.state == .began {
-      let mods = viewModel?.modules ?? []
-      let selection = Radio.CustomSelection(name: viewModel?.text ?? "n/a", ids: mods.map { $0.id ?? 0 }.shuffled())
-      interactor?.startCustomChannel(selection: selection, appending: true)
+      startResultsRadio(UIButton())
+    }
+  }
+
+  private func showRadioToast(message: String) {
+    if let toastParent = tabBarController {
+      let toastView = Toast(text: message)
+      let hvc = UIHostingController(rootView: toastView)
+      hvc.view.translatesAutoresizingMaskIntoConstraints = false
+      hvc.view.backgroundColor = .clear
+      toastParent.addChild(hvc)
+      toastParent.addChild(hvc)
+      toastParent.view.addSubview(hvc.view)
+      // Setup constraints
+      NSLayoutConstraint.activate([
+        hvc.view.leadingAnchor.constraint(equalTo: toastParent.view.leadingAnchor),
+        hvc.view.trailingAnchor.constraint(equalTo: toastParent.view.trailingAnchor),
+        hvc.view.topAnchor.constraint(equalTo: toastParent.view.topAnchor),
+        hvc.view.bottomAnchor.constraint(equalTo: toastParent.view.bottomAnchor)
+      ])
+
+      // Notify the hosting controller
+      hvc.didMove(toParent: toastParent)
+      DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3.0) { hvc.view.removeFromSuperview() }
+
     }
   }
 

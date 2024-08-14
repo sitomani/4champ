@@ -13,6 +13,7 @@ protocol SearchPresentationLogic {
   func presentBatchProgress(response: Search.BatchDownload.Response)
   func presentMetadataChange(response: Search.MetaDataChange.Response)
   func presentDeletion(response: Search.MetaDataChange.Response)
+  func presentRadioResponse(response: Search.RadioSetup.Response)
 }
 
 /// Search result presentation class. Presenter wraps the json originating
@@ -90,6 +91,15 @@ class SearchPresenter: SearchPresentationLogic {
     let vm = Search.MetaDataChange.ViewModel(module: response.module)
     DispatchQueue.main.async {
       self.viewController?.displayDeletion(viewModel: vm)
+    }
+  }
+
+  func presentRadioResponse(response: Search.RadioSetup.Response) {
+    let msgId = response.appending ? "Search_RadioMessage_Append" : "Search_RadioMessage_Add"
+    let channelName = response.channelName ?? "Radio_Custom".l13n()
+    let vm = Search.RadioSetup.ViewModel(message: .init(format: msgId.l13n(), channelName, response.moduleCount))
+    DispatchQueue.main.async {
+      self.viewController?.displayRadioSetup(viewModel: vm)
     }
   }
 

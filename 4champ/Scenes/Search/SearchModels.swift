@@ -30,6 +30,21 @@ enum Search {
     var pagingIndex: Int = 0
   }
 
+  struct RadioSetup {
+    struct Request {
+      var selection: Radio.CustomSelection?
+      var appending: Bool = false
+    }
+    struct Response {
+      var channelName: String?
+      var moduleCount: Int
+      var appending: Bool = false
+    }
+    struct ViewModel {
+      var message: String
+    }
+  }
+
   struct ProgressResponse {
     var progress: Float
     var error: Error?
