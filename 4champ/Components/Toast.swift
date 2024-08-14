@@ -1,9 +1,8 @@
 //
 //  Toast.swift
-//  ampplayer
+//  4champ
 //
-//  Created by Aleksi Sitomaniemi on 12.8.2024.
-//  Copyright © 2024 boogie. All rights reserved.
+//  Copyright © 2024 Aleksi Sitomaniemi. All rights reserved.
 //
 
 import SwiftUI
