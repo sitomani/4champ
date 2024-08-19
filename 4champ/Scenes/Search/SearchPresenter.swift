@@ -96,7 +96,7 @@ class SearchPresenter: SearchPresentationLogic {
 
   func presentRadioResponse(response: Search.RadioSetup.Response) {
     let msgId = response.appending ? "Search_RadioMessage_Append" : "Search_RadioMessage_Add"
-    let channelName = response.channelName ?? "Radio_Custom".l13n()
+    let channelName = (response.channelName ?? "Radio_Custom".l13n()) + (response.appending ? "+" : "")
     let vm = Search.RadioSetup.ViewModel(message: .init(format: msgId.l13n(), channelName, response.moduleCount))
     DispatchQueue.main.async {
       self.viewController?.displayRadioSetup(viewModel: vm)

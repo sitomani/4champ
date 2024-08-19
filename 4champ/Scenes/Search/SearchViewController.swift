@@ -317,8 +317,11 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   }
 
   @IBAction func startResultsRadio(_ sender: UIButton) {
-    let mods = (viewModel?.modules ?? []).filter { $0.supported() }
-    let selection = Radio.CustomSelection(name: viewModel?.text, ids: mods.map { $0.id ?? 0 }.shuffled())
+    var selection: Radio.CustomSelection?
+    if let text = viewModel?.text, text.count > 0 {
+      let mods = (viewModel?.modules ?? []).filter { $0.supported() }
+      selection = Radio.CustomSelection(name: text, ids: mods.map { $0.id ?? 0 }.shuffled())
+    }
     interactor?.setupRadio(Search.RadioSetup.Request(selection: selection, appending: sender !== radioButton))
   }
 

@@ -49,6 +49,22 @@ struct Toast: View {
 
 }
 
-#Preview {
-    Toast()
+struct ToastPreviewWrapper: View {
+    @State private var toggle = false
+    private let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
+
+    var body: some View {
+        Toast(text: "Channel 'something' started with 130 modules")
+            .id(toggle)  // Changes the identity of the view to trigger onAppear
+            .onReceive(timer) { _ in
+                self.toggle.toggle()  // Toggling the state to reset the view
+            }
+    }
+}
+
+struct Toast_Previews: PreviewProvider {
+    static var previews: some View {
+        ToastPreviewWrapper()
+            .previewLayout(.sizeThatFits)
+    }
 }
