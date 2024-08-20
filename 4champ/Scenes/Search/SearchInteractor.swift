@@ -147,7 +147,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
     let count = modulePlayer.controlRadio(Radio.Control.Request(state: newState, channel: RadioChannel.selection, selection: newSelection))
     let response = Search.RadioSetup.Response(channelName: newSelection.name,
                                               moduleCount: count,
-                                              appending: request.appending)
+                                              appending: isAppending)
     presenter?.presentRadioResponse(response: response)
   }
 
