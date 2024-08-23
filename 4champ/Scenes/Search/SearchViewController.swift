@@ -14,6 +14,13 @@ protocol SearchDisplayLogic: class {
   func displayBatchProgress(viewModel: Search.BatchDownload.ViewModel)
   func displayMetaDataChange(viewModel: Search.MetaDataChange.ViewModel)
   func displayDeletion(viewModel: Search.MetaDataChange.ViewModel)
+  func displayRadioSetup(viewModel: Search.RadioSetup.ViewModel)
+}
+
+extension SearchViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
 }
 
 class SearchViewController: UIViewController, SearchDisplayLogic {
@@ -36,9 +43,16 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   private var progressMarkIndex = 0
   private var spinnerTimer: Timer?
 
+  private lazy var radioButtonLPR: UILongPressGestureRecognizer = UILongPressGestureRecognizer(
+    target: self,
+    action: #selector(radioButtonLongPressed(sender:)))
+
   @IBOutlet weak var searchBar: UISearchBar?
 
   @IBOutlet weak var tableView: UITableView?
+  @IBOutlet weak var searchBarToEdgeConstraint: NSLayoutConstraint?
+  @IBOutlet weak var radioButton: UIButton?
+
   // MARK: Object lifecycle
 
   override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -86,6 +100,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     tableView?.delegate = self
     spinner?.isHidden = true
     progressBar?.isHidden = true
+
     view.backgroundColor = Appearance.darkBlueColor
     tableView?.backgroundColor = Appearance.ampBgColor
     // Based on the context, either show search bar (root level search) or
@@ -109,9 +124,11 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       spinner?.startAnimating()
       interactor?.triggerAutoFetchList()
     }
-
+    animateRadioButton(false)
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
     self.view.addGestureRecognizer(longPressRecognizer)
+
+    radioButton?.addGestureRecognizer(radioButtonLPR)
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -161,8 +178,36 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     spinner?.isHidden = true
     DispatchQueue.main.async {
       self.tableView?.reloadData()
+      self.animateRadioButton()
     }
     updateDownloadAllButton()
+  }
+
+  func displayRadioSetup(viewModel: Search.RadioSetup.ViewModel) {
+    showRadioToast(message: viewModel.message)
+  }
+
+  func animateRadioButton(_ animated: Bool = true) {
+    var modules: [MMD] = []
+    if searchBar?.superview != nil {
+      modules = viewModel?.modules.filter({ mod in
+        mod.supported()
+      }) ?? []
+    }
+    var targetAlpha = 1.0
+    var targetConstant = 48.0
+    let animTime = animated ? 0.3 : 0
+    self.searchBarToEdgeConstraint?.priority = .required
+
+    if modules.isEmpty {
+      targetAlpha = 0.0
+      targetConstant = 0
+    }
+    UIView.animate(withDuration: animTime) {
+      self.radioButton?.alpha = targetAlpha
+      self.searchBarToEdgeConstraint?.constant = targetConstant
+    }
+
   }
 
   func updateDownloadAllButton() {
@@ -186,9 +231,20 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       dlbutton.addTarget(self, action: #selector(triggerDownloadAll(_:)), for: .touchUpInside)
       dlbutton.semanticContentAttribute = UIApplication.shared
         .userInterfaceLayoutDirection == .rightToLeft ? .forceLeftToRight : .forceRightToLeft
-      navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: dlbutton)
 
-      dlbutton.isHidden = onlineOnly <= 0
+      let radioButton = UIButton(type: .system)
+      radioButton.setImage(UIImage(named: "radio"), for: .normal)
+      radioButton.addTarget(self, action: #selector(startArtistRadio(_:)), for: .touchUpInside)
+      radioButton.addGestureRecognizer(radioButtonLPR)
+
+      var navItems: [UIBarButtonItem] = []
+      if vm.modules.count > 0 {
+        navItems.append(UIBarButtonItem(customView: radioButton))
+      }
+      if onlineOnly > 0 {
+        navItems.append(UIBarButtonItem(customView: dlbutton))
+      }
+      navigationItem.rightBarButtonItems = navItems
     }
   }
 
@@ -222,7 +278,8 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
 
   func displayMetaDataChange(viewModel: Search.MetaDataChange.ViewModel) {
     self.viewModel?.updateModule(module: viewModel.module)
-    if let modIndex = self.viewModel?.modules.index(of: viewModel.module) {
+    if let modIndex = self.viewModel?.modules.index(of: viewModel.module),
+       nil != tableView?.window {
       tableView?.reloadRows(at: [IndexPath(row: modIndex, section: 0)], with: .fade)
     } else {
       tableView?.reloadData()
@@ -231,7 +288,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
 
   func displayDeletion(viewModel: Search.MetaDataChange.ViewModel) {
     self.viewModel?.updateModule(module: viewModel.module)
-    if let modIndex = self.viewModel?.modules.index(of: viewModel.module) {
+    if let modIndex = self.viewModel?.modules.index(of: viewModel.module), nil != tableView?.window {
       tableView?.reloadRows(at: [IndexPath(row: modIndex, section: 0)], with: .left)
     } else {
       tableView?.reloadData()
@@ -255,6 +312,19 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     interactor?.downloadModules(request)
   }
 
+  @objc private func startArtistRadio(_: UIBarButtonItem) {
+    interactor?.setupRadio(Search.RadioSetup.Request(selection: nil, appending: false))
+  }
+
+  @IBAction func startResultsRadio(_ sender: UIButton) {
+    var selection: Radio.CustomSelection?
+    if let text = viewModel?.text, text.count > 0 {
+      let mods = (viewModel?.modules ?? []).filter { $0.supported() }
+      selection = Radio.CustomSelection(name: text, ids: mods.map { $0.id ?? 0 }.shuffled())
+    }
+    interactor?.setupRadio(Search.RadioSetup.Request(selection: selection, appending: sender !== radioButton))
+  }
+
   @objc func longPressed(sender: UILongPressGestureRecognizer) {
     if sender.state == UIGestureRecognizer.State.began {
       let touchPoint = sender.location(in: self.tableView)
@@ -264,6 +334,35 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
           longTap(cell: cell )
         }
       }
+    }
+  }
+
+  @objc func radioButtonLongPressed(sender: UILongPressGestureRecognizer) {
+    if sender.state == .began {
+      startResultsRadio(UIButton())
+    }
+  }
+
+  private func showRadioToast(message: String) {
+    if let toastParent = tabBarController {
+      let toastView = Toast(text: message)
+      let hvc = UIHostingController(rootView: toastView)
+      hvc.view.translatesAutoresizingMaskIntoConstraints = false
+      hvc.view.backgroundColor = .clear
+      toastParent.addChild(hvc)
+      toastParent.view.addSubview(hvc.view)
+      // Setup constraints
+      NSLayoutConstraint.activate([
+        hvc.view.leadingAnchor.constraint(equalTo: toastParent.view.leadingAnchor),
+        hvc.view.trailingAnchor.constraint(equalTo: toastParent.view.trailingAnchor),
+        hvc.view.topAnchor.constraint(equalTo: toastParent.view.topAnchor),
+        hvc.view.bottomAnchor.constraint(equalTo: toastParent.view.bottomAnchor)
+      ])
+
+      // Notify the hosting controller
+      hvc.didMove(toParent: toastParent)
+      DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3.0) { hvc.view.removeFromSuperview() }
+
     }
   }
 
@@ -302,6 +401,7 @@ extension SearchViewController: UISearchBarDelegate {
       searchBar?.searching = false
       viewModel = Search.ViewModel(modules: [], composers: [], groups: [], text: "")
       tableView?.reloadData()
+      animateRadioButton()
     } else {
       searchBar?.searching = true
       perform(#selector(triggerSearch), with: nil, afterDelay: Constants.searchDelay)

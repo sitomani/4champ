@@ -38,6 +38,8 @@ protocol SearchBusinessLogic {
   func addToPlaylist(moduleId: Int, playlistId: String)
 
   func deleteModule(at indexPath: IndexPath)
+
+  func setupRadio(_ request: Search.RadioSetup.Request)
 }
 
 /// Search Interactor datastore
@@ -48,9 +50,11 @@ protocol SearchDataStore {
   var pagingIndex: Int { get }
 }
 
-/// Implementation of Search business logic
+/// Implementation of Search business logic∂a
 class SearchInteractor: SearchBusinessLogic, SearchDataStore {
+
   var presenter: SearchPresentationLogic?
+  var settingsInteractor = SettingsInteractor()
 
   var autoListTitle: String?
   var autoListId: Int?
@@ -118,6 +122,33 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
       }
     }
     return false
+  }
+
+  func setupRadio(_ request: Search.RadioSetup.Request) {
+    // handle the text/module name search case
+    let newState: Radio.Control.State = (request.appending) ? .append : .on
+
+    let newSelection: Radio.CustomSelection
+
+    if let selection = request.selection, selection.ids.count > 0 {
+      newSelection = selection
+    } else if latestModuleResponse.result.count > 0 {
+      let supportedMods = latestModuleResponse.result.filter { MMD.supportedTypes.contains($0.format) }
+      let modIDs = supportedMods.map { mr in
+        mr.getId()
+      }.shuffled()
+      newSelection = Radio.CustomSelection(name: autoListTitle, ids: modIDs)
+    } else {
+      log.error("Attempted to start custom channel with no data")
+      return
+    }
+
+    let isAppending = request.appending && modulePlayer.radioOn
+    let count = modulePlayer.controlRadio(Radio.Control.Request(state: newState, channel: RadioChannel.selection, selection: newSelection))
+    let response = Search.RadioSetup.Response(channelName: newSelection.name,
+                                              moduleCount: count,
+                                              appending: isAppending)
+    presenter?.presentRadioResponse(response: response)
   }
 
   func triggerAutoFetchList() {

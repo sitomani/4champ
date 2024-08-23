@@ -11,6 +11,7 @@ enum RadioChannel: Int {
   case all
   case new
   case local
+  case selection
 }
 
 enum RadioStatus {
@@ -18,15 +19,28 @@ enum RadioStatus {
   case fetching(progress: Float)
   case failure
   case noModulesAvailable
+  case noSelectionAvailable
   case on
 }
 
 enum Radio {
+  struct CustomSelection {
+    let name: String?
+    let ids: [Int]
+  }
   // MARK: Use cases
+
   enum Control {
+    enum State {
+      case on
+      case off
+      case append
+    }
+
     struct Request {
-      var powerOn: Bool
+      var state: Radio.Control.State
       var channel: RadioChannel
+      var selection: CustomSelection?
     }
 
     struct Response {

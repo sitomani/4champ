@@ -21,6 +21,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
   var router: (NSObjectProtocol & RadioRoutingLogic & RadioDataPassing)?
 
   private var currentModule: MMD?
+  private var currentChannelBuffer = Radio.ChannelBuffer.ViewModel(nowPlaying: nil, nextUp: nil, historyAvailable: false)
 
   @IBOutlet weak var currentModuleView: UIView?
   @IBOutlet weak var channelSegments: UISegmentedControl?
@@ -50,7 +51,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
   @IBOutlet weak var tableBottomConstraint: NSLayoutConstraint?
 
   var notifyItem: UIBarButtonItem?
-
+  private var segmentDict = [0: RadioChannel.all, 1: RadioChannel.new, 2: RadioChannel.local, 3: RadioChannel.selection]
   private let gradientLayer = CAGradientLayer()
   let gradientColorTop =  UIColor.init(rgb: 0x16538a)
   let gradientColorBottom = UIColor.init(rgb: 0x16538a)
@@ -118,6 +119,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     channelSegments?.setTitle("Radio_All".l13n(), forSegmentAt: 0)
     channelSegments?.setTitle("Radio_New".l13n(), forSegmentAt: 1)
     channelSegments?.setTitle("Radio_Local".l13n(), forSegmentAt: 2)
+    updateCustomChannelSegment(title: "Radio_Custom".l13n())
 
     channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
     channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
@@ -126,7 +128,6 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 
     interactor?.refreshLocalNotificationsStatus()
     interactor?.refreshBadge()
-    displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel(nowPlaying: nil, nextUp: nil, historyAvailable: false))
 
     radioTable?.dataSource = self
     radioTable?.delegate = self
@@ -143,6 +144,24 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     let img = UIImage(named: "notifications-add")?.withRenderingMode(.alwaysTemplate)
     notifyItem = UIBarButtonItem.init(image: img, landscapeImagePhone: img, style: .plain, target: self, action: #selector(notificationsPressed))
     self.navigationItem.rightBarButtonItem = notifyItem
+    updateUIElements()
+  }
+
+  private func updateCustomChannelSegment(title: String) {
+    channelSegments?.setTitle(title, forSegmentAt: 3)
+  }
+
+  private func updateUIElements() {
+    displayControlStatus(viewModel: Radio.Control.ViewModel(status: router?.dataStore?.status ?? .off))
+    displayChannelBuffer(viewModel: currentChannelBuffer)
+    if let channel = router?.dataStore?.channel, let channelIndex = segmentDict.first(where: { elem in
+      elem.value == channel
+    }) {
+      channelSegments?.selectedSegmentIndex = channelIndex.key
+      if channel == .selection {
+        updateCustomChannelSegment(title: router?.dataStore?.customSelection.name ?? "")
+      }
+    }
   }
 
   @objc func longPressed(sender: UILongPressGestureRecognizer) {
@@ -164,6 +183,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
+    updateUIElements()
   }
 
   func setupGradientBackground() {
@@ -213,6 +233,10 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
       switchTitle?.text = "Radio_NoLocalModules".l13n()
       switchTitle?.textColor = Appearance.errorColor
       radioSwitch?.onTintColor = Appearance.errorColor
+    case .noSelectionAvailable:
+      switchTitle?.text = "Radio_NoSelection".l13n()
+      switchTitle?.textColor = Appearance.errorColor
+      radioSwitch?.onTintColor = Appearance.errorColor
     case .failure:
       switchTitle?.text = "Radio_FetchFailed".l13n()
       switchTitle?.textColor = Appearance.errorColor
@@ -226,6 +250,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 
   func displayChannelBuffer(viewModel: Radio.ChannelBuffer.ViewModel) {
     log.debug("")
+    currentChannelBuffer = viewModel
     if let nextUp = viewModel.nextUp {
       nextUpTitle?.text = nextUp
     } else {
@@ -248,6 +273,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
       shareButton?.isHidden = true
       animateGradient(.in)
       tableBottomConstraint?.constant = 50.0
+      downloadProgress?.progress = 0
     } else {
       currentModule = nil
       currentModuleView?.alpha = 0.8
@@ -297,7 +323,11 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 
   func displaySessionHistoryInsert() {
     historyTitle?.text = "Radio_Previous".l13n()
-    radioTable?.insertRows(at: [IndexPath.init(item: 0, section: 0)], with: .top)
+    if radioTable?.window == nil {
+      radioTable?.reloadData()
+    } else {
+      radioTable?.insertRows(at: [IndexPath.init(item: 0, section: 0)], with: .top)
+    }
   }
 
   @IBAction private func saveTapped(_ sender: UIButton) {
@@ -318,9 +348,10 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 
   @IBAction private func controlSwitchChanged(_ sender: UISwitch) {
     log.debug("")
-    if let channelSelection = RadioChannel(rawValue: channelSegments?.selectedSegmentIndex ?? 0) {
-      let req = Radio.Control.Request(powerOn: sender.isOn, channel: channelSelection)
-      interactor?.controlRadio(request: req)
+    if let channelSelection = segmentDict[channelSegments?.selectedSegmentIndex ?? 0] {
+      let powerState: Radio.Control.State = sender.isOn ? .on : .off
+      let req = Radio.Control.Request(state: powerState, channel: channelSelection)
+      _ = interactor?.controlRadio(request: req)
     }
   }
 
@@ -330,9 +361,10 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 
   @IBAction private func segmentChanged(_ sender: UISegmentedControl) {
     log.debug("")
-    if let channelSelection = RadioChannel(rawValue: sender.selectedSegmentIndex ) {
-      let req = Radio.Control.Request(powerOn: radioSwitch?.isOn ?? false, channel: channelSelection)
-      interactor?.controlRadio(request: req)
+    if let channelSelection = segmentDict[channelSegments?.selectedSegmentIndex ?? 0] {
+      let powerState: Radio.Control.State = (radioSwitch?.isOn ?? false) ? .on : .off
+      let req = Radio.Control.Request(state: powerState, channel: channelSelection)
+      _ = interactor?.controlRadio(request: req)
     }
   }
 }
@@ -356,7 +388,6 @@ extension RadioViewController: UITableViewDataSource, UITableViewDelegate {
   }
 
   func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-    log.debug("foo")
     return indexPath
   }
 

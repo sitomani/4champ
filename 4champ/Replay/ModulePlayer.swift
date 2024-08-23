@@ -139,6 +139,11 @@ class ModulePlayer: NSObject {
     }
   }
 
+  /// Radio Control proxy to remotecontrol
+  func controlRadio(_ request: Radio.Control.Request) -> Int {
+    return radioRemoteControl?.controlRadio(request: request) ?? 0
+  }
+
   /// Starts playing a module immediately. If there are modules in play queue,
   /// the given module `mmd` will be inserted to queue at the position of currently
   /// playing module.
@@ -158,7 +163,7 @@ class ModulePlayer: NSObject {
       play(at: index)
     } else {
       playQueue.append(mmd)
-      play(at: playQueue.count-1)
+      play(at: playQueue.count - 1)
     }
   }
 

@@ -19,7 +19,7 @@ You can also follow the 4champ accounts on [X (4champ_app)](https://x.com/4champ
 ### Main Features of the app
 
 - Search: Search the AMP database by module, composer, group name or sampletexts.
-- Radio: You can listen to a random set of tunes from the whole collection of over 150000 modules, or stream from the head, i.e. the most recently added ones. You can also play from the local collection from set of modules that you've selected to keep for offline mode. 
+- Radio: You can listen to a random set of tunes from the whole collection of over 150000 modules, or stream from the head, i.e. the most recently added ones. You can also play from the local collection from set of modules that you've selected to keep for offline mode and build your own custom channels through from search results.
 - Playlists: Build your own playlists from modules.
 - Local Collection: store modules locally - persistent storage for off-line listening of modules.
 - Settings: Control stereo separation, sound interpolation etc.

@@ -1,5 +1,13 @@
 # 4champ Development Journal
 
+### August 2024 A feature requested by 4champ user realised in the form of a new 4champ radio channel. 
+
+Earlier this year [marekhac suggested](https://github.com/sitomani/4champ/issues/34) that it'd be nice if the app would keep on playing tunes by a composer when a module was selected to play from the composer page in the search view.
+
+When figuring out how to actually implement this, I sidestepped a bit from the original request and integrated the search results playback to the radio feature. This way user can navigate away from the search and modules will keep on playing from the result set that the custom channel was started at.
+
+The integration to radio also allows for extending the custom channel modules set from another search, which is done by long-tapping the radio button on the search result. Have fun building transient channels!
+
 ### January 2024 Stability update + PreTracker support + first PR from a contributor!
 
 During the #hacktoberfest campaign in 2023 I did a handful of stability fixes and migrated the app to latest iOS SDK. These changes did not yet make it to a release, but in January I noticed that UADE now has PreTracker support!

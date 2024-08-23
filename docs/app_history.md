@@ -126,3 +126,7 @@ UADE player integration
 ### Version 3.6 January 2024
 
 Update UADE library with PRT (PreTracker) support.
+
+### Version 3.7 August 2024
+
+Fourth channel (custom) added to 4champ radio.

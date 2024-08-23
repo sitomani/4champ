@@ -14,7 +14,7 @@ protocol RadioBusinessLogic {
   /// Radio on/off/channel switch control interface
   /// - parameters:
   ///   - request: Control parameters (on/off/channel) in a `Radio.Control.Request` struct
-  func controlRadio(request: Radio.Control.Request)
+  func controlRadio(request: Radio.Control.Request) -> Int
 
   /// Set current playing song favorite status
   func toggleFavorite()
@@ -53,15 +53,17 @@ protocol RadioBusinessLogic {
   func playFromSessionHistory(at: IndexPath)
 }
 
-/// Protocol to handle play history in radio mode
+/// Protocol to handle play history in radio mode + start artist radio
 protocol RadioRemoteControl: NSObjectProtocol {
   func playPrev()
+  func controlRadio(request: Radio.Control.Request) -> Int
 }
 
 /// Radio datastore for keeping currently selected channel and status
 protocol RadioDataStore {
-  var channel: RadioChannel { get set }
-  var status: RadioStatus { get set }
+  var channel: RadioChannel { get }
+  var status: RadioStatus { get }
+  var customSelection: Radio.CustomSelection { get }
 }
 
 enum PostFetchAction {
@@ -79,6 +81,8 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   private var ntfAuthorization: UNAuthorizationStatus = .notDetermined
   private var activeRequest: Alamofire.DataRequest?
   private var playbackTimer: Timer?
+  private var customChannelIndex = 0 // index of module in custom channel
+  var customSelection: Radio.CustomSelection = Radio.CustomSelection(name: "", ids: [])
 
   // Keep session history for getting back to modules listened in the radio mode.
   private var radioSessionHistory: [MMD] = []
@@ -105,6 +109,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     NotificationCenter.default.addObserver(self, selector: #selector(doBadgeUpdate(_:)), name: Notifications.badgeUpdate, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(refreshLocalNotificationsStatus),
                                            name: UIApplication.willEnterForegroundNotification, object: nil)
+    modulePlayer.radioRemoteControl = self
   }
 
   deinit {
@@ -116,22 +121,20 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   }
 
   // MARK: Request handling
-  func controlRadio(request: Radio.Control.Request) {
-    log.debug(request)
-    if modulePlayer.radioOn || request.powerOn {
+  func controlRadio(request: Radio.Control.Request) -> Int {
+    if modulePlayer.radioOn || request.state == .on {
       stopPlayback()
     }
-    guard request.powerOn == true else {
+    guard [Radio.Control.State.on, Radio.Control.State.append].contains(request.state) else {
       modulePlayer.removePlayerObserver(self)
-      modulePlayer.radioRemoteControl = nil
+      // modulePlayer.radioRemoteControl = nil
 
       presenter?.presentChannelBuffer(buffer: [], history: [])
       modulePlayer.cleanup()
       radioSessionHistory.removeAll()
-      return
+      return 0
     }
 
-    modulePlayer.radioRemoteControl = self
     modulePlayer.addPlayerObserver(self)
     modulePlayer.cleanup()
     radioSessionHistory.removeAll()
@@ -140,9 +143,20 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     playbackTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
       self?.periodicUpdate()
     }
+    let originalCount = customSelection.ids.count
+    if let selection = request.selection {
+      if request.state == .append {
+        let combined = Array(Set(customSelection.ids + selection.ids))
+        customSelection = Radio.CustomSelection(name: self.customSelection.name, ids: combined.shuffled())
+      } else {
+        customSelection = selection
+      }
+    }
     channel = request.channel
     status = .on
     fillBuffer()
+    let customCount = request.state == .append ? customSelection.ids.count - originalCount : customSelection.ids.count
+    return customCount
   }
 
   func toggleFavorite() {
@@ -343,6 +357,14 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
         return -1
       }
       return mod.id!
+    case .selection:
+      guard customSelection.ids.count > 0 else {
+        presenter?.presentControlStatus(status: .noSelectionAvailable)
+        return -1
+      }
+      let ids = customSelection.ids
+      customChannelIndex = (customChannelIndex + 1) % ids.count
+      return ids[customChannelIndex]
     }
   }
 
