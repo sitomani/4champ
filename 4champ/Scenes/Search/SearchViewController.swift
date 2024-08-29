@@ -361,8 +361,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
 
       // Notify the hosting controller
       hvc.didMove(toParent: toastParent)
-      DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3.0) { hvc.view.removeFromSuperview() }
-
+      DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.3) { hvc.view.removeFromSuperview() }
     }
   }
 
