@@ -68,7 +68,6 @@ struct MMD: Identifiable, NameComparable {
         name = name.replacingOccurrences(of: "%", with: "%25") // replace percent signs with encoding
         name = name.removingPercentEncoding ?? "" // before removing the encoding
         localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(name).appendingPathExtension(type!)
-        print(localPath)
       }
     }
   }

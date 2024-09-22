@@ -57,10 +57,6 @@ class AmpVizScene: SKScene {
         }
     }
 
-    deinit {
-        print("channelbars deallocated")
-    }
-
     override func willMove(from view: SKView) {
         super.willMove(from: view)
 
