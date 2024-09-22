@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="500" text="Radio OFF" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUj-fw-iU8">
-                                <rect key="frame" x="78" y="5" width="179" height="61"/>
+                                <rect key="frame" x="78" y="25.5" width="179" height="20.5"/>
                                 <inset key="insetFor6xAndEarlier" minX="-30" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -232,7 +232,6 @@
                             <constraint firstItem="qcG-Wi-evM" firstAttribute="top" secondItem="PQr-Ze-W5v" secondAttribute="top" constant="9" id="5vD-Ix-guo"/>
                             <constraint firstItem="AIU-Eo-k1H" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="20" id="7IX-BX-Xxu"/>
                             <constraint firstItem="zEe-nb-Fcg" firstAttribute="trailing" secondItem="PQr-Ze-W5v" secondAttribute="trailing" id="FYD-b7-kDd"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="F68-Dd-9Qo" secondAttribute="trailing" constant="4" id="HWV-C8-tFb"/>
                             <constraint firstItem="PQr-Ze-W5v" firstAttribute="trailing" secondItem="RQm-Tf-BLL" secondAttribute="trailing" constant="20" id="HWs-z6-sf0"/>
                             <constraint firstItem="AIU-Eo-k1H" firstAttribute="top" secondItem="PQr-Ze-W5v" secondAttribute="top" constant="20" id="J0C-6y-6fv"/>
                             <constraint firstItem="TVg-ts-xlz" firstAttribute="top" secondItem="AIU-Eo-k1H" secondAttribute="bottom" constant="12" id="Lak-Dy-GfT"/>
@@ -248,7 +247,6 @@
                             <constraint firstItem="QUj-fw-iU8" firstAttribute="leading" secondItem="AIU-Eo-k1H" secondAttribute="trailing" constant="9" id="jvP-8n-P7k"/>
                             <constraint firstAttribute="bottom" secondItem="zEe-nb-Fcg" secondAttribute="bottom" id="rNa-XF-MUM"/>
                             <constraint firstItem="F68-Dd-9Qo" firstAttribute="trailing" secondItem="PQr-Ze-W5v" secondAttribute="trailing" constant="-20" id="sUs-GF-JTL"/>
-                            <constraint firstItem="F68-Dd-9Qo" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" constant="4" id="spc-IF-1dS"/>
                             <constraint firstItem="RQm-Tf-BLL" firstAttribute="top" secondItem="Ac5-pb-fyE" secondAttribute="bottom" constant="4" id="sz2-Ap-mMN"/>
                             <constraint firstItem="qcG-Wi-evM" firstAttribute="leading" secondItem="QUj-fw-iU8" secondAttribute="trailing" constant="10" id="tWO-1Q-Sj5"/>
                             <constraint firstItem="F68-Dd-9Qo" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="20" id="twK-CW-5rG"/>
@@ -557,6 +555,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ODU-eH-lD6" userLabel="Backdrop">
+                                <rect key="frame" x="0.0" y="60" width="375" height="457"/>
+                                <color key="backgroundColor" red="0.070588235294117646" green="0.20000000000000001" blue="0.3411764705882353" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qbe-t6-f7a" userLabel="PlayerView">
                                 <rect key="frame" x="0.0" y="517" width="375" height="130"/>
                                 <subviews>
@@ -736,9 +738,9 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jcX-uC-gV4">
-                                <rect key="frame" x="0.0" y="16" width="44" height="44"/>
+                                <rect key="frame" x="0.0" y="16" width="88" height="44"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="44" id="2tf-j9-ig2"/>
+                                    <constraint firstAttribute="width" constant="88" id="2tf-j9-ig2"/>
                                     <constraint firstAttribute="height" constant="44" id="mpU-O7-ydm"/>
                                 </constraints>
                                 <state key="normal" image="modtext"/>
@@ -750,6 +752,10 @@
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pKX-l3-Wif" userLabel="skene" customClass="SKView">
                                 <rect key="frame" x="0.0" y="60" width="375" height="457"/>
                                 <color key="backgroundColor" red="0.27943599219999998" green="0.4278570116" blue="0.14543387290000001" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kgz-iN-zwz" customClass="VertexShaderView" customModule="ampplayer" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="60" width="375" height="457"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                             <scrollView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tdl-pu-OGA">
                                 <rect key="frame" x="0.0" y="60" width="375" height="457"/>
@@ -770,9 +776,9 @@
                                 </constraints>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pPd-Q6-6go">
-                                <rect key="frame" x="331" y="16" width="44" height="44"/>
+                                <rect key="frame" x="287" y="16" width="88" height="44"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="44" id="Hat-00-YKc"/>
+                                    <constraint firstAttribute="width" constant="88" id="Hat-00-YKc"/>
                                     <constraint firstAttribute="height" constant="44" id="P7E-m2-JfQ"/>
                                 </constraints>
                                 <state key="normal" image="vizbars"/>
@@ -801,17 +807,25 @@
                         <constraints>
                             <constraint firstItem="Qbe-t6-f7a" firstAttribute="trailing" secondItem="Kmt-ao-QB7" secondAttribute="trailing" id="3IP-4N-xSy"/>
                             <constraint firstItem="tdl-pu-OGA" firstAttribute="leading" secondItem="Kmt-ao-QB7" secondAttribute="leading" id="626-DU-dZp"/>
+                            <constraint firstItem="Qbe-t6-f7a" firstAttribute="top" secondItem="ODU-eH-lD6" secondAttribute="bottom" id="72W-rH-q8h"/>
                             <constraint firstItem="jcX-uC-gV4" firstAttribute="top" secondItem="8fe-Vz-2y9" secondAttribute="top" constant="16" id="7IB-dT-IhQ"/>
+                            <constraint firstItem="Kgz-iN-zwz" firstAttribute="centerY" secondItem="tdl-pu-OGA" secondAttribute="centerY" id="8G8-Gd-mFu"/>
+                            <constraint firstItem="ODU-eH-lD6" firstAttribute="leading" secondItem="Kmt-ao-QB7" secondAttribute="leading" id="91N-TO-S4N"/>
                             <constraint firstItem="rpw-aD-EcH" firstAttribute="top" secondItem="8fe-Vz-2y9" secondAttribute="top" constant="17" id="9A0-u0-f3O"/>
                             <constraint firstItem="pKX-l3-Wif" firstAttribute="top" secondItem="jcX-uC-gV4" secondAttribute="bottom" id="B56-7H-YTs"/>
                             <constraint firstItem="tdl-pu-OGA" firstAttribute="trailing" secondItem="Kmt-ao-QB7" secondAttribute="trailing" id="J6t-gQ-Phs"/>
                             <constraint firstItem="rpw-aD-EcH" firstAttribute="centerX" secondItem="8fe-Vz-2y9" secondAttribute="centerX" id="OqV-1w-GRh"/>
+                            <constraint firstItem="ODU-eH-lD6" firstAttribute="top" secondItem="jcX-uC-gV4" secondAttribute="bottom" id="Oxb-p2-Q9T"/>
                             <constraint firstItem="Qbe-t6-f7a" firstAttribute="top" secondItem="pKX-l3-Wif" secondAttribute="bottom" id="Tro-Gx-OY7"/>
+                            <constraint firstItem="Kmt-ao-QB7" firstAttribute="trailing" secondItem="Kgz-iN-zwz" secondAttribute="trailing" id="VW4-WZ-hiQ"/>
+                            <constraint firstItem="Kgz-iN-zwz" firstAttribute="leading" secondItem="Kmt-ao-QB7" secondAttribute="leading" id="Vgb-pt-vWX"/>
                             <constraint firstItem="tdl-pu-OGA" firstAttribute="top" secondItem="jcX-uC-gV4" secondAttribute="bottom" id="XT3-mq-nh8"/>
                             <constraint firstItem="Qbe-t6-f7a" firstAttribute="leading" secondItem="Kmt-ao-QB7" secondAttribute="leading" id="Ys8-TF-ycU"/>
                             <constraint firstItem="pPd-Q6-6go" firstAttribute="top" secondItem="8fe-Vz-2y9" secondAttribute="top" constant="16" id="aWw-WZ-2s6"/>
                             <constraint firstItem="Qbe-t6-f7a" firstAttribute="bottom" secondItem="Kmt-ao-QB7" secondAttribute="bottom" id="cXh-UK-eEM"/>
+                            <constraint firstItem="ODU-eH-lD6" firstAttribute="trailing" secondItem="Kmt-ao-QB7" secondAttribute="trailing" id="cpS-an-sV9"/>
                             <constraint firstItem="pPd-Q6-6go" firstAttribute="trailing" secondItem="Kmt-ao-QB7" secondAttribute="trailing" id="jcA-rU-s15"/>
+                            <constraint firstItem="Kgz-iN-zwz" firstAttribute="height" secondItem="pKX-l3-Wif" secondAttribute="height" id="kCy-2g-llu"/>
                             <constraint firstItem="pKX-l3-Wif" firstAttribute="leading" secondItem="Kmt-ao-QB7" secondAttribute="leading" id="rzx-2h-Xl1"/>
                             <constraint firstItem="jcX-uC-gV4" firstAttribute="leading" secondItem="Kmt-ao-QB7" secondAttribute="leading" id="u1z-1m-P1D"/>
                             <constraint firstItem="pKX-l3-Wif" firstAttribute="trailing" secondItem="Kmt-ao-QB7" secondAttribute="trailing" id="umz-XE-cpd"/>
@@ -820,12 +834,14 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
+                        <outlet property="backdrop" destination="ODU-eH-lD6" id="DL5-sv-aQR"/>
                         <outlet property="collectionLabel" destination="dYe-LJ-GyL" id="320-CQ-dTG"/>
                         <outlet property="composerLabel" destination="PQf-mk-E4k" id="Mxj-uI-FLb"/>
                         <outlet property="faveStar" destination="udt-UI-6xl" id="shP-IR-ZiS"/>
                         <outlet property="playButton" destination="29I-XP-0Th" id="vMp-A4-c0E"/>
                         <outlet property="playerView" destination="Qbe-t6-f7a" id="bL5-iY-mAX"/>
                         <outlet property="playhead" destination="W2Y-4L-TN9" id="9jm-nZ-emp"/>
+                        <outlet property="renderView" destination="Kgz-iN-zwz" id="J4l-uH-Iwu"/>
                         <outlet property="samplesLabel" destination="Gn3-eQ-i3E" id="HQI-ZC-IkY"/>
                         <outlet property="saveButton" destination="3tE-Cf-j4W" id="uBP-lg-D1z"/>
                         <outlet property="scrollV" destination="tdl-pu-OGA" id="LcV-uF-wgF"/>
@@ -840,7 +856,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UKF-W8-BL3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="847" y="-1085"/>
+            <point key="canvasLocation" x="845.60000000000002" y="-1085.3073463268368"/>
         </scene>
         <!--Main View Controller-->
         <scene sceneID="yl2-sM-qoP">

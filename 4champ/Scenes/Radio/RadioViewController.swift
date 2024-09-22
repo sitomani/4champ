@@ -183,7 +183,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    updateUIElements()
+    self.updateUIElements()
   }
 
   func setupGradientBackground() {
@@ -323,11 +323,11 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 
   func displaySessionHistoryInsert() {
     historyTitle?.text = "Radio_Previous".l13n()
-    if radioTable?.window == nil {
+//    if radioTable?.window == nil {
       radioTable?.reloadData()
-    } else {
-      radioTable?.insertRows(at: [IndexPath.init(item: 0, section: 0)], with: .top)
-    }
+//    } else {
+//      radioTable?.insertRows(at: [IndexPath.init(item: 0, section: 0)], with: .top)
+//    }
   }
 
   @IBAction private func saveTapped(_ sender: UIButton) {

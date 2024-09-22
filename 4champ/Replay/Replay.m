@@ -303,6 +303,9 @@ static OSStatus playbackCallback(void *inRefCon,
         buf[frame] = p1;
         buf2[frame] = p2;
       }
+      if ([mp streamDelegate]) {
+        [[mp streamDelegate] bufferUpdatedLeft:bufLeft Right:bufRight frameCount:size];
+      }
     } else {
       //out of bytes... just put frame's worth of zeros and inform delegate
       for( UInt32 i = 0; i < ioData->mNumberBuffers; i++ )

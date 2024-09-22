@@ -65,6 +65,7 @@ class ModulePlayer: NSObject {
   let renderer = Replay()
   let mpImage = UIImage.init(named: "albumart")!
   weak var radioRemoteControl: RadioRemoteControl?
+  weak var streamVisualiser: StreamVisualiser?
 
   var currentModule: MMD? {
     // on currentModule change, post info on MPNowPlayingInfoCenter
@@ -188,7 +189,7 @@ class ModulePlayer: NSObject {
     } else {
       log.error("Could not load tune: \(path)")
         _ = observers.map {
-          $0.errorOccurred(error: .loadFailed(mmd: playQueue[at]))
+          $0.errorOccurred(error: .loadFailed(mmd: mod))
         }
       return false
     }
@@ -231,6 +232,9 @@ class ModulePlayer: NSObject {
     while playQueue[nextIndex] == currentModule && nextIndex < playQueue.count-1 {
       nextIndex += 1
     }
+
+    nextIndex = nextIndex % playQueue.count
+
     if play(at: nextIndex) == false {
       guard playQueue.count > nextIndex else { return }
       playQueue.remove(at: nextIndex)
@@ -321,6 +325,13 @@ class ModulePlayer: NSObject {
 }
 
 extension ModulePlayer: ReplayStreamDelegate {
+
+  func bufferUpdatedLeft(_ leftChannel: UnsafePointer<Int16>!, right rightChannel: UnsafePointer<Int16>!, frameCount: UInt32) {
+    if let vis = streamVisualiser {
+      vis.update(leftChannel: leftChannel, rightChannel: rightChannel, frameCount: frameCount)
+    }
+  }
+
   func reachedEnd(ofStream replay: Replay!) {
     log.debug("")
     DispatchQueue.main.async {

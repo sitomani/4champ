@@ -91,11 +91,14 @@
 		735A273E264FDFAD004EAC0C /* Gzip in Frameworks */ = {isa = PBXBuildFile; productRef = 735A273D264FDFAD004EAC0C /* Gzip */; };
 		735A2742264FDFDE004EAC0C /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = 735A2741264FDFDE004EAC0C /* SwiftyBeaver */; };
 		735A2746264FE01D004EAC0C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 735A2745264FE01D004EAC0C /* Alamofire */; };
+		736DAC5F2C862F4D005C07B4 /* VisualisationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736DAC5E2C862F4D005C07B4 /* VisualisationMenu.swift */; };
 		73759FD228EB34DF00535F8E /* libopenmpt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73759FD128EB34DF00535F8E /* libopenmpt.xcframework */; };
 		7397C1DE29091504002D5CDB /* UADEReplayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7397C1DC29091504002D5CDB /* UADEReplayer.m */; };
 		7397C1E629091D9D002D5CDB /* uade_ios.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7397C1E129091BC3002D5CDB /* uade_ios.xcframework */; };
 		7397C1E729091D9D002D5CDB /* uade_ios.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7397C1E129091BC3002D5CDB /* uade_ios.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		739B4BF42720850200C2D69F /* RadioSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739B4BF32720850200C2D69F /* RadioSessionCell.swift */; };
+		73AE47432C80E371008BAD87 /* amplitudegraph.metal in Sources */ = {isa = PBXBuildFile; fileRef = 73AE47422C80E371008BAD87 /* amplitudegraph.metal */; };
+		73AE47452C80E437008BAD87 /* VertexShaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73AE47442C80E437008BAD87 /* VertexShaderView.swift */; };
 		73CE92E52AAF03D1000BFC1C /* PlaylistPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CE92E42AAF03D1000BFC1C /* PlaylistPresenter.swift */; };
 		73E4FBF02ADC4D01009A985A /* RefreshLatestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E4FBEF2ADC4D01009A985A /* RefreshLatestOperation.swift */; };
 		73F564CE2C6A866D000B34A3 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F564CD2C6A866D000B34A3 /* Toast.swift */; };
@@ -226,11 +229,14 @@
 		735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 9 (imports).xcdatamodel"; sourceTree = "<group>"; };
 		7364535E2B6C1F9E009A0F7A /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		7364535F2B6C1F9E009A0F7A /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		736DAC5E2C862F4D005C07B4 /* VisualisationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualisationMenu.swift; sourceTree = "<group>"; };
 		73759FD128EB34DF00535F8E /* libopenmpt.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libopenmpt.xcframework; path = ../openmpt/libopenmpt.xcframework; sourceTree = "<group>"; };
 		7397C1DA29091504002D5CDB /* UADEReplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UADEReplayer.h; sourceTree = "<group>"; };
 		7397C1DC29091504002D5CDB /* UADEReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UADEReplayer.m; sourceTree = "<group>"; };
 		7397C1E129091BC3002D5CDB /* uade_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = uade_ios.xcframework; path = "../uade-ios/uade_ios.xcframework"; sourceTree = "<group>"; };
 		739B4BF32720850200C2D69F /* RadioSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioSessionCell.swift; sourceTree = "<group>"; };
+		73AE47422C80E371008BAD87 /* amplitudegraph.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = amplitudegraph.metal; sourceTree = "<group>"; };
+		73AE47442C80E437008BAD87 /* VertexShaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexShaderView.swift; sourceTree = "<group>"; };
 		73CE92E42AAF03D1000BFC1C /* PlaylistPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistPresenter.swift; sourceTree = "<group>"; };
 		73E4FBEF2ADC4D01009A985A /* RefreshLatestOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshLatestOperation.swift; sourceTree = "<group>"; };
 		73F564CD2C6A866D000B34A3 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
@@ -454,6 +460,9 @@
 				45AA91182100EF1900794147 /* AmpSlider.swift */,
 				45AA91192100EF1900794147 /* AmpVizScene.swift */,
 				45AA91142100ECE600794147 /* VisualizerViewController.swift */,
+				73AE47422C80E371008BAD87 /* amplitudegraph.metal */,
+				73AE47442C80E437008BAD87 /* VertexShaderView.swift */,
+				736DAC5E2C862F4D005C07B4 /* VisualisationMenu.swift */,
 			);
 			path = Visualizer;
 			sourceTree = "<group>";
@@ -675,6 +684,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				736DAC5F2C862F4D005C07B4 /* VisualisationMenu.swift in Sources */,
 				4543984F20D0366E00991ADC /* String+extension.swift in Sources */,
 				45AA91162100ECE600794147 /* VisualizerViewController.swift in Sources */,
 				45855FCB244475050079C767 /* DownloadHostingController.swift in Sources */,
@@ -735,7 +745,9 @@
 				451ED0B1241E8A83006CE4E8 /* PlaylistStore.swift in Sources */,
 				45D392A520B1DDEC00EEF4E3 /* AppDelegate.swift in Sources */,
 				4569AC8B21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift in Sources */,
+				73AE47452C80E437008BAD87 /* VertexShaderView.swift in Sources */,
 				739B4BF42720850200C2D69F /* RadioSessionCell.swift in Sources */,
+				73AE47432C80E371008BAD87 /* amplitudegraph.metal in Sources */,
 				4509EA49226251EF0031408D /* Playlist+CoreDataClass.swift in Sources */,
 				45AA911B2100EF1900794147 /* AmpVizScene.swift in Sources */,
 				451B6AA52204B6CC001848FA /* LocalInteractor.swift in Sources */,
@@ -936,7 +948,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 37;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
@@ -945,6 +957,7 @@
 					"../uade-ios/src/include",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/4champ/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -954,7 +967,7 @@
 					../openmpt,
 					"../uade-ios",
 				);
-				MARKETING_VERSION = 3.7;
+				MARKETING_VERSION = 3.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -972,7 +985,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 37;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
@@ -981,6 +994,7 @@
 					"../uade-ios/src/include",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/4champ/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -990,7 +1004,7 @@
 					../openmpt,
 					"../uade-ios",
 				);
-				MARKETING_VERSION = 3.7;
+				MARKETING_VERSION = 3.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

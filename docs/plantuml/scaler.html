@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>PlantUML</title>
+    <style>
+      .holder {
+        background-color: gray;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      .content {
+        background-color: blue;
+        width: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="holder">
+      <div class="content"></div>
+    </div>
+
+    <script>
+      function setContentHeight() {
+        var holder = document.querySelector('.holder');
+        var content = document.querySelector('.content');
+        var holderHeight = holder.offsetHeight;
+
+        var contentHeight = 150 + (0.2 * (holderHeight - 400));
+        content.style.height = contentHeight + 'px';
+        content.innerHTML = "contentHeight: " + Math.round(contentHeight) + "," + Math.round(holderHeight);
+      }
+      window.onload = setContentHeight;
+      window.addEventListener('resize', setContentHeight);
+    </script>
+  </body>
+</html>
