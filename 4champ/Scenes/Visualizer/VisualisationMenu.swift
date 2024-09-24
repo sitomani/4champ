@@ -12,8 +12,8 @@ struct VisualisationMenu: View {
 
     var body: some View {
         ZStack {
-            Color.blue // Set the background color to blue
-                .edgesIgnoringSafeArea(.all) // Ignore safe area to cover the entire popover
+            Color.blue
+                .edgesIgnoringSafeArea(.all)
             HStack {
                 Button(action: { onButtonPress?(.none)}, label: { Image("vizbars_disabled") })
                 Button(action: { onButtonPress?(.channelBars)}, label: { Image("vizbars") })

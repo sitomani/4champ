@@ -40,7 +40,6 @@ class VertexShaderView: MTKView, StreamVisualiser {
     func createPipelineState() -> MTLRenderPipelineState? {
         guard let device = device else { return nil }
 
-        // Load shaders from the library
         let library = device.makeDefaultLibrary()
         let vertexFunction = library?.makeFunction(name: "vertex_main")
         let fragmentFunction = library?.makeFunction(name: "fragment_main")
@@ -57,7 +56,6 @@ class VertexShaderView: MTKView, StreamVisualiser {
         guard let leftBuffer = self.leftBuffer, let rightBuffer = self.rightBuffer else { return }
         self.frameCount = frameCount
 
-        // Get a pointer to the Metal buffer's memory
         let bufferPointerLeft = leftBuffer.contents().assumingMemoryBound(to: Int16.self)
         let bufferPointerRight = rightBuffer.contents().assumingMemoryBound(to: Int16.self)
 
@@ -65,7 +63,7 @@ class VertexShaderView: MTKView, StreamVisualiser {
         memcpy(bufferPointerLeft, leftChannel, byteCount)
         memcpy(bufferPointerRight, rightChannel, byteCount)
 
-        // Trigger the rendering
+        // Trigger the rendering asynchronously
         DispatchQueue.main.async {
             self.setNeedsDisplay()
         }
@@ -80,7 +78,7 @@ class VertexShaderView: MTKView, StreamVisualiser {
 
         let commandBuffer = commandQueue.makeCommandBuffer()
 
-        // Set up the 4champ background color
+        // 4champ background color
         renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.07, 0.20, 0.34, 1.0)
         let renderEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
 
