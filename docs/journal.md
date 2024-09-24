@@ -1,5 +1,13 @@
 # 4champ Development Journal
 
+### September 2024 my first ever shader coding exercise
+
+I have been long wanting to have a go with some kind of additional visuals in the 4champ Now playing view. I started to implement an amplitude graph visualizer on traditional UIKit view and graphics context first but it turned out quickly that the performance was not good enough, if there was any more complex maths involved, it'd not manage to draw the updates before the next audio frames came in, causing the app to crash. 
+
+So I turned towards Apple Metal APIs and implemented the same in a simple vertex shader. It was surprisingly convenient to work with, once I got the basic setup up. Already looking forward to adding some fragment shader visualisers in the future.
+
+![](media/dreamweaver.mp4 "New visualizer in action")
+
 ### August 2024 A feature requested by 4champ user realised in the form of a new 4champ radio channel. 
 
 Earlier this year [marekhac suggested](https://github.com/sitomani/4champ/issues/34) that it'd be nice if the app would keep on playing tunes by a composer when a module was selected to play from the composer page in the search view.
