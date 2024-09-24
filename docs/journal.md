@@ -6,7 +6,7 @@ I have been long wanting to have a go with some kind of additional visuals in th
 
 So I turned towards Apple Metal APIs and implemented the same in a simple vertex shader. It was surprisingly convenient to work with, once I got the basic setup up. Already looking forward to adding some fragment shader visualisers in the future.
 
-./media/dreamweaver.mp4
+![](./media/dreamweaver.mp4)
 
 ### August 2024 A feature requested by 4champ user realised in the form of a new 4champ radio channel. 
 
