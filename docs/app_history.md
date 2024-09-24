@@ -130,3 +130,7 @@ Update UADE library with PRT (PreTracker) support.
 ### Version 3.7 August 2024
 
 Fourth channel (custom) added to 4champ radio.
+
+### Version 3.8 September 2024
+
+New music visualizer added - you can select either the channelbars or amplitude graph from the top right button on the Now playing view. 

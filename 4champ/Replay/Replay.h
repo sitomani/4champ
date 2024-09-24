@@ -69,6 +69,9 @@
 
 @protocol ReplayStreamDelegate <NSObject>
 
+- (void)bufferUpdatedLeft:(const int16_t *)leftChannel
+                Right:(const int16_t *)rightChannel
+                  frameCount:(uint32_t)frameCount;
 /**
  Called when replay reaches end of the module
  @param replay identifies the Replay object

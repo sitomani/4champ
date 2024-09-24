@@ -7,13 +7,20 @@
 
 import UIKit
 import SpriteKit
+import SwiftUI
 
-struct ViewElement {
-  static let None: UInt32 = 0
-  static let All: UInt32 = UInt32.max
-  static let Text: UInt32 = 0b1       // 1
-  static let Visualiser: UInt32 = 0b10      // 2
+enum ViewElement: UInt32 {
+  case none =         0
+  case all =          0b11111111
+  case initialised =  0b1
+  case text =         0b10
+  case channelBars =  0b100
+  case amplitude =    0b1000
 }
+
+let visIcons: [ViewElement: UIImage?] = [.none: UIImage.init(named: "vizbars_disabled"),
+                                         .channelBars: UIImage.init(named: "vizbars"),
+                                         .amplitude: UIImage.init(named: "vizgraph")]
 
 class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate {
 
@@ -33,10 +40,26 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   @IBOutlet weak var vizButton: UIButton!
   @IBOutlet weak var playButton: UIButton!
   @IBOutlet weak var vizView: SKView!
+  @IBOutlet weak var renderView: VertexShaderView!
+  @IBOutlet weak var backdrop: UIView!
 
   @IBOutlet weak var playerView: UIView!
 
   var hasUpdatedVisibility: Bool = false
+
+  private var visibilityFlags: UInt32 {
+    get {
+      let value = UserDefaults.standard.integer(forKey: "nowplaying_elements")
+      if value == 0 {
+        // uninitialised flags: return the default flags
+        return ViewElement.text.rawValue | ViewElement.channelBars.rawValue | ViewElement.initialised.rawValue
+      }
+      return UInt32(value)
+    }
+    set {
+      UserDefaults.standard.setValue(newValue, forKey: "nowplaying_elements")
+    }
+  }
 
   private var playbackTimer: Timer?
 
@@ -53,7 +76,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
     // Fixing issue with launching app on iOS8
     super.init(nibName: nibNameOrNil ?? "NowPlayingViewController", bundle: nibBundleOrNil)
-  }
+ }
 
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
@@ -85,32 +108,35 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
 
   @IBAction func toggleText(_: UIButton) {
     log.debug("")
-    textButton.isSelected = !textButton.isSelected
-    UserDefaults.standard.set(textButton.isSelected, forKey: "nowplaying_text")
-    updateVisibility(ViewElement.Text)
+    visibilityFlags ^= ViewElement.text.rawValue
+    updateVisibility(ViewElement.text.rawValue)
   }
 
   func updateVisibility(_ element: UInt32) {
-    let textHidden = UserDefaults.standard.bool(forKey: "nowplaying_text")
-    let vizHidden = UserDefaults.standard.bool(forKey: "nowplaying_viz")
-
     // Update button selected status (to have right status when view is loaded)
-    textButton?.isSelected = textHidden
-    vizButton?.isSelected = vizHidden
+    textButton?.isSelected = visibilityFlags & ViewElement.text.rawValue == 0
 
-    if element & ViewElement.Text > 0 {
-      if textHidden {
+    if element & ViewElement.text.rawValue > 0 {
+      if visibilityFlags & ViewElement.text.rawValue == 0 {
         fadeOut(scrollV!) {}
       } else {
         fadeIn(scrollV!) {}
       }
     }
 
-    if element & ViewElement.Visualiser > 0 {
-      if vizHidden {
+    if element & ViewElement.channelBars.rawValue > 0 {
+      if visibilityFlags & ViewElement.channelBars.rawValue == 0 {
         stopVisualisation()
       } else {
         startVisualisation()
+      }
+    }
+
+    if element & ViewElement.amplitude.rawValue > 0 {
+      if visibilityFlags & ViewElement.amplitude.rawValue == 0 {
+        stopGraph()
+      } else {
+        startGraph()
       }
     }
   }
@@ -138,9 +164,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
 
   @IBAction func toggleVisualiser(_: UIButton) {
     log.debug("")
-    vizButton?.isSelected = !vizButton!.isSelected
-    UserDefaults.standard.set(vizButton!.isSelected, forKey: "nowplaying_viz")
-    updateVisibility(ViewElement.Visualiser)
+    showVisMenu()
   }
 
   @IBAction func share (_ sender: UIButton) {
@@ -194,7 +218,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     }
     self.samplesLabel?.text = str
     if hasUpdatedVisibility {
-      updateVisibility(ViewElement.All)
+      updateVisibility(ViewElement.all.rawValue)
     }
   }
 
@@ -282,7 +306,8 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     saveButton.isHidden = false
     faveStar.isHidden = false
     shareButton.isHidden = true
-
+    backdrop.backgroundColor = UIColor.init(rgb: 0x123357)
+    setupVisualisationIcon()
     updateView(module: modulePlayer.currentModule)
     if modulePlayer.status == .playing {
       startPlaybackTimer()
@@ -291,6 +316,20 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
 
     let lpr = UILongPressGestureRecognizer(target: self, action: #selector(showPlaylistPicker(_:)))
     playerView?.addGestureRecognizer(lpr)
+  }
+
+  func setupVisualisationIcon() {
+    let visElement: ViewElement
+    if visibilityFlags & ViewElement.amplitude.rawValue > 0 {
+      visElement = .amplitude
+    } else if visibilityFlags & ViewElement.channelBars.rawValue > 0 {
+      visElement = .channelBars
+    } else {
+      visElement = .none
+    }
+    if let img = visIcons[visElement] {
+      self.vizButton?.setImage(img, for: .normal)
+    }
   }
 
   @objc func showPlaylistPicker(_ sender: UIGestureRecognizer) {
@@ -313,7 +352,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     super.viewDidLayoutSubviews()
     if !hasUpdatedVisibility {
       hasUpdatedVisibility = true
-      updateVisibility(ViewElement.All)
+      updateVisibility(ViewElement.all.rawValue)
     }
   }
 
@@ -326,18 +365,40 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     let view = self.vizView
     fadeIn(view!) {}
 
-    let vizHidden = UserDefaults.standard.bool(forKey: "nowplaying_viz")
+    let vizHidden = visibilityFlags & ViewElement.channelBars.rawValue == 0
     view?.isHidden = vizHidden
 
     view?.presentScene(nil) // to make sure to release anything previously presented
     view?.backgroundColor = UIColor(red: 0.07, green: 0.20, blue: 0.34, alpha: 1.0)
     let scene: SKScene = AmpVizScene(size: view!.bounds.size)
     view?.presentScene(scene)
+    view?.isPaused = false
   }
 
   func stopVisualisation() {
     log.debug("")
-    fadeOut(vizView) {self.vizView.presentScene(nil)}
+    fadeOut(vizView) {
+      self.vizView.presentScene(nil)
+      self.vizView.isPaused = true
+    }
+  }
+
+  func startGraph() {
+    log.debug("")
+    let view = self.renderView
+    fadeIn(view!) {}
+    let graphHidden = visibilityFlags & ViewElement.amplitude.rawValue == 0
+    view?.isHidden = graphHidden
+    modulePlayer.streamVisualiser = view
+    view?.isPaused = false
+  }
+
+  func stopGraph() {
+    log.debug("")
+    fadeOut(renderView!) {
+      modulePlayer.streamVisualiser = nil
+      self.renderView?.isPaused = true
+    }
   }
 }
 
@@ -378,4 +439,42 @@ extension VisualizerViewController: ModulePlayerObserver {
       self?.periodicUpdate()
     }
   }
+
+  func showVisMenu() {
+    let popoverContent = UIHostingController(rootView: VisualisationMenu(onButtonPress: { element in
+      switch element {
+      case .amplitude:
+        self.visibilityFlags |= element.rawValue
+        self.visibilityFlags &= ~ViewElement.channelBars.rawValue
+      case .channelBars:
+        self.visibilityFlags |= element.rawValue
+        self.visibilityFlags &= ~ViewElement.amplitude.rawValue
+      default:
+        self.visibilityFlags &= ~ViewElement.amplitude.rawValue
+        self.visibilityFlags &= ~ViewElement.channelBars.rawValue
+      }
+      if let img = visIcons[element] {
+        self.vizButton?.setImage(img, for: .normal)
+      }
+
+      self.updateVisibility(ViewElement.all.rawValue)
+      self.dismiss(animated: true)
+    }))
+    popoverContent.modalPresentationStyle = .popover
+    popoverContent.preferredContentSize = CGSize(width: 120, height: 54)
+    if let popoverPresentationController = popoverContent.popoverPresentationController {
+        popoverPresentationController.delegate = self
+        popoverPresentationController.sourceView = self.vizButton
+      popoverPresentationController.sourceRect = CGRect(x: self.vizButton.bounds.midX, y: 0, width: 0, height: self.vizButton.bounds.height)
+        popoverPresentationController.permittedArrowDirections = .up
+    }
+    self.present(popoverContent, animated: true, completion: nil)
+  }
+}
+
+extension VisualizerViewController: UIPopoverPresentationControllerDelegate {
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        // Return .none to ensure that popovers are not adapted to a different style on iPhone
+        return .none
+    }
 }
