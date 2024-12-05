@@ -52,7 +52,7 @@ class AboutHeaderView: UIButton {
     tintColor = UIColor.init(rgb: 0xc6c6c6)
     if let image = UIImage.init(named: imageKey) {
 
-      if titleKey == "Twitter" {
+      if titleKey == "Social_Check" {
         let scaledImage = image.resizeImageWith(newSize: CGSize.init(width: 30, height: 25))
         setImage(scaledImage.withRenderingMode(.alwaysTemplate), for: .normal)
       } else {
