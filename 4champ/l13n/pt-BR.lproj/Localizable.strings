@@ -65,7 +65,9 @@
 /* Search view: Texts tab title */
 "G_Texts" = "Textos";
 
-"Connectivity_Err" = "Temos um problema ao conetar com amp.dascene.net. Você pode usar o app em modo offline e tocar músicas locais, mas as funcionalidades de pesquisa e rádio não vão funcionar. Verifique o feed do 4champ no Twitter sobre possíveis atualizações de status.";
+"Connectivity_Err" = "Temos um problema ao conetar com amp.dascene.net. Você pode usar o app em modo offline e tocar músicas locais, mas as funcionalidades de pesquisa e rádio não vão funcionar. Verifique o feed do 4champ no Mastodon sobre possíveis atualizações de status.";
+
+"Social_Check" = "4champ no Mastodon";
 
 /* Search view: Composer tab title */
 "SearchView_Composer" = "Compositor";
@@ -338,7 +340,7 @@
 
 "AboutView_Radio" = "A Rádio 4champ traz aleatoriamente músicas de todo o banco de dados AMP para o seu dispositivo. \n\nSe você gostar de uma música que está tocando e desejar guardá-la para mais tarde, toque no ícone de favorito (estrela) na visualização da Rádio 4champ ou dê um toque longo no module para adicionar a uma playlist. \n\nVocê pode escolher de quatro canais: Todos (embaralhar todo o conteúdo), Novos (adicionados recentemente ao banco de dados da AMP), Coleção (mods da coleção local) e Personalizado (criado a partir de um resultado de pesquisa).";
 
-"AboutView_Twitter" ="Você pode encontrar o 4champ no Twitter! Siga @4champ_app para obter as últimas notícias sobre o aplicativo, versões futuras, interrupções de serviço, etc. O feed do 4champ geralmente também traz músicas legais postadas para seu entretenimento. Toque aqui para seguir.";
+"AboutView_Social" ="Você pode encontrar o 4champ no Mastodon! Siga @4champ@mastodon.social para obter as últimas notícias sobre o aplicativo, versões futuras, interrupções de serviço, etc. O feed do 4champ geralmente também traz músicas legais postadas para seu entretenimento. Toque aqui para seguir.";
 
 "SettingsView_Title" = "Configurações";
 

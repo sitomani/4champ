@@ -121,8 +121,8 @@ extension AboutViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 && indexPath.section == 1 {
-            let twitterUrl = URL(string: "https://twitter.com/4champ_app")!
-            UIApplication.shared.open(twitterUrl)
+            let socialUrl = URL(string: "https://mastodon.social/@4champ")!
+            UIApplication.shared.open(socialUrl)
         }
     }
 

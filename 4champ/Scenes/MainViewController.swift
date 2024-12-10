@@ -42,18 +42,18 @@ class MainViewController: UITabBarController {
     UITabBar.appearance().standardAppearance = tabBarAppearance
 
     if #available(iOS 15.0, *) {
-        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+      UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
     }
 
     let navBarAppearance: UINavigationBarAppearance = UINavigationBarAppearance()
     navBarAppearance.configureWithDefaultBackground()
     navBarAppearance.backgroundColor = Appearance.tabColor
     navBarAppearance.titleTextAttributes = [.foregroundColor: Appearance.barTitleColor,
-                                                  .font: UIFont.systemFont(ofSize: 16.0, weight: .heavy)]
+                                            .font: UIFont.systemFont(ofSize: 16.0, weight: .heavy)]
     UINavigationBar.appearance().standardAppearance = navBarAppearance
 
     if #available(iOS 15.0, *) {
-        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+      UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
     }
 
     self.becomeFirstResponder()
@@ -70,6 +70,17 @@ class MainViewController: UITabBarController {
         tab.title = titles[index].l13n()
       }
     }
+  }
+
+  override func viewWillAppear(_ animated: Bool) {
+    if #available(iOS 18.0, *), UIDevice.current.userInterfaceIdiom == .pad {
+      traitOverrides.horizontalSizeClass = .unspecified
+      if ProcessInfo.processInfo.isiOSAppOnMac {
+        self.mode = .tabSidebar
+        self.sidebar.isHidden = true
+      }
+    }
+    super.viewWillAppear(animated)
   }
 
   override func viewDidAppear(_ animated: Bool) {
@@ -108,30 +119,30 @@ class MainViewController: UITabBarController {
 
     for ctl in self.children {
       if let navCtl = ctl as? UINavigationController,
-        let firstChild = navCtl.topViewController as? NowPlayingContainer {
+         let firstChild = navCtl.topViewController as? NowPlayingContainer {
         firstChild.toggleNowPlaying(value)
       }
     }
   }
 
   override func remoteControlReceived(with event: UIEvent?) {
-        guard let event = event else {
-          return
-        }
-        switch event.subtype {
-        case .remoteControlPlay:
-          modulePlayer.resume()
-        case .remoteControlPause:
-          modulePlayer.pause()
-        case .remoteControlStop:
-          modulePlayer.stop()
-        case .remoteControlNextTrack:
-          modulePlayer.playNext()
-        case .remoteControlPreviousTrack:
-          modulePlayer.playPrev()
-        default:
-          log.debug("remote control event \(event.subtype) not handled")
-        }
+    guard let event = event else {
+      return
+    }
+    switch event.subtype {
+    case .remoteControlPlay:
+      modulePlayer.resume()
+    case .remoteControlPause:
+      modulePlayer.pause()
+    case .remoteControlStop:
+      modulePlayer.stop()
+    case .remoteControlNextTrack:
+      modulePlayer.playNext()
+    case .remoteControlPreviousTrack:
+      modulePlayer.playPrev()
+    default:
+      log.debug("remote control event \(event.subtype) not handled")
+    }
   }
 
   @IBAction func togglePlay(_ sender: UIButton) {

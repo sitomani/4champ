@@ -61,7 +61,7 @@ class AboutInteractor: AboutBusinessLogic, AboutDataStore {
         log.debug("")
         let aboutTitle = "4champ \(AppInfo().version) (\(AppInfo().build))"
         let titleKeys = [aboutTitle,
-                         "Twitter",
+                         "Social_Check",
                          "About_Copyrights",
                          "TabBar_Local",
                          "TabBar_Playlist",
@@ -69,13 +69,13 @@ class AboutInteractor: AboutBusinessLogic, AboutDataStore {
                          "TabBar_Radio",
                          "About_Licenses"]
         let contentKeys = ["AboutView_Info",
-                           "AboutView_Twitter",
+                           "AboutView_Social",
                            "AboutView_Legal",
                            "AboutView_Local",
                            "AboutView_Playlists",
                            "AboutView_Search",
                            "AboutView_Radio"]
-        let imageKeys = ["about", "twitter_small", "legal", "localMods", "playlist", "search", "radio", "about"]
+        let imageKeys = ["about", "mastodon_small", "legal", "localMods", "playlist", "search", "radio", "about"]
         let lics = ["Alamofire", "GzipSwift", "HivelyTracker", "LibOpenMPT", "UADE"]
         let licUrls = ["https://github.com/Alamofire/Alamofire/blob/master/LICENSE",
                        "https://github.com/1024jp/GzipSwift/blob/develop/LICENSE",
