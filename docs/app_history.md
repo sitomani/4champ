@@ -134,3 +134,7 @@ Fourth channel (custom) added to 4champ radio.
 ### Version 3.8 September 2024
 
 New music visualizer added - you can select either the channelbars or amplitude graph from the top right button on the Now playing view. 
+
+### Version 3.9 December 2024
+
+References to Twitter removed from the app. Decided not to reference X either, and changed the links to [Mastodon](https://mastodon.social/@4champ) instead.

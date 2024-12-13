@@ -1,5 +1,9 @@
 # 4champ Development Journal
 
+### December 2024 there is a season for everything
+
+I set up a [mastodon.social](https://mastodon.social/@4champ) account some time after Twitter was rebranded to X and have been using both accounts sporadically for the past couple of years. I have now deactivated my ex-Twitter account and moved permanently to mastodon for the limited social media presence that 4champ has. I recognize that from a marketing perspective, this will push 4champ further to the periphery, but I think I can live with that. If you're having a Mastodon account, it might be worth your while to follow the 4champ account. Cheers, and have a very nice holiday season 2024.
+
 ### September 2024 my first ever shader coding exercise
 
 I have been long wanting to have a go with some kind of additional visuals in the 4champ Now playing view. I started to implement an amplitude graph visualizer on traditional UIKit view and graphics context first but it turned out quickly that the performance was not good enough, if there was any more complex maths involved, it'd not manage to draw the updates before the next audio frames came in, causing the app to crash. 
