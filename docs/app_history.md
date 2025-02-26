@@ -69,7 +69,7 @@ First version to support download of all modules by a composer in one go.
 #### 2.0 Aug 2 2015
 
 The **Assembly 2015** release (out just before ASM2015 which was the first [Assembly](https://assembly.org) I participated after my teens!).
-Now playing view added to the player (see module sample texts while playing). This was also the first version where the
+Visualizer view added to the player (see module sample texts while playing). This was also the first version where the
 background play feature was no longer an in-app purchase, but free for all users.
 
 ### Version 2.1 that never was
@@ -133,8 +133,12 @@ Fourth channel (custom) added to 4champ radio.
 
 ### Version 3.8 September 2024
 
-New music visualizer added - you can select either the channelbars or amplitude graph from the top right button on the Now playing view. 
+New music visualizer added - you can select either the channelbars or amplitude graph from the top right button on the Visualizer view. 
 
 ### Version 3.9 December 2024
 
 References to Twitter removed from the app. Decided not to reference X either, and changed the links to [Mastodon](https://mastodon.social/@4champ) instead.
+
+### Version 3.10 February 2025
+
+Add support for looped playback.
