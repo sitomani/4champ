@@ -1,12 +1,18 @@
 # 4champ Development Journal
 
+### February 2025 could you repeat that, please?
+
+One of the characteristics of the tracker tunes is that they are often designed to loop indefinitely. Some modules even have hidden stuff that you will not hear at all unless the playback is looped. Check for yourself e.g. [Impatients](https://4champ.net/mod?id=90454) by Lesnik. The tune is a 10 seconds long pattern. On a single play you'll only hear the chord pattern, but when looped, a melody will come in, and the repeating tune slowly fades away, until sound is no longer heard after 1:48.
+
+The looping option in 4champ interface is available at the Visualizer view. Tap the repeat symbol at the left of the controls row to toggle looping for the current song on or off.
+
 ### December 2024 there is a season for everything
 
 I set up a [mastodon.social](https://mastodon.social/@4champ) account some time after Twitter was rebranded to X and have been using both accounts sporadically for the past couple of years. I have now deactivated my ex-Twitter account and moved permanently to mastodon for the limited social media presence that 4champ has. I recognize that from a marketing perspective, this will push 4champ further to the periphery, but I think I can live with that. If you're having a Mastodon account, it might be worth your while to follow the 4champ account. Cheers, and have a very nice holiday season 2024.
 
 ### September 2024 my first ever shader coding exercise
 
-I have been long wanting to have a go with some kind of additional visuals in the 4champ Now playing view. I started to implement an amplitude graph visualizer on traditional UIKit view and graphics context first but it turned out quickly that the performance was not good enough, if there was any more complex maths involved, it'd not manage to draw the updates before the next audio frames came in, causing the app to crash. 
+I have been long wanting to have a go with some kind of additional visuals in the 4champ Visualizer view. I started to implement an amplitude graph visualizer on traditional UIKit view and graphics context first but it turned out quickly that the performance was not good enough, if there was any more complex maths involved, it'd not manage to draw the updates before the next audio frames came in, causing the app to crash. 
 
 So I turned towards Apple Metal APIs and implemented the same in a simple vertex shader. It was surprisingly convenient to work with, once I got the basic setup up. Already looking forward to adding some fragment shader visualisers in the future.
 
