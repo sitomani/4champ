@@ -30,6 +30,7 @@ static volatile int uadethread_running;
 }
 
 @synthesize name = _name;
+@synthesize looping = _looping;
 
 + (NSArray<NSString*>*)supportedFormats {
     return @[@"AAM", // ArtAndMagic,
@@ -371,15 +372,23 @@ static volatile int uadethread_running;
 - (int)readFrames:(size_t)count bufLeft:(int16_t *)bufLeft bufRight:(int16_t *)bufRight {
     int16_t buf[count*2];
     ssize_t retVal = uade_read(&buf, sizeof buf, ustate);
-
+    bool atEnd = false;
+    if(retVal < count) {
+        NSLog(@"UADE buffer underrun");
+        atEnd = true;
+    }
     struct uade_notification n;
     // Check for song end
     if (uade_read_notification(&n, ustate)) {
-        bool atEnd = n.type == UADE_NOTIFICATION_SONG_END;
-        uade_cleanup_notification(&n);
-        if(atEnd) {
-            return 0;
+        if (n.type == UADE_NOTIFICATION_SONG_END) {
+            NSLog(@"UADE_NOTIFICATION_SONG_END");
+            atEnd = true;
         }
+        uade_cleanup_notification(&n);
+    }
+
+    if (atEnd) {
+		return 0;
     }
 
     if(retVal<0) {

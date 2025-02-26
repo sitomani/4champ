@@ -231,6 +231,7 @@
 		7364535F2B6C1F9E009A0F7A /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		736DAC5E2C862F4D005C07B4 /* VisualisationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualisationMenu.swift; sourceTree = "<group>"; };
 		73759FD128EB34DF00535F8E /* libopenmpt.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libopenmpt.xcframework; path = ../openmpt/libopenmpt.xcframework; sourceTree = "<group>"; };
+		7375F0C12D6C5F9700EEA350 /* AmpCDModel 10 (looping).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 10 (looping).xcdatamodel"; sourceTree = "<group>"; };
 		7397C1DA29091504002D5CDB /* UADEReplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UADEReplayer.h; sourceTree = "<group>"; };
 		7397C1DC29091504002D5CDB /* UADEReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UADEReplayer.m; sourceTree = "<group>"; };
 		7397C1E129091BC3002D5CDB /* uade_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = uade_ios.xcframework; path = "../uade-ios/uade_ios.xcframework"; sourceTree = "<group>"; };
@@ -1086,10 +1087,11 @@
 		454D1AD822035D87006ABA85 /* AmpCDModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				7375F0C12D6C5F9700EEA350 /* AmpCDModel 10 (looping).xcdatamodel */,
 				735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */,
 				454D1AD922035D87006ABA85 /* AmpCDModel 8 (preview).xcdatamodel */,
 			);
-			currentVersion = 735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */;
+			currentVersion = 7375F0C12D6C5F9700EEA350 /* AmpCDModel 10 (looping).xcdatamodel */;
 			path = AmpCDModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

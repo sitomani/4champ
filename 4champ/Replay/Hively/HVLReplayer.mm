@@ -27,6 +27,7 @@
 }
 
 @synthesize name = _name;
+@synthesize looping = _looping;
 static int iHivelyBufPos = 0;
 
 + (NSArray<NSString*>*)supportedFormats {
@@ -80,7 +81,7 @@ static int iHivelyBufPos = 0;
         return 0;
     }
 
-    if (currentHVLtune->ht_SongEndReached) {
+    if (currentHVLtune->ht_SongEndReached && !_looping) {
         return 0; //return zero to trigger mod change, hvl+ahx loop forever
     }
     int left = (int)count;
@@ -107,6 +108,10 @@ static int iHivelyBufPos = 0;
     }
     
     return readsize;
+}
+
+- (void) setLooping:(Boolean)value {
+    _looping = value;
 }
 
 - (void) setStereoSeparation:(NSInteger)value {
