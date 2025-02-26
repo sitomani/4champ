@@ -39,17 +39,27 @@ class AmpSlider: UISlider {
         // Setup the FX slider
         self.setMinimumTrackImage(minImage, for: UIControl.State())
         self.setMaximumTrackImage(maxImage, for: UIControl.State())
-        self.updatePlayhead("0.00")
+        self.updatePlayhead("0.00", loop: false)
 
         let gr: UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(sliderTapped))
         self.addGestureRecognizer(gr)
 
     }
 
-    func updatePlayhead(_ txt: String) {
+    func updatePlayhead(_ txt: String, loop: Bool) {
         let myString: NSString = txt as NSString
         let txtSize: CGSize = myString.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12.0)])
-        let headSize: CGSize = CGSize(width: txtSize.width+5, height: txtSize.height)
+
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 12, weight: .regular)
+        let originalSymbolImage = UIImage(systemName: "repeat", withConfiguration: symbolConfig)
+        let symbolImage = originalSymbolImage?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        let symbolSize = symbolImage?.size ?? CGSize(width: 12, height: 12)
+        let padding: CGFloat = 5
+        var loopExtra: CGFloat = 0
+        if loop {
+            loopExtra = symbolSize.width + padding
+        }
+        let headSize: CGSize = CGSize(width: txtSize.width+padding+loopExtra, height: txtSize.height)
         UIGraphicsBeginImageContextWithOptions(headSize, true, UIScreen.main.scale)
         UIColor(red: 0.06, green: 0.19, blue: 0.25, alpha: 1.0).set()
         UIRectFill(CGRect(x: 0, y: 0, width: headSize.width, height: headSize.height))
@@ -61,6 +71,11 @@ class AmpSlider: UISlider {
         let dict: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: UIColor.white]
 
         myString.draw(at: CGPoint(x: 3, y: 1), withAttributes: dict)
+        if loop, let symbolImage = symbolImage {
+            let symbolX = txtSize.width + padding
+            let symbolY = (headSize.height - symbolSize.height) / 2 + 1.0
+            symbolImage.draw(at: CGPoint(x: symbolX, y: symbolY))
+        }
         let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
 

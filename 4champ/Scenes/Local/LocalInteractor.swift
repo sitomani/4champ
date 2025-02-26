@@ -89,6 +89,7 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore {
       module.favorite = mi.modFavorite?.boolValue ?? false
       module.serviceId = ModuleService(rawValue: mi.serviceId?.intValue ?? 1)
       module.serviceKey = mi.serviceKey
+      module.loop = mi.loop?.intValue ?? 0
       return module
     }
     return MMD()

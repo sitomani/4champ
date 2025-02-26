@@ -16,6 +16,7 @@ extension ModuleInfo: Identifiable {
     }
 
     @NSManaged public var added: NSDate?
+    @NSManaged public var loop: NSNumber?
     @NSManaged public var lastPlayed: NSDate?
     @NSManaged public var modAuthor: String?
     @NSManaged public var modDLStatus: NSNumber?

@@ -212,6 +212,7 @@ extension ModuleStorage: ModuleStorageInterface {
     cdModule.shared = nil
     cdModule.serviceId = NSNumber.init(value: module.serviceId?.rawValue ?? 1)
     cdModule.serviceKey = module.serviceKey
+    cdModule.loop = 0
     saveContext()
 
     let mmd = MMD.init(cdi: cdModule)
@@ -268,6 +269,21 @@ extension ModuleStorage: ModuleStorageInterface {
         cdModule.modFavorite = 1
         ReviewActions.increment()
       }
+      saveContext()
+      let mmd = MMD.init(cdi: cdModule)
+      _ = observers.map {
+        $0.metadataChange(mmd)
+      }
+      return mmd
+    }
+    return nil
+  }
+
+  func toggleLoop(module: MMD) -> MMD? {
+    addModule(module: module)
+    if let cdModule = fetchModuleInfo(module.id!), let loop = cdModule.loop {
+      let toggled: Bool = loop.intValue > 0 ? false : true
+      cdModule.loop = NSNumber(value: toggled)
       saveContext()
       let mmd = MMD.init(cdi: cdModule)
       _ = observers.map {

@@ -12,6 +12,7 @@
   openmpt_module* currentOMPTFile;
 }
 @synthesize name = _name;
+@synthesize looping = _looping;
 
 + (NSArray<NSString*>*)supportedFormats {
     return @[@"667",
@@ -87,6 +88,12 @@
   return true;
 }
 
+- (void) setLooping:(Boolean)value {
+    if(!currentOMPTFile) return;
+    _looping = value;
+    openmpt_module_set_repeat_count(currentOMPTFile, value ? -1 : 0);
+}
+
 - (void)dealloc {
     NSLog(@"MTPReplayer deallocated");
 }
@@ -121,6 +128,10 @@
 }
 
 - (void) setCurrentPosition:(int)newPosition {
+    if(newPosition == 0) {
+        openmpt_module_set_position_order_row(currentOMPTFile, 0, 0);
+        return;
+    }
   openmpt_module_set_position_seconds(currentOMPTFile, newPosition);
 }
 

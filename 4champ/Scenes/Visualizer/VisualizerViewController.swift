@@ -42,6 +42,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   @IBOutlet weak var vizView: SKView!
   @IBOutlet weak var renderView: VertexShaderView!
   @IBOutlet weak var backdrop: UIView!
+  @IBOutlet weak var loopButton: UIButton!
 
   @IBOutlet weak var playerView: UIView!
 
@@ -182,8 +183,10 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     let timeLeft = pos
     let seconds = timeLeft % 60
     let minutes = (timeLeft - seconds) / 60
+    let loop =  pos > length && length > 0 // for UADE tunes length == 0, no looping support
     let txt = String(format: "%d:%02d", minutes, seconds)
-    self.playhead?.updatePlayhead(txt)
+
+    self.playhead?.updatePlayhead(txt, loop: loop)
   }
 
   func updateView(module: MMD?) {
@@ -201,6 +204,8 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     let playlistName = modulePlayer.radioOn ? " | Radio" : ""
     composerLabel.text = info.composer! + playlistName
     faveStar.isSelected = info.favorite
+    loopButton.isSelected = info.loop > 0
+    loopButton.isEnabled = modulePlayer.renderer.name != "UADE"
     saveButton.isHidden = info.hasBeenSaved()
     shareButton.isHidden = true
 
@@ -228,6 +233,13 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
             return
     }
     updateFaveStar(updated.favorite)
+  }
+
+  @IBAction func toggleLoop (_ sender: UIButton) {
+    guard let mod = modulePlayer.currentModule else {
+      return
+    }
+    _ = moduleStorage.toggleLoop(module: mod)
   }
 
   @IBAction func sliderChanged() {

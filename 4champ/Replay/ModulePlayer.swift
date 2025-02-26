@@ -179,6 +179,7 @@ class ModulePlayer: NSObject {
     renderer.stop()
     let mod = playQueue[at]
     if renderer.loadModule(path, type: mod.type) {
+        renderer.looping =  mod.loop > 0
         let settings = SettingsInteractor()
         setStereoSeparation(settings.stereoSeparation)
         setInterpolation(settings.interpolation)
@@ -342,14 +343,17 @@ extension ModulePlayer: ReplayStreamDelegate {
 
 extension ModulePlayer: ModuleStorageObserver {
   // At metadata change, update currentMod and playlist MMD instances
-  // for favorite status update
+  // for favorite/loop status update
   func metadataChange(_ mmd: MMD) {
     if currentModule == mmd {
       currentModule?.favorite = mmd.favorite
+      currentModule?.loop = mmd.loop
+      renderer.looping = mmd.loop > 0
     }
     if playQueue.count == 0 { return }
     for qIndex in 0...playQueue.count-1 where playQueue[qIndex] == mmd {
       playQueue[qIndex].favorite = mmd.favorite
+      playQueue[qIndex].loop = mmd.loop
     }
     _ = observers.map {
       $0.queueChanged(changeType: .other)

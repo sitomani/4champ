@@ -10,6 +10,8 @@
 /// The Replay control API
 @protocol ReplayControl <NSObject>
 
+@property (nonatomic, assign) Boolean looping;
+
 /**
  Supported @formats
  */

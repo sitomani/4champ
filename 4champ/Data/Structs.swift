@@ -30,6 +30,7 @@ struct MMD: Identifiable, NameComparable {
 
   init() {
     name = ""
+    loop = 0
   }
 
   static let supportedTypes: [String] = Replay.supportedFormats
@@ -52,6 +53,7 @@ struct MMD: Identifiable, NameComparable {
     self.serviceId = ModuleService.init(rawValue: cdi.serviceId?.intValue ?? 1) ?? .amp
     self.serviceKey = cdi.serviceKey
     self.favorite = cdi.modFavorite?.boolValue ?? false
+    self.loop = cdi.loop?.intValue ?? 0
   }
 
   init(path: String, modId: Int) {
@@ -83,6 +85,7 @@ struct MMD: Identifiable, NameComparable {
   var note: String?
   var serviceId: ModuleService? // local | amp | nn?
   var serviceKey: String? // identifier of the module in non-amp service
+  var loop: Int // if >0, the song is looped
   func fileExists() -> Bool {
     if let path = localPath?.path {
       return FileManager.default.fileExists(atPath: path)
