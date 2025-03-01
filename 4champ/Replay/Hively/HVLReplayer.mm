@@ -110,10 +110,6 @@ static int iHivelyBufPos = 0;
     return readsize;
 }
 
-- (void) setLooping:(Boolean)value {
-    _looping = value;
-}
-
 - (void) setStereoSeparation:(NSInteger)value {
     if (currentHVLtune == nil) {
         return;
