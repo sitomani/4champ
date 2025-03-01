@@ -374,7 +374,6 @@ static volatile int uadethread_running;
     ssize_t retVal = uade_read(&buf, sizeof buf, ustate);
     bool atEnd = false;
     if(retVal < count) {
-        NSLog(@"UADE buffer underrun");
         atEnd = true;
     }
     struct uade_notification n;
@@ -388,7 +387,7 @@ static volatile int uadethread_running;
     }
 
     if (atEnd) {
-		return 0;
+        return 0;
     }
 
     if(retVal<0) {
