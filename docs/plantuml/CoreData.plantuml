@@ -16,6 +16,7 @@ entity ModuleInfo {
   radioOnly: Boolean
   serviceId: Int
   serviceKey: String
+  loop: Int
   shared: Date
 }
 

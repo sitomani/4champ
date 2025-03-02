@@ -32,6 +32,8 @@ interface ReplayInformation {
 }
 
 interface ReplayControl {
+    looping: Boolean
+    supportedFormats: NSArray<String>
     loadModule(path)
     setCurrentPosition(int)
     setStereoSeparation(int)
