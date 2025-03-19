@@ -65,8 +65,8 @@ enum RESTRoutes: URLRequestConvertible {
   // URLRequestConvertible protocol implementation
   func asURLRequest() throws -> URLRequest {
     guard let url = URL.init(string: self.route.path, relativeTo: URL.init(string: "https://4champ.net")) else {
-//    guard let url = URL.init(string: self.route.path, relativeTo: URL.init(string: "http://localhost:8081")) else {
-      throw NSError.init()
+      let error = NSError(domain: "AMPErrorDomain", code: -1)
+      throw error
     }
 
     var request = URLRequest(url: url)

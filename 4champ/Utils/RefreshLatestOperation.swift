@@ -10,7 +10,7 @@ import Foundation
 import NotificationCenter
 import Alamofire
 
-class RefershLatestOperation: Operation {
+class RefershLatestOperation: Operation, @unchecked Sendable {
    private var _executing = false
    private var _finished = false
 
