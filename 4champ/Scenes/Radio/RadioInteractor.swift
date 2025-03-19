@@ -337,9 +337,9 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     switch channel {
     case .all:
       var id: Int = 0
-      while(id == 0 || !radioSessionHistory.filter({ mmd in
+      while id == 0 || !radioSessionHistory.filter({ mmd in
         mmd.id == id
-      }).isEmpty) {
+      }).isEmpty {
         id = Int.random(in: 1...settings.collectionSize)
       }
       return id

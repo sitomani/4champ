@@ -291,10 +291,6 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     }
   }
 
-  override func viewWillDisappear(_ animated: Bool) {
-    super.viewWillDisappear(animated)
-  }
-
   override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
     stopVisualisation()
@@ -366,10 +362,6 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
       hasUpdatedVisibility = true
       updateVisibility(ViewElement.all.rawValue)
     }
-  }
-
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
   }
 
   func startVisualisation() {

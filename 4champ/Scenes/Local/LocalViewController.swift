@@ -70,10 +70,6 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
   }
 
   // MARK: View lifecycle
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-  }
-
   override func viewDidLoad() {
     super.viewDidLoad()
     tableView.dataSource = self
