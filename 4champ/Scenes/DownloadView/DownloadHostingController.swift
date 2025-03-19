@@ -385,7 +385,7 @@ extension DownloadController: ModuleFetcherDelegate {
     case .failed(let err):
       model.error = err
     default:
-      log.verbose("noop")
+      log.debug("noop")
     }
   }
 }

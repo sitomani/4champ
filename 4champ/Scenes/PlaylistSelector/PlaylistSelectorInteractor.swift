@@ -138,7 +138,7 @@ extension PlaylistSelectorInteractor: ModuleFetcherDelegate {
       let resp = PlaylistSelector.Append.Response(status: DownloadStatus.failed(error: err!))
       presenter?.presentAppend(response: resp)
     default:
-      log.verbose("noop")
+      log.debug("noop")
     }
   }
 }

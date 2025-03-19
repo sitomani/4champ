@@ -151,7 +151,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   }
 
   deinit {
-    log.verbose("")
+    log.debug("")
     modulePlayer.removePlayerObserver(self)
   }
 

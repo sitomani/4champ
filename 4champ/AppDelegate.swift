@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SwiftyBeaver
 import AVFoundation
 import Alamofire
 import UserNotifications
@@ -16,7 +15,7 @@ import BackgroundTasks
 // Global
 let modulePlayer = ModulePlayer()
 let moduleStorage = ModuleStorage()
-let log = SwiftyBeaver.self
+let log = AMPLogger()
 let settings = SettingsInteractor()
 let shareUtil = ShareUtility()
 
@@ -32,7 +31,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // Override point for customization after application launch.
     Appearance.setup()
-    setupLogging()
     setupAVSession()
     setupBackgroundTask()
     cleanupFiles()
@@ -151,25 +149,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     operation.completionBlock = {
       task.setTaskCompleted(success: !operation.isCancelled)
     }
-  }
-
-  /// Set up SwiftyBeaver logging
-  func setupLogging() {
-    let console = ConsoleDestination()  // log to Xcode Console
-    // use custom format and set console output to short time, log level & message
-    console.format = "$DHH:mm:ss $d $L $N.$F $M"
-    console.levelString.error = "🛑"
-    console.levelString.warning = "🔶"
-    console.levelString.info = "🔷"
-    console.levelString.debug = "◾️"
-    console.levelString.verbose = "◽️"
-    log.addDestination(console)
-
-    console.minLevel = .warning
-#if DEBUG
-    console.minLevel = .debug
-#endif
-    log.info("Logger initialized")
   }
 
   func cleanupFiles() {

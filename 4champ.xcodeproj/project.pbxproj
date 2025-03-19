@@ -89,10 +89,10 @@
 		45D61F5920E1695200869814 /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F5820E1695100869814 /* UIUtils.swift */; };
 		45D61F5B20E1780D00869814 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F5A20E1780D00869814 /* Appearance.swift */; };
 		735A273E264FDFAD004EAC0C /* Gzip in Frameworks */ = {isa = PBXBuildFile; productRef = 735A273D264FDFAD004EAC0C /* Gzip */; };
-		735A2742264FDFDE004EAC0C /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = 735A2741264FDFDE004EAC0C /* SwiftyBeaver */; };
 		735A2746264FE01D004EAC0C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 735A2745264FE01D004EAC0C /* Alamofire */; };
 		736DAC5F2C862F4D005C07B4 /* VisualisationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736DAC5E2C862F4D005C07B4 /* VisualisationMenu.swift */; };
 		73759FD228EB34DF00535F8E /* libopenmpt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73759FD128EB34DF00535F8E /* libopenmpt.xcframework */; };
+		737FEAAF2D89FF190075079B /* AMPLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737FEAAE2D89FF060075079B /* AMPLogger.swift */; };
 		7397C1DE29091504002D5CDB /* UADEReplayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7397C1DC29091504002D5CDB /* UADEReplayer.m */; };
 		7397C1E629091D9D002D5CDB /* uade_ios.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7397C1E129091BC3002D5CDB /* uade_ios.xcframework */; };
 		7397C1E729091D9D002D5CDB /* uade_ios.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7397C1E129091BC3002D5CDB /* uade_ios.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -232,6 +232,7 @@
 		736DAC5E2C862F4D005C07B4 /* VisualisationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualisationMenu.swift; sourceTree = "<group>"; };
 		73759FD128EB34DF00535F8E /* libopenmpt.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libopenmpt.xcframework; path = ../openmpt/libopenmpt.xcframework; sourceTree = "<group>"; };
 		7375F0C12D6C5F9700EEA350 /* AmpCDModel 10 (looping).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 10 (looping).xcdatamodel"; sourceTree = "<group>"; };
+		737FEAAE2D89FF060075079B /* AMPLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMPLogger.swift; sourceTree = "<group>"; };
 		7397C1DA29091504002D5CDB /* UADEReplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UADEReplayer.h; sourceTree = "<group>"; };
 		7397C1DC29091504002D5CDB /* UADEReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UADEReplayer.m; sourceTree = "<group>"; };
 		7397C1E129091BC3002D5CDB /* uade_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = uade_ios.xcframework; path = "../uade-ios/uade_ios.xcframework"; sourceTree = "<group>"; };
@@ -252,7 +253,6 @@
 				73759FD228EB34DF00535F8E /* libopenmpt.xcframework in Frameworks */,
 				735A2746264FE01D004EAC0C /* Alamofire in Frameworks */,
 				735A273E264FDFAD004EAC0C /* Gzip in Frameworks */,
-				735A2742264FDFDE004EAC0C /* SwiftyBeaver in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,6 +524,7 @@
 		45D61F5720E1695100869814 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				737FEAAE2D89FF060075079B /* AMPLogger.swift */,
 				45D61F5820E1695100869814 /* UIUtils.swift */,
 				45D61F5A20E1780D00869814 /* Appearance.swift */,
 				45855FCC2444AC6B0079C767 /* ModuleSharing.swift */,
@@ -582,7 +583,6 @@
 			name = ampplayer;
 			packageProductDependencies = (
 				735A273D264FDFAD004EAC0C /* Gzip */,
-				735A2741264FDFDE004EAC0C /* SwiftyBeaver */,
 				735A2745264FE01D004EAC0C /* Alamofire */,
 			);
 			productName = ampplayer;
@@ -630,7 +630,6 @@
 			mainGroup = 45D3929820B1DDEC00EEF4E3;
 			packageReferences = (
 				735A273C264FDFAD004EAC0C /* XCRemoteSwiftPackageReference "GzipSwift" */,
-				735A2740264FDFDE004EAC0C /* XCRemoteSwiftPackageReference "SwiftyBeaver" */,
 				735A2744264FE01D004EAC0C /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 45D392A220B1DDEC00EEF4E3 /* Products */;
@@ -663,7 +662,6 @@
 /* Begin PBXShellScriptBuildPhase section */
 		73CD16E12AD16C3400987AD6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -677,7 +675,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\n\nif which swiftlint; then\n    swiftlint —-fix --format\n    swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\n\nif [ \"${CONFIGURATION}\" = \"Debug\" ]; then\n    if which swiftlint; then\n        swiftlint —-fix --format\n        swiftlint\n    else\n      echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n    fi\nfi\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -742,6 +740,7 @@
 				451ED0A6241E6AA6006CE4E8 /* SwiftUITest.swift in Sources */,
 				451B6AA22204B6CC001848FA /* LocalRouter.swift in Sources */,
 				454F5207215D3FF1007011F3 /* ComposerCell.swift in Sources */,
+				737FEAAF2D89FF190075079B /* AMPLogger.swift in Sources */,
 				4543985120D03C1600991ADC /* AboutHeaderView.swift in Sources */,
 				450E506421879347008FB155 /* SettingsPresenter.swift in Sources */,
 				451ED0B1241E8A83006CE4E8 /* PlaylistStore.swift in Sources */,
@@ -952,7 +951,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 41;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
@@ -971,7 +970,7 @@
 					../openmpt,
 					"../uade-ios",
 				);
-				MARKETING_VERSION = 3.10;
+				MARKETING_VERSION = 3.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -989,7 +988,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 41;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
@@ -1008,7 +1007,7 @@
 					../openmpt,
 					"../uade-ios",
 				);
-				MARKETING_VERSION = 3.10;
+				MARKETING_VERSION = 3.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1050,14 +1049,6 @@
 				minimumVersion = 5.1.1;
 			};
 		};
-		735A2740264FDFDE004EAC0C /* XCRemoteSwiftPackageReference "SwiftyBeaver" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SwiftyBeaver/SwiftyBeaver";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.9.4;
-			};
-		};
 		735A2744264FE01D004EAC0C /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -1073,11 +1064,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 735A273C264FDFAD004EAC0C /* XCRemoteSwiftPackageReference "GzipSwift" */;
 			productName = Gzip;
-		};
-		735A2741264FDFDE004EAC0C /* SwiftyBeaver */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 735A2740264FDFDE004EAC0C /* XCRemoteSwiftPackageReference "SwiftyBeaver" */;
-			productName = SwiftyBeaver;
 		};
 		735A2745264FE01D004EAC0C /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;

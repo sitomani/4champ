@@ -289,7 +289,7 @@ extension SearchInteractor: ModuleFetcherDelegate {
       }
       fetchNextQueuedModule()
     default:
-      log.verbose("noop")
+      log.debug("noop")
     }
   }
 
