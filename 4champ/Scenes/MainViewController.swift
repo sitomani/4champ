@@ -35,7 +35,7 @@ class MainViewController: UITabBarController {
     notplayingConstraint?.isActive = true
     npView.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
     npView?.alpha = 0
-
+    self.view.backgroundColor = Appearance.ampBgColor
     let tabBarAppearance: UITabBarAppearance = UITabBarAppearance()
     tabBarAppearance.configureWithDefaultBackground()
     tabBarAppearance.backgroundColor = Appearance.tabColor
