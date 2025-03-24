@@ -6,8 +6,8 @@
 //
 
 import UIKit
-import Alamofire
 import UserNotifications
+import Alamofire
 
 /// Radio Interactor business logic protocol
 protocol RadioBusinessLogic {
@@ -79,7 +79,6 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   private var lastPlayed: Int = 0 // identifier of the last module id played (used in New channel)
   private var postFetchAction: PostFetchAction = .appendToQueue // determines how to handle module at fetch complete
   private var ntfAuthorization: UNAuthorizationStatus = .notDetermined
-  private var activeRequest: Alamofire.DataRequest?
   private var playbackTimer: Timer?
   private var customChannelIndex = 0 // index of module in custom channel
   var customSelection: Radio.CustomSelection = Radio.CustomSelection(name: "", ids: [])

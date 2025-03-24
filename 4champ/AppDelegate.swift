@@ -7,7 +7,6 @@
 
 import UIKit
 import AVFoundation
-import Alamofire
 import UserNotifications
 import SwiftUI
 import BackgroundTasks
