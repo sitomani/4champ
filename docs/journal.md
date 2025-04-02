@@ -1,5 +1,11 @@
 # 4champ Development Journal
 
+### March 2025 Indie development
+
+In March 2025 I participated an Apple developer conference at my hometown. Along with a fun workshop with AudioKit and two days of presentations I had the chance to meet a number of fellow iOS developers. It was truly inspiring to see what others are building and how they go about iOS/Swift/SwiftUI etc. 
+
+One particularly heartwarming thing was to get a compliment on the size of 4champ - the universal binary is 9,1MB at the AppStore. This inspired me to start looking into how to make it even smaller. I figured immediately that I have two categories of dependencies: convenience and core. The playback libraries and gzip support are core; I do not have the capacity or interest to try to replace them. Using Alamofire and SwiftyBeaver libraries are convenience, I have used them before in my work and they've been useful in setting up certain functionality in the 4champ project. I've decided to go a notch more independent by migrating to OS services for logging and networking. I've already changed the logging part, and next target is the network requests handling. 
+
 ### February 2025 could you repeat that, please?
 
 One of the characteristics of the tracker tunes is that they are often designed to loop indefinitely. Some modules even have hidden stuff that you will not hear at all unless the playback is looped. Check for yourself e.g. [Impatients](https://4champ.net/mod?id=90454) by Lesnik. The tune is a 10 seconds long pattern. On a single play you'll only hear the chord pattern, but when looped, a melody will come in, and the repeating tune slowly fades away, until sound is no longer heard after 1:48.
