@@ -7,7 +7,6 @@
 
 import UIKit
 import UserNotifications
-import Alamofire
 
 /// Radio Interactor business logic protocol
 protocol RadioBusinessLogic {
@@ -268,13 +267,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     log.debug("")
     playbackTimer?.invalidate()
 
-    AF.session.getAllTasks { (tasks) in
-      tasks.forEach {
-        if !$0.currentRequest!.url!.absoluteString.contains("get_latest") {
-          $0.cancel()
-        }
-      }
-    }
+    NetworkClient.cancelAllDataTasks()
 
     status = .off
     lastPlayed = 0

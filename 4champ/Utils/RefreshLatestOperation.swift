@@ -8,68 +8,73 @@
 
 import Foundation
 import NotificationCenter
-import Alamofire
 
-class RefershLatestOperation: Operation, @unchecked Sendable {
-   private var _executing = false
-   private var _finished = false
+class RefreshLatestOperation: Operation, @unchecked Sendable {
+  private var _executing = false
+  private var _finished = false
 
-   override private(set) var isExecuting: Bool {
-       get {
-           return _executing
-       }
-       set {
-           willChangeValue(forKey: "isExecuting")
-           _executing = newValue
-           didChangeValue(forKey: "isExecuting")
-       }
-   }
+  override private(set) var isExecuting: Bool {
+    get {
+      return _executing
+    }
+    set {
+      willChangeValue(forKey: "isExecuting")
+      _executing = newValue
+      didChangeValue(forKey: "isExecuting")
+    }
+  }
 
-   override private(set) var isFinished: Bool {
-       get {
-           return _finished
-       }
-       set {
-           willChangeValue(forKey: "isFinished")
-           _finished = newValue
-           didChangeValue(forKey: "isFinished")
-       }
-   }
+  override private(set) var isFinished: Bool {
+    get {
+      return _finished
+    }
+    set {
+      willChangeValue(forKey: "isFinished")
+      _finished = newValue
+      didChangeValue(forKey: "isFinished")
+    }
+  }
 
-   override func start() {
-       if isCancelled {
-           isFinished = true
-           return
-       }
+  override func start() {
+    if isCancelled {
+      isFinished = true
+      return
+    }
 
-       isExecuting = true
-       main() // Call your main method to perform the task
-   }
+    isExecuting = true
+    main() // Call your main method to perform the task
+  }
 
-   override func main() {
-       // Send a REST request to refresh app contents
-       log.debug("")
-       let req = RESTRoutes.latestId
-       AF.request(req).validate().responseString { resp in
-           switch resp.result {
-           case .failure:
-               self.cancel()
-           case .success(let str):
-               guard let collectionSize = Int(str) else {
-                   self.completeOperation()
-                   return
-               }
-               log.info("Collection Size: \(collectionSize)")
-               self.updateCollectionSize(size: collectionSize)
-               self.completeOperation()
-           }
-       }
-   }
+  func getLatestId() async -> Int {
+    do {
+      let client = NetworkClient()
+      let collectionSize = try await client.send(APILatestIdRequest())
+      return Int(collectionSize) ?? 0
+    } catch {
+      return 0
+    }
+  }
 
-   private func completeOperation() {
-       isExecuting = false
-       isFinished = true
-   }
+  override func main() {
+    // Send a REST request to refresh app contents
+    log.debug("")
+
+    Task {
+      let latestId = await getLatestId()
+      if latestId > 0 {
+        log.info("Latest ID: \(latestId)")
+        updateCollectionSize(size: latestId)
+      } else {
+        log.error("Failed to fetch latest ID")
+      }
+      completeOperation()
+    }
+  }
+
+  private func completeOperation() {
+    isExecuting = false
+    isFinished = true
+  }
 
   func updateCollectionSize(size: Int) {
     log.debug("")

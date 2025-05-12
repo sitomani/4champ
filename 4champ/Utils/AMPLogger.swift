@@ -43,12 +43,12 @@ struct AMPLogger {
         switch message {
         case let string as String:
             logger.log(level: level, "\(logPrefix) \(string)")
-        case let url as URL:
-            logger.log(level: level, "\(logPrefix) URL: \(url.absoluteString)")
+        case let value as URL:
+            logger.log(level: level, "\(logPrefix) URL: \(value.absoluteString)")
         case let error as Error:
             logger.log(level: level, "\(logPrefix) Error: \(error.localizedDescription)")
         default:
-            logger.log(level: level, "\(logPrefix) Unknown type: \(String(describing: message))")
+            logger.log(level: level, "\(logPrefix) \(String(describing: message))")
         }
     }
 }

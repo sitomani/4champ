@@ -40,7 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // Refresh the latest
     bgQueue.maxConcurrentOperationCount = 1
-    bgQueue.addOperation(RefershLatestOperation())
+    bgQueue.addOperation(RefreshLatestOperation())
     UIApplication.shared.beginReceivingRemoteControlEvents()
 
 #if DEBUG
@@ -138,7 +138,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     log.debug("")
     scheduleAppRefresh()
 
-    let operation = RefershLatestOperation()
+    let operation = RefreshLatestOperation()
     bgQueue.addOperation(operation)
 
     task.expirationHandler = {
