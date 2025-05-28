@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Alamofire
 import Foundation
 
 /// Search Interactor business logic interface
@@ -61,12 +60,13 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
   var autoListType: SearchType?
   var pagingIndex: Int = 0
 
-  private var currentRequest: Alamofire.DataRequest?
+  private var currentTask: Task<Sendable, Error>?
   private var downloadQueue: [Int] = []
   private var favoritedModuleId: Int = 0
   private var originalQueueLenght: Int = 0
   private var fetcher: ModuleFetcher?
   private var latestModuleResponse = Search.Response<ModuleResult>(result: [], text: "")
+  private var nwClient = NetworkClient()
 
   init() {
     moduleStorage.addStorageObserver(self)
@@ -78,28 +78,30 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
 
   func search(_ request: Search.Request) {
     log.debug("keyword: \(request.text), type: \(request.type), pagingIndex: \(request.pagingIndex)")
-    if currentRequest != nil {
-      currentRequest?.cancel()
-      currentRequest = nil
+
+    if currentTask != nil {
+      currentTask?.cancel()
+      currentTask = nil
     }
-    let restRequest = RESTRoutes.search(type: request.type, text: request.text, position: request.pagingIndex)
-    currentRequest = AF.request(restRequest).validate().responseData { response in
-      if let checkReq = self.currentRequest?.request, checkReq != response.request {
-        log.warning("overlapping requests. Bypass all except most recent.")
-        return
-      }
-      if case let .success(jsonData) = response.result {
-        log.info("\(response.result) \(request.text)")
-        self.pagingIndex = request.pagingIndex
-        if false == self.processResponse(request: request, responseData: jsonData) {
+
+    let req: APISearchRequest = APISearchRequest(type: request.type, sought: request.text, position: request.pagingIndex)
+
+    currentTask = Task {
+      do {
+        let responseData = try await nwClient.send(req)
+        if false == processResponse(request: request, responseData: responseData) {
           self.latestModuleResponse = Search.Response<ModuleResult>(result: [], text: request.text)
           self.presenter?.presentSearchResponse(self.latestModuleResponse)
         }
-      } else {
-        log.error(String.init(describing: response.error))
+        self.pagingIndex = request.pagingIndex
+      } catch let err {
+        self.latestModuleResponse = Search.Response<ModuleResult>(result: [], text: request.text)
+        self.presenter?.presentSearchResponse(self.latestModuleResponse)
+        log.error(String.init(describing: err))
       }
-      self.currentRequest = nil
+      return
     }
+    return
   }
 
   private func processResponse(request: Search.Request, responseData: Data) -> Bool {
@@ -118,6 +120,11 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
     case SearchType.group:
       if let groups = try? JSONDecoder().decode([GroupResult].self, from: responseData) {
         self.presenter?.presentSearchResponse(Search.Response<GroupResult>(result: groups, text: request.text))
+        return true
+      }
+      // fallback for the AMP response for direct group match: returns composers
+      if let composers = try? JSONDecoder().decode([ComposerResult].self, from: responseData) {
+        self.presenter?.presentSearchResponse(Search.Response<ComposerResult>(result: composers, text: request.text))
         return true
       }
     }
@@ -155,21 +162,19 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
     guard let id = autoListId, let type = autoListType else { return }
 
     if type == .composer {
-      let restRequest = RESTRoutes.listModules(composerId: id)
-      AF.request(restRequest).validate().responseData { response in
-        if case let .success(jsonData) = response.result,
-           let modules = try? JSONDecoder().decode([ModuleResult].self, from: jsonData) {
-            self.latestModuleResponse = Search.Response<ModuleResult>(result: modules, text: "")
-            self.presenter?.presentSearchResponse(self.latestModuleResponse)
-          }
+      let req = APIListModulesRequest(composerId: id)
+      Task {
+        if let response = try? await nwClient.send(req) {
+          self.latestModuleResponse = Search.Response<ModuleResult>(result: response, text: "")
+          self.presenter?.presentSearchResponse(self.latestModuleResponse)
+        }
       }
     } else if type == .group {
-      let restRequest = RESTRoutes.listComposers(groupId: id)
-      AF.request(restRequest).validate().responseData { response in
-        if case let .success(jsonData) = response.result,
-           let composers = try? JSONDecoder().decode([ComposerResult].self, from: jsonData) {
-            self.presenter?.presentSearchResponse(Search.Response<ComposerResult>(result: composers, text: ""))
-          }
+      let req = APIListComposersRequest(groupId: id)
+      Task {
+        if let response = try? await nwClient.send(req) {
+          self.presenter?.presentSearchResponse(Search.Response<ComposerResult>(result: response, text: ""))
+        }
       }
     } else {
       log.error("Invalid type for auto fetch \(type)")

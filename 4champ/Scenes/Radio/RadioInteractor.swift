@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Alamofire
 import UserNotifications
 
 /// Radio Interactor business logic protocol
@@ -79,7 +78,6 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   private var lastPlayed: Int = 0 // identifier of the last module id played (used in New channel)
   private var postFetchAction: PostFetchAction = .appendToQueue // determines how to handle module at fetch complete
   private var ntfAuthorization: UNAuthorizationStatus = .notDetermined
-  private var activeRequest: Alamofire.DataRequest?
   private var playbackTimer: Timer?
   private var customChannelIndex = 0 // index of module in custom channel
   var customSelection: Radio.CustomSelection = Radio.CustomSelection(name: "", ids: [])
@@ -269,13 +267,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     log.debug("")
     playbackTimer?.invalidate()
 
-    AF.session.getAllTasks { (tasks) in
-      tasks.forEach {
-        if !$0.currentRequest!.url!.absoluteString.contains("get_latest") {
-          $0.cancel()
-        }
-      }
-    }
+    NetworkClient.cancelAllDataTasks()
 
     status = .off
     lastPlayed = 0

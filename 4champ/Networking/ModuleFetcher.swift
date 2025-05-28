@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 import Gzip
 
 /**
@@ -44,15 +43,21 @@ protocol ModuleFetcherDelegate: class {
  Implements the flow for fetching modules, consisting of module download link fetching based on id,
  gzipped module downloading, unzipping and saving to local filesystem.
  */
-class ModuleFetcher {
+class ModuleFetcher: NSObject {
   var delegate: ModuleFetcherDelegate?
 
-  private var currentRequest: Alamofire.DataRequest?
+  private var currentTask: Task<Sendable, Error>?
+  private var downloadTask: URLSessionDownloadTask?
   private var state: FetcherState = .idle {
     didSet {
-      delegate?.fetcherStateChanged(self, state: state)
+      let state = state
+      DispatchQueue.main.async {
+        self.delegate?.fetcherStateChanged(self, state: state)
+      }
     }
   }
+  /// Holds the currently downloading module id
+  private var targetModuleId: Int?
 
   convenience init(delegate: ModuleFetcherDelegate) {
     self.init()
@@ -64,11 +69,11 @@ class ModuleFetcher {
   }
 
   /**
-  Fetches a module based on Amiga Music Preservation module id. In case the module
-     is available in local storage, will complete immediately through state change to `FetcherState.done`.
-    - parameters:
-        - ampId: Identifier of the module to download.
-  */
+   Fetches a module based on Amiga Music Preservation module id. In case the module
+   is available in local storage, will complete immediately through state change to `FetcherState.done`.
+   - parameters:
+   - ampId: Identifier of the module to download.
+   */
   func fetchModule(ampId: Int) {
     state = .resolvingPath
 
@@ -77,99 +82,102 @@ class ModuleFetcher {
       DispatchQueue.main.asyncAfter(deadline: DispatchTime.now(), execute: {
         self.state = .done(mmd: mmd)
       })
-        return
+      return
     }
 
-    let req = RESTRoutes.modulePath(id: ampId)
-    currentRequest = AF.request(req).validate().responseString { resp in
-      switch resp.result {
-      case .failure(let err):
-        log.error(err)
-        self.state = .failed(err: err)
-      case .success(let uriPath):
-        if uriPath.count > 0, let modUrl = URL.init(string: uriPath) {
+    currentTask = Task {
+      do {
+        let client = NetworkClient()
+        let requ = APIModulePathRequest(moduleId: ampId)
+        let resp = try await client.send(requ)
+        if resp.count > 0, let modUrl = URL.init(string: resp) {
           self.fetchModule(modUrl: modUrl, id: ampId)
         }
+      } catch {
+        state = .failed(err: error)
+        log.error(error)
       }
+      return
     }
   }
 
   /**
-  Cancels current fetch request if any.
-  */
+   Cancels current fetch request if any.
+   */
   func cancel() {
-    guard let req = currentRequest else { log.debug("No current request to cancel"); return }
-    req.cancel()
-    currentRequest = nil
+    currentTask?.cancel()
+    downloadTask?.cancel()
+    currentTask = nil
   }
 
   /**
-  private function that fetches the module from the identified download link,
-  unpacks it and saves to disk. After completion, reports the module metadata on the
-  downloaded module through a state change to `FetcherState.done(mmd)`. In case
-  of an error, a state change to `FetcherState.failed(error)` will be propagated.
+   private function that fetches the module from the identified download link,
+   unpacks it and saves to disk. After completion, reports the module metadata on the
+   downloaded module through a state change to `FetcherState.done(mmd)`. In case
+   of an error, a state change to `FetcherState.failed(error)` will be propagated.
    - parameters:
-      - modUrl: URL of the module to download
-      - id: numeric identifier of the module (needed for the module metadata object)
-  */
+   - modUrl: URL of the module to download
+   - id: numeric identifier of the module (needed for the module metadata object)
+   */
   private func fetchModule(modUrl: URL, id: Int) {
     log.debug("")
     state = .downloading(progress: 0)
-    currentRequest = AF.request(modUrl).validate().responseData { resp in
-      if case .failure(let error) = resp.result {
-        log.error(error)
-        self.state = .failed(err: error)
+    targetModuleId = id
+
+    let configuration = URLSessionConfiguration.default
+    let operationQueue = OperationQueue()
+    let session = URLSession(configuration: configuration, delegate: self, delegateQueue: operationQueue)
+
+    downloadTask = session.downloadTask(with: modUrl)
+    downloadTask?.resume()
+    return
+  }
+
+}
+
+extension ModuleFetcher: URLSessionDownloadDelegate {
+  func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+    log.debug("Downloaded module to \(location)")
+    self.state = .unpacking
+    if let moduleData = try? Data(contentsOf: location),
+        let moduleDataUnzipped = self.gzipInflate(data: moduleData),
+        let modId = targetModuleId {
+      var mmd = MMD.init(path: downloadTask.originalRequest!.url!.path, modId: modId)
+      mmd.size = Int(moduleDataUnzipped.count / 1024)
+
+      // Make sure that we only process supported mods further
+      guard mmd.supported() else {
+        self.state = .failed(err: FetcherError.unsupportedFormat)
         return
       }
-
-      if case let .success(moduleData) = resp.result {
-        self.state = .unpacking
-        if let moduleDataUnzipped = self.gzipInflate(data: moduleData) {
-          var mmd = MMD.init(path: modUrl.path, modId: id)
-          mmd.size = Int(moduleDataUnzipped.count / 1024)
-
-          // Make sure that we only process supported mods further
-          guard mmd.supported() else {
-            self.state = .failed(err: FetcherError.unsupportedFormat)
-            return
-          }
-          do {
-            // store to file and make sure it's not writing over an existing mod
-            var numberExt = 0
-            var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-              .last!.appendingPathComponent(mmd.name).appendingPathExtension(mmd.type!)
-            while FileManager.default.fileExists(atPath: localPath.path) {
-                numberExt += 1
-                let filename = mmd.name + "_\(numberExt)"
-                localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-                .last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
-            }
-            mmd.localPath = localPath
-            try moduleDataUnzipped.write(to: mmd.localPath!, options: .atomic)
-          } catch {
-            log.error("Could not write module data to file: \(error)")
-          }
-          mmd.serviceId = .amp
-          self.state = .done(mmd: mmd)
-          self.state = .idle
-          self.currentRequest = nil
+      do {
+        // store to file and make sure it's not writing over an existing mod
+        var numberExt = 0
+        var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+          .last!.appendingPathComponent(mmd.name).appendingPathExtension(mmd.type!)
+        while FileManager.default.fileExists(atPath: localPath.path) {
+          numberExt += 1
+          let filename = mmd.name + "_\(numberExt)"
+          localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+            .last!.appendingPathComponent(filename).appendingPathExtension(mmd.type!)
         }
+        mmd.localPath = localPath
+        try moduleDataUnzipped.write(to: mmd.localPath!, options: .atomic)
+      } catch {
+        log.error("Could not write module data to file: \(error)")
       }
-      }.downloadProgress { progress in
-        var currentProg = Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
-        if currentProg == 1.0 {
-          currentProg = 0
-        }
-        self.delegate?.fetcherStateChanged(self, state: FetcherState.downloading(progress: currentProg))
+      mmd.serviceId = ModuleService.amp
+      self.state = .done(mmd: mmd)
+      self.state = .idle
     }
   }
 
   /**
-  Unzips the module data using GzipSwift
+   Unzips the module data using GzipSwift
    - parameters:
-      - data: the gzipped module
+   - data: the gzipped module
    - returns: module data, unzipped
-  */
+   */
   private func gzipInflate(data: Data) -> Data? {
     if data.isGzipped, let inflated = try? data.gunzipped() {
       return inflated
@@ -177,17 +185,16 @@ class ModuleFetcher {
     log.error("FAILED TO UNZIP")
     return data
   }
-}
-
-/**
- Hashable protocol extension to ModuleFetcher for keeping the fetchers in an array
- */
-extension ModuleFetcher: Hashable {
-  static func == (left: ModuleFetcher, right: ModuleFetcher) -> Bool {
-    return left === right
-  }
-
-  func hash(into hasher: inout Hasher) {
-    hasher.combine(ObjectIdentifier(self).hashValue)
+  
+  func urlSession(_ session: URLSession,
+                  downloadTask: URLSessionDownloadTask,
+                  didWriteData bytesWritten: Int64,
+                  totalBytesWritten: Int64,
+                  totalBytesExpectedToWrite: Int64) {
+    var currentProg = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
+    if currentProg == 1.0 {
+      currentProg = 0
+    }
+    state = .downloading(progress: currentProg)
   }
 }

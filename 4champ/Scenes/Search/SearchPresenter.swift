@@ -51,10 +51,12 @@ class SearchPresenter: SearchPresentationLogic {
     default:
         break
     }
-    viewController?.displayResult(viewModel: Search.ViewModel(modules: modules,
-                                                              composers: composers,
-                                                              groups: groups,
-                                                              text: response.text))
+    DispatchQueue.main.async {
+      self.viewController?.displayResult(viewModel: Search.ViewModel(modules: modules,
+                                                                composers: composers,
+                                                                groups: groups,
+                                                                text: response.text))
+    }
 
   }
 
