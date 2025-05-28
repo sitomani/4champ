@@ -199,7 +199,7 @@
 		45AA90FD20FF36C200794147 /* HVLReplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HVLReplayer.h; sourceTree = "<group>"; };
 		45AA90FE20FF36C200794147 /* Replay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Replay.h; sourceTree = "<group>"; };
 		45AA910020FF36C200794147 /* MPTReplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTReplayer.h; sourceTree = "<group>"; };
-		45AA910120FF36C200794147 /* MPTReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTReplayer.m; sourceTree = "<group>"; };
+		45AA910120FF36C200794147 /* MPTReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = MPTReplayer.m; sourceTree = "<group>"; tabWidth = 2; };
 		45AA910B20FF3A3B00794147 /* 4champ-bridging-header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "4champ-bridging-header.h"; path = "4champ/4champ-bridging-header.h"; sourceTree = SOURCE_ROOT; };
 		45AA910D20FF5E8A00794147 /* Structs.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45AA910F2100C48500794147 /* MainViewController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; tabWidth = 2; };

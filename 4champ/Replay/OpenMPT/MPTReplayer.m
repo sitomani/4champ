@@ -151,6 +151,7 @@
       if (str) {
         [sampleArray addObject:str];
       }
+      free((void*)sampleName);
     }
   } @catch (NSException *exception) {
     infoStr = [@"Could not get info for module" mutableCopy];
@@ -175,6 +176,7 @@
       if (str) {
         [sampleArray addObject:str];
       }
+      free((void*)sampleName);
     }
   } @catch (NSException *exception) {
     infoStr = [@"Could not get info for module" mutableCopy];
