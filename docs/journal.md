@@ -1,5 +1,19 @@
 # 4champ Development Journal
 
+### May 2025 Good Bye, Alamofire, good bye, GZipSwift, Just give me motion and set me free
+
+The swift package manager dependencies sorted now, the project no longer uses any. For networking, iOS Networking APIs are used. For unpacking the gz-compressed module files, I turned to platform zlib. Logging is done with OS logging API. The details of the impact on app size in the table below:
+
+| Dependency     | Universal Binary | Install Size | Download Size |
+|----------------|------------------|--------------|---------------|
+| Before         | 5.93 MB           | 9.10 MB      | 3.2 MB        |
+| SwiftyBeaver removed  | -0.13 MB          | -0.18 MB      | -0.07 MB       |
+| Alamofire removed      | -0.94 MB          | -1.12 MB      | -0.37 MB       |
+| GZipSwift removed      | -0.02 MB          | -0.02 MB      | -0.01 MB       |
+| Now         | 4.84 MB           | 7.78 MB      | 2.75 MB        |
+
+I'd not call it drastic, but very nice drop anyway, and the main purpose of this exercise was to do a refresher on the platform networking APIs. The logging + compression changes were a bonus on top.
+
 ### March 2025 Indie development
 
 In March 2025 I participated an Apple developer conference at my hometown. Along with a fun workshop with AudioKit and two days of presentations I had the chance to meet a number of fellow iOS developers. It was truly inspiring to see what others are building and how they go about iOS/Swift/SwiftUI etc. 

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Gzip
+import zlib
 
 /**
  ModuleFetcher states
@@ -137,10 +137,8 @@ class ModuleFetcher: NSObject {
 
 extension ModuleFetcher: URLSessionDownloadDelegate {
   func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-    log.debug("Downloaded module to \(location)")
     self.state = .unpacking
-    if let moduleData = try? Data(contentsOf: location),
-        let moduleDataUnzipped = self.gzipInflate(data: moduleData),
+    if let moduleDataUnzipped = self.gunzip(dataURL: location),
         let modId = targetModuleId {
       var mmd = MMD.init(path: downloadTask.originalRequest!.url!.path, modId: modId)
       mmd.size = Int(moduleDataUnzipped.count / 1024)
@@ -173,19 +171,41 @@ extension ModuleFetcher: URLSessionDownloadDelegate {
   }
 
   /**
-   Unzips the module data using GzipSwift
+   Unzips the module data using zlib
    - parameters:
    - data: the gzipped module
    - returns: module data, unzipped
    */
-  private func gzipInflate(data: Data) -> Data? {
-    if data.isGzipped, let inflated = try? data.gunzipped() {
-      return inflated
+  private func gunzip(dataURL: URL) -> Data? {
+    do {
+      guard let input = gzopen(dataURL.path, "rb") else {
+        throw NetworkError.decompressionFailed
+      }
+
+      defer {
+        gzclose(input)
+      }
+
+      let bufferSize = 32_768
+      var decompressedData = Data()
+      var buffer = [UInt8](repeating: 0, count: bufferSize)
+
+      while true {
+        let bytesRead = gzread(input, &buffer, UInt32(bufferSize))
+        if bytesRead < 0 {
+          throw NetworkError.decompressionFailed
+        } else if bytesRead == 0 {
+          break
+        }
+        decompressedData.append(buffer, count: Int(bytesRead))
+      }
+      return decompressedData
+    } catch {
+      log.error("Unpacking failed: \(error)")
+      return nil
     }
-    log.error("FAILED TO UNZIP")
-    return data
   }
-  
+
   func urlSession(_ session: URLSession,
                   downloadTask: URLSessionDownloadTask,
                   didWriteData bytesWritten: Int64,

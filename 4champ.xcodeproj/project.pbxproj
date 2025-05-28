@@ -90,7 +90,6 @@
 		45D61F5B20E1780D00869814 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F5A20E1780D00869814 /* Appearance.swift */; };
 		733F495E2DD0DA4700334C8A /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733F495D2DD0DA4400334C8A /* APIRequest.swift */; };
 		733F49602DD0DAF200334C8A /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733F495F2DD0DAF100334C8A /* NetworkClient.swift */; };
-		735A273E264FDFAD004EAC0C /* Gzip in Frameworks */ = {isa = PBXBuildFile; productRef = 735A273D264FDFAD004EAC0C /* Gzip */; };
 		736DAC5F2C862F4D005C07B4 /* VisualisationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736DAC5E2C862F4D005C07B4 /* VisualisationMenu.swift */; };
 		73759FD228EB34DF00535F8E /* libopenmpt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73759FD128EB34DF00535F8E /* libopenmpt.xcframework */; };
 		737FEAAF2D89FF190075079B /* AMPLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737FEAAE2D89FF060075079B /* AMPLogger.swift */; };
@@ -183,7 +182,6 @@
 		454F520B21610E94007011F3 /* ModuleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ModuleCell.xib; sourceTree = "<group>"; };
 		454F520D21610F70007011F3 /* GroupCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupCell.xib; sourceTree = "<group>"; };
 		454F520F21610F83007011F3 /* ComposerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComposerCell.xib; sourceTree = "<group>"; };
-		455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
 		4569AC8A21628C70000EDFDC /* UISearchBar+ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchBar+ActivityIndicator.swift"; sourceTree = "<group>"; };
 		456E6F2D240A5FAF0034BDA2 /* PlaylistView.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = PlaylistView.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45855FC624444C9B0079C767 /* ampplayer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ampplayer.entitlements; sourceTree = "<group>"; };
@@ -225,8 +223,6 @@
 		45D61F5020E1647300869814 /* RadioInteractor.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = RadioInteractor.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45D61F5820E1695100869814 /* UIUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
 		45D61F5A20E1780D00869814 /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
-		45D61F5C20E17D8F00869814 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
-		45D61F6220E1863600869814 /* Gzip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Gzip.framework; path = Carthage/Build/iOS/Gzip.framework; sourceTree = "<group>"; };
 		733F495D2DD0DA4400334C8A /* APIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		733F495F2DD0DAF100334C8A /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 9 (imports).xcdatamodel"; sourceTree = "<group>"; };
@@ -254,7 +250,6 @@
 			files = (
 				7397C1E629091D9D002D5CDB /* uade_ios.xcframework in Frameworks */,
 				73759FD228EB34DF00535F8E /* libopenmpt.xcframework in Frameworks */,
-				735A273E264FDFAD004EAC0C /* Gzip in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -543,9 +538,6 @@
 			children = (
 				7397C1E129091BC3002D5CDB /* uade_ios.xcframework */,
 				73759FD128EB34DF00535F8E /* libopenmpt.xcframework */,
-				455CC0A52104A0E20094A5D3 /* SwiftyBeaver.framework */,
-				45D61F6220E1863600869814 /* Gzip.framework */,
-				45D61F5C20E17D8F00869814 /* Alamofire.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -586,7 +578,6 @@
 			);
 			name = ampplayer;
 			packageProductDependencies = (
-				735A273D264FDFAD004EAC0C /* Gzip */,
 			);
 			productName = ampplayer;
 			productReference = 45D392A120B1DDEC00EEF4E3 /* ampplayer.app */;
@@ -632,7 +623,6 @@
 			);
 			mainGroup = 45D3929820B1DDEC00EEF4E3;
 			packageReferences = (
-				735A273C264FDFAD004EAC0C /* XCRemoteSwiftPackageReference "GzipSwift" */,
 			);
 			productRefGroup = 45D392A220B1DDEC00EEF4E3 /* Products */;
 			projectDirPath = "";
@@ -1044,25 +1034,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		735A273C264FDFAD004EAC0C /* XCRemoteSwiftPackageReference "GzipSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/1024jp/GzipSwift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.1.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		735A273D264FDFAD004EAC0C /* Gzip */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 735A273C264FDFAD004EAC0C /* XCRemoteSwiftPackageReference "GzipSwift" */;
-			productName = Gzip;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		454D1AD822035D87006ABA85 /* AmpCDModel.xcdatamodeld */ = {

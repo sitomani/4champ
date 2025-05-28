@@ -10,6 +10,7 @@ enum NetworkError: Error {
     case decodingError
     case serverError(statusCode: Int)
     case unknown(Error)
+    case decompressionFailed
 }
 
 /*
@@ -61,7 +62,9 @@ final class NetworkClient {
 
     static func cancelAllDataTasks() {
         URLSession.shared.getAllTasks { tasks in
-            tasks.forEach { $0.cancel() }
+            tasks.forEach { task in
+                task.cancel()
+            }
         }
     }
 }

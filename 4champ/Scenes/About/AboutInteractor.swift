@@ -76,9 +76,8 @@ class AboutInteractor: AboutBusinessLogic, AboutDataStore {
                            "AboutView_Search",
                            "AboutView_Radio"]
         let imageKeys = ["about", "mastodon_small", "legal", "localMods", "playlist", "search", "radio", "about"]
-        let lics = ["GzipSwift", "HivelyTracker", "LibOpenMPT", "UADE"]
-        let licUrls = ["https://github.com/1024jp/GzipSwift/blob/develop/LICENSE",
-                       "HivelyTracker replayer source code is public domain," +
+        let lics = ["HivelyTracker", "LibOpenMPT", "UADE"]
+        let licUrls = ["HivelyTracker replayer source code is public domain," +
                        "see http://www.hivelytracker.co.uk/forum.php?action=viewthread&id=114",
                        "https://lib.openmpt.org/libopenmpt/license/",
                        "https://gitlab.com/uade-music-player/uade/-/blob/master/COPYING"]

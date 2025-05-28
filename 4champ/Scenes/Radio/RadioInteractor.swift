@@ -85,6 +85,8 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   // Keep session history for getting back to modules listened in the radio mode.
   private var radioSessionHistory: [MMD] = []
 
+  private var fetchers: [ModuleFetcher] = []
+
   private var radioOn: Bool {
     switch status {
     case .off:
@@ -182,6 +184,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       postFetchAction = .insertToQueue
       let fetcher = ModuleFetcher.init(delegate: self)
       fetcher.fetchModule(ampId: prevId)
+      fetchers.append(fetcher)
     }
   }
 
@@ -199,6 +202,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     postFetchAction = .startPlay
     let fetcher = ModuleFetcher.init(delegate: self)
     fetcher.fetchModule(ampId: radioSessionHistory[historyIndex].id!)
+    fetchers.append(fetcher)
   }
 
   func addToSessionHistory(module: MMD) {
@@ -267,7 +271,8 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     log.debug("")
     playbackTimer?.invalidate()
 
-    NetworkClient.cancelAllDataTasks()
+    fetchers.forEach { $0.cancel() }
+    fetchers.removeAll()
 
     status = .off
     lastPlayed = 0
@@ -319,6 +324,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       if id < 0 { return } // failed to determine next module id
       let fetcher = ModuleFetcher.init(delegate: self)
       fetcher.fetchModule(ampId: id)
+      fetchers.append(fetcher)
     }
   }
 
@@ -377,6 +383,7 @@ extension RadioInteractor: ModuleFetcherDelegate {
     switch state {
     case .failed(let err):
       if let fetcherErr = err as? FetcherError {
+        fetchers.removeAll { $0 === fetcher }
         if fetcherErr == .unsupportedFormat {
           // keep on loading mods
           fillBuffer()
@@ -390,6 +397,7 @@ extension RadioInteractor: ModuleFetcherDelegate {
       status = .fetching(progress: progress)
 
     case .done(let mmd):
+      fetchers.removeAll { $0 === fetcher }
       handleDownloadComplete(mmd)
 
     default: ()
