@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A6B361A2EDB557A0095F17A /* SettingsAmigaResamplerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6B36192EDB55710095F17A /* SettingsAmigaResamplerCell.swift */; };
 		4509EA47226251EF0031408D /* ModuleInfo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4509EA43226251EF0031408D /* ModuleInfo+CoreDataClass.swift */; };
 		4509EA48226251EF0031408D /* ModuleInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4509EA44226251EF0031408D /* ModuleInfo+CoreDataProperties.swift */; };
 		4509EA49226251EF0031408D /* Playlist+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4509EA45226251EF0031408D /* Playlist+CoreDataClass.swift */; };
@@ -119,6 +120,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3A6B36192EDB55710095F17A /* SettingsAmigaResamplerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAmigaResamplerCell.swift; sourceTree = "<group>"; };
 		4509EA43226251EF0031408D /* ModuleInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModuleInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		4509EA44226251EF0031408D /* ModuleInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModuleInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		4509EA45226251EF0031408D /* Playlist+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playlist+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -259,6 +261,7 @@
 		450E505D2187932F008FB155 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				3A6B36192EDB55710095F17A /* SettingsAmigaResamplerCell.swift */,
 				450E505E21879347008FB155 /* SettingsPresenter.swift */,
 				450E506021879347008FB155 /* SettingsRouter.swift */,
 				450E506121879347008FB155 /* SettingsModels.swift */,
@@ -711,6 +714,7 @@
 				4509EA47226251EF0031408D /* ModuleInfo+CoreDataClass.swift in Sources */,
 				450E506D2187A066008FB155 /* SettingsStereoCell.swift in Sources */,
 				45D61F5B20E1780D00869814 /* Appearance.swift in Sources */,
+				3A6B361A2EDB557A0095F17A /* SettingsAmigaResamplerCell.swift in Sources */,
 				4543983720D0344F00991ADC /* AboutModels.swift in Sources */,
 				4535A46B2114C335005FBB8B /* ModuleCell.swift in Sources */,
 				4543983420D0344F00991ADC /* AboutRouter.swift in Sources */,

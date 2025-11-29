@@ -25,6 +25,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     static let newestPlayed = "newestPlayed"
     static let prevCollectionSize = "prevCollectionSize"
     static let interpolation = "interpolation"
+    static let amigaResampler = "amigaResampler"
   }
 
   var presenter: SettingsPresentationLogic?
@@ -50,6 +51,18 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     }
     set {
       UserDefaults.standard.set(newValue.rawValue, forKey: SettingKeys.interpolation)
+    }
+  }
+  
+  var amigaResampler: Bool {
+    get {
+      if let value = UserDefaults.standard.value(forKey: SettingKeys.amigaResampler) as? Bool {
+        return value
+      }
+      return Constants.amigaResamplerDefault
+    }
+    set {
+      UserDefaults.standard.set(newValue, forKey: SettingKeys.amigaResampler)
     }
   }
 
@@ -110,11 +123,13 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
       response = request
       stereoSeparation = request.stereoSeparation
       interpolation = request.interpolation
+      amigaResampler = request.amigaResampler
     } else {
-      response = Settings.Update.ValueBag(stereoSeparation: stereoSeparation, interpolation: interpolation)
+      response = Settings.Update.ValueBag(stereoSeparation: stereoSeparation, interpolation: interpolation, amigaResampler: amigaResampler)
     }
     modulePlayer.setStereoSeparation(stereoSeparation)
     modulePlayer.setInterpolation(interpolation)
+    modulePlayer.setAmigaResampler(amigaResampler)
     presenter?.presentSettings(response: response)
   }
 
