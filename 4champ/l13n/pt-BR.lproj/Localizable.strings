@@ -348,7 +348,7 @@
 "Settings_Effects" = "Efeitos";
 "Settings_PreviewMode" = "Modo Preview";
 "Settings_Interpolation" = "Interpolação de Samples";
-"Settings_AmigaResampler" = "Use Amiga resampler for Amiga .MOD modules";
+"Settings_AmigaResampler" = "Usar o ressampler do Amiga para arquivos .MOD";
 
 "Settings_Housekeeping" = "Exclusão Automática";
 "Settings_HousekeepingDescription" = "Selecione como você deseja que o 4champ trate os modules não fixados (não favoritos, nem em uma playlist) quando uma playlist for apagada";
