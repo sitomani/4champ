@@ -267,6 +267,12 @@ static SInt16* bufRight;
   }
 }
 
+- (void) setAmigaResampler:(BOOL)enabled {
+  if (renderer) {
+    [renderer setAmigaResampler:enabled];
+  }
+}
+
 - (void)cleanup {
   //noop, done in loadModule for the replayer
 }

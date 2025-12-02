@@ -123,6 +123,10 @@ static int iHivelyBufPos = 0;
     //nop
 }
 
+- (void) setAmigaResampler:(BOOL)enabled {
+    //nop
+}
+
 - (int) currentPosition {
     if (!currentHVLtune) {
         return 0;

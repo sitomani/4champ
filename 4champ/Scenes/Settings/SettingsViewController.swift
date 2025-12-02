@@ -102,10 +102,16 @@ class SettingsViewController: UITableViewController, SettingsDisplayLogic {
       interpolationCell.title?.text = title
       interpolationCell.interpolationSwitch?.isOn = viewModel.interpolation == .libraryDefault
     }
+    
+    if let amigaResamplerCell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 2)) as? SettingsAmigaResamplerCell {
+      let title = "Settings_AmigaResampler".l13n()
+      amigaResamplerCell.title?.text = title
+      amigaResamplerCell.amigaResamplerSwitch?.isOn = viewModel.amigaResampler
+    }
   }
 
   private func buildValueBag() -> Settings.Update.ValueBag {
-    var valueBag = Settings.Update.ValueBag(stereoSeparation: 0, interpolation: .libraryDefault)
+    var valueBag = Settings.Update.ValueBag(stereoSeparation: 0, interpolation: .libraryDefault, amigaResampler: false)
 
     if let stereoCell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 0)) as? SettingsStereoCell,
       let separation = stereoCell.slider?.value {
@@ -117,6 +123,11 @@ class SettingsViewController: UITableViewController, SettingsDisplayLogic {
       let ipol = value ? SampleInterpolation.libraryDefault : SampleInterpolation.off
       valueBag.interpolation = ipol
     }
+
+    if let amigaResamplerCell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 2)) as? SettingsAmigaResamplerCell,
+      let value = amigaResamplerCell.amigaResamplerSwitch?.isOn {
+      valueBag.amigaResampler = value
+    }    
 
     return valueBag
   }

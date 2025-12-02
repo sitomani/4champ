@@ -332,6 +332,10 @@ static volatile int uadethread_running;
     uade_effect_pan_set_amount(ustate, newValue);
 }
 
+- (void)setAmigaResampler:(BOOL)enabled {
+    // noop
+}
+
 - (int)currentPosition {
     if(ustate) {
         const struct uade_song_info *info = uade_get_song_info(ustate);

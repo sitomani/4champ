@@ -12,6 +12,7 @@ enum Settings {
     struct ValueBag {
       var stereoSeparation: Int
       var interpolation: SampleInterpolation
+      var amigaResampler: Bool
     }
   }
 }

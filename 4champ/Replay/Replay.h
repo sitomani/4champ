@@ -45,6 +45,12 @@
 - (void) setInterpolationFilterLength:(NSInteger)value;
 
 /**
+ Sets whether libopenmpt should use Amiga Resampler emulation for Amiga modules. This overrides interpolation settings for Amiga modules.
+ @param enabled boolean, enable/disable feature.
+ */
+- (void) setAmigaResampler:(BOOL)enabled;
+
+/**
  Free replayer resources
  */
 - (void) cleanup;

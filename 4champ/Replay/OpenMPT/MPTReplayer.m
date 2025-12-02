@@ -117,6 +117,10 @@
     openmpt_module_set_render_param(currentOMPTFile, OPENMPT_MODULE_RENDER_INTERPOLATIONFILTER_LENGTH, (int32_t)len);
 }
 
+- (void) setAmigaResampler:(BOOL)enabled {
+  openmpt_module_ctl_set_boolean(currentOMPTFile, "render.resampler.emulate_amiga", enabled ? 1 : 0);
+}
+
 - (int) currentPosition {
   int cp = openmpt_module_get_position_seconds(currentOMPTFile);
   return cp;

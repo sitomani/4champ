@@ -114,6 +114,7 @@ class ModulePlayer: NSObject {
     let settings = SettingsInteractor()
     renderer.setStereoSeparation(settings.stereoSeparation)
     renderer.setInterpolationFilterLength(settings.interpolation.rawValue)
+    renderer.setAmigaResampler(settings.amigaResampler)
     NotificationCenter.default.addObserver(self,
                                    selector: #selector(handleRouteChange),
                                    name: AVAudioSession.routeChangeNotification,
@@ -183,6 +184,7 @@ class ModulePlayer: NSObject {
         let settings = SettingsInteractor()
         setStereoSeparation(settings.stereoSeparation)
         setInterpolation(settings.interpolation)
+        setAmigaResampler(settings.amigaResampler)
         currentModule = mod
         renderer.play()
         status = .playing
@@ -207,6 +209,10 @@ class ModulePlayer: NSObject {
 
   func setInterpolation(_ interpolation: SampleInterpolation) {
     renderer.setInterpolationFilterLength(interpolation.rawValue)
+  }
+  
+  func setAmigaResampler(_ enabled: Bool) {
+    renderer.setAmigaResampler(enabled)
   }
 
   /// Set new play queue (when user selects a playlist and starts playing)
