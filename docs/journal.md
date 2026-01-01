@@ -1,5 +1,15 @@
 # 4champ Development Journal
 
+### January 2026
+
+During the Christmas break I had some spare hours to spend with 4champ, and finally got to implement a feature that most tracker players do have, i.e. the pattern playback visualisation. After a couple of attempts with SwiftUI I figured that it'll never meet my performance targets and reverted to OG CATextLayers instead. With this implementation, rendering the pattern even for 16 channels is still working with no hickups.
+
+Watching the pattern tracks is both entertaining and often surprising, as people are doing all sorts of fancy playback stuff that you don't have a clue about just listening to to the music. You're proabably familiar with what Bonefish/Mr.Mygg/JoSsS have been doing with mods like [Dan Dan Dada](https://www.youtube.com/watch?v=jr7ut5oKJhE), but have a go with the 4champ pattern visualisation and check e.g. [Yu-Fight Chip](https://4champ.net/mod?id=125194) by Okeanos, or very fresh Zabutom XM 4-channel mod [Broken Words](https://4champ.net/mod?id=178566) which both make use of creative pattern management.
+
+### December 2025
+
+Christmas came early this year, as I got contacted around the turn of Nov-Dec by [Laamaa](https://github.com/laamaa), who wanted to merge two pull requests; libopenmpt update and a new setting for enabling amiga resampler for mod files (a feature in libopenmpt). It's absolutely heartmelting to get contributions like this, so I went ahead and merged those as soon as possible.
+
 ### May 2025 Good Bye, Alamofire, good bye, GZipSwift, Just give me motion and set me free
 
 The swift package manager dependencies sorted now, the project no longer uses any. For networking, iOS Networking APIs are used. For unpacking the gz-compressed module files, I turned to platform zlib. Logging is done with OS logging API. The details of the impact on app size in the table below:
