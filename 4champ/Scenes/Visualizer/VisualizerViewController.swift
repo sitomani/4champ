@@ -16,11 +16,16 @@ enum ViewElement: UInt32 {
   case text =         0b10
   case channelBars =  0b100
   case amplitude =    0b1000
+  case pattern =      0b10000
 }
 
 let visIcons: [ViewElement: UIImage?] = [.none: UIImage.init(named: "vizbars_disabled"),
                                          .channelBars: UIImage.init(named: "vizbars"),
                                          .amplitude: UIImage.init(named: "vizgraph")]
+
+let txtIcons: [ViewElement: UIImage?] = [.none: UIImage.init(named: "modtext_disabled"),
+                                         .text: UIImage.init(named: "modtext"),
+                                         .pattern: UIImage.init(named: "trkbars")]
 
 class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate {
 
@@ -46,6 +51,30 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
 
   @IBOutlet weak var playerView: UIView!
 
+  lazy var smallDisplay: Bool = {
+#if os(iOS)
+  if UIDevice.current.userInterfaceIdiom == .phone {
+    true
+  } else {
+    false
+  }
+#else
+  false
+#endif
+  }()
+  
+  lazy var patternView: PatternVisualiser = {
+    let view = PatternVisualiser(frame: .zero)
+    view.smallDisplay = smallDisplay || ["MOD", "STK"].contains(modulePlayer.currentModule?.type)
+    return view
+  }()
+  
+  lazy var patternModel: PtnModel = {
+    let model = PtnModel(patternData: PatternData(rowIndex: 0, patternIndex: 0, channelData: []), smallDisplay: smallDisplay)
+    model.modelObserver = self
+    return model
+  }()
+  
   var hasUpdatedVisibility: Bool = false
 
   private var visibilityFlags: UInt32 {
@@ -109,19 +138,26 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
 
   @IBAction func toggleText(_: UIButton) {
     log.debug("")
-    visibilityFlags ^= ViewElement.text.rawValue
-    updateVisibility(ViewElement.text.rawValue)
+    showTxtMenu()
   }
 
   func updateVisibility(_ element: UInt32) {
-    // Update button selected status (to have right status when view is loaded)
-    textButton?.isSelected = visibilityFlags & ViewElement.text.rawValue == 0
-
     if element & ViewElement.text.rawValue > 0 {
       if visibilityFlags & ViewElement.text.rawValue == 0 {
         fadeOut(scrollV!) {}
       } else {
         fadeIn(scrollV!) {}
+      }
+    }
+  
+    if element & ViewElement.pattern.rawValue > 0 {
+      if visibilityFlags & ViewElement.pattern.rawValue == 0 {
+        fadeOut(patternView) {
+          self.patternModel.stopTimer()
+        }
+      } else {
+        self.patternModel.startTimer()
+        fadeIn(patternView) {}
       }
     }
 
@@ -172,6 +208,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   }
 
   deinit {
+    patternModel.stopTimer()
     modulePlayer.removePlayerObserver(self)
   }
 
@@ -293,6 +330,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
 
   override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
+    patternModel.stopTimer()
     stopVisualisation()
   }
 
@@ -304,9 +342,10 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     log.debug("")
     super.viewDidLoad()
     modulePlayer.addPlayerObserver(self)
-
+    
     scrollV.delegate = self
     scrollV.backgroundColor = UIColor.clear
+    setupPatternView()
 
     // Hide UI elements that are currently not supported
     collectionLabel.text = NSLocalizedString("Radio_InLocalCollection", comment: "")
@@ -316,6 +355,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     shareButton.isHidden = true
     backdrop.backgroundColor = UIColor.init(rgb: 0x123357)
     setupVisualisationIcon()
+    setupTextIcon()
     updateView(module: modulePlayer.currentModule)
     if modulePlayer.status == .playing {
       startPlaybackTimer()
@@ -326,6 +366,16 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     playerView?.addGestureRecognizer(lpr)
   }
 
+  func setupPatternView() {
+    patternView.translatesAutoresizingMaskIntoConstraints = false
+    patternView.backgroundColor = .clear
+    view.addSubview(patternView)
+    patternView.widthAnchor.constraint(equalTo: scrollV.widthAnchor).isActive = true
+    patternView.topAnchor.constraint(equalTo: backdrop.topAnchor).isActive = true
+    patternView.bottomAnchor.constraint(equalTo: backdrop.bottomAnchor).isActive = true
+    patternView.centerXAnchor.constraint(equalTo: scrollV.centerXAnchor).isActive = true
+  }
+  
   func setupVisualisationIcon() {
     let visElement: ViewElement
     if visibilityFlags & ViewElement.amplitude.rawValue > 0 {
@@ -337,6 +387,20 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     }
     if let img = visIcons[visElement] {
       self.vizButton?.setImage(img, for: .normal)
+    }
+  }
+  
+  func setupTextIcon() {
+    let txtElement: ViewElement
+    if visibilityFlags & ViewElement.text.rawValue > 0 {
+      txtElement = .text
+    } else if visibilityFlags & ViewElement.pattern.rawValue > 0 {
+      txtElement = .pattern
+    } else {
+      txtElement = .none
+    }
+    if let img = txtIcons[txtElement] {
+      self.textButton?.setImage(img, for: .normal)
     }
   }
 
@@ -411,6 +475,8 @@ extension VisualizerViewController: ModulePlayerObserver {
     log.debug("")
     DispatchQueue.main.async {
       self.updateView(module: module)
+      self.patternModel.forceUpdate = true
+      self.patternView.smallDisplay = self.smallDisplay || ["MOD", "STK"].contains(modulePlayer.currentModule?.type)
     }
   }
 
@@ -445,7 +511,8 @@ extension VisualizerViewController: ModulePlayerObserver {
   }
 
   func showVisMenu() {
-    let popoverContent = UIHostingController(rootView: VisualisationMenu(onButtonPress: { element in
+    let popoverContent = UIHostingController(rootView: VisualisationMenu(onButtonPress: { [weak self] element in
+      guard let self = self else { return }
       switch element {
       case .amplitude:
         self.visibilityFlags |= element.rawValue
@@ -474,6 +541,38 @@ extension VisualizerViewController: ModulePlayerObserver {
     }
     self.present(popoverContent, animated: true, completion: nil)
   }
+  
+  func showTxtMenu() {
+    let popoverContent = UIHostingController(rootView: VisualisationMenu(type: .text, onButtonPress: { [weak self] element in
+      guard let self = self else { return }
+      switch element {
+      case .text:
+        self.visibilityFlags |= element.rawValue
+        self.visibilityFlags &= ~ViewElement.pattern.rawValue
+      case .pattern:
+        self.visibilityFlags |= element.rawValue
+        self.visibilityFlags &= ~ViewElement.text.rawValue
+      default:
+        self.visibilityFlags &= ~ViewElement.text.rawValue
+        self.visibilityFlags &= ~ViewElement.pattern.rawValue
+      }
+      if let img = txtIcons[element] {
+        self.textButton?.setImage(img, for: .normal)
+      }
+
+      self.updateVisibility(ViewElement.all.rawValue)
+      self.dismiss(animated: true)
+    }))
+    popoverContent.modalPresentationStyle = .popover
+    popoverContent.preferredContentSize = CGSize(width: 120, height: 54)
+    if let popoverPresentationController = popoverContent.popoverPresentationController {
+        popoverPresentationController.delegate = self
+        popoverPresentationController.sourceView = self.textButton
+      popoverPresentationController.sourceRect = CGRect(x: self.textButton.bounds.midX, y: 0, width: 0, height: self.textButton.bounds.height)
+        popoverPresentationController.permittedArrowDirections = .up
+    }
+    self.present(popoverContent, animated: true, completion: nil)
+  }
 }
 
 extension VisualizerViewController: UIPopoverPresentationControllerDelegate {
@@ -481,4 +580,24 @@ extension VisualizerViewController: UIPopoverPresentationControllerDelegate {
         // Return .none to ensure that popovers are not adapted to a different style on iPhone
         return .none
     }
+}
+
+extension VisualizerViewController: PtnModelObserver {
+  func updateNow() {
+    let model = patternModel
+    self.patternView.updateData(
+      channelData: model.patternData.channelData,
+      currentRow: model.patternData.rowIndex,
+      patternIndex: model.patternData.patternIndex,
+      forceUpdate: model.forceUpdate
+    )
+    model.forceUpdate = false
+  }
+  
+  func patternChanged() {
+    updateNow()
+  }
+  func rowChanged() {
+    updateNow()
+  }
 }

@@ -91,6 +91,7 @@
 		45D61F5B20E1780D00869814 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F5A20E1780D00869814 /* Appearance.swift */; };
 		733F495E2DD0DA4700334C8A /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733F495D2DD0DA4400334C8A /* APIRequest.swift */; };
 		733F49602DD0DAF200334C8A /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733F495F2DD0DAF100334C8A /* NetworkClient.swift */; };
+		736C7D852F02A9F700725D28 /* PatternModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736C7D842F02A9F400725D28 /* PatternModels.swift */; };
 		736DAC5F2C862F4D005C07B4 /* VisualisationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736DAC5E2C862F4D005C07B4 /* VisualisationMenu.swift */; };
 		73759FD228EB34DF00535F8E /* libopenmpt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73759FD128EB34DF00535F8E /* libopenmpt.xcframework */; };
 		737FEAAF2D89FF190075079B /* AMPLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737FEAAE2D89FF060075079B /* AMPLogger.swift */; };
@@ -101,6 +102,7 @@
 		73AE47432C80E371008BAD87 /* amplitudegraph.metal in Sources */ = {isa = PBXBuildFile; fileRef = 73AE47422C80E371008BAD87 /* amplitudegraph.metal */; };
 		73AE47452C80E437008BAD87 /* VertexShaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73AE47442C80E437008BAD87 /* VertexShaderView.swift */; };
 		73CE92E52AAF03D1000BFC1C /* PlaylistPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CE92E42AAF03D1000BFC1C /* PlaylistPresenter.swift */; };
+		73D5FAE72E8440B20093739C /* PatternVisualiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D5FAE62E8440B20093739C /* PatternVisualiser.swift */; };
 		73E4FBF02ADC4D01009A985A /* RefreshLatestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E4FBEF2ADC4D01009A985A /* RefreshLatestOperation.swift */; };
 		73F564CE2C6A866D000B34A3 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F564CD2C6A866D000B34A3 /* Toast.swift */; };
 /* End PBXBuildFile section */
@@ -224,12 +226,13 @@
 		45D61F4F20E1647300869814 /* RadioViewController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = RadioViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45D61F5020E1647300869814 /* RadioInteractor.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = RadioInteractor.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45D61F5820E1695100869814 /* UIUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
-		45D61F5A20E1780D00869814 /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
+		45D61F5A20E1780D00869814 /* Appearance.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; tabWidth = 2; };
 		733F495D2DD0DA4400334C8A /* APIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		733F495F2DD0DAF100334C8A /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 9 (imports).xcdatamodel"; sourceTree = "<group>"; };
 		7364535E2B6C1F9E009A0F7A /* pt-BR */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		7364535F2B6C1F9E009A0F7A /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		736C7D842F02A9F400725D28 /* PatternModels.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = PatternModels.swift; sourceTree = "<group>"; tabWidth = 2; };
 		736DAC5E2C862F4D005C07B4 /* VisualisationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualisationMenu.swift; sourceTree = "<group>"; };
 		73759FD128EB34DF00535F8E /* libopenmpt.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libopenmpt.xcframework; path = ../openmpt/libopenmpt.xcframework; sourceTree = "<group>"; };
 		7375F0C12D6C5F9700EEA350 /* AmpCDModel 10 (looping).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 10 (looping).xcdatamodel"; sourceTree = "<group>"; };
@@ -241,6 +244,7 @@
 		73AE47422C80E371008BAD87 /* amplitudegraph.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = amplitudegraph.metal; sourceTree = "<group>"; };
 		73AE47442C80E437008BAD87 /* VertexShaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexShaderView.swift; sourceTree = "<group>"; };
 		73CE92E42AAF03D1000BFC1C /* PlaylistPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistPresenter.swift; sourceTree = "<group>"; };
+		73D5FAE62E8440B20093739C /* PatternVisualiser.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = PatternVisualiser.swift; sourceTree = "<group>"; tabWidth = 2; };
 		73E4FBEF2ADC4D01009A985A /* RefreshLatestOperation.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = RefreshLatestOperation.swift; sourceTree = "<group>"; };
 		73F564CD2C6A866D000B34A3 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -460,12 +464,14 @@
 		45AA91132100ECE600794147 /* Visualizer */ = {
 			isa = PBXGroup;
 			children = (
+				736C7D842F02A9F400725D28 /* PatternModels.swift */,
 				45AA91182100EF1900794147 /* AmpSlider.swift */,
 				45AA91192100EF1900794147 /* AmpVizScene.swift */,
 				45AA91142100ECE600794147 /* VisualizerViewController.swift */,
 				73AE47422C80E371008BAD87 /* amplitudegraph.metal */,
 				73AE47442C80E437008BAD87 /* VertexShaderView.swift */,
 				736DAC5E2C862F4D005C07B4 /* VisualisationMenu.swift */,
+				73D5FAE62E8440B20093739C /* PatternVisualiser.swift */,
 			);
 			path = Visualizer;
 			sourceTree = "<group>";
@@ -732,8 +738,10 @@
 				451B6AA02204B6CC001848FA /* LocalPresenter.swift in Sources */,
 				453D9BB8241BF286002EEBAB /* PlaylistSelectorPresenter.swift in Sources */,
 				45AA910320FF36C200794147 /* hvl_replay.cpp in Sources */,
+				73D5FAE72E8440B20093739C /* PatternVisualiser.swift in Sources */,
 				451ED0AF241E8A83006CE4E8 /* PlaylistRouter.swift in Sources */,
 				45B5FC26255D997000282550 /* ReviewActions.swift in Sources */,
+				736C7D852F02A9F700725D28 /* PatternModels.swift in Sources */,
 				45D61F5920E1695200869814 /* UIUtils.swift in Sources */,
 				451ED0A6241E6AA6006CE4E8 /* SwiftUITest.swift in Sources */,
 				451B6AA22204B6CC001848FA /* LocalRouter.swift in Sources */,
@@ -950,7 +958,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 43;
+				CURRENT_PROJECT_VERSION = 47;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
@@ -960,7 +968,7 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/4champ/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -969,7 +977,7 @@
 					../openmpt,
 					"../uade-ios",
 				);
-				MARKETING_VERSION = 3.11;
+				MARKETING_VERSION = 3.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -987,7 +995,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 43;
+				CURRENT_PROJECT_VERSION = 47;
 				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
@@ -997,7 +1005,7 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/4champ/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1006,7 +1014,7 @@
 					../openmpt,
 					"../uade-ios",
 				);
-				MARKETING_VERSION = 3.11;
+				MARKETING_VERSION = 3.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

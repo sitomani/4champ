@@ -179,6 +179,21 @@ static SInt16* bufRight;
   return [renderer numberOfChannels];
 }
 
+- (NSInteger) getCurrentRow
+{
+  return [renderer getCurrentRow];
+}
+
+- (NSInteger) getCurrentPattern
+{
+  return [renderer getCurrentPattern];
+}
+
+- (NSArray<NSString*>*) getPatternData:(NSInteger)channel
+{
+  return [renderer getPatternData:channel];
+}
+
 - (void)pause
 {
   if(renderer) {

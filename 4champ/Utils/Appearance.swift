@@ -26,6 +26,10 @@ class Appearance {
   static var veryLightGray = UIColor.init(rgb: 0xf0f0f0)
   static var cellColor = UIColor.clear
   static var radioSeparatorColor = UIColor.init(rgb: 0x294976)
+  static var noteColor = UIColor.init(rgb: 0xffffff)
+  static var instrumentColor = UIColor.init(rgb: 0x33ff00)
+  static var effect1Color = UIColor.init(rgb: 0xffa0b0)
+  static var effect2Color = UIColor.init(rgb: 0xdddd12)
 
   class func setup() {
     let navigationBarAppearace = UINavigationBar.appearance()
@@ -38,6 +42,7 @@ class Appearance {
 
     let tabBarAppearance = UITabBar.appearance()
     tabBarAppearance.barTintColor = Appearance.tabColor
+      tabBarAppearance.backgroundColor = Appearance.tabColor
 
     let switchAppearance = UISwitch.appearance()
     switchAppearance.onTintColor = successColor

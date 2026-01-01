@@ -64,6 +64,9 @@
 - (int) moduleLength; //returns current mod length in seconds. 0 if not known
 - (NSInteger) volumeOnChannel:(NSInteger)channel; //returns current volume on requested channel
 - (NSInteger) numberOfChannels; //returns number of channels in current module
+- (NSArray<NSString*>*) getPatternData:(NSInteger)channel; // returns pattern data for given channel
+- (NSInteger) getCurrentRow; // get current pattern row
+- (NSInteger) getCurrentPattern; // get current pattern
 - (NSArray<NSString*>*) getSamples; //returns sample names of current mod
 - (NSArray<NSString*>*) getInstruments; //returns instrument names of current mod
 @end

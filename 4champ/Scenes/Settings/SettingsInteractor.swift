@@ -135,7 +135,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
 
   private func updateBadge() {
     DispatchQueue.main.async {
-      UIApplication.shared.applicationIconBadgeNumber = self.badgeCount
+      UNUserNotificationCenter.current().setBadgeCount(self.badgeCount)
     }
   }
 }

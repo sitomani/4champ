@@ -29,6 +29,9 @@ interface ReplayInformation {
     numberOfChannels()
     samples()
     instruments()
+    getCurrentRow()
+    getCurrentPattern()
+    getPatternData()
 }
 
 interface ReplayControl {

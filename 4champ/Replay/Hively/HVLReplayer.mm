@@ -209,4 +209,18 @@ static int iHivelyBufPos = 0;
   return true;
 }
 
+- (NSArray<NSString *> *)getPatternData:(NSInteger)channel {
+    return @[];
+}
+
+- (NSInteger)getCurrentPattern { 
+    return -1;
+}
+
+
+- (NSInteger)getCurrentRow { 
+    return -1;
+}
+
+
 @end
