@@ -15,10 +15,10 @@ enum RowElementType {
 }
 
 let elementTypeColors: [RowElementType: UIColor] = [
-  .note: .white,
-  .instrument: .green.withAlphaComponent(0.8),
-  .effect1: .red.withAlphaComponent(0.8),
-  .effect2: .yellow.withAlphaComponent(0.8)
+  .note: Appearance.noteColor,
+  .instrument: Appearance.instrumentColor,
+  .effect1: Appearance.effect1Color,
+  .effect2: Appearance.effect2Color
 ]
 
 let emptyElementStrings: [RowElementType: String] = [
