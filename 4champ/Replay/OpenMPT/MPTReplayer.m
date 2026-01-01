@@ -169,7 +169,6 @@
   if (!currentOMPTFile) {
     return @[];
   }
-  
   int samples = openmpt_module_get_num_instruments(currentOMPTFile);
   NSMutableString* infoStr = [[NSMutableString alloc] init];
   NSMutableArray* sampleArray = [NSMutableArray new];
@@ -199,5 +198,24 @@
   return volInt;
 }
 
+- (NSInteger) getCurrentRow {
+  return openmpt_module_get_current_row(currentOMPTFile);
+}
+
+- (NSInteger) getCurrentPattern {
+  return openmpt_module_get_current_pattern(currentOMPTFile);
+}
+
+- (NSArray<NSString*>*) getPatternData:(NSInteger)channel {
+    int ptn = openmpt_module_get_current_pattern(currentOMPTFile);
+    int rows = openmpt_module_get_pattern_num_rows(currentOMPTFile, ptn);
+    NSMutableArray<NSString*>* arr = [[NSMutableArray alloc] initWithCapacity:rows];
+    for(int i = 0; i<rows; i++) {
+      const char* ptnstring = openmpt_module_format_pattern_row_channel(currentOMPTFile, ptn, i, (int)channel, 0, 0);
+      [arr insertObject:[[NSString alloc] initWithUTF8String:ptnstring] atIndex:i];
+      free((void*)ptnstring);
+    }
+  return arr;
+  }
 
 @end

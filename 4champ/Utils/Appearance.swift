@@ -38,6 +38,7 @@ class Appearance {
 
     let tabBarAppearance = UITabBar.appearance()
     tabBarAppearance.barTintColor = Appearance.tabColor
+      tabBarAppearance.backgroundColor = Appearance.tabColor
 
     let switchAppearance = UISwitch.appearance()
     switchAppearance.onTintColor = successColor

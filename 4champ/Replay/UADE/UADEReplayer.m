@@ -405,4 +405,19 @@ static volatile int uadethread_running;
     return (int)retVal;
 }
 
+- (NSInteger)getCurrentPattern {
+    return -1;
+}
+
+
+- (NSInteger)getCurrentRow {
+    return -1;
+}
+
+- (NSArray<NSString *> *)getPatternData:(NSInteger)channel { 
+    return @[];
+}
+
+
+
 @end
