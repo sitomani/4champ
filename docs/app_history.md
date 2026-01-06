@@ -142,3 +142,11 @@ References to Twitter removed from the app. Decided not to reference X either, a
 ### Version 3.10 February 2025
 
 Add support for looped playback.
+
+### Version 3.12 January 2026
+
+First release in 2026. Wait, I did only one in 2025? 
+
+- New setting for using Amiga Resampler for MOD playback
+- LibOpenMPT updated
+- pattern visualisation added.
