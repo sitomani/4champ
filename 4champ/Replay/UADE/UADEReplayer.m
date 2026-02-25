@@ -103,7 +103,7 @@ static volatile int uadethread_running;
              @"MMDC",
              @"MM4", @"MM8", // Music Maker
              @"MMS", @"SFX20", // MultiMedia Sound
-             @"MED", @"MMD0", @"MMD1", @"MMD2", @"OCTAMED", // Octamed
+             @"MMD0", @"MMD1", @"MMD2", @"OCTAMED", // Octamed, except MED which is handled with OpenMPT
              @"MK2", @"MKII", // MarkII
              @"MXTX",// Maxtrax
              @"MCMD",// MCMD

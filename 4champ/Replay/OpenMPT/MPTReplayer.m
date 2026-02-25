@@ -37,7 +37,7 @@
             @"J2B",
             @"M15",
             @"MDL",
-            //@"MED", Handled by UADE
+            @"MED", // Handled by OpenMPT due to some crashes with UADE
             @"MMCMP",
             @"MMS",
             @"MO3",
