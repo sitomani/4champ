@@ -105,6 +105,8 @@
 		73D5FAE72E8440B20093739C /* PatternVisualiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D5FAE62E8440B20093739C /* PatternVisualiser.swift */; };
 		73E4FBF02ADC4D01009A985A /* RefreshLatestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E4FBEF2ADC4D01009A985A /* RefreshLatestOperation.swift */; };
 		73F564CE2C6A866D000B34A3 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F564CD2C6A866D000B34A3 /* Toast.swift */; };
+		F4F2485A2F55E20D00FFB06A /* CarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F248572F55E20D00FFB06A /* CarPlaySceneDelegate.swift */; };
+		F4F2485B2F55E20D00FFB06A /* CarPlaySearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F248582F55E20D00FFB06A /* CarPlaySearchController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -247,6 +249,8 @@
 		73D5FAE62E8440B20093739C /* PatternVisualiser.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = PatternVisualiser.swift; sourceTree = "<group>"; tabWidth = 2; };
 		73E4FBEF2ADC4D01009A985A /* RefreshLatestOperation.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = RefreshLatestOperation.swift; sourceTree = "<group>"; };
 		73F564CD2C6A866D000B34A3 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
+		F4F248572F55E20D00FFB06A /* CarPlaySceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySceneDelegate.swift; sourceTree = "<group>"; };
+		F4F248582F55E20D00FFB06A /* CarPlaySearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySearchController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -497,6 +501,7 @@
 		45D392A320B1DDEC00EEF4E3 /* 4champ */ = {
 			isa = PBXGroup;
 			children = (
+				F4F248592F55E20D00FFB06A /* CarPlay */,
 				73F564CC2C6A863A000B34A3 /* Components */,
 				45AA910C20FF5E6300794147 /* Data */,
 				45AA910B20FF3A3B00794147 /* 4champ-bridging-header.h */,
@@ -566,6 +571,15 @@
 				73F564CD2C6A866D000B34A3 /* Toast.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		F4F248592F55E20D00FFB06A /* CarPlay */ = {
+			isa = PBXGroup;
+			children = (
+				F4F248572F55E20D00FFB06A /* CarPlaySceneDelegate.swift */,
+				F4F248582F55E20D00FFB06A /* CarPlaySearchController.swift */,
+			);
+			path = CarPlay;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -710,6 +724,8 @@
 				454F5205215D20F3007011F3 /* ModuleFetcher.swift in Sources */,
 				733F495E2DD0DA4700334C8A /* APIRequest.swift in Sources */,
 				73CE92E52AAF03D1000BFC1C /* PlaylistPresenter.swift in Sources */,
+				F4F2485A2F55E20D00FFB06A /* CarPlaySceneDelegate.swift in Sources */,
+				F4F2485B2F55E20D00FFB06A /* CarPlaySearchController.swift in Sources */,
 				451ED0B2241E8A83006CE4E8 /* PlaylistInteractor.swift in Sources */,
 				45D61F5320E1647300869814 /* RadioRouter.swift in Sources */,
 				453D9BBA241BF286002EEBAB /* PlaylistSelectorRouter.swift in Sources */,
