@@ -102,19 +102,20 @@ class CarPlayController: NSObject {
         infoItem.handler = { _, done in done() }
 
         // Playback control rows
-        let toggleItem = CPListItem(text: isPlaying ? "Pause" : "Play", detailText: nil)
+        let toggleItem = CPListItem(text: isPlaying ? "Pause" : "Play", detailText: nil,
+                                    image: controlIcon(named: isPlaying ? "pause-small" : "play-small"))
         toggleItem.handler = { _, done in
             if modulePlayer.status == .playing { modulePlayer.pause() } else { modulePlayer.resume() }
             done()
         }
 
-        let prevItem = CPListItem(text: "Previous", detailText: nil)
+        let prevItem = CPListItem(text: "Previous", detailText: nil, image: controlIcon(named: "prev-small"))
         prevItem.handler = { _, done in
             modulePlayer.playPrev()
             done()
         }
 
-        let nextItem = CPListItem(text: "Next", detailText: nil)
+        let nextItem = CPListItem(text: "Next", detailText: nil, image: controlIcon(named: "next-small"))
         nextItem.handler = { _, done in
             modulePlayer.playNext()
             done()
@@ -158,6 +159,16 @@ class CarPlayController: NSObject {
         var info = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
         info[MPNowPlayingInfoPropertyPlaybackRate] = NSNumber(value: rate)
         MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+    }
+
+    // MARK: - Image helpers
+
+    private func controlIcon(named name: String) -> UIImage? {
+        guard let image = UIImage(named: name) else { return nil }
+        let size = CGSize(width: 12, height: 12)
+        return UIGraphicsImageRenderer(size: size).image { _ in
+            image.draw(in: CGRect(origin: .zero, size: size))
+        }
     }
 
     // MARK: - Navigation helpers
