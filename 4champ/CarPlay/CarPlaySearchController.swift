@@ -14,6 +14,7 @@ class CarPlayController: NSObject {
     private weak var interfaceController: CPInterfaceController?
     private var fetcher: ModuleFetcher?
     private var lastPlayedModules: [MMD] = []
+    private var nowPlayingTemplate: CPListTemplate?
 
     init(interfaceController: CPInterfaceController) {
         self.interfaceController = interfaceController
@@ -86,21 +87,80 @@ class CarPlayController: NSObject {
         center.previousTrackCommand.removeTarget(nil)
     }
 
-    // MARK: - Private helpers
+    // MARK: - Custom Now Playing template
 
-    private func updateNowPlayingInfo(for module: MMD, playbackRate: Double) {
+    private func makeNowPlayingSections(module: MMD, isPlaying: Bool) -> [CPListSection] {
+        // Info row: album art + module name + composer/type
+        let parts = [module.composer, module.type].compactMap { $0 }.filter { !$0.isEmpty }
+        let detail = parts.joined(separator: " • ")
+        let artwork = UIImage(named: "albumart")
+        let infoItem = CPListItem(text: module.name,
+                                  detailText: detail.isEmpty ? nil : detail,
+                                  image: artwork,
+                                  showsDisclosureIndicator: false)
+        infoItem.accessoryType = .none
+        infoItem.handler = { _, done in done() }
+
+        // Playback control rows
+        let toggleItem = CPListItem(text: isPlaying ? "Pause" : "Play", detailText: nil)
+        toggleItem.handler = { _, done in
+            if modulePlayer.status == .playing { modulePlayer.pause() } else { modulePlayer.resume() }
+            done()
+        }
+
+        let prevItem = CPListItem(text: "Previous", detailText: nil)
+        prevItem.handler = { _, done in
+            modulePlayer.playPrev()
+            done()
+        }
+
+        let nextItem = CPListItem(text: "Next", detailText: nil)
+        nextItem.handler = { _, done in
+            modulePlayer.playNext()
+            done()
+        }
+
+        return [
+            CPListSection(items: [infoItem]),
+            CPListSection(items: [toggleItem, prevItem, nextItem])
+        ]
+    }
+
+    private func showOrUpdateNowPlaying(module: MMD, isPlaying: Bool) {
+        let sections = makeNowPlayingSections(module: module, isPlaying: isPlaying)
+        if let existing = nowPlayingTemplate,
+           interfaceController?.topTemplate === existing {
+            existing.updateSections(sections)
+        } else {
+            let template = CPListTemplate(title: "Now Playing", sections: sections)
+            nowPlayingTemplate = template
+            interfaceController?.pushTemplate(template, animated: true, completion: nil)
+        }
+    }
+
+    // MARK: - MPNowPlayingInfoCenter (lock screen / AirPlay)
+
+    private func setNowPlayingInfo(for module: MMD, playbackRate: Double) {
         let artwork = MPMediaItemArtwork(boundsSize: CGSize(width: 300, height: 300)) { _ in
             UIImage(named: "albumart") ?? UIImage()
         }
         MPNowPlayingInfoCenter.default().nowPlayingInfo = [
-            MPMediaItemPropertyTitle: module.name,
-            MPMediaItemPropertyArtist: module.composer ?? "",
-            MPMediaItemPropertyArtwork: artwork,
-            MPNowPlayingInfoPropertyPlaybackRate: playbackRate,
-            MPNowPlayingInfoPropertyElapsedPlaybackTime: modulePlayer.renderer.currentPosition(),
-            MPMediaItemPropertyPlaybackDuration: modulePlayer.renderer.moduleLength()
+            MPMediaItemPropertyTitle:                    module.name,
+            MPMediaItemPropertyArtist:                   module.composer ?? "",
+            MPMediaItemPropertyArtwork:                  artwork,
+            MPNowPlayingInfoPropertyPlaybackRate:         NSNumber(value: playbackRate),
+            MPNowPlayingInfoPropertyElapsedPlaybackTime:  NSNumber(value: Double(modulePlayer.renderer.currentPosition())),
+            MPMediaItemPropertyPlaybackDuration:          NSNumber(value: Double(modulePlayer.renderer.moduleLength()))
         ]
     }
+
+    private func updatePlaybackRate(_ rate: Double) {
+        var info = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
+        info[MPNowPlayingInfoPropertyPlaybackRate] = NSNumber(value: rate)
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+    }
+
+    // MARK: - Navigation helpers
 
     private func pushLastPlayedTemplate() {
         let items: [CPListItem]
@@ -118,8 +178,7 @@ class CarPlayController: NSObject {
                 return item
             }
         }
-        let section = CPListSection(items: items)
-        let template = CPListTemplate(title: "Last played", sections: [section])
+        let template = CPListTemplate(title: "Last played", sections: [CPListSection(items: items)])
         interfaceController?.pushTemplate(template, animated: true, completion: nil)
     }
 
@@ -141,7 +200,7 @@ extension CarPlayController: ModuleFetcherDelegate {
     func fetcherStateChanged(_ fetcher: ModuleFetcher, state: FetcherState) {
         switch state {
         case .done(let mmd):
-            modulePlayer.play(mmd: mmd)
+            DispatchQueue.main.async { modulePlayer.play(mmd: mmd) }
         case .failed:
             DispatchQueue.main.async { [weak self] in
                 let action = CPAlertAction(title: "OK", style: .default, handler: { _ in })
@@ -159,33 +218,39 @@ extension CarPlayController: ModuleFetcherDelegate {
 extension CarPlayController: ModulePlayerObserver {
 
     func statusChanged(status: PlayerStatus) {
-        switch status {
-        case .playing:
-            if let module = modulePlayer.currentModule {
-                updateNowPlayingInfo(for: module, playbackRate: 1.0)
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            switch status {
+            case .playing:
+                guard let module = modulePlayer.currentModule else { return }
+                self.setNowPlayingInfo(for: module, playbackRate: 1.0)
+                self.showOrUpdateNowPlaying(module: module, isPlaying: true)
+            case .paused:
+                self.updatePlaybackRate(0.0)
+                if let module = modulePlayer.currentModule {
+                    self.nowPlayingTemplate?.updateSections(
+                        self.makeNowPlayingSections(module: module, isPlaying: false)
+                    )
+                }
+            default:
+                break
             }
-            DispatchQueue.main.async { [weak self] in
-                guard let controller = self?.interfaceController else { return }
-                guard !(controller.topTemplate is CPNowPlayingTemplate) else { return }
-                controller.pushTemplate(CPNowPlayingTemplate.shared, animated: true, completion: nil)
-            }
-        case .paused:
-            if let module = modulePlayer.currentModule {
-                updateNowPlayingInfo(for: module, playbackRate: 0.0)
-            }
-        default:
-            break
         }
     }
 
-    /// Tracks every module that starts playing, newest first, capped at 20.
     func moduleChanged(module: MMD, previous: MMD?) {
         lastPlayedModules.removeAll { $0.id == module.id }
         lastPlayedModules.insert(module, at: 0)
         if lastPlayedModules.count > 20 {
             lastPlayedModules = Array(lastPlayedModules.prefix(20))
         }
-        updateNowPlayingInfo(for: module, playbackRate: 1.0)
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.setNowPlayingInfo(for: module, playbackRate: 1.0)
+            self.nowPlayingTemplate?.updateSections(
+                self.makeNowPlayingSections(module: module, isPlaying: modulePlayer.status == .playing)
+            )
+        }
     }
 
     func errorOccurred(error: PlayerError) {}
