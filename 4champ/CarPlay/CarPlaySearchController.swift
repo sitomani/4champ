@@ -90,16 +90,26 @@ class CarPlayController: NSObject {
     // MARK: - Custom Now Playing template
 
     private func makeNowPlayingSections(module: MMD, isPlaying: Bool) -> [CPListSection] {
-        // Info row: album art + module name + composer/type
-        let parts = [module.composer, module.type].compactMap { $0 }.filter { !$0.isEmpty }
-        let detail = parts.joined(separator: " • ")
-        let artwork = UIImage(named: "albumart")
-        let infoItem = CPListItem(text: module.name,
-                                  detailText: detail.isEmpty ? nil : detail,
-                                  image: artwork,
-                                  showsDisclosureIndicator: false)
-        infoItem.accessoryType = .none
-        infoItem.handler = { _, done in done() }
+        // Info row: floppy disk icon + module name + composer
+        let starIcon = controlIcon(named: module.favorite ? "favestar-yellow" : "favestar-grey")
+        let yellowIcon = controlIcon(named: "favestar-yellow")
+        let greyIcon = controlIcon(named: "favestar-grey")
+        let composer = module.composer?.trimmingCharacters(in: .whitespaces)
+        let title = module.name.count > 25 ? String(module.name.prefix(25)) + "…" : module.name
+        let infoItem = CPListItem(text: title,
+                                  detailText: (composer?.isEmpty == false) ? composer : nil,
+                                  image: moduleIcon(for: module),
+                                  accessoryImage: starIcon,
+                                  accessoryType: .none)
+        infoItem.handler = { [weak self, weak infoItem] _, done in
+            DispatchQueue.main.async {
+                guard let infoItem else { done(); return }
+                if let updated = moduleStorage.toggleFavorite(module: module) {
+                    infoItem.setAccessoryImage(updated.favorite ? yellowIcon : greyIcon)
+                }
+                done()
+            }
+        }
 
         // Playback control rows
         let toggleItem = CPListItem(text: isPlaying ? "Pause" : "Play", detailText: nil,
@@ -146,12 +156,12 @@ class CarPlayController: NSObject {
             UIImage(named: "albumart") ?? UIImage()
         }
         MPNowPlayingInfoCenter.default().nowPlayingInfo = [
-            MPMediaItemPropertyTitle:                    module.name,
-            MPMediaItemPropertyArtist:                   module.composer ?? "",
-            MPMediaItemPropertyArtwork:                  artwork,
-            MPNowPlayingInfoPropertyPlaybackRate:         NSNumber(value: playbackRate),
-            MPNowPlayingInfoPropertyElapsedPlaybackTime:  NSNumber(value: Double(modulePlayer.renderer.currentPosition())),
-            MPMediaItemPropertyPlaybackDuration:          NSNumber(value: Double(modulePlayer.renderer.moduleLength()))
+            MPMediaItemPropertyTitle: module.name,
+            MPMediaItemPropertyArtist: module.composer ?? "",
+            MPMediaItemPropertyArtwork: artwork,
+            MPNowPlayingInfoPropertyPlaybackRate: NSNumber(value: playbackRate),
+            MPNowPlayingInfoPropertyElapsedPlaybackTime: NSNumber(value: Double(modulePlayer.renderer.currentPosition())),
+            MPMediaItemPropertyPlaybackDuration: NSNumber(value: Double(modulePlayer.renderer.moduleLength()))
         ]
     }
 
@@ -168,6 +178,24 @@ class CarPlayController: NSObject {
         let size = CGSize(width: 12, height: 12)
         return UIGraphicsImageRenderer(size: size).image { _ in
             image.draw(in: CGRect(origin: .zero, size: size))
+        }
+    }
+
+    private func moduleIcon(for module: MMD) -> UIImage? {
+        guard let base = UIImage(named: "modicon") else { return nil }
+        let size = base.size
+        return UIGraphicsImageRenderer(size: size).image { _ in
+            base.draw(in: CGRect(origin: .zero, size: size))
+            guard let format = module.type, !format.isEmpty else { return }
+            let attrs: [NSAttributedString.Key: Any] = [
+                .font: UIFont.boldSystemFont(ofSize: 10),
+                .foregroundColor: UIColor.darkText
+            ]
+            let text = format.uppercased() as NSString
+            let textSize = text.size(withAttributes: attrs)
+            let point = CGPoint(x: (size.width - textSize.width) / 2,
+                                y: size.height - textSize.height - 8)
+            text.draw(at: point, withAttributes: attrs)
         }
     }
 
