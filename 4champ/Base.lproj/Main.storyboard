@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24127" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -859,6 +858,12 @@
                                     <action selector="dismissMe:" destination="twp-s7-Sug" eventType="touchUpInside" id="mVM-aq-yF8"/>
                                 </connections>
                             </button>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="YC3-MJ-gN1">
+                                <rect key="frame" x="150.5" y="501" width="74" height="26"/>
+                                <connections>
+                                    <action selector="handlePageChange:" destination="twp-s7-Sug" eventType="valueChanged" id="meJ-vI-9w5"/>
+                                </connections>
+                            </pageControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Kmt-ao-QB7"/>
                         <color key="backgroundColor" red="0.0" green="0.12925630807876587" blue="0.23255422711372375" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -870,11 +875,13 @@
                             <constraint firstItem="Kgz-iN-zwz" firstAttribute="centerY" secondItem="tdl-pu-OGA" secondAttribute="centerY" id="8G8-Gd-mFu"/>
                             <constraint firstItem="ODU-eH-lD6" firstAttribute="leading" secondItem="Kmt-ao-QB7" secondAttribute="leading" id="91N-TO-S4N"/>
                             <constraint firstItem="rpw-aD-EcH" firstAttribute="top" secondItem="8fe-Vz-2y9" secondAttribute="top" constant="17" id="9A0-u0-f3O"/>
+                            <constraint firstItem="Qbe-t6-f7a" firstAttribute="top" secondItem="YC3-MJ-gN1" secondAttribute="bottom" id="AJD-mR-zP8"/>
                             <constraint firstItem="pKX-l3-Wif" firstAttribute="top" secondItem="jcX-uC-gV4" secondAttribute="bottom" id="B56-7H-YTs"/>
                             <constraint firstItem="tdl-pu-OGA" firstAttribute="trailing" secondItem="Kmt-ao-QB7" secondAttribute="trailing" id="J6t-gQ-Phs"/>
                             <constraint firstItem="rpw-aD-EcH" firstAttribute="centerX" secondItem="8fe-Vz-2y9" secondAttribute="centerX" id="OqV-1w-GRh"/>
                             <constraint firstItem="ODU-eH-lD6" firstAttribute="top" secondItem="jcX-uC-gV4" secondAttribute="bottom" id="Oxb-p2-Q9T"/>
                             <constraint firstItem="Qbe-t6-f7a" firstAttribute="top" secondItem="pKX-l3-Wif" secondAttribute="bottom" id="Tro-Gx-OY7"/>
+                            <constraint firstItem="YC3-MJ-gN1" firstAttribute="centerX" secondItem="8fe-Vz-2y9" secondAttribute="centerX" id="Tza-TO-PSF"/>
                             <constraint firstItem="Kmt-ao-QB7" firstAttribute="trailing" secondItem="Kgz-iN-zwz" secondAttribute="trailing" id="VW4-WZ-hiQ"/>
                             <constraint firstItem="Kgz-iN-zwz" firstAttribute="leading" secondItem="Kmt-ao-QB7" secondAttribute="leading" id="Vgb-pt-vWX"/>
                             <constraint firstItem="tdl-pu-OGA" firstAttribute="top" secondItem="jcX-uC-gV4" secondAttribute="bottom" id="XT3-mq-nh8"/>
@@ -909,6 +916,7 @@
                         <outlet property="sizeLabel" destination="oJM-64-2C4" id="R23-22-0Kg"/>
                         <outlet property="textButton" destination="jcX-uC-gV4" id="KXk-a6-tmL"/>
                         <outlet property="titleLabel" destination="7ct-p7-T1s" id="VkK-Ad-3Ku"/>
+                        <outlet property="txtPageControl" destination="YC3-MJ-gN1" id="bnS-kf-r3C"/>
                         <outlet property="vizButton" destination="pPd-Q6-6go" id="jQa-fd-akD"/>
                         <outlet property="vizView" destination="pKX-l3-Wif" id="qDJ-Kc-cla"/>
                     </connections>
