@@ -39,6 +39,8 @@ protocol SearchBusinessLogic {
   func deleteModule(at indexPath: IndexPath)
 
   func setupRadio(_ request: Search.RadioSetup.Request)
+  
+  func toggleComposerSort()
 }
 
 /// Search Interactor datastore
@@ -46,6 +48,7 @@ protocol SearchDataStore {
   var autoListTitle: String? { get set }
   var autoListId: Int? { get set }
   var autoListType: SearchType? { get set }
+  var autoListSort: SortType? { get set }
   var pagingIndex: Int { get }
 }
 
@@ -58,6 +61,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
   var autoListTitle: String?
   var autoListId: Int?
   var autoListType: SearchType?
+  var autoListSort: SortType?
   var pagingIndex: Int = 0
 
   private var currentTask: Task<Sendable, Error>?
@@ -70,6 +74,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
 
   init() {
     moduleStorage.addStorageObserver(self)
+    autoListSort = settingsInteractor.composerModuleListSort
   }
 
   deinit {
@@ -160,12 +165,13 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
 
   func triggerAutoFetchList() {
     guard let id = autoListId, let type = autoListType else { return }
-
+    let sortType = autoListSort ?? settingsInteractor.composerModuleListSort
+    
     if type == .composer {
       let req = APIListModulesRequest(composerId: id)
       Task {
         if let response = try? await nwClient.send(req) {
-          self.latestModuleResponse = Search.Response<ModuleResult>(result: response, text: "")
+          self.latestModuleResponse = Search.Response<ModuleResult>(result: response, text: "", sortType: sortType)
           self.presenter?.presentSearchResponse(self.latestModuleResponse)
         }
       }
@@ -180,6 +186,22 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
       log.error("Invalid type for auto fetch \(type)")
     }
   }
+  
+  func toggleComposerSort() {
+    switch settingsInteractor.composerModuleListSort {
+    case .nameAscending:
+      settingsInteractor.composerModuleListSort = .nameDescending
+    case .nameDescending:
+      settingsInteractor.composerModuleListSort = .idAscending
+    case .idAscending:
+      settingsInteractor.composerModuleListSort = .idDescending
+    case .idDescending:
+      settingsInteractor.composerModuleListSort = .nameAscending
+    }
+    autoListSort = settingsInteractor.composerModuleListSort
+    latestModuleResponse.sortType = autoListSort
+    presenter?.presentSearchResponse(latestModuleResponse)
+  }
 
   func download(moduleId: Int) {
     // reset the download queue if single downloads are triggered
@@ -192,7 +214,8 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
     guard latestModuleResponse.result.count > at.row else {
       return nil
     }
-    let msr = latestModuleResponse.sortedResult()[at.row]
+    let sortType = latestModuleResponse.text.isEmpty ? autoListSort : .nameAscending
+    let msr = latestModuleResponse.sortedResult(sortType: sortType)[at.row]
     if let modInfo = moduleStorage.fetchModuleInfo(msr.getId()) {
       return modInfo
     }

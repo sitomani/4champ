@@ -20,11 +20,7 @@ protocol SearchPresentationLogic {
 /// objects into presentable structs for `SearchViewController`
 class SearchPresenter: SearchPresentationLogic {
   weak var viewController: SearchDisplayLogic?
-
-  private let nameSorterBlock: (NameComparable, NameComparable) -> Bool = { (compA, compB) in
-    return compA.name.compare(compB.name, options: .caseInsensitive) == .orderedAscending
-  }
-
+  
   func presentSearchResponse<T>(_ response: Search.Response<T>) {
     var modules: [MMD] = []
     var composers: [ComposerInfo] = []
@@ -34,19 +30,20 @@ class SearchPresenter: SearchPresentationLogic {
       if let composersResponse = (response as? Search.Response<ComposerResult>)?.result {
         composers = composersResponse.compactMap {
           return getComposerInfoFrom(resultObject: $0)
-        }.sorted(by: nameSorterBlock)
+        }.sorted(by: nameSorterBlockAsc)
       }
     case is ModuleResult.Type:
       if let modulesResponse = (response as? Search.Response<ModuleResult>)?.result {
         modules = modulesResponse.compactMap {
           return getMMDFrom(resultObject: $0)
-        }.sorted(by: nameSorterBlock)
+        }
+        modules = sortModulesResponse(modules, by: response.sortType)
       }
     case is GroupResult.Type:
       if let groupsResponse = (response as? Search.Response<GroupResult>)?.result {
         groups = groupsResponse.compactMap {
           return getGroupInfoFrom(resultObject: $0)
-        }.sorted(by: nameSorterBlock)
+        }.sorted(by: nameSorterBlockAsc)
       }
     default:
         break
@@ -58,6 +55,21 @@ class SearchPresenter: SearchPresentationLogic {
                                                                 text: response.text))
     }
 
+  }
+  
+  func sortModulesResponse(_ modules: [MMD], by sortType: SortType?) -> [MMD] {
+    var sortedModules: [MMD] = []
+    switch sortType {
+    case .idDescending:
+      sortedModules = modules.sorted(by: idSorterBlockDesc)
+    case .idAscending:
+      sortedModules = modules.sorted(by: idSorterBlockAsc)
+    case .nameDescending:
+      sortedModules = modules.sorted(by: nameSorterBlockDesc)
+    case .nameAscending, .none:
+      sortedModules = modules.sorted(by: nameSorterBlockAsc)
+    }
+    return sortedModules
   }
 
   func presentDownloadProgress(response: Search.ProgressResponse) {

@@ -11,6 +11,26 @@ protocol NameComparable {
   var name: String { get set }
 }
 
+protocol IdComparable {
+  var id: Int? { get set }
+}
+
+let nameSorterBlockAsc: (NameComparable, NameComparable) -> Bool = { (compA, compB) in
+  return compA.name.compare(compB.name, options: .caseInsensitive) == .orderedAscending
+}
+
+let nameSorterBlockDesc: (NameComparable, NameComparable) -> Bool = { (compA, compB) in
+  return compA.name.compare(compB.name, options: .caseInsensitive) == .orderedDescending
+}
+
+let idSorterBlockAsc: (IdComparable, IdComparable) -> Bool = { (compA, compB) in
+  return compA.id ?? 0 < compB.id ?? 0
+}
+
+let idSorterBlockDesc: (IdComparable, IdComparable) -> Bool = { (compA, compB) in
+  return compA.id ?? 0 > compB.id ?? 0
+}
+
 struct ComposerInfo: NameComparable {
   var id: Int
   var name: String
@@ -76,6 +96,7 @@ enum Search {
   struct Response<T> {
     var result: [T]
     var text: String
+    var sortType: SortType?
   }
 
   struct ViewModel {
@@ -129,10 +150,27 @@ struct GroupResult: Codable {
 }
 
 extension Search.Response where T == ModuleResult {
-  func sortedResult() -> [ModuleResult] {
-    let result = result.sorted { (resA, resB) -> Bool in
-      return resA.name.label.compare(resB.name.label, options: .caseInsensitive) == .orderedAscending
+  func sortedResult(sortType: SortType?) -> [ModuleResult] {
+    
+    var sortedModules: [ModuleResult] = []
+    switch sortType {
+    case .idDescending:
+      sortedModules = result.sorted { (resA, resB) -> Bool in
+        return resA.getId() > resB.getId()
+      }
+    case .idAscending:
+      sortedModules = result.sorted { (resA, resB) -> Bool in
+        return resA.getId() < resB.getId()
+      }
+    case .nameDescending:
+      sortedModules = result.sorted { (resA, resB) -> Bool in
+        return resA.name.label.compare(resB.name.label, options: .caseInsensitive) == .orderedDescending
+      }
+    case .nameAscending, .none:
+      sortedModules = result.sorted { (resA, resB) -> Bool in
+        return resA.name.label.compare(resB.name.label, options: .caseInsensitive) == .orderedAscending
+      }
     }
-    return result
+    return sortedModules
   }
 }
