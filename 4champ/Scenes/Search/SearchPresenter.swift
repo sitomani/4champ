@@ -20,11 +20,7 @@ protocol SearchPresentationLogic {
 /// objects into presentable structs for `SearchViewController`
 class SearchPresenter: SearchPresentationLogic {
   weak var viewController: SearchDisplayLogic?
-
-  private let nameSorterBlock: (NameComparable, NameComparable) -> Bool = { (compA, compB) in
-    return compA.name.compare(compB.name, options: .caseInsensitive) == .orderedAscending
-  }
-
+  
   func presentSearchResponse<T>(_ response: Search.Response<T>) {
     var modules: [MMD] = []
     var composers: [ComposerInfo] = []
@@ -34,19 +30,19 @@ class SearchPresenter: SearchPresentationLogic {
       if let composersResponse = (response as? Search.Response<ComposerResult>)?.result {
         composers = composersResponse.compactMap {
           return getComposerInfoFrom(resultObject: $0)
-        }.sorted(by: nameSorterBlock)
+        }.sorted(by: nameSorterBlockAsc)
       }
     case is ModuleResult.Type:
-      if let modulesResponse = (response as? Search.Response<ModuleResult>)?.result {
+      if let modulesResponse = (response as? Search.Response<ModuleResult>)?.sortedResult(sortType: response.sortType) {
         modules = modulesResponse.compactMap {
           return getMMDFrom(resultObject: $0)
-        }.sorted(by: nameSorterBlock)
+        }
       }
     case is GroupResult.Type:
       if let groupsResponse = (response as? Search.Response<GroupResult>)?.result {
         groups = groupsResponse.compactMap {
           return getGroupInfoFrom(resultObject: $0)
-        }.sorted(by: nameSorterBlock)
+        }.sorted(by: nameSorterBlockAsc)
       }
     default:
         break
@@ -59,7 +55,7 @@ class SearchPresenter: SearchPresentationLogic {
     }
 
   }
-
+  
   func presentDownloadProgress(response: Search.ProgressResponse) {
     var vm = Search.ProgressResponse.ViewModel(progress: response.progress)
     if response.error != nil {
@@ -127,11 +123,11 @@ class SearchPresenter: SearchPresentationLogic {
   }
 
   private func getMMDFrom(resultObject: ModuleResult) -> MMD {
-    let id: Int = getIdFrom(href: resultObject.name.href) ?? 0
+    let id: Int = getIdFrom(href: resultObject.nameBlock.href) ?? 0
     var mmd = MMD()
     mmd.id = id
-    mmd.downloadPath = URL.init(string: resultObject.name.href)
-    mmd.name = resultObject.name.label
+    mmd.downloadPath = URL.init(string: resultObject.nameBlock.href)
+    mmd.name = resultObject.nameBlock.label
     mmd.size = Int(resultObject.size.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
     mmd.type = resultObject.format
     mmd.composer = resultObject.composer.label

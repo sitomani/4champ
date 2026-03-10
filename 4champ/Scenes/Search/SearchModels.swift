@@ -8,7 +8,27 @@
 import UIKit
 
 protocol NameComparable {
-  var name: String { get set }
+  var name: String { get }
+}
+
+protocol IdComparable {
+  var id: Int? { get }
+}
+
+let nameSorterBlockAsc: (NameComparable, NameComparable) -> Bool = { (compA, compB) in
+  return compA.name.compare(compB.name, options: .caseInsensitive) == .orderedAscending
+}
+
+let nameSorterBlockDesc: (NameComparable, NameComparable) -> Bool = { (compA, compB) in
+  return compA.name.compare(compB.name, options: .caseInsensitive) == .orderedDescending
+}
+
+let idSorterBlockAsc: (IdComparable, IdComparable) -> Bool = { (compA, compB) in
+  return compA.id ?? 0 < compB.id ?? 0
+}
+
+let idSorterBlockDesc: (IdComparable, IdComparable) -> Bool = { (compA, compB) in
+  return compA.id ?? 0 > compB.id ?? 0
 }
 
 struct ComposerInfo: NameComparable {
@@ -76,6 +96,7 @@ enum Search {
   struct Response<T> {
     var result: [T]
     var text: String
+    var sortType: SortType?
   }
 
   struct ViewModel {
@@ -97,19 +118,29 @@ enum Search {
 }
 
 // MARK: 4champ.net JSON interface objects
-struct ModuleResult: Codable {
-  let name, composer: LabelHref
+struct ModuleResult: Decodable, IdComparable, NameComparable {
+  let nameBlock: LabelHref
+  let composer: LabelHref
   let format: String
   let size, downloadCount: String
   let infos: String
   let note: String
-  func getId() -> Int {
-    let modUri = URL.init(string: name.href)
+  
+  var id: Int? {
+    let modUri = URL.init(string: nameBlock.href)
     var id: Int = 0
     if let idString = modUri?.query?.split(separator: "=").last {
         id = Int(idString) ?? 0
     }
     return id
+  }
+  var name: String {
+    return nameBlock.label
+  }
+  
+  enum CodingKeys: String, CodingKey {
+    case nameBlock = "name"
+    case composer, format, size, downloadCount, infos, note
   }
 }
 
@@ -129,10 +160,22 @@ struct GroupResult: Codable {
 }
 
 extension Search.Response where T == ModuleResult {
-  func sortedResult() -> [ModuleResult] {
-    let result = result.sorted { (resA, resB) -> Bool in
-      return resA.name.label.compare(resB.name.label, options: .caseInsensitive) == .orderedAscending
-    }
-    return result
+  func sortedResult(sortType: SortType?) -> [ModuleResult] {
+    return sortModules(modules: result, sortType: sortType)
   }
+}
+
+func sortModules<T: IdComparable & NameComparable>(modules: [T], sortType: SortType?) -> [T] {
+  var sortedModules: [T] = []
+  switch sortType {
+  case .idDescending:
+    sortedModules = modules.sorted(by: idSorterBlockDesc)
+  case .idAscending:
+    sortedModules = modules.sorted(by: idSorterBlockAsc)
+  case .nameDescending:
+    sortedModules = modules.sorted(by: nameSorterBlockDesc)
+  case .nameAscending, .none:
+    sortedModules = modules.sorted(by: nameSorterBlockAsc)
+  }
+  return sortedModules
 }
