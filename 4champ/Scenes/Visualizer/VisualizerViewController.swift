@@ -50,6 +50,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
   @IBOutlet weak var loopButton: UIButton!
 
   @IBOutlet weak var playerView: UIView!
+  @IBOutlet weak var txtPageControl: UIPageControl!
 
   lazy var smallDisplay: Bool = {
 #if os(iOS)
@@ -100,6 +101,17 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
         self.presentingViewController?.dismiss(animated: true, completion: nil)
       }
     default: ()
+    }
+  }
+  
+  @IBAction func handlePageChange(_ sender: UIPageControl) {
+    switch sender.currentPage {
+    case 1:
+      setTextVis(.text)
+    case 2:
+      setTextVis(.pattern)
+    default:
+      setTextVis(.none)
     }
   }
 
@@ -364,12 +376,40 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
 
     let lpr = UILongPressGestureRecognizer(target: self, action: #selector(showPlaylistPicker(_:)))
     playerView?.addGestureRecognizer(lpr)
+    
+    // Add left/right swipe detection for switching between text modes (.none, .text, .pattern)
+    let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+    swipeLeft.direction = .left
+    let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+    swipeRight.direction = .right
+    view.addGestureRecognizer(swipeLeft)
+    view.addGestureRecognizer(swipeRight)
+  }
+  
+  @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+    
+    switch gesture.direction {
+    case .right:
+      if visibilityFlags & ViewElement.pattern.rawValue > 0 {
+        setTextVis(.text)
+      } else if visibilityFlags & ViewElement.text.rawValue > 0 {
+        setTextVis(.none)
+      }
+    case .left:
+      if visibilityFlags & ViewElement.text.rawValue > 0 {
+        setTextVis(.pattern)
+      } else if visibilityFlags & ViewElement.pattern.rawValue == 0 && visibilityFlags & ViewElement.text.rawValue == 0 {
+        setTextVis(.text)
+      }
+    default:
+      break
+    }
   }
 
   func setupPatternView() {
     patternView.translatesAutoresizingMaskIntoConstraints = false
     patternView.backgroundColor = .clear
-    view.addSubview(patternView)
+    view.insertSubview(patternView, belowSubview: txtPageControl)
     patternView.widthAnchor.constraint(equalTo: scrollV.widthAnchor).isActive = true
     patternView.topAnchor.constraint(equalTo: backdrop.topAnchor).isActive = true
     patternView.bottomAnchor.constraint(equalTo: backdrop.bottomAnchor).isActive = true
@@ -394,10 +434,13 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     let txtElement: ViewElement
     if visibilityFlags & ViewElement.text.rawValue > 0 {
       txtElement = .text
+      txtPageControl.currentPage = 1
     } else if visibilityFlags & ViewElement.pattern.rawValue > 0 {
       txtElement = .pattern
+      txtPageControl.currentPage = 2
     } else {
       txtElement = .none
+      txtPageControl.currentPage = 0
     }
     if let img = txtIcons[txtElement] {
       self.textButton?.setImage(img, for: .normal)
@@ -467,6 +510,27 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
       modulePlayer.streamVisualiser = nil
       self.renderView?.isPaused = true
     }
+  }
+  
+  func setTextVis(_ element: ViewElement) {
+    switch element {
+    case .text:
+      visibilityFlags |= element.rawValue
+      visibilityFlags &= ~ViewElement.pattern.rawValue
+      txtPageControl.currentPage = 1
+    case .pattern:
+      visibilityFlags |= element.rawValue
+      visibilityFlags &= ~ViewElement.text.rawValue
+      txtPageControl.currentPage = 2
+    default:
+      visibilityFlags &= ~ViewElement.text.rawValue
+      visibilityFlags &= ~ViewElement.pattern.rawValue
+      txtPageControl.currentPage = 0
+    }
+    if let img = txtIcons[element] {
+      textButton?.setImage(img, for: .normal)
+    }
+    updateVisibility(ViewElement.all.rawValue)
   }
 }
 
@@ -541,26 +605,11 @@ extension VisualizerViewController: ModulePlayerObserver {
     }
     self.present(popoverContent, animated: true, completion: nil)
   }
-  
+
   func showTxtMenu() {
     let popoverContent = UIHostingController(rootView: VisualisationMenu(type: .text, onButtonPress: { [weak self] element in
       guard let self = self else { return }
-      switch element {
-      case .text:
-        self.visibilityFlags |= element.rawValue
-        self.visibilityFlags &= ~ViewElement.pattern.rawValue
-      case .pattern:
-        self.visibilityFlags |= element.rawValue
-        self.visibilityFlags &= ~ViewElement.text.rawValue
-      default:
-        self.visibilityFlags &= ~ViewElement.text.rawValue
-        self.visibilityFlags &= ~ViewElement.pattern.rawValue
-      }
-      if let img = txtIcons[element] {
-        self.textButton?.setImage(img, for: .normal)
-      }
-
-      self.updateVisibility(ViewElement.all.rawValue)
+      self.setTextVis(element)
       self.dismiss(animated: true)
     }))
     popoverContent.modalPresentationStyle = .popover
