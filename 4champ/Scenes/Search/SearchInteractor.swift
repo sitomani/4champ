@@ -56,7 +56,6 @@ protocol SearchDataStore {
 class SearchInteractor: SearchBusinessLogic, SearchDataStore {
 
   var presenter: SearchPresentationLogic?
-  var settingsInteractor = SettingsInteractor()
 
   var autoListTitle: String?
   var autoListId: Int?
@@ -74,7 +73,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
 
   init() {
     moduleStorage.addStorageObserver(self)
-    autoListSort = settingsInteractor.composerModuleListSort
+    autoListSort = settings.composerModuleListSort
   }
 
   deinit {
@@ -165,7 +164,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
 
   func triggerAutoFetchList() {
     guard let id = autoListId, let type = autoListType else { return }
-    let sortType = autoListSort ?? settingsInteractor.composerModuleListSort
+    let sortType = autoListSort ?? settings.composerModuleListSort
     
     if type == .composer {
       let req = APIListModulesRequest(composerId: id)
@@ -188,17 +187,17 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
   }
   
   func toggleComposerSort() {
-    switch settingsInteractor.composerModuleListSort {
+    switch settings.composerModuleListSort {
     case .nameAscending:
-      settingsInteractor.composerModuleListSort = .nameDescending
+      settings.composerModuleListSort = .nameDescending
     case .nameDescending:
-      settingsInteractor.composerModuleListSort = .idAscending
+      settings.composerModuleListSort = .idAscending
     case .idAscending:
-      settingsInteractor.composerModuleListSort = .idDescending
+      settings.composerModuleListSort = .idDescending
     case .idDescending:
-      settingsInteractor.composerModuleListSort = .nameAscending
+      settings.composerModuleListSort = .nameAscending
     }
-    autoListSort = settingsInteractor.composerModuleListSort
+    autoListSort = settings.composerModuleListSort
     latestModuleResponse.sortType = autoListSort
     presenter?.presentSearchResponse(latestModuleResponse)
   }
