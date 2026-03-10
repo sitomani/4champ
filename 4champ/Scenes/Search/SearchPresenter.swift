@@ -33,11 +33,10 @@ class SearchPresenter: SearchPresentationLogic {
         }.sorted(by: nameSorterBlockAsc)
       }
     case is ModuleResult.Type:
-      if let modulesResponse = (response as? Search.Response<ModuleResult>)?.result {
+      if let modulesResponse = (response as? Search.Response<ModuleResult>)?.sortedResult(sortType: response.sortType) {
         modules = modulesResponse.compactMap {
           return getMMDFrom(resultObject: $0)
         }
-        modules = sortModulesResponse(modules, by: response.sortType)
       }
     case is GroupResult.Type:
       if let groupsResponse = (response as? Search.Response<GroupResult>)?.result {
@@ -57,21 +56,6 @@ class SearchPresenter: SearchPresentationLogic {
 
   }
   
-  func sortModulesResponse(_ modules: [MMD], by sortType: SortType?) -> [MMD] {
-    var sortedModules: [MMD] = []
-    switch sortType {
-    case .idDescending:
-      sortedModules = modules.sorted(by: idSorterBlockDesc)
-    case .idAscending:
-      sortedModules = modules.sorted(by: idSorterBlockAsc)
-    case .nameDescending:
-      sortedModules = modules.sorted(by: nameSorterBlockDesc)
-    case .nameAscending, .none:
-      sortedModules = modules.sorted(by: nameSorterBlockAsc)
-    }
-    return sortedModules
-  }
-
   func presentDownloadProgress(response: Search.ProgressResponse) {
     var vm = Search.ProgressResponse.ViewModel(progress: response.progress)
     if response.error != nil {
@@ -139,11 +123,11 @@ class SearchPresenter: SearchPresentationLogic {
   }
 
   private func getMMDFrom(resultObject: ModuleResult) -> MMD {
-    let id: Int = getIdFrom(href: resultObject.name.href) ?? 0
+    let id: Int = getIdFrom(href: resultObject.nameBlock.href) ?? 0
     var mmd = MMD()
     mmd.id = id
-    mmd.downloadPath = URL.init(string: resultObject.name.href)
-    mmd.name = resultObject.name.label
+    mmd.downloadPath = URL.init(string: resultObject.nameBlock.href)
+    mmd.name = resultObject.nameBlock.label
     mmd.size = Int(resultObject.size.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
     mmd.type = resultObject.format
     mmd.composer = resultObject.composer.label

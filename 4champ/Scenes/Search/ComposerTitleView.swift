@@ -68,19 +68,21 @@ class ComposerTitleView: UIView {
     
   }
   private func setUpLabelConstrains() {
-    self.translatesAutoresizingMaskIntoConstraints = false
-    self.heightAnchor.constraint(equalToConstant: 64).isActive = true
-
     titleLabel.translatesAutoresizingMaskIntoConstraints = false
-    titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-    titleLabel.heightAnchor.constraint(equalToConstant: 48).isActive = true
-    titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-
     sortButton.translatesAutoresizingMaskIntoConstraints = false
-    sortButton.leftAnchor.constraint(equalTo: titleLabel.rightAnchor, constant: 4).isActive = true
-    sortButton.heightAnchor.constraint(equalToConstant: 48).isActive = true
-    sortButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+
+    NSLayoutConstraint.activate([
+        titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+        titleLabel.topAnchor.constraint(equalTo: topAnchor),
+        titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+        sortButton.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 4),
+        sortButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+        sortButton.topAnchor.constraint(equalTo: topAnchor),
+        sortButton.bottomAnchor.constraint(equalTo: bottomAnchor)
+    ])
     
-    sortButton.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+    setContentHuggingPriority(.required, for: .horizontal)
+    setContentCompressionResistancePriority(.required, for: .horizontal)
   }
 }

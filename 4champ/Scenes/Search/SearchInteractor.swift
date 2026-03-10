@@ -146,8 +146,8 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
       newSelection = selection
     } else if latestModuleResponse.result.count > 0 {
       let supportedMods = latestModuleResponse.result.filter { MMD.supportedTypes.contains($0.format) }
-      let modIDs = supportedMods.map { mr in
-        mr.getId()
+      let modIDs = supportedMods.compactMap { mr in
+        mr.id
       }.shuffled()
       newSelection = Radio.CustomSelection(name: autoListTitle, ids: modIDs)
     } else {
@@ -216,7 +216,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
     }
     let sortType = latestModuleResponse.text.isEmpty ? autoListSort : .nameAscending
     let msr = latestModuleResponse.sortedResult(sortType: sortType)[at.row]
-    if let modInfo = moduleStorage.fetchModuleInfo(msr.getId()) {
+    if let id = msr.id, let modInfo = moduleStorage.fetchModuleInfo(id) {
       return modInfo
     }
     return nil
