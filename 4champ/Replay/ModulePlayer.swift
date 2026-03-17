@@ -110,6 +110,7 @@ class ModulePlayer: NSObject {
     moduleStorage.addStorageObserver(self) // listen to metadata changes
 
     renderer.initAudio()
+    renderer.streamDelegate = self
     renderer.setStereoSeparation(settings.stereoSeparation)
     renderer.setInterpolationFilterLength(settings.interpolation.rawValue)
     renderer.setAmigaResampler(settings.amigaResampler)
