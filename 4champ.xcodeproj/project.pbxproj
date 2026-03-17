@@ -94,6 +94,7 @@
 		736C7D852F02A9F700725D28 /* PatternModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736C7D842F02A9F400725D28 /* PatternModels.swift */; };
 		736DAC5F2C862F4D005C07B4 /* VisualisationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736DAC5E2C862F4D005C07B4 /* VisualisationMenu.swift */; };
 		73759FD228EB34DF00535F8E /* libopenmpt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73759FD128EB34DF00535F8E /* libopenmpt.xcframework */; };
+		737DF3B72F5B14E100AA37C7 /* ComposerTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737DF3B62F5B14D100AA37C7 /* ComposerTitleView.swift */; };
 		737FEAAF2D89FF190075079B /* AMPLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737FEAAE2D89FF060075079B /* AMPLogger.swift */; };
 		7397C1DE29091504002D5CDB /* UADEReplayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7397C1DC29091504002D5CDB /* UADEReplayer.m */; };
 		7397C1E629091D9D002D5CDB /* uade_ios.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7397C1E129091BC3002D5CDB /* uade_ios.xcframework */; };
@@ -194,7 +195,7 @@
 		45855FCC2444AC6B0079C767 /* ModuleSharing.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModuleSharing.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45A080E424327ED500AEA85F /* Entitlements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModulePlayer.swift; sourceTree = "<group>"; tabWidth = 2; };
-		45AA90F420FF2F6600794147 /* Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
+		45AA90F420FF2F6600794147 /* Endpoints.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45AA90F720FF36C200794147 /* Replay.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = Replay.m; sourceTree = "<group>"; tabWidth = 2; };
 		45AA90F920FF36C200794147 /* hvl_replay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hvl_replay.cpp; sourceTree = "<group>"; };
 		45AA90FA20FF36C200794147 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -236,6 +237,7 @@
 		736DAC5E2C862F4D005C07B4 /* VisualisationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualisationMenu.swift; sourceTree = "<group>"; };
 		73759FD128EB34DF00535F8E /* libopenmpt.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libopenmpt.xcframework; path = ../openmpt/libopenmpt.xcframework; sourceTree = "<group>"; };
 		7375F0C12D6C5F9700EEA350 /* AmpCDModel 10 (looping).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 10 (looping).xcdatamodel"; sourceTree = "<group>"; };
+		737DF3B62F5B14D100AA37C7 /* ComposerTitleView.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ComposerTitleView.swift; sourceTree = "<group>"; tabWidth = 2; };
 		737FEAAE2D89FF060075079B /* AMPLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMPLogger.swift; sourceTree = "<group>"; };
 		7397C1DA29091504002D5CDB /* UADEReplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UADEReplayer.h; sourceTree = "<group>"; };
 		7397C1DC29091504002D5CDB /* UADEReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UADEReplayer.m; sourceTree = "<group>"; };
@@ -301,6 +303,7 @@
 		4535A45D2114BB0A005FBB8B /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				737DF3B62F5B14D100AA37C7 /* ComposerTitleView.swift */,
 				4535A45E2114BB2D005FBB8B /* SearchPresenter.swift */,
 				4535A4602114BB2D005FBB8B /* SearchRouter.swift */,
 				4535A4612114BB2D005FBB8B /* SearchModels.swift */,
@@ -701,6 +704,7 @@
 				45D61F5120E1647300869814 /* RadioPresenter.swift in Sources */,
 				453D9BBC241BF286002EEBAB /* PlaylistSelectorStore.swift in Sources */,
 				73F564CE2C6A866D000B34A3 /* Toast.swift in Sources */,
+				737DF3B72F5B14E100AA37C7 /* ComposerTitleView.swift in Sources */,
 				4535A4662114BB2D005FBB8B /* SearchRouter.swift in Sources */,
 				4535A4642114BB2D005FBB8B /* SearchPresenter.swift in Sources */,
 				45855FCD2444AC6B0079C767 /* ModuleSharing.swift in Sources */,

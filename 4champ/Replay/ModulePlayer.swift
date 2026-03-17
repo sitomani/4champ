@@ -111,7 +111,6 @@ class ModulePlayer: NSObject {
 
     renderer.initAudio()
     renderer.streamDelegate = self
-    let settings = SettingsInteractor()
     renderer.setStereoSeparation(settings.stereoSeparation)
     renderer.setInterpolationFilterLength(settings.interpolation.rawValue)
     renderer.setAmigaResampler(settings.amigaResampler)
@@ -181,7 +180,6 @@ class ModulePlayer: NSObject {
     let mod = playQueue[at]
     if renderer.loadModule(path, type: mod.type) {
         renderer.looping =  mod.loop > 0
-        let settings = SettingsInteractor()
         setStereoSeparation(settings.stereoSeparation)
         setInterpolation(settings.interpolation)
         setAmigaResampler(settings.amigaResampler)

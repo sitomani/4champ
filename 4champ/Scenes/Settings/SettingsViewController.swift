@@ -28,7 +28,7 @@ class SettingsViewController: UITableViewController, SettingsDisplayLogic {
   // MARK: Setup
   private func setup() {
     let viewController = self
-    let interactor = SettingsInteractor()
+    let interactor = settings
     let presenter = SettingsPresenter()
     let router = SettingsRouter()
     viewController.interactor = interactor

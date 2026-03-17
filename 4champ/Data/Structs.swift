@@ -27,7 +27,7 @@ struct Notifications {
   static let badgeUpdate = Notification.Name("badge_update")
 }
 
-struct MMD: Identifiable, NameComparable {
+struct MMD: Identifiable, NameComparable, IdComparable {
 
   init() {
     name = ""

@@ -42,6 +42,8 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   private let progressMarks = ["◐", "◓", "◑", "◒"]
   private var progressMarkIndex = 0
   private var spinnerTimer: Timer?
+  
+  private var composerTitleView: ComposerTitleView?
 
   private lazy var radioButtonLPR: UILongPressGestureRecognizer = UILongPressGestureRecognizer(
     target: self,
@@ -78,6 +80,9 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     presenter.viewController = viewController
     router.viewController = viewController
     router.dataStore = interactor
+    composerTitleView = ComposerTitleView.init { [weak self] in
+        self?.interactor?.toggleComposerSort()
+      }
   }
 
   // MARK: Routing
@@ -119,7 +124,15 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       searchBar?.scopeButtonTitles = searchScopes.map { $0.l13n() }
     } else {
       searchBar?.removeFromSuperview()
-      navigationItem.title = router?.dataStore?.autoListTitle?.uppercased()
+      if router?.dataStore?.autoListType == .composer {
+        composerTitleView?.titleLabel.text = router?.dataStore?.autoListTitle?.uppercased()
+        composerTitleView?.updateSortType(router?.dataStore?.autoListSort)
+
+        navigationItem.titleView = composerTitleView
+        
+      } else {
+        navigationItem.title = router?.dataStore?.autoListTitle?.uppercased()
+      }
       spinner?.isHidden = false
       spinner?.startAnimating()
       interactor?.triggerAutoFetchList()
@@ -181,6 +194,9 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       self.animateRadioButton()
     }
     updateDownloadAllButton()
+    if router?.dataStore?.autoListType == .composer {
+      composerTitleView?.updateSortType(router?.dataStore?.autoListSort)
+    }
   }
 
   func displayRadioSetup(viewModel: Search.RadioSetup.ViewModel) {

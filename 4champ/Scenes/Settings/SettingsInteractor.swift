@@ -7,6 +7,17 @@
 
 import UIKit
 
+/**
+ Search sort type identifies the sorting property. Default is name ascending
+ Composer modules list sort can use id descending sort
+ */
+enum SortType: Int {
+  case nameAscending
+  case nameDescending
+  case idAscending
+  case idDescending
+}
+
 protocol SettingsBusinessLogic {
   func updateSettings(request: Settings.Update.ValueBag?)
 }
@@ -14,6 +25,7 @@ protocol SettingsBusinessLogic {
 protocol SettingsDataStore {
   var stereoSeparation: Int { get set }
   var interpolation: SampleInterpolation { get set }
+  var composerModuleListSort: SortType { get set }
 }
 
 class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
@@ -26,6 +38,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     static let prevCollectionSize = "prevCollectionSize"
     static let interpolation = "interpolation"
     static let amigaResampler = "amigaResampler"
+    static let moduleSortKey = "moduleSortKey"
   }
 
   var presenter: SettingsPresentationLogic?
@@ -113,6 +126,18 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
       return diff
     }
     return 0
+  }
+  
+  var composerModuleListSort: SortType {
+    get {
+      if let value = UserDefaults.standard.value(forKey: SettingKeys.moduleSortKey) as? Int {
+        return SortType(rawValue: value) ?? .nameAscending
+      }
+      return .nameAscending
+    }
+    set {
+      UserDefaults.standard.set(newValue.rawValue, forKey: SettingKeys.moduleSortKey)
+    }
   }
 
   // MARK: Do something
