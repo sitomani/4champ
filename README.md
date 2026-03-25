@@ -24,6 +24,7 @@ You can also follow the 4champ accounts on [X (4champ_app)](https://x.com/4champ
 - Local Collection: store modules locally - persistent storage for off-line listening of modules.
 - Settings: Control stereo separation, sound interpolation etc.
 - Import modules from filesystem (local / cloud / network)
+- CarPlay support
 
 ### Dependencies
 

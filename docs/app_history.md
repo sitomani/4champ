@@ -143,6 +143,10 @@ References to Twitter removed from the app. Decided not to reference X either, a
 
 Add support for looped playback.
 
+### Version 3.11 May 2025
+
+Maintenance feature - minimize dependencies
+
 ### Version 3.12 January 2026
 
 First release in 2026. Wait, I did only one in 2025? 
@@ -150,3 +154,13 @@ First release in 2026. Wait, I did only one in 2025?
 - New setting for using Amiga Resampler for MOD playback
 - LibOpenMPT updated
 - pattern visualisation added.
+
+### Version 3.13 February 2026
+
+Minor patch to use LibOpenMPT for MED file playback
+
+### Version 3.14 March 2026
+
+- Carplay support
+- Module results sorting for composer modules list
+- Text mode change by swipe/pagecontrol on visualizer view
