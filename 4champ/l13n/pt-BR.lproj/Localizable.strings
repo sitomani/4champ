@@ -172,7 +172,7 @@
 "LockScreen_Playing" = "%1$@ por %2$@";
 
 /* Lock-screen: radio playlist name */
-"LockScreen_Radio" = "Rádio 4champ";
+"LockScreen_Radio" = "Rádio 4champ (%@)";
 
 /* Share module default content modname, author */
 "Share_DefaultMessage" = "%1$@ por %2$@ #4champ #NowPlaying #TocandoAgora";
@@ -359,3 +359,5 @@
 "Settings_AnalyticsOK" = "Estou bem com isso";
 "Settings_AnalyticsDetails" = "Detalhes da coleta de dados";
 "Settings_EffectsOnOff" = "Efeitos on/off";
+
+"Carplay_Queue" = "Fila";

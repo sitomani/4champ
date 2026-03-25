@@ -928,7 +928,7 @@
         <!--Main View Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
-                <tabBarController id="49e-Tb-3d3" customClass="MainViewController" customModule="ampplayer" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="mainScreen" id="49e-Tb-3d3" customClass="MainViewController" customModule="ampplayer" customModuleProvider="target" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" translucent="NO" id="W28-zg-YXA">

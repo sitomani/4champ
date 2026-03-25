@@ -22,6 +22,7 @@ protocol PlaylistSelectorDataStore {
 }
 
 class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelectorDataStore {
+  
   var presenter: PlaylistSelectorPresentationLogic?
   var frc: NSFetchedResultsController<Playlist>?
 
@@ -31,43 +32,9 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
 
   func prepare(request: PlaylistSelector.PrepareSelection.Request) {
     self.module = request.module
-    let fetchRequest = NSFetchRequest<Playlist>.init(entityName: "Playlist")
-    fetchRequest.sortDescriptors = []
-
-    let filterString = "plId != 'radioList'"
-    fetchRequest.predicate = NSPredicate.init(format: filterString)
-    frc = moduleStorage.createFRC(fetchRequest: fetchRequest, entityName: "Playlist")
-    try? frc?.performFetch()
-
-    if let plObjects = frc?.fetchedObjects {
-      var plMetaData = plObjects.map {
-        PLMD(id: $0.plId, name: $0.plName, current: false, modules: [] )
-      }
-
-      for pl in plObjects {
-        for mi in pl.modules ?? [] {
-          let modId = (mi as? ModuleInfo)?.modId?.intValue ?? 0
-          if let index = plMetaData.firstIndex(where: { $0.id == pl.plId }) {
-            plMetaData[index].modules.append(modId)
-          }
-        }
-      }
-
-      plMetaData.sort { (pla, plb) -> Bool in
-        if pla.id == "default" {
-          return true
-        }
-        if plb.id == "default" {
-          return false
-        }
-        return pla.name! < plb.name!
-      }
-
-      playlists = plMetaData
-
-      let response = PlaylistSelector.PrepareSelection.Response(module: request.module, playlistOptions: plMetaData)
-      presenter?.presentSelector(response: response)
-    }
+    playlists = PlaylistInteractor.sharedInstance.playlists
+    let response = PlaylistSelector.PrepareSelection.Response(module: request.module, playlistOptions: playlists)
+    presenter?.presentSelector(response: response)
   }
   func appendToPlaylist(request: PlaylistSelector.Append.Request) {
     guard let modId = module?.id else {

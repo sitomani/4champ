@@ -98,6 +98,9 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   // MARK: View lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
+    if let radioImage = UIImage(named: "radio")?.withTintColor(.lightGray) {
+      radioButton?.setImage(radioImage, for: .normal)
+    }
     modulePlayer.addPlayerObserver(self)
     registerXibs(in: tableView)
     tableView?.rowHeight = UITableView.automaticDimension
@@ -249,7 +252,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
         .userInterfaceLayoutDirection == .rightToLeft ? .forceLeftToRight : .forceRightToLeft
 
       let radioButton = UIButton(type: .system)
-      radioButton.setImage(UIImage(named: "radio"), for: .normal)
+      radioButton.setImage(UIImage(named: "radio")?.withTintColor(.lightGray, renderingMode: .alwaysTemplate), for: .normal)
       radioButton.addTarget(self, action: #selector(startArtistRadio(_:)), for: .touchUpInside)
       radioButton.addGestureRecognizer(radioButtonLPR)
 

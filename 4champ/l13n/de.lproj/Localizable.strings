@@ -1,4 +1,4 @@
-﻿/* Shared module download status view - Play button */
+/* Shared module download status view - Play button */
 "DownloadView_Play" = "Abspielen";
 
 /* Shared module downlaod status view - Dismiss button */
@@ -166,7 +166,7 @@
 "LockScreen_Playing" = "%1$@ von %2$@";
 
 /* Lock-screen: radio playlist name */
-"LockScreen_Radio" = "4champ Radio";
+"LockScreen_Radio" = "4champ Radio (%@)";
 
 /* Share module default content modname, author */
 "Share_DefaultMessage" = "%1$@ by %2$@ #4champ #NowPlaying ";
@@ -344,3 +344,5 @@
 "SettingsView_Title" = "Einstellungen";
 "Settings_Interpolation" = "Sample interpolation";
 "Settings_AmigaResampler" = "Amiga-Resampler für .MOD-Dateien verwenden";
+
+"Carplay_Queue" = "Warteschlange";

@@ -70,6 +70,8 @@ class MainViewController: UITabBarController {
         tab.title = titles[index].l13n()
       }
     }
+    // make the app start at Radio tab
+    selectedIndex = 3
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -79,6 +81,10 @@ class MainViewController: UITabBarController {
         self.mode = .tabSidebar
         self.sidebar.isHidden = true
       }
+    }
+    if let mod = modulePlayer.currentModule {
+      npView.setModule(mod)
+      toggleNowPlaying(true)
     }
     super.viewWillAppear(animated)
   }
@@ -122,26 +128,6 @@ class MainViewController: UITabBarController {
          let firstChild = navCtl.topViewController as? NowPlayingContainer {
         firstChild.toggleNowPlaying(value)
       }
-    }
-  }
-
-  override func remoteControlReceived(with event: UIEvent?) {
-    guard let event = event else {
-      return
-    }
-    switch event.subtype {
-    case .remoteControlPlay:
-      modulePlayer.resume()
-    case .remoteControlPause:
-      modulePlayer.pause()
-    case .remoteControlStop:
-      modulePlayer.stop()
-    case .remoteControlNextTrack:
-      modulePlayer.playNext()
-    case .remoteControlPreviousTrack:
-      modulePlayer.playPrev()
-    default:
-      log.debug("remote control event \(event.subtype) not handled")
     }
   }
 

@@ -25,7 +25,7 @@ class PlaylistSelectorPresenter: PlaylistSelectorPresentationLogic {
         var plIndex = 0
         for pl in response.playlistOptions {
 
-            let modTick = pl.modules.contains(response.module.id ?? 0) ? "✓" : ""
+            let modTick = pl.modules.map { $0.id }.contains(response.module.id ?? 0) ? "✓" : ""
             let modPlay: String
             if pl.id == moduleStorage.currentPlaylist?.plId {
                 modPlay = "▶️"

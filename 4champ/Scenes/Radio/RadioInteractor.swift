@@ -10,6 +10,16 @@ import UserNotifications
 
 /// Radio Interactor business logic protocol
 protocol RadioBusinessLogic {
+  /// Adds a presenter to interactor. The new presenter will be populated with currently radio status if playing
+  /// - paramteters:
+  ///    - presenter: object conforming to `RadioPresentationLogic` protocol
+  func addPresenter(_ presenter: RadioPresentationLogic)
+  
+  /// Removes presenter. Identification is done by `presenterId` property
+  /// - paramteters:
+  ///    - presenter: object conforming to `RadioPresentationLogic` protocol
+  func removePresenter(_ presenter: RadioPresentationLogic)
+    
   /// Radio on/off/channel switch control interface
   /// - parameters:
   ///   - request: Control parameters (on/off/channel) in a `Radio.Control.Request` struct
@@ -73,14 +83,16 @@ enum PostFetchAction {
 
 class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemoteControl {
 
-  var presenter: RadioPresentationLogic?
+  static let sharedInstance = RadioInteractor()
+  
+  private var presenters: [RadioPresentationLogic] = []
 
   private var lastPlayed: Int = 0 // identifier of the last module id played (used in New channel)
   private var postFetchAction: PostFetchAction = .appendToQueue // determines how to handle module at fetch complete
   private var ntfAuthorization: UNAuthorizationStatus = .notDetermined
   private var playbackTimer: Timer?
   private var customChannelIndex = 0 // index of module in custom channel
-  var customSelection: Radio.CustomSelection = Radio.CustomSelection(name: "", ids: [])
+  var customSelection: Radio.CustomSelection = Radio.CustomSelection(name: "Radio_Custom".l13n(), ids: [])
 
   // Keep session history for getting back to modules listened in the radio mode.
   private var radioSessionHistory: [MMD] = []
@@ -99,8 +111,23 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   var channel: RadioChannel = .all
   var status: RadioStatus = .off {
     didSet {
-      presenter?.presentControlStatus(status: status)
+      presenters.forEach { $0.presentControlStatus(status: status) }
       modulePlayer.radioOn = self.radioOn
+      if self.radioOn {
+        let textFormat = "LockScreen_Radio".l13n()
+        let channelName: String
+        switch self.channel {
+        case .all:
+          channelName = "Radio_All".l13n()
+        case .local:
+          channelName = "Radio_Local".l13n()
+        case .new:
+          channelName = "Radio_New".l13n()
+        case .custom:
+          channelName = customSelection.name
+        }
+        modulePlayer.currentPlaylistName = String.init(format: textFormat, "\(channelName)")
+      }
     }
   }
 
@@ -116,11 +143,29 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     NotificationCenter.default.removeObserver(self)
   }
 
+  @objc func playbackControlObserver(_ notification: Notification) {
+    if let request = notification.object as? Radio.Control.Request {
+      _ = controlRadio(request: request)
+    }
+  }
+  
   @objc func doBadgeUpdate(_ notification: Notification?) {
-    self.presenter?.presentNewModules(response: Radio.NewModules.Response(badgeValue: settings.badgeCount))
+    presenters.forEach { $0.presentNewModules(response: Radio.NewModules.Response(badgeValue: settings.badgeCount)) }
   }
 
   // MARK: Request handling
+  func addPresenter(_ presenter: RadioPresentationLogic) {
+    presenters.append(presenter)
+    doBadgeUpdate(nil)
+    if radioOn {
+      triggerBufferPresentation()
+    }
+  }
+  
+  func removePresenter(_ presenter: RadioPresentationLogic) {
+    presenters.removeAll { $0.presenterId.compare(presenter.presenterId) == .orderedSame }
+  }
+  
   func controlRadio(request: Radio.Control.Request) -> Int {
     if modulePlayer.radioOn || request.state == .on {
       stopPlayback()
@@ -129,7 +174,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       modulePlayer.removePlayerObserver(self)
       // modulePlayer.radioRemoteControl = nil
 
-      presenter?.presentChannelBuffer(buffer: [], history: [])
+      presenters.forEach { $0.presentChannelBuffer(buffer: [], history: []) }
       modulePlayer.cleanup()
       radioSessionHistory.removeAll()
       return 0
@@ -144,15 +189,19 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       self?.periodicUpdate()
     }
     let originalCount = customSelection.ids.count
-    if let selection = request.selection {
+    switch request.channel {
+    case .custom:
+      let selection = request.customSelection ?? Radio.CustomSelection.init(name: "Radio_Custom".l13n(), ids: [])
       if request.state == .append {
         let combined = Array(Set(customSelection.ids + selection.ids))
-        customSelection = Radio.CustomSelection(name: self.customSelection.name, ids: combined.shuffled())
+        customSelection = Radio.CustomSelection(name: self.customSelection.name + "+", ids: combined.shuffled())
       } else {
         customSelection = selection
       }
+      channel = .custom
+    default:
+      channel = request.channel
     }
-    channel = request.channel
     status = .on
     fillBuffer()
     let customCount = request.state == .append ? customSelection.ids.count - originalCount : customSelection.ids.count
@@ -208,7 +257,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   func addToSessionHistory(module: MMD) {
     if !radioSessionHistory.contains(module) {
       radioSessionHistory.insert(module, at: 0)
-      presenter?.presentSessionHistoryInsert()
+      presenters.forEach { $0.presentSessionHistoryInsert() }
     }
   }
 
@@ -220,7 +269,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       let response = Radio.LocalNotifications.Response(
         notificationsEnabled: self.ntfAuthorization == .authorized,
         notificationsRequested: self.ntfAuthorization != .notDetermined)
-      self.presenter?.presentNotificationStatus(response: response)
+      self.presenters.forEach { $0.presentNotificationStatus(response: response) }
     }
   }
 
@@ -289,10 +338,10 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   private func triggerBufferPresentation() {
     log.debug("")
     guard radioOn else {
-      self.presenter?.presentChannelBuffer(buffer: [], history: [])
+      presenters.forEach { $0.presentChannelBuffer(buffer: [], history: []) }
       return
     }
-    self.presenter?.presentChannelBuffer(buffer: modulePlayer.playQueue, history: radioSessionHistory)
+    presenters.forEach { $0.presentChannelBuffer(buffer: modulePlayer.playQueue, history: radioSessionHistory) }
   }
 
   /// Removes the first module in current playlist and deletes the related local file
@@ -351,13 +400,13 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       return lastPlayed
     case .local:
       guard let mod = moduleStorage.getRandomModule() else {
-        presenter?.presentControlStatus(status: .noModulesAvailable)
+        presenters.forEach { $0.presentControlStatus(status: .noModulesAvailable) }
         return -1
       }
       return mod.id!
-    case .selection:
+    case .custom:
       guard customSelection.ids.count > 0 else {
-        presenter?.presentControlStatus(status: .noSelectionAvailable)
+        presenters.forEach { $0.presentControlStatus(status: .noSelectionAvailable) }
         return -1
       }
       let ids = customSelection.ids
@@ -374,7 +423,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       length = Int(modulePlayer.renderer.moduleLength())
       elapsed = Int(modulePlayer.renderer.currentPosition())
     }
-    presenter?.presentPlaybackTime(length: length, elapsed: elapsed)
+    presenters.forEach { $0.presentPlaybackTime(length: length, elapsed: elapsed) }
   }
 }
 
@@ -436,7 +485,7 @@ extension RadioInteractor: ModulePlayerObserver {
     if let previous = previous {
       addToSessionHistory(module: previous)
     }
-    presenter?.presentReplayer(name: modulePlayer.renderer.name)
+    presenters.forEach { $0.presentReplayer(name: modulePlayer.renderer.name) }
   }
 
   func statusChanged(status: PlayerStatus) {
@@ -461,14 +510,19 @@ extension RadioInteractor: ModulePlayerObserver {
   }
 
   func queueChanged(changeType: QueueChange) {
-    if changeType == .newPlaylist && radioOn {
+    switch changeType {
+    case .newPlaylist:
+      guard radioOn else {
+        triggerBufferPresentation()
+        return
+      }
       status = .off
       radioSessionHistory.removeAll()
       modulePlayer.removePlayerObserver(self)
-      presenter?.presentChannelBuffer(buffer: [], history: [])
-      presenter?.presentControlStatus(status: .off)
+      presenters.forEach { $0.presentChannelBuffer(buffer: [], history: []) }
+      presenters.forEach { $0.presentControlStatus(status: .off) }
       playbackTimer?.invalidate()
-    } else {
+    default:
       triggerBufferPresentation()
     }
   }

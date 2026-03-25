@@ -52,7 +52,7 @@ class PlaylistStore: ObservableObject, PlaylistDisplayLogic {
     let router = PlaylistRouter()
     viewController.interactor = interactor
     viewController.router = router
-    interactor.presenter = presenter
+    interactor.addPresenter(presenter)
     presenter.viewController = viewController
     router.dataStore = interactor
     interactor.selectPlaylist(request: Playlists.Select.Request(playlistId: ""))

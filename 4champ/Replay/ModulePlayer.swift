@@ -21,8 +21,8 @@ enum PlayerStatus: Int {
   case paused
 }
 
-enum QueueChange: Int {
-  case newPlaylist
+enum QueueChange {
+  case newPlaylist(name: String)
   case other
 }
 
@@ -60,9 +60,13 @@ protocol ModulePlayerObserver: class {
 }
 
 class ModulePlayer: NSObject {
+  
+  static let sharedInstance = ModulePlayer()
+  
   var radioOn: Bool = false
   var playQueue: [MMD] = []
   let renderer = Replay()
+  var currentPlaylistName = "LockScreen_Radio".l13n()
   let mpImage = UIImage.init(named: "albumart")!
   weak var radioRemoteControl: RadioRemoteControl?
   weak var streamVisualiser: StreamVisualiser?
@@ -71,9 +75,9 @@ class ModulePlayer: NSObject {
     // on currentModule change, post info on MPNowPlayingInfoCenter
     didSet {
       if let mod = currentModule {
-        let author = mod.composer
+        let author = mod.composer ?? ""
         let songName = mod.name
-        let playlistName = "LockScreen_Radio".l13n()
+        let playlistName = currentPlaylistName
 
         let artwork = MPMediaItemArtwork.init(boundsSize: mpImage.size, requestHandler: { (_) -> UIImage in
           return self.mpImage
@@ -83,11 +87,14 @@ class ModulePlayer: NSObject {
           [ MPMediaItemPropertyArtwork: artwork,
             MPMediaItemPropertyAlbumTitle: playlistName,
             MPMediaItemPropertyTitle: songName,
-            MPMediaItemPropertyArtist: author ?? "",
+            MPMediaItemPropertyArtist: author,
             MPMediaItemPropertyPlaybackDuration: NSNumber.init(value: renderer.moduleLength()),
-            MPNowPlayingInfoPropertyElapsedPlaybackTime: NSNumber.init(value: renderer.currentPosition())
+            MPNowPlayingInfoPropertyElapsedPlaybackTime: NSNumber.init(value: renderer.currentPosition()),
+            MPNowPlayingInfoPropertyPlaybackRate: NSNumber(value: 1.0)
         ]
         MPNowPlayingInfoCenter.default().nowPlayingInfo = dict
+        MPNowPlayingInfoCenter.default().playbackState = .playing
+        log.debug("Now Playing info set successfully")
 
         _ = observers.map {
           $0.moduleChanged(module: mod, previous: oldValue)
@@ -98,6 +105,18 @@ class ModulePlayer: NSObject {
 
   var status: PlayerStatus = .initialised {
     didSet {
+      // Update MPNowPlayingInfoCenter playback state for CarPlay and lock screen
+      switch status {
+      case .playing:
+        updateNowPlayingElapsedTime(playbackState: .playing)
+      case .paused:
+        updateNowPlayingElapsedTime(playbackState: .paused)
+      case .stopped:
+        MPNowPlayingInfoCenter.default().playbackState = .stopped
+      case .initialised:
+        MPNowPlayingInfoCenter.default().playbackState = .unknown
+      }
+      
       _ = observers.map {
         $0.statusChanged(status: status)
       }
@@ -118,6 +137,10 @@ class ModulePlayer: NSObject {
                                    selector: #selector(handleRouteChange),
                                    name: AVAudioSession.routeChangeNotification,
                                    object: nil)
+    NotificationCenter.default.addObserver(self,
+                                           selector: #selector(handleInterruption),
+                                           name: AVAudioSession.interruptionNotification,
+                                           object: nil)
 
   }
 
@@ -214,11 +237,12 @@ class ModulePlayer: NSObject {
   }
 
   /// Set new play queue (when user selects a playlist and starts playing)
-  func setNewPlayQueue(queue: [MMD]) {
+  func setNewPlayQueue(queue: [MMD], queueName: String) {
     cleanup()
     playQueue = queue
+    currentPlaylistName = queueName
     _ = observers.map {
-      $0.queueChanged(changeType: .newPlaylist)
+      $0.queueChanged(changeType: .newPlaylist(name: queueName))
     }
   }
 
@@ -269,6 +293,7 @@ class ModulePlayer: NSObject {
 
   /// Pauses the current playback
   func pause() {
+    log.debug("")
     guard status == .playing else { return }
     renderer.pause()
     status = .paused
@@ -276,9 +301,19 @@ class ModulePlayer: NSObject {
 
   /// Resumes paused module
   func resume() {
+    log.debug("")
     guard status == .paused else { return }
     renderer.resume()
     status = .playing
+  }
+
+  /// Updates the elapsed time in Now Playing Info for CarPlay and lock screen
+  private func updateNowPlayingElapsedTime(playbackState: MPNowPlayingPlaybackState) {
+    guard var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo else { return }
+    nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: renderer.currentPosition())
+    nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = NSNumber(value: playbackState == .playing ? 1.0 : 0.0)
+    MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    MPNowPlayingInfoCenter.default().playbackState = playbackState
   }
 
   /// Stops playback. This will also reset the now playing info
@@ -302,6 +337,17 @@ class ModulePlayer: NSObject {
     }
     playQueue.removeAll()
     currentModule = nil
+  }
+  
+  @objc func handleInterruption(notification: Notification) {
+    log.debug("")
+    guard let userInfo = notification.userInfo,
+          let reasonValue = userInfo[AVAudioSessionInterruptionReasonKey] as? UInt,
+          let reason = AVAudioSession.InterruptionReason(rawValue: reasonValue) else {
+      return
+    }
+    log.debug("Playback interrupted with reason: \(reason)")
+    pause()
   }
 
   /// Handle audio route change notifications

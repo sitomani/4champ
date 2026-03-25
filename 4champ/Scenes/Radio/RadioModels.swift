@@ -7,11 +7,25 @@
 
 import UIKit
 
-enum RadioChannel: Int {
+enum RadioChannel: Equatable {
+  static func == (lhs: RadioChannel, rhs: RadioChannel) -> Bool {
+      switch (lhs, rhs) {
+      case (.all, .all):
+          return true
+      case (.new, .new):
+          return true
+      case (.local, .local):
+          return true
+      case (.custom, .custom):
+          return true
+      default:
+          return false
+      }
+  }
   case all
   case new
   case local
-  case selection
+  case custom
 }
 
 enum RadioStatus {
@@ -25,7 +39,7 @@ enum RadioStatus {
 
 enum Radio {
   struct CustomSelection {
-    let name: String?
+    let name: String
     let ids: [Int]
   }
   // MARK: Use cases
@@ -40,7 +54,7 @@ enum Radio {
     struct Request {
       var state: Radio.Control.State
       var channel: RadioChannel
-      var selection: CustomSelection?
+      var customSelection: Radio.CustomSelection?
     }
 
     struct Response {

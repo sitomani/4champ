@@ -1,4 +1,4 @@
-﻿/* Shared module download status view - Play button */
+/* Shared module download status view - Play button */
 "DownloadView_Play" = "Играть";
 
 /* Shared module downlaod status view - Dismiss button */
@@ -167,7 +167,7 @@
 "LockScreen_Playing" = "%1$@ от %2$@";
 
 /* Lock-screen: radio playlist name */
-"LockScreen_Radio" = "4champ радио";
+"LockScreen_Radio" = "4champ радио (%@)";
 
 /* Share module default content modname, author */
 "Share_DefaultMessage" = "%1$@ от %2$@ #4champ #NowPlaying ";
@@ -354,3 +354,5 @@
 "Settings_AnalyticsDetails" = "Инфо о сборе данных";
 "Settings_EffectsOnOff" = "Эффекты ВКЛ/ВЫКЛ";
 "Settings_PreviewMode" = "предварительный просмотр";
+
+"Carplay_Queue" = "Очередь";

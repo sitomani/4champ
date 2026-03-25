@@ -13,13 +13,16 @@
 import UIKit
 
 protocol PlaylistPresentationLogic {
+  var presenterId: String { get }
   func presentPlaylist(response: Playlists.Select.Response)
+  func presentMetadataChanged(response: Playlists.Select.Response)
   func presentModeChange(shuffled: Bool)
 }
 
 class PlaylistPresenter: PlaylistPresentationLogic {
+  var presenterId: String = UUID().uuidString
   weak var viewController: PlaylistDisplayLogic?
-
+  
   func presentPlaylist(response: Playlists.Select.Response) {
     let pl = response.selectedPlaylist
     let shuffle = (pl.playmode?.intValue ?? 0) == 1
@@ -42,6 +45,10 @@ class PlaylistPresenter: PlaylistPresentationLogic {
     DispatchQueue.main.async {
       self.viewController?.displayPlaylist(viewModel: vm)
     }
+  }
+  
+  func presentMetadataChanged(response: Playlists.Select.Response) {
+    presentPlaylist(response: response)
   }
 
   func presentModeChange(shuffled: Bool) {
