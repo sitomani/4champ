@@ -1,5 +1,11 @@
 # 4champ Development Journal
 
+### March 2026
+
+I've received a number of requests for CarPlay support from users past year. In March 2026, I finally took a dive in the Apple WWDC materials regarding the feature, and little by little figured out how to fit the feature in with 4champ. The architecture choice done back in 2018 proved valuable now that I split the application to two parallel UIScenes. Introducing multiple presenters per interactor in a VIP cycle was straightforward within the clean architecture.
+
+In addition to the CarPlay support, I implemented another user request: Composer modules sorting by Id for finding out the most recently added modules by a composer. And finally, a small UX improvement for the visualizer screen: text mode change can be done by swiping left/right on the view, or by tapping the page control at the bottom of th  e view.
+
 ### January 2026
 
 During the Christmas break I had some spare hours to spend with 4champ, and finally got to implement a feature that most tracker players do have, i.e. the pattern playback visualisation. After a couple of attempts with SwiftUI I figured that it'll never meet my performance targets and reverted to OG CATextLayers instead. With this implementation, rendering the pattern even for 16 channels is still working with no hickups.

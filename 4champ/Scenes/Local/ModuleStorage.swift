@@ -42,6 +42,8 @@ protocol ModuleStorageObserver: class {
 }
 
 class ModuleStorage: NSObject {
+  static let shared = ModuleStorage()
+  
   private var observers: [ModuleStorageObserver] = []
   private var _currentPlaylist: Playlist?
   private var _storageError: StorageError?

@@ -54,9 +54,9 @@ class AboutHeaderView: UIButton {
 
       if titleKey == "Social_Check" {
         let scaledImage = image.resizeImageWith(newSize: CGSize.init(width: 30, height: 25))
-        setImage(scaledImage.withRenderingMode(.alwaysTemplate), for: .normal)
+        setImage(scaledImage.withTintColor(.label, renderingMode: .alwaysTemplate), for: .normal)
       } else {
-        setImage(image, for: .normal)
+        setImage(image.withTintColor(.label, renderingMode: .alwaysTemplate), for: .normal)
       }
     } else {
       if imageKey == "legal" {

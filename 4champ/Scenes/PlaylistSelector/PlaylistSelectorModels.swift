@@ -12,7 +12,7 @@ struct PLMD: Identifiable {
     var id: String?
     var name: String?
     var current: Bool
-    var modules: [Int]
+    var modules: [MMD]
 }
 
 enum DownloadStatus: Equatable {

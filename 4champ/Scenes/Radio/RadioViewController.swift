@@ -51,7 +51,10 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
   @IBOutlet weak var tableBottomConstraint: NSLayoutConstraint?
 
   var notifyItem: UIBarButtonItem?
-  private var segmentDict = [0: RadioChannel.all, 1: RadioChannel.new, 2: RadioChannel.local, 3: RadioChannel.selection]
+  private var segmentDict = [0: RadioChannel.all,
+                             1: RadioChannel.new,
+                             2: RadioChannel.local,
+                             3: RadioChannel.custom] as [Int: RadioChannel]
   private let gradientLayer = CAGradientLayer()
   let gradientColorTop =  UIColor.init(rgb: 0x16538a)
   let gradientColorBottom = UIColor.init(rgb: 0x16538a)
@@ -77,12 +80,12 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 
   private func setup() {
     let viewController = self
-    let interactor = RadioInteractor()
+    let interactor = RadioInteractor.sharedInstance
     let presenter = RadioPresenter()
     let router = RadioRouter()
     viewController.interactor = interactor
     viewController.router = router
-    interactor.presenter = presenter
+    interactor.addPresenter(presenter)
     presenter.viewController = viewController
     router.viewController = viewController
     router.dataStore = interactor
@@ -119,7 +122,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     channelSegments?.setTitle("Radio_All".l13n(), forSegmentAt: 0)
     channelSegments?.setTitle("Radio_New".l13n(), forSegmentAt: 1)
     channelSegments?.setTitle("Radio_Local".l13n(), forSegmentAt: 2)
-    updateCustomChannelSegment(title: "Radio_Custom".l13n())
+    updateCustomChannelSegment(selection: Radio.CustomSelection(name: "Radio_Custom".l13n(), ids: []))
 
     channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
     channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
@@ -147,8 +150,9 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     updateUIElements()
   }
 
-  private func updateCustomChannelSegment(title: String) {
-    channelSegments?.setTitle(title, forSegmentAt: 3)
+  private func updateCustomChannelSegment(selection: Radio.CustomSelection?) {
+    let channelname = selection?.name ?? "Radio_Custom".l13n()
+    channelSegments?.setTitle(channelname, forSegmentAt: 3)
   }
 
   private func updateUIElements() {
@@ -158,8 +162,11 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
       elem.value == channel
     }) {
       channelSegments?.selectedSegmentIndex = channelIndex.key
-      if channel == .selection {
-        updateCustomChannelSegment(title: router?.dataStore?.customSelection.name ?? "")
+      switch channel {
+      case .custom:
+        updateCustomChannelSegment(selection: router?.dataStore?.customSelection)
+      default:
+        break
       }
     }
   }
@@ -256,9 +263,17 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     } else {
       nextUpTitle?.text = radioSwitch?.isOn ?? false ? " " : "" // just to keep the space open when radio is on
     }
-
+    
     prevButton?.isEnabled = viewModel.historyAvailable
     nextButton?.isEnabled = viewModel.nowPlaying != nil
+    
+    if let channel = router?.dataStore?.channel, let channelIndex = segmentDict.first(where: { elem in
+      elem.value == channel
+    }) {
+      if radioSwitch?.isOn == true {
+        channelSegments?.selectedSegmentIndex = channelIndex.key
+      }
+    }
 
     if let current = viewModel.nowPlaying {
       currentModule = current
@@ -323,11 +338,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 
   func displaySessionHistoryInsert() {
     historyTitle?.text = "Radio_Previous".l13n()
-    if radioTable?.window == nil {
-      radioTable?.reloadData()
-    } else {
-      radioTable?.insertRows(at: [IndexPath.init(item: 0, section: 0)], with: .top)
-    }
+    radioTable?.reloadData()
   }
 
   @IBAction private func saveTapped(_ sender: UIButton) {
@@ -350,7 +361,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     log.debug("")
     if let channelSelection = segmentDict[channelSegments?.selectedSegmentIndex ?? 0] {
       let powerState: Radio.Control.State = sender.isOn ? .on : .off
-      let req = Radio.Control.Request(state: powerState, channel: channelSelection)
+      let req = Radio.Control.Request(state: powerState, channel: channelSelection, customSelection: router?.dataStore?.customSelection)
       _ = interactor?.controlRadio(request: req)
     }
   }
@@ -363,7 +374,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     log.debug("")
     if let channelSelection = segmentDict[channelSegments?.selectedSegmentIndex ?? 0] {
       let powerState: Radio.Control.State = (radioSwitch?.isOn ?? false) ? .on : .off
-      let req = Radio.Control.Request(state: powerState, channel: channelSelection)
+      let req = Radio.Control.Request(state: powerState, channel: channelSelection, customSelection: router?.dataStore?.customSelection)
       _ = interactor?.controlRadio(request: req)
     }
   }

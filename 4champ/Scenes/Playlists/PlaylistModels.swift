@@ -14,6 +14,11 @@ import UIKit
 
 enum Playlists {
   // MARK: Use cases
+    enum ShuffleMode {
+        case shuffle
+        case noShuffle
+        case userPreference
+    }
 
     enum Favorite {
         struct Request {
@@ -28,6 +33,12 @@ enum Playlists {
     enum Play {
         struct Request {
             let mmd: MMD
+        }
+    }
+    
+    enum Start {
+        struct Request {
+            var shuffleMode: Playlists.ShuffleMode = .userPreference
         }
     }
 

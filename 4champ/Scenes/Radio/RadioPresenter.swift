@@ -8,6 +8,7 @@
 import UIKit
 
 protocol RadioPresentationLogic {
+  var presenterId: String { get }
   func presentControlStatus(status: RadioStatus)
   func presentChannelBuffer(buffer: [MMD], history: [MMD])
   func presentReplayer(name: String)
@@ -24,6 +25,7 @@ enum NotificationState {
 }
 
 class RadioPresenter: RadioPresentationLogic {
+  var presenterId: String = UUID().uuidString
   weak var viewController: RadioDisplayLogic?
 
   // MARK: Do something

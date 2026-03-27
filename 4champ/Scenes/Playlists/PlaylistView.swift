@@ -143,7 +143,7 @@ struct PlaylistView: View {
         .navigationBarTitle(Text("TabBar_Playlist".l13n().uppercased()), displayMode: .inline)
         .navigationBarItems(leading: HStack {
           Button(action: {self.toggleShuffle()}, label: {Image(store.viewModel.shuffle ? "shuffled" : "sequential")})
-          Button(action: {self.store.interactor?.startPlaylist()}, label: {Image("play-small")})
+          Button(action: {self.store.interactor?.startPlaylist(request: Playlists.Start.Request() )}, label: {Image("play-small")})
         },
           trailing: HStack {
           Button(action: {self.startImport()},

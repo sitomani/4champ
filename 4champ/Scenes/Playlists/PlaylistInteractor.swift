@@ -14,6 +14,8 @@ import UIKit
 import CoreData
 
 protocol PlaylistBusinessLogic {
+  func addPresenter(_ presenter: PlaylistPresentationLogic)
+  func removePresenter(_ presenter: PlaylistPresentationLogic)
   func selectPlaylist(request: Playlists.Select.Request)
   func removeModule(request: Playlists.Remove.Request)
   func moveModule(request: Playlists.Move.Request)
@@ -21,18 +23,23 @@ protocol PlaylistBusinessLogic {
   func importModules()
   func toggleFavorite(request: Playlists.Favorite.Request)
   func playModule(request: Playlists.Play.Request)
-  func startPlaylist()
+  func startPlaylist(request: Playlists.Start.Request)
 }
 
 protocol PlaylistDataStore {
+  var playlists: [PLMD] { get }
+  var selectedPlaylistId: String? { get }
   // var name: String { get set }
 }
 
 class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore {
-  var presenter: PlaylistPresentationLogic?
+  
+  static let sharedInstance = PlaylistInteractor()
+  
+  var presenters: [PlaylistPresentationLogic] = []
   var selectedPlaylistId: String?
   var frc: NSFetchedResultsController<Playlist>?
-  // var name: String = ""
+  var playlists: [PLMD] = []
 
   private var downloadController = DownloadController.init()
 
@@ -47,6 +54,7 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore {
     frc?.delegate = self
     do {
       try frc?.performFetch()
+      rebuildList()
     } catch {
       log.error("Failed to perform fetch: \(error)")
     }
@@ -60,11 +68,20 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore {
   }
 
   // MARK: Interactions
+  func addPresenter(_ presenter: PlaylistPresentationLogic) {
+    self.presenters.append(presenter)
+  }
+  func removePresenter(_ presenter: PlaylistPresentationLogic) {
+    self.presenters.removeAll(where: { $0.presenterId == presenter.presenterId })
+  }
   func selectPlaylist(request: Playlists.Select.Request) {
     if request.playlistId.count > 0 {
       selectedPlaylistId = request.playlistId
     }
-    doPresent()
+    if let pl = frc?.fetchedObjects?.first(where: { ($0 as Playlist).plId == selectedPlaylistId }) {
+      let resp = Playlists.Select.Response(selectedPlaylist: pl)
+      presenters.forEach { $0.presentPlaylist(response: resp) }
+    }
   }
 
   func removeModule(request: Playlists.Remove.Request) {
@@ -72,7 +89,7 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore {
       pl.removeFromModules(at: request.modIndex)
       moduleStorage.saveContext()
       let resp = Playlists.Select.Response(selectedPlaylist: pl)
-      presenter?.presentPlaylist(response: resp)
+      presenters.forEach { $0.presentPlaylist(response: resp) }
     }
   }
 
@@ -90,7 +107,7 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore {
       pl.modules = modSet
       moduleStorage.saveContext()
       let resp = Playlists.Select.Response(selectedPlaylist: pl)
-      presenter?.presentPlaylist(response: resp)
+      presenters.forEach { $0.presentPlaylist(response: resp) }
     }
   }
 
@@ -106,7 +123,7 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore {
     if let mod = moduleStorage.getModuleById(request.modId) {
       _ = moduleStorage.toggleFavorite(module: mod)
     }
-    doPresent()
+    doPresentMetadataChanged()
   }
 
   func playModule(request: Playlists.Play.Request) {
@@ -116,8 +133,13 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore {
     }
   }
 
-  func startPlaylist() {
+  func startPlaylist(request: Playlists.Start.Request) {
     rebuildQueue()
+    if request.shuffleMode != .userPreference {
+      let shuffle = request.shuffleMode == .shuffle
+      moduleStorage.currentPlaylist?.playmode = NSNumber.init(value: shuffle)
+      moduleStorage.saveContext() // will call rebuildqueue on change
+    }
     modulePlayer.play(at: 0)
   }
 
@@ -140,14 +162,40 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore {
       }
 
       moduleStorage.currentPlaylist = pl
-      modulePlayer.setNewPlayQueue(queue: playlistQueue)
+      modulePlayer.setNewPlayQueue(queue: playlistQueue, queueName: pl.getDisplayName())
     }
   }
+  
+  private func rebuildList() {
+    let plObjects = frc?.fetchedObjects ?? []
+    
+    var plMetaData = plObjects.map {
+      var meta = PLMD(id: $0.plId, name: $0.plName, current: false, modules: [] )
+      $0.modules?.forEach { modInfo in
+        if let mi = modInfo as? ModuleInfo {
+          meta.modules.append(MMD(cdi: mi))
+        }
+      }
+      return meta
+    }
+            
+    plMetaData.sort { (pla, plb) -> Bool in
+      if pla.id == "default" {
+        return true
+      }
+      if plb.id == "default" {
+        return false
+      }
+      return pla.name! < plb.name!
+    }
+    
+    playlists = plMetaData
+  }
 
-  private func doPresent() {
+  private func doPresentMetadataChanged() {
     if let pl = frc?.fetchedObjects?.first(where: { ($0 as Playlist).plId == selectedPlaylistId }) {
       let resp = Playlists.Select.Response(selectedPlaylist: pl)
-      presenter?.presentPlaylist(response: resp)
+      presenters.forEach { $0.presentMetadataChanged(response: resp) }
     }
   }
 }
@@ -168,17 +216,19 @@ extension PlaylistInteractor: NSFetchedResultsControllerDelegate {
 
     if let pl = anObject as? Playlist, pl.plId == selectedPlaylistId {
       rebuildQueue()
+    } else {
+      rebuildList()
     }
   }
 
   func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    doPresent()
+    doPresentMetadataChanged()
   }
 }
 
 extension PlaylistInteractor: ModuleStorageObserver {
   func metadataChange(_ mmd: MMD) {
-    doPresent()
+    doPresentMetadataChanged()
   }
 
   func playlistChange() {

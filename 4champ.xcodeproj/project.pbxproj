@@ -89,6 +89,11 @@
 		45D61F5620E1647300869814 /* RadioInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F5020E1647300869814 /* RadioInteractor.swift */; };
 		45D61F5920E1695200869814 /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F5820E1695100869814 /* UIUtils.swift */; };
 		45D61F5B20E1780D00869814 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D61F5A20E1780D00869814 /* Appearance.swift */; };
+		733ACA7B2F669FDE007E6D83 /* CPRadioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733ACA7A2F669FC7007E6D83 /* CPRadioController.swift */; };
+		733ACA7D2F66B171007E6D83 /* CPListTemplate+playlists.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733ACA7C2F66B165007E6D83 /* CPListTemplate+playlists.swift */; };
+		733ACA7F2F66B6A7007E6D83 /* CPPlaylistsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733ACA7E2F66B6A0007E6D83 /* CPPlaylistsController.swift */; };
+		733ACA812F66B922007E6D83 /* UIImage+Carplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733ACA802F66B90E007E6D83 /* UIImage+Carplay.swift */; };
+		733ACA832F66BFAA007E6D83 /* CPPlayQueueController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733ACA822F66BFA5007E6D83 /* CPPlayQueueController.swift */; };
 		733F495E2DD0DA4700334C8A /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733F495D2DD0DA4400334C8A /* APIRequest.swift */; };
 		733F49602DD0DAF200334C8A /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733F495F2DD0DAF100334C8A /* NetworkClient.swift */; };
 		736C7D852F02A9F700725D28 /* PatternModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736C7D842F02A9F400725D28 /* PatternModels.swift */; };
@@ -100,6 +105,7 @@
 		7397C1E629091D9D002D5CDB /* uade_ios.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7397C1E129091BC3002D5CDB /* uade_ios.xcframework */; };
 		7397C1E729091D9D002D5CDB /* uade_ios.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7397C1E129091BC3002D5CDB /* uade_ios.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		739B4BF42720850200C2D69F /* RadioSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739B4BF32720850200C2D69F /* RadioSessionCell.swift */; };
+		739CE41E2F086A3A00F04907 /* TemplateApplicationSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739CE41D2F086A3A00F04907 /* TemplateApplicationSceneDelegate.swift */; };
 		73AE47432C80E371008BAD87 /* amplitudegraph.metal in Sources */ = {isa = PBXBuildFile; fileRef = 73AE47422C80E371008BAD87 /* amplitudegraph.metal */; };
 		73AE47452C80E437008BAD87 /* VertexShaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73AE47442C80E437008BAD87 /* VertexShaderView.swift */; };
 		73CE92E52AAF03D1000BFC1C /* PlaylistPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CE92E42AAF03D1000BFC1C /* PlaylistPresenter.swift */; };
@@ -193,7 +199,6 @@
 		45855FC8244467420079C767 /* DownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadView.swift; sourceTree = "<group>"; };
 		45855FCA244475050079C767 /* DownloadHostingController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = DownloadHostingController.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45855FCC2444AC6B0079C767 /* ModuleSharing.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModuleSharing.swift; sourceTree = "<group>"; tabWidth = 2; };
-		45A080E424327ED500AEA85F /* Entitlements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		45AA7AEC2101BDB10096D7E7 /* ModulePlayer.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModulePlayer.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45AA90F420FF2F6600794147 /* Endpoints.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45AA90F720FF36C200794147 /* Replay.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = Replay.m; sourceTree = "<group>"; tabWidth = 2; };
@@ -228,6 +233,11 @@
 		45D61F5020E1647300869814 /* RadioInteractor.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = RadioInteractor.swift; sourceTree = "<group>"; tabWidth = 2; };
 		45D61F5820E1695100869814 /* UIUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
 		45D61F5A20E1780D00869814 /* Appearance.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; tabWidth = 2; };
+		733ACA7A2F669FC7007E6D83 /* CPRadioController.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = CPRadioController.swift; sourceTree = "<group>"; tabWidth = 2; usesTabs = 0; };
+		733ACA7C2F66B165007E6D83 /* CPListTemplate+playlists.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = "CPListTemplate+playlists.swift"; sourceTree = "<group>"; tabWidth = 2; };
+		733ACA7E2F66B6A0007E6D83 /* CPPlaylistsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPPlaylistsController.swift; sourceTree = "<group>"; };
+		733ACA802F66B90E007E6D83 /* UIImage+Carplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Carplay.swift"; sourceTree = "<group>"; };
+		733ACA822F66BFA5007E6D83 /* CPPlayQueueController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPPlayQueueController.swift; sourceTree = "<group>"; };
 		733F495D2DD0DA4400334C8A /* APIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		733F495F2DD0DAF100334C8A /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 9 (imports).xcdatamodel"; sourceTree = "<group>"; };
@@ -243,6 +253,7 @@
 		7397C1DC29091504002D5CDB /* UADEReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UADEReplayer.m; sourceTree = "<group>"; };
 		7397C1E129091BC3002D5CDB /* uade_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = uade_ios.xcframework; path = "../uade-ios/uade_ios.xcframework"; sourceTree = "<group>"; };
 		739B4BF32720850200C2D69F /* RadioSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioSessionCell.swift; sourceTree = "<group>"; };
+		739CE41D2F086A3A00F04907 /* TemplateApplicationSceneDelegate.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = TemplateApplicationSceneDelegate.swift; sourceTree = "<group>"; tabWidth = 2; };
 		73AE47422C80E371008BAD87 /* amplitudegraph.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = amplitudegraph.metal; sourceTree = "<group>"; };
 		73AE47442C80E437008BAD87 /* VertexShaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexShaderView.swift; sourceTree = "<group>"; };
 		73CE92E42AAF03D1000BFC1C /* PlaylistPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistPresenter.swift; sourceTree = "<group>"; };
@@ -330,6 +341,7 @@
 		4543982C20D0344F00991ADC /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				739CE41C2F086A2200F04907 /* CarPlay */,
 				45855FC7244466580079C767 /* DownloadView */,
 				451ED0A4241E6A92006CE4E8 /* SwiftUITest */,
 				453D9BB1241BF1FD002EEBAB /* PlaylistSelector */,
@@ -487,7 +499,9 @@
 				45D392A320B1DDEC00EEF4E3 /* 4champ */,
 				45D392A220B1DDEC00EEF4E3 /* Products */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		45D392A220B1DDEC00EEF4E3 /* Products */ = {
 			isa = PBXGroup;
@@ -514,7 +528,6 @@
 				45D392AF20B1DDEE00EEF4E3 /* LaunchScreen.storyboard */,
 				45D392B220B1DDEE00EEF4E3 /* Info.plist */,
 				45CEA1DE2413C8E300930A72 /* SceneDelegate.swift */,
-				45A080E424327ED500AEA85F /* Entitlements.plist */,
 			);
 			path = 4champ;
 			sourceTree = "<group>";
@@ -563,6 +576,19 @@
 			path = UADE;
 			sourceTree = "<group>";
 		};
+		739CE41C2F086A2200F04907 /* CarPlay */ = {
+			isa = PBXGroup;
+			children = (
+				733ACA822F66BFA5007E6D83 /* CPPlayQueueController.swift */,
+				733ACA802F66B90E007E6D83 /* UIImage+Carplay.swift */,
+				733ACA7E2F66B6A0007E6D83 /* CPPlaylistsController.swift */,
+				733ACA7C2F66B165007E6D83 /* CPListTemplate+playlists.swift */,
+				733ACA7A2F669FC7007E6D83 /* CPRadioController.swift */,
+				739CE41D2F086A3A00F04907 /* TemplateApplicationSceneDelegate.swift */,
+			);
+			path = CarPlay;
+			sourceTree = "<group>";
+		};
 		73F564CC2C6A863A000B34A3 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -603,8 +629,8 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
-				ORGANIZATIONNAME = boogie;
+				LastUpgradeCheck = 2600;
+				ORGANIZATIONNAME = "Aleksi Sitomaniemi";
 				TargetAttributes = {
 					45D392A020B1DDEC00EEF4E3 = {
 						CreatedOnToolsVersion = 9.3;
@@ -700,6 +726,7 @@
 				451ED0B0241E8A83006CE4E8 /* PlaylistModels.swift in Sources */,
 				4543983820D0344F00991ADC /* AboutPresenter.swift in Sources */,
 				45AA910E20FF5E8A00794147 /* Structs.swift in Sources */,
+				733ACA812F66B922007E6D83 /* UIImage+Carplay.swift in Sources */,
 				450E506721879347008FB155 /* SettingsModels.swift in Sources */,
 				45D61F5120E1647300869814 /* RadioPresenter.swift in Sources */,
 				453D9BBC241BF286002EEBAB /* PlaylistSelectorStore.swift in Sources */,
@@ -713,6 +740,7 @@
 				451B6AA42204B6CC001848FA /* LocalViewController.swift in Sources */,
 				454F5205215D20F3007011F3 /* ModuleFetcher.swift in Sources */,
 				733F495E2DD0DA4700334C8A /* APIRequest.swift in Sources */,
+				733ACA7F2F66B6A7007E6D83 /* CPPlaylistsController.swift in Sources */,
 				73CE92E52AAF03D1000BFC1C /* PlaylistPresenter.swift in Sources */,
 				451ED0B2241E8A83006CE4E8 /* PlaylistInteractor.swift in Sources */,
 				45D61F5320E1647300869814 /* RadioRouter.swift in Sources */,
@@ -749,6 +777,7 @@
 				45D61F5920E1695200869814 /* UIUtils.swift in Sources */,
 				451ED0A6241E6AA6006CE4E8 /* SwiftUITest.swift in Sources */,
 				451B6AA22204B6CC001848FA /* LocalRouter.swift in Sources */,
+				733ACA832F66BFAA007E6D83 /* CPPlayQueueController.swift in Sources */,
 				454F5207215D3FF1007011F3 /* ComposerCell.swift in Sources */,
 				737FEAAF2D89FF190075079B /* AMPLogger.swift in Sources */,
 				4543985120D03C1600991ADC /* AboutHeaderView.swift in Sources */,
@@ -764,7 +793,9 @@
 				451B6AA52204B6CC001848FA /* LocalInteractor.swift in Sources */,
 				454F5209215D4587007011F3 /* GroupCell.swift in Sources */,
 				45AA91122100D13300794147 /* NowPlayingView.swift in Sources */,
+				739CE41E2F086A3A00F04907 /* TemplateApplicationSceneDelegate.swift in Sources */,
 				45AA910620FF36C200794147 /* MPTReplayer.m in Sources */,
+				733ACA7B2F669FDE007E6D83 /* CPRadioController.swift in Sources */,
 				451B6AA72204BBBB001848FA /* ModuleStorage.swift in Sources */,
 				4543983620D0344F00991ADC /* AboutInteractor.swift in Sources */,
 				73E4FBF02ADC4D01009A985A /* RefreshLatestOperation.swift in Sources */,
@@ -773,6 +804,7 @@
 				45AA7AED2101BDB10096D7E7 /* ModulePlayer.swift in Sources */,
 				456E6F2E240A5FAF0034BDA2 /* PlaylistView.swift in Sources */,
 				454612F3245DA50700C07D51 /* SettingsInterpolationCell.swift in Sources */,
+				733ACA7D2F66B171007E6D83 /* CPListTemplate+playlists.swift in Sources */,
 				45AA910520FF36C200794147 /* HVLReplayer.mm in Sources */,
 				45D61F5620E1647300869814 /* RadioInteractor.swift in Sources */,
 				453D9BBF241D24B7002EEBAB /* PlaylistPickerView.swift in Sources */,
@@ -837,6 +869,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -870,6 +903,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -891,6 +925,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -900,6 +935,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -933,6 +969,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 2G92PSCBJ9;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -948,6 +985,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				NEW_SETTING = "";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
@@ -962,8 +1000,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 49;
-				DEVELOPMENT_TEAM = 2G92PSCBJ9;
+				CURRENT_PROJECT_VERSION = 55;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					../openmpt/libopenmpt,
@@ -981,7 +1018,7 @@
 					../openmpt,
 					"../uade-ios",
 				);
-				MARKETING_VERSION = 3.13;
+				MARKETING_VERSION = 3.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -999,8 +1036,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 49;
-				DEVELOPMENT_TEAM = 2G92PSCBJ9;
+				CURRENT_PROJECT_VERSION = 55;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					../openmpt/libopenmpt,
@@ -1018,7 +1054,7 @@
 					../openmpt,
 					"../uade-ios",
 				);
-				MARKETING_VERSION = 3.13;
+				MARKETING_VERSION = 3.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boogiesoftware.ampplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

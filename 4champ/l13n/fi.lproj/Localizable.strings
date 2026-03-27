@@ -1,4 +1,4 @@
-﻿/* Shared module download status view - Play button */
+/* Shared module download status view - Play button */
 "DownloadView_Play" = "Soita";
 
 /* Shared module downlaod status view - Dismiss button */
@@ -354,3 +354,5 @@
 "Settings_AnalyticsOK" = "Sopii minulle";
 "Settings_AnalyticsDetails" = "Lisätietoja analytiikasta";
 "Settings_EffectsOnOff" = "Efektit päällä/pois";
+
+"Carplay_Queue" = "Jono";

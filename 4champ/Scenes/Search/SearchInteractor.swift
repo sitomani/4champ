@@ -148,14 +148,14 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
       let modIDs = supportedMods.compactMap { mr in
         mr.id
       }.shuffled()
-      newSelection = Radio.CustomSelection(name: autoListTitle, ids: modIDs)
+      newSelection = Radio.CustomSelection(name: autoListTitle!, ids: modIDs)
     } else {
       log.error("Attempted to start custom channel with no data")
       return
     }
 
     let isAppending = request.appending && modulePlayer.radioOn
-    let count = modulePlayer.controlRadio(Radio.Control.Request(state: newState, channel: RadioChannel.selection, selection: newSelection))
+    let count = modulePlayer.controlRadio(Radio.Control.Request(state: newState, channel: RadioChannel.custom, customSelection: newSelection))
     let response = Search.RadioSetup.Response(channelName: newSelection.name,
                                               moduleCount: count,
                                               appending: isAppending)
