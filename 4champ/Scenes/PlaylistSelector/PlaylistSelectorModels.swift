@@ -57,7 +57,7 @@ enum PlaylistSelector {
 
     enum Append {
         struct Request {
-            let module: MMD
+            let moduleId: Int?
             let playlistIndex: Int
         }
         struct Response {

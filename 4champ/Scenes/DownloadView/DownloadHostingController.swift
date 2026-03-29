@@ -289,15 +289,6 @@ class DownloadController: NSObject, ObservableObject {
     }
     let filename = String(pathElements.popLast()!)
 
-    guard let suffix = filename.split(separator: ".").last else {
-      return nil
-    }
-
-    let filetype = String(suffix).uppercased()
-    guard MMD.supportedTypes.contains(filetype) else {
-      return nil
-    }
-
     if let previouslyImported = moduleStorage.fetchModuleInfoByKey(filename) {
       log.info("File \(filename) already imported")
       // already imported file with this name
@@ -305,26 +296,16 @@ class DownloadController: NSObject, ObservableObject {
       return MMD.init(cdi: previouslyImported)
     }
 
-    var mmd = MMD.init()
-    mmd.downloadPath = nil
-    mmd.name = filename
-    mmd.type = filetype
-    mmd.composer = ""
-    mmd.serviceId = .local
-    mmd.serviceKey = filename
+    guard var mmd = MMD.init(localFilename: filename) else { return nil }
 
-    guard let localPath = copyFileToDocumentsDirectory(from: url, with: &mmd, status: &status) else {
-      return nil
+    if copyFileToDocumentsDirectory(from: url, with: &mmd, status: &status) {
+      moduleStorage.addModule(module: mmd)
+      return mmd
     }
-
-    mmd.localPath = localPath
-    mmd.id = moduleStorage.getNextModuleId(service: .local)
-    moduleStorage.addModule(module: mmd)
-    status = .importSuccess
-    return mmd
+    return nil
   }
 
-  private func copyFileToDocumentsDirectory(from url: URL, with mmd: inout MMD, status: inout ImportResultType?) -> URL? {
+  private func copyFileToDocumentsDirectory(from url: URL, with mmd: inout MMD, status: inout ImportResultType?) -> Bool {
     var numberExt = 0
     var localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
       .last!.appendingPathComponent(mmd.name).appendingPathExtension(mmd.type!)
@@ -340,12 +321,14 @@ class DownloadController: NSObject, ObservableObject {
       try FileManager.default.copyItem(at: url, to: localPath)
       let attrs = try FileManager.default.attributesOfItem(atPath: localPath.path)
       mmd.size = ((attrs[FileAttributeKey.size] as? Int) ?? 0) / 1024
+      mmd.localPath = localPath
+      mmd.id = moduleStorage.getNextModuleId(service: .local)
+      status = .importSuccess
     } catch {
       status = .importFailed
-      return nil
+      return false
     }
-
-    return localPath
+    return true
   }
 
   private func discardModule() {

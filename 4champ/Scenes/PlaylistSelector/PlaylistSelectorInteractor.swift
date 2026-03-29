@@ -19,6 +19,7 @@ protocol PlaylistSelectorBusinessLogic {
 }
 
 protocol PlaylistSelectorDataStore {
+  var moduleId: Int? { get  }
 }
 
 class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelectorDataStore {
@@ -29,7 +30,8 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
   private var playlists: [PLMD] = []
   private var module: MMD?
   private var selectedPlaylist: Playlist?
-
+  var moduleId: Int? { return module?.id }
+  
   func prepare(request: PlaylistSelector.PrepareSelection.Request) {
     self.module = request.module
     playlists = PlaylistInteractor.sharedInstance.playlists
@@ -37,7 +39,7 @@ class PlaylistSelectorInteractor: PlaylistSelectorBusinessLogic, PlaylistSelecto
     presenter?.presentSelector(response: response)
   }
   func appendToPlaylist(request: PlaylistSelector.Append.Request) {
-    guard let modId = module?.id else {
+    guard let modId = request.moduleId else {
       return
     }
 
