@@ -38,7 +38,7 @@ enum RadioStatus {
 }
 
 enum Radio {
-  struct CustomSelection {
+  struct CustomSelection: Encodable, Decodable {
     let name: String
     let ids: [Int]
   }

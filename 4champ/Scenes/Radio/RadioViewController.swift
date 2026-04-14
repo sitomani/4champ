@@ -122,7 +122,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     channelSegments?.setTitle("Radio_All".l13n(), forSegmentAt: 0)
     channelSegments?.setTitle("Radio_New".l13n(), forSegmentAt: 1)
     channelSegments?.setTitle("Radio_Local".l13n(), forSegmentAt: 2)
-    updateCustomChannelSegment(selection: Radio.CustomSelection(name: "Radio_Custom".l13n(), ids: []))
+    updateCustomChannelSegment(selection: router?.dataStore?.customSelection)
 
     channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
     channelSegments?.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
