@@ -184,16 +184,17 @@ class PlaylistHostingViewController: UIHostingController<AnyView> {
 
 #if DEBUG
 
-func randomMMD() -> MMD {
-  var mmd = MMD()
-  mmd.composer = "foo"
-  mmd.name = "bar"
+func randomModule() -> MMD {
+  var mmd = MMD.init(path: "foo", modId: 123)
+  mmd.composer = "Composer"
+  mmd.name = "music"
   mmd.type = "MOD"
   return mmd
 }
-
-var st = PlaylistStore(viewModel: Playlists.Select.ViewModel(playlistName: "foo", shuffle: false, modules: [randomMMD(), randomMMD(), randomMMD(), randomMMD()])
-)
+let vm = Playlists.Select.ViewModel(playlistName: "foo",
+                                    shuffle: false,
+                                    modules: [randomModule(), randomModule(), randomModule(), randomModule()])
+var st = PlaylistStore(viewModel: vm)
 
 struct PlaylistPreview: PreviewProvider {
   static var previews: some View {

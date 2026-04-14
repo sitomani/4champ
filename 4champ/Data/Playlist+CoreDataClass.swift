@@ -9,8 +9,22 @@
 import Foundation
 import CoreData
 
+protocol PLCDOPresentable: class {
+  func getDisplayName() -> String
+  func getModuleCount() -> Int
+  func getPlId() -> String
+}
+
 @objc(Playlist)
-public class Playlist: NSManagedObject {
+public class Playlist: NSManagedObject, PLCDOPresentable {
+  func getModuleCount() -> Int {
+    return self.modules?.count ?? 0
+  }
+  
+  func getPlId() -> String {
+    return self.plId ?? "default"
+  }
+  
     func getDisplayName() -> String {
         if self.plId == "default" {
             return "PlaylistView_DefaultPlaylist".l13n()

@@ -35,7 +35,7 @@ class SearchPresenter: SearchPresentationLogic {
     case is ModuleResult.Type:
       if let modulesResponse = (response as? Search.Response<ModuleResult>)?.sortedResult(sortType: response.sortType) {
         modules = modulesResponse.compactMap {
-          return getMMDFrom(resultObject: $0)
+          return MMD.init(searchResult: $0)
         }
       }
     case is GroupResult.Type:
@@ -121,22 +121,4 @@ class SearchPresenter: SearchPresentationLogic {
                         realName: resultObject.realname,
                         groups: resultObject.groups)
   }
-
-  private func getMMDFrom(resultObject: ModuleResult) -> MMD {
-    let id: Int = getIdFrom(href: resultObject.nameBlock.href) ?? 0
-    var mmd = MMD()
-    mmd.id = id
-    mmd.downloadPath = URL.init(string: resultObject.nameBlock.href)
-    mmd.name = resultObject.nameBlock.label
-    mmd.size = Int(resultObject.size.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
-    mmd.type = resultObject.format
-    mmd.composer = resultObject.composer.label
-    mmd.serviceId = .amp
-    mmd.note = resultObject.note
-    if let localCopy = moduleStorage.getModuleById(id) {
-      mmd.localPath = localCopy.localPath
-    }
-    return mmd
-  }
-
 }

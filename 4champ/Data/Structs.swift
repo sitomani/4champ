@@ -36,45 +36,6 @@ struct MMD: Identifiable, NameComparable, IdComparable {
 
   static let supportedTypes: [String] = Replay.supportedFormats
 
-  init(cdi: ModuleInfo) {
-    self.init()
-    self.composer = cdi.modAuthor
-    if let urlString = cdi.modURL {
-      self.downloadPath = URL.init(string: urlString)
-    }
-    self.id = cdi.modId?.intValue ?? 0
-    if let path = cdi.modLocalPath {
-      self.localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(path)
-    } else {
-      log.error("Module \(cdi.modName ?? "") file not available")
-    }
-    self.name = cdi.modName ?? ""
-    self.size = cdi.modSize?.intValue
-    self.type = cdi.modType
-    self.serviceId = ModuleService.init(rawValue: cdi.serviceId?.intValue ?? 1) ?? .amp
-    self.serviceKey = cdi.serviceKey
-    self.favorite = cdi.modFavorite?.boolValue ?? false
-    self.loop = cdi.loop?.intValue ?? 0
-  }
-
-  init(path: String, modId: Int) {
-    self.init()
-    downloadPath = URL.init(string: path)
-
-    id = modId
-    let components = path.components(separatedBy: "/")
-    if components.count > 1 {
-      composer = components[components.count - 2].removingPercentEncoding
-      if let modNameParts = components.last?.components(separatedBy: ".") {
-        type = modNameParts.first ?? "MOD"
-        name = modNameParts[1...modNameParts.count - 2].joined(separator: ".")
-        name = name.replacingOccurrences(of: "%", with: "%25") // replace percent signs with encoding
-        name = name.removingPercentEncoding ?? "" // before removing the encoding
-        localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(name).appendingPathExtension(type!)
-      }
-    }
-  }
-
   var id: Int?
   var name: String
   var type: String?
@@ -121,4 +82,90 @@ extension MMD: Equatable {}
 func == (lhs: MMD, rhs: MMD) -> Bool {
   let eq = lhs.id == rhs.id && lhs.id != nil
   return eq
+}
+
+protocol MMDInstantiable {
+  /// Instantiate from CoreData `ModuleInfo` object
+  init(cdi: ModuleInfo)
+  /// Instantiate from 4champ.net search response `ModuleResult`
+  init(searchResult: ModuleResult)
+  /// Instantiate from remote URL and moduleID
+  init(path: String, modId: Int)
+  /// Instantiate from local file name  (path will be determined after instantiation)
+  init?(localFilename: String)
+}
+
+extension MMD: MMDInstantiable {
+  init(cdi: ModuleInfo) {
+    self.init()
+    composer = cdi.modAuthor
+    if let urlString = cdi.modURL {
+      downloadPath = URL.init(string: urlString)
+    }
+    id = cdi.modId?.intValue ?? 0
+    if let path = cdi.modLocalPath {
+      localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(path)
+    } else {
+      log.error("Module \(cdi.modName ?? "") file not available")
+    }
+    name = cdi.modName ?? ""
+    size = cdi.modSize?.intValue
+    type = cdi.modType
+    serviceId = ModuleService.init(rawValue: cdi.serviceId?.intValue ?? 1) ?? .amp
+    serviceKey = cdi.serviceKey
+    favorite = cdi.modFavorite?.boolValue ?? false
+    loop = cdi.loop?.intValue ?? 0
+  }
+  
+  init(searchResult: ModuleResult) {
+    self.init()
+    id = searchResult.id
+    downloadPath = URL.init(string: searchResult.nameBlock.href)
+    name = searchResult.nameBlock.label
+    size = Int(searchResult.size.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
+    type = searchResult.format
+    composer = searchResult.composer.label
+    serviceId = .amp
+    note = searchResult.note
+    if let localCopy = moduleStorage.getModuleById(id ?? 0) {
+      localPath = localCopy.localPath
+    }
+  }
+
+  init(path: String, modId: Int) {
+    self.init()
+    downloadPath = URL.init(string: path)
+
+    id = modId
+    let components = path.components(separatedBy: "/")
+    if components.count > 1 {
+      composer = components[components.count - 2].removingPercentEncoding
+      if let modNameParts = components.last?.components(separatedBy: ".") {
+        type = modNameParts.first ?? "MOD"
+        name = modNameParts[1...modNameParts.count - 2].joined(separator: ".")
+        name = name.replacingOccurrences(of: "%", with: "%25") // replace percent signs with encoding
+        name = name.removingPercentEncoding ?? "" // before removing the encoding
+        localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(name).appendingPathExtension(type!)
+      }
+    }
+  }
+  
+  init?(localFilename: String) {
+    guard let suffix = localFilename.split(separator: ".").last else {
+      return nil
+    }
+
+    let filetype = String(suffix).uppercased()
+    guard MMD.supportedTypes.contains(filetype) else {
+      return nil
+    }
+    
+    downloadPath = nil
+    name = localFilename
+    type = filetype
+    composer = ""
+    serviceId = .local
+    serviceKey = localFilename
+    loop = 0
+  }
 }

@@ -31,18 +31,15 @@ struct NavigationConfigurator: UIViewControllerRepresentable {
 }
 
 struct PlaylistCell: View {
-  let pl: Playlist
+  let pl: PLCDOPresentable
   
-  func getImage() -> UIImage {
-    return UIImage.init(named:
-      pl.plName == "default" ? "playlist_default" : "playlist") ?? UIImage()
-  }
   var body: some View {
     HStack {
-      Image(uiImage: getImage()
-        .withTintColor(.lightGray, renderingMode: .alwaysTemplate))
-      Text("\(pl.getDisplayName()) (\(pl.modules?.count ?? 0))").foregroundColor(.white).frame(maxWidth: .infinity, alignment: .leading)
-    }.deleteDisabled(pl.plId == "default")
+      Image(pl.getPlId() == "default" ? "playlist": "playlist")
+        .renderingMode(.template)
+        .foregroundColor(Color(.white.withAlphaComponent(0.8)))
+      Text("\(pl.getDisplayName()) (\(pl.getModuleCount()))").foregroundColor(.white).frame(maxWidth: .infinity, alignment: .leading)
+    }.deleteDisabled(pl.getPlId() == "default")
   }
 }
 
@@ -158,5 +155,27 @@ struct PlaylistSelectorSUI: View {
           Image(systemName: "plus").imageScale(.large)
         })).background(Color(Appearance.darkBlueColor))
     }.background(Color(Appearance.darkBlueColor)).navigationViewStyle(StackNavigationViewStyle())
+  }
+}
+
+internal class PLDummy: NSObject, PLCDOPresentable {
+  func getDisplayName() -> String {
+    "Konkoilen"
+  }
+  
+  func getModuleCount() -> Int {
+    4
+  }
+  
+  func getPlId() -> String {
+    "default"
+  }
+  
+}
+
+#Preview {
+  ZStack {
+    Color.red
+    PlaylistCell(pl: PLDummy())
   }
 }

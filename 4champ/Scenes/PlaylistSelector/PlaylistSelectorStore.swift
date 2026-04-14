@@ -85,7 +85,7 @@ class PlaylistSelectorStore: ObservableObject, PlaylistSelectorDisplayLogic {
     case .downloading:
       return
     default:
-      interactor?.appendToPlaylist(request: PlaylistSelector.Append.Request(module: MMD(), playlistIndex: playlistIndex))
+      interactor?.appendToPlaylist(request: PlaylistSelector.Append.Request(moduleId: router?.dataStore?.moduleId, playlistIndex: playlistIndex))
     }
   }
 

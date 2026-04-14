@@ -17,7 +17,7 @@ protocol LocalBusinessLogic {
 
   // Direct getters
   func moduleCount() -> Int
-  func getModule(at: IndexPath) -> MMD
+  func getModule(at: IndexPath) -> MMD?
   func getModuleInfo(at: IndexPath) -> ModuleInfo?
 }
 
@@ -73,26 +73,11 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore {
     return frc?.fetchedObjects?.count ?? 0
   }
 
-  func getModule(at: IndexPath) -> MMD {
+  func getModule(at: IndexPath) -> MMD? {
     if let mi = frc?.fetchedObjects?[at.row] {
-      var module = MMD()
-      module.type = mi.modType ?? ""
-      module.id = mi.modId?.intValue ?? 0
-      if let path = mi.modLocalPath {
-        module.localPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!.appendingPathComponent(path)
-      } else {
-        log.error("file not available for module \(module.name)")
-      }
-      module.name = mi.modName ?? ""
-      module.size = mi.modSize?.intValue ?? 0
-      module.composer = mi.modAuthor ?? ""
-      module.favorite = mi.modFavorite?.boolValue ?? false
-      module.serviceId = ModuleService(rawValue: mi.serviceId?.intValue ?? 1)
-      module.serviceKey = mi.serviceKey
-      module.loop = mi.loop?.intValue ?? 0
-      return module
+      return MMD.init(cdi: mi)
     }
-    return MMD()
+    return nil
   }
 
   func getModuleInfo(at: IndexPath) -> ModuleInfo? {
@@ -103,7 +88,7 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore {
   }
 
   func playModule(at: IndexPath) {
-    let mmd = getModule(at: at)
+    guard let mmd = getModule(at: at) else { return }
 
     if mmd.fileExists() {
         modulePlayer.play(mmd: mmd)
@@ -114,12 +99,12 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore {
   }
 
   func deleteModule(at: IndexPath) {
-    let mmd = getModule(at: at)
+    guard let mmd = getModule(at: at) else { return }
     moduleStorage.deleteModule(module: mmd)
   }
 
   func toggleFavorite(at: IndexPath) {
-    let mmd = getModule(at: at)
+    guard let mmd = getModule(at: at) else { return }
     if mmd.fileExists() {
       _ = moduleStorage.toggleFavorite(module: mmd)
     }
