@@ -108,7 +108,7 @@ static volatile int uadethread_running;
              @"MXTX",// Maxtrax
              @"MCMD",// MCMD
              @"MIDI",// MIDI-loriciel
-             //@"ML",@"Ml"  // MusicLine Editor - disabled since ML player does not handle file paths longer than 127 chars.
+             @"ML", // MusicLine Editor
              @"MOK", // Silmarilis
              @"MON", // ManiacsOfNoise
              @"MSO", // Medley

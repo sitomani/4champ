@@ -28,14 +28,14 @@ struct Notifications {
 }
 
 struct MMD: Identifiable, NameComparable, IdComparable {
-
+  
   init() {
     name = ""
     loop = 0
   }
-
+  
   static let supportedTypes: [String] = Replay.supportedFormats
-
+  
   var id: Int?
   var name: String
   var type: String?
@@ -110,7 +110,7 @@ extension MMD: MMDInstantiable {
     }
     name = cdi.modName ?? ""
     size = cdi.modSize?.intValue
-    type = cdi.modType
+    type = cdi.modType?.uppercased()
     serviceId = ModuleService.init(rawValue: cdi.serviceId?.intValue ?? 1) ?? .amp
     serviceKey = cdi.serviceKey
     favorite = cdi.modFavorite?.boolValue ?? false
@@ -123,7 +123,7 @@ extension MMD: MMDInstantiable {
     downloadPath = URL.init(string: searchResult.nameBlock.href)
     name = searchResult.nameBlock.label
     size = Int(searchResult.size.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
-    type = searchResult.format
+    type = searchResult.format.uppercased()
     composer = searchResult.composer.label
     serviceId = .amp
     note = searchResult.note
@@ -141,7 +141,7 @@ extension MMD: MMDInstantiable {
     if components.count > 1 {
       composer = components[components.count - 2].removingPercentEncoding
       if let modNameParts = components.last?.components(separatedBy: ".") {
-        type = modNameParts.first ?? "MOD"
+        type = modNameParts.first?.uppercased() ?? "MOD"
         name = modNameParts[1...modNameParts.count - 2].joined(separator: ".")
         name = name.replacingOccurrences(of: "%", with: "%25") // replace percent signs with encoding
         name = name.removingPercentEncoding ?? "" // before removing the encoding
@@ -162,7 +162,7 @@ extension MMD: MMDInstantiable {
     
     downloadPath = nil
     name = localFilename
-    type = filetype
+    type = filetype.uppercased()
     composer = ""
     serviceId = .local
     serviceKey = localFilename
