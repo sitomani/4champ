@@ -39,6 +39,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     static let interpolation = "interpolation"
     static let amigaResampler = "amigaResampler"
     static let moduleSortKey = "moduleSortKey"
+    static let radioCustomSelection = "radioCustomSelection"
   }
 
   var presenter: SettingsPresentationLogic?
@@ -138,6 +139,22 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     set {
       UserDefaults.standard.set(newValue.rawValue, forKey: SettingKeys.moduleSortKey)
     }
+  }
+  
+  var radioCustomSelection: Radio.CustomSelection {
+    get {
+      if let data = UserDefaults.standard.string(forKey: SettingKeys.radioCustomSelection),
+         let value = try? JSONDecoder().decode(Radio.CustomSelection.self, from: data.data(using: .utf8)!) {
+        return value
+      }
+      return Radio.CustomSelection(name: "Radio_Custom".l13n(), ids: [])
+    }
+    set {
+      if let data = try? JSONEncoder().encode(newValue) {
+        UserDefaults.standard.set(String(data: data, encoding: .utf8) ?? "", forKey: SettingKeys.radioCustomSelection)
+      }
+    }
+    
   }
 
   // MARK: Do something

@@ -92,8 +92,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   private var ntfAuthorization: UNAuthorizationStatus = .notDetermined
   private var playbackTimer: Timer?
   private var customChannelIndex = 0 // index of module in custom channel
-  var customSelection: Radio.CustomSelection = Radio.CustomSelection(name: "Radio_Custom".l13n(), ids: [])
-
+  var customSelection: Radio.CustomSelection = settings.radioCustomSelection
   // Keep session history for getting back to modules listened in the radio mode.
   private var radioSessionHistory: [MMD] = []
 
@@ -198,6 +197,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
       } else {
         customSelection = selection
       }
+      settings.radioCustomSelection = customSelection
       channel = .custom
     default:
       channel = request.channel
