@@ -1,0 +1,3 @@
+[submodule "uade-ios"]
+	path = uade-ios
+	url = git@gitlab.com:sitomani/uade-ios.git

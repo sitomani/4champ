@@ -251,7 +251,7 @@
 		737FEAAE2D89FF060075079B /* AMPLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMPLogger.swift; sourceTree = "<group>"; };
 		7397C1DA29091504002D5CDB /* UADEReplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UADEReplayer.h; sourceTree = "<group>"; };
 		7397C1DC29091504002D5CDB /* UADEReplayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UADEReplayer.m; sourceTree = "<group>"; };
-		7397C1E129091BC3002D5CDB /* uade_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = uade_ios.xcframework; path = "../uade-ios/uade_ios.xcframework"; sourceTree = "<group>"; };
+		7397C1E129091BC3002D5CDB /* uade_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = uade_ios.xcframework; path = "uade-ios/uade_ios.xcframework"; sourceTree = SOURCE_ROOT; };
 		739B4BF32720850200C2D69F /* RadioSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioSessionCell.swift; sourceTree = "<group>"; };
 		739CE41D2F086A3A00F04907 /* TemplateApplicationSceneDelegate.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = TemplateApplicationSceneDelegate.swift; sourceTree = "<group>"; tabWidth = 2; };
 		73AE47422C80E371008BAD87 /* amplitudegraph.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = amplitudegraph.metal; sourceTree = "<group>"; };
