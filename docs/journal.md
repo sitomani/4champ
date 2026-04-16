@@ -1,5 +1,9 @@
 # 4champ Development Journal
 
+### April 2026
+
+It feels good to work on in a more regular pace with 4champ features after a while. During April I've done a couple of smaller improvements, one that is visible for the end users (custom channel in radio is persisted between launches) and one refactoring that has been waiting a long time in the issues list. Then, a bigger change that updates both UADE and OpenMPT to latest version of the lib and reintroduces the libraries as submodules. Along with the UADE update, I cherrypicked the change done by Matti Tiainen that enables long filepaths for all formats in UADE. This enabled playback of MusiclineEditor (ML) files in the app! There are some really banger tunes in that format in AMP, so it's great to have support available, check e.g. [Take the Ragga Muffin](https://4champ.net/mod?id=171566) by Firefox or [OctaGroove](https://4champ.net/mod?id=170589) by Ziphoid.
+
 ### March 2026
 
 I've received a number of requests for CarPlay support from users past year. In March 2026, I finally took a dive in the Apple WWDC materials regarding the feature, and little by little figured out how to fit the feature in with 4champ. The architecture choice done back in 2018 proved valuable now that I split the application to two parallel UIScenes. Introducing multiple presenters per interactor in a VIP cycle was straightforward within the clean architecture.
