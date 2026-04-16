@@ -34,20 +34,18 @@ The project has build phase for running **[SwiftLint](https://github.com/realm/S
 
 #### Module Playback Libraries
 
-4champ uses [libOpenMPT](https://github.com/OpenMPT/openmpt), [Hivelytracker](https://github.com/pete-gordon/hivelytracker) and [UADE](https://gitlab.com/sitomani/uade-ios) for module playback.
-
 **Hivelytracker** replayer code is included in [4champ/Replay/Hively](4champ/replay/hively) folder, so it will be built automatically when you build xcode projects in this repository, no further actions needed.
 
-**LibOpenMPT** repo does not build for iOS without small tweaks, which I have done on my own fork of the lib at https://github.com/sitomani/openmpt. In order to build it for use in connection with 4champ and the SamplePlayer demo app in this repository, you will need to take the following steps:
+**LibOpenMPT** repo does not build for iOS without small tweaks, which I have done on my own fork of the lib at https://github.com/sitomani/openmpt. 
 
-1. Make sure you have the [GENie](https://github.com/bkaradzic/GENie) project generator tool installed to your system
-2. Clone https://github.com/sitomani/openmpt at same folder where you cloned this repository at (the repositories will be subfolders in same level in the directory tree).
-3. Navigate in terminal to the openmpt repository root folder
-4. Execute `iOS_genproject.sh` to generate the xcode project files for libopenmpt.
-5. Execute `iOS_build.sh` to build the fat framework file for iOS use (supports simulators on both Intel and M1 macs and all Arm64 iOS devices)
-6. After successful build, the framework file `libopenmpt.framework` will be found under openmpt repository root, and 4champ repository projects are configured to find it there, provided that you have cloned this repository and openmpt repository in the same folder.
+**UADE** likewise, the UADE framework implementation is my port for iOS at https://gitlab.com/sitomani/uade-ios.
 
-**UADE** likewise, the UADE framework implementation is my port for iOS at https://gitlab.com/sitomani/uade-ios. Clone the repository in the same parent folder and build the framework following instructions in the cloned repository before building the app.
+The **LibOpenMPT** and **UADE** are configured as submodules in this repository. When you clone this repo, you need to build the libraries first to build 4champ. Run the following shell script to get a working build:
+
+```shell
+./build_deps.sh
+```
+this will prepare the frameworks that 4champ project expects to be found in this folder.
 
 ### Building the app
 
