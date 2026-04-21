@@ -65,5 +65,6 @@ _1st_intro.mod_ by florist (Aleksi Sitomaniemi - yup that's me!)<br/>
 _all.in.eightchannels.xm_ by Daze (Patrick Glasby-Baldwin)<br/>
 _jinx.jam_ by Jeff (Ingmar Hänsch)<br/>
 _mislead.ahx_ by Pink (Manfred Linzner)<br/>
+_octagroove.ml_ by Ziphoid (John Carehag)<br/>
 _peanuts!.hvl_ by Lavaburn (Dale Whinham)<br/>
 _sweet_dreams.aon_ by Toodeloo (Anders Nilsson)<br/>
