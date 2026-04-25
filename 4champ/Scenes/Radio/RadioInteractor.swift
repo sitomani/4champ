@@ -136,6 +136,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     NotificationCenter.default.addObserver(self, selector: #selector(refreshLocalNotificationsStatus),
                                            name: UIApplication.willEnterForegroundNotification, object: nil)
     modulePlayer.radioRemoteControl = self
+    channel = settings.lastRadioChannel
   }
 
   deinit {

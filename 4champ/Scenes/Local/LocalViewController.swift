@@ -98,6 +98,11 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
     self.view.addGestureRecognizer(longPressRecognizer)
   }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    settings.lastActiveTab = .local
+  }
 
   deinit {
     modulePlayer.removePlayerObserver(self)

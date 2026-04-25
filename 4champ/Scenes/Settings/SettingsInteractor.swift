@@ -18,6 +18,14 @@ enum SortType: Int {
   case idDescending
 }
 
+enum MainTabs: Int {
+  case local
+  case playlists
+  case search
+  case radio
+  case about
+}
+
 protocol SettingsBusinessLogic {
   func updateSettings(request: Settings.Update.ValueBag?)
 }
@@ -40,6 +48,10 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     static let amigaResampler = "amigaResampler"
     static let moduleSortKey = "moduleSortKey"
     static let radioCustomSelection = "radioCustomSelection"
+    static let lastActiveTab = "lastActiveTab"
+    static let lastActivePlaylist = "lastActivePlaylist"
+    static let lastSearch = "lastSearch"
+    static let lastRadioChannel = "lastRadioChannel"
   }
 
   var presenter: SettingsPresentationLogic?
@@ -154,7 +166,57 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
         UserDefaults.standard.set(String(data: data, encoding: .utf8) ?? "", forKey: SettingKeys.radioCustomSelection)
       }
     }
-    
+  }
+  
+  var lastActiveTab: MainTabs {
+    get {
+      if let lastActive = UserDefaults.standard.value(forKey: SettingKeys.lastActiveTab) as? Int {
+        return MainTabs(rawValue: lastActive) ?? .radio
+      }
+      return MainTabs.radio
+    }
+    set {
+      UserDefaults.standard.set(newValue.rawValue, forKey: SettingKeys.lastActiveTab)
+    }
+  }
+  
+  var lastActivePlaylist: String {
+    get {
+      if let lastActive = UserDefaults.standard.value(forKey: SettingKeys.lastActivePlaylist) as? String {
+        return lastActive
+      }
+      return "default"
+    }
+    set {
+      UserDefaults.standard.set(newValue, forKey: SettingKeys.lastActivePlaylist)
+    }
+  }
+  
+  var lastSearchRequest: Search.Request {
+    get {
+      if let data = UserDefaults.standard.string(forKey: SettingKeys.lastSearch),
+         let value = try? JSONDecoder().decode(Search.Request.self, from: data.data(using: .utf8)!) {
+        return value
+      }
+      return Search.Request(text: "", type: .composer)
+    }
+    set {
+      if let data = try? JSONEncoder().encode(newValue) {
+        UserDefaults.standard.set(String(data: data, encoding: .utf8) ?? "", forKey: SettingKeys.lastSearch)
+      }
+    }
+  }
+  
+  var lastRadioChannel: RadioChannel {
+    get {
+      if let channel = UserDefaults.standard.value(forKey: SettingKeys.lastRadioChannel) as? Int {
+        return RadioChannel(rawValue: channel) ?? .all
+      }
+      return .all
+    }
+    set {
+      UserDefaults.standard.set(newValue.rawValue, forKey: SettingKeys.lastRadioChannel)
+    }
   }
 
   // MARK: Do something

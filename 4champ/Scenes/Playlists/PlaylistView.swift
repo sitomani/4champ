@@ -69,7 +69,7 @@ struct PlaylistView: View {
   @State var showNowPlaying: Bool = false
   @State var isEditing: Bool = false
   @State var navigationButtonID = UUID()
-  @State var selectedPlaylistId: String = "default" {
+  @State var selectedPlaylistId: String = settings.lastActivePlaylist {
     didSet {
       store.interactor?.selectPlaylist(request: Playlists.Select.Request(playlistId: self.selectedPlaylistId))
     }
@@ -179,6 +179,11 @@ class PlaylistHostingViewController: UIHostingController<AnyView> {
     store.router?.viewController = self
     super.viewDidLoad()
     self.view.backgroundColor = Appearance.darkBlueColor
+  }
+
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    settings.lastActiveTab = .playlists
   }
 }
 

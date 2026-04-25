@@ -190,6 +190,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
+    settings.lastActiveTab = .radio
     updateUIElements()
   }
 
@@ -376,6 +377,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
       let powerState: Radio.Control.State = (radioSwitch?.isOn ?? false) ? .on : .off
       let req = Radio.Control.Request(state: powerState, channel: channelSelection, customSelection: router?.dataStore?.customSelection)
       _ = interactor?.controlRadio(request: req)
+      settings.lastRadioChannel = channelSelection
     }
   }
 }

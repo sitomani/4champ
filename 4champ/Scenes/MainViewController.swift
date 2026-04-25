@@ -70,8 +70,19 @@ class MainViewController: UITabBarController {
         tab.title = titles[index].l13n()
       }
     }
-    // make the app start at Radio tab
-    selectedIndex = 3
+    // make the app start at the last active tab
+    switch settings.lastActiveTab {
+    case .local:
+      selectedIndex = 0
+    case .playlists:
+      selectedIndex = 1
+    case .search:
+      selectedIndex = 2
+    case .radio:
+      selectedIndex = 3
+    case .about:
+      selectedIndex = 4
+    }
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -113,6 +124,8 @@ class MainViewController: UITabBarController {
     }))
     present(migrationAlert, animated: true)
   }
+  
+  
 
   func toggleNowPlaying(_ value: Bool) {
     log.debug("")

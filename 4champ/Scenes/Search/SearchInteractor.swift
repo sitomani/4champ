@@ -87,6 +87,10 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
       currentTask?.cancel()
       currentTask = nil
     }
+    
+    if request.text.isEmpty {
+      return
+    }
 
     let req: APISearchRequest = APISearchRequest(type: request.type, sought: request.text, position: request.pagingIndex)
 
@@ -98,6 +102,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
           self.presenter?.presentSearchResponse(self.latestModuleResponse)
         }
         self.pagingIndex = request.pagingIndex
+        settings.lastSearchRequest = request
       } catch let err {
         self.latestModuleResponse = Search.Response<ModuleResult>(result: [], text: request.text)
         self.presenter?.presentSearchResponse(self.latestModuleResponse)

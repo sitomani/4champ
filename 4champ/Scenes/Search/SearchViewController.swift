@@ -123,8 +123,21 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
         tf.leftView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
         tf.leftView?.tintColor = .lightGray
       }
-
       searchBar?.scopeButtonTitles = searchScopes.map { $0.l13n() }
+      let request = settings.lastSearchRequest
+      searchBar?.searchTextField.text = request.text
+      searchBar?.showsScopeBar = true
+      switch request.type {
+      case .composer:
+        searchBar?.selectedScopeButtonIndex = 0
+      case .module:
+        searchBar?.selectedScopeButtonIndex = 1
+      case .group:
+        searchBar?.selectedScopeButtonIndex = 2
+      case .meta:
+        searchBar?.selectedScopeButtonIndex = 3
+      }
+      interactor?.search(request)
     } else {
       searchBar?.removeFromSuperview()
       if router?.dataStore?.autoListType == .composer {
@@ -149,6 +162,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
+    settings.lastActiveTab = .search
     if shouldDisplaySearchBar {
       navigationItem.title = "TabBar_Search".l13n().uppercased()
       let text = searchBar?.text ?? ""
@@ -416,6 +430,7 @@ extension SearchViewController: UISearchBarDelegate {
   private func prepareSearch(keyword: String) {
     NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(triggerSearch), object: nil)
     if keyword.count == 0 {
+      settings.lastSearchRequest = Search.Request(text: "", type: searchScopes[searchBar?.selectedScopeButtonIndex ?? 0], pagingIndex: 0)
       searchBar?.searching = false
       viewModel = Search.ViewModel(modules: [], composers: [], groups: [], text: "")
       tableView?.reloadData()

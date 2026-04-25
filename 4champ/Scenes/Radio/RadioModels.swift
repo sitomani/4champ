@@ -7,21 +7,7 @@
 
 import UIKit
 
-enum RadioChannel: Equatable {
-  static func == (lhs: RadioChannel, rhs: RadioChannel) -> Bool {
-      switch (lhs, rhs) {
-      case (.all, .all):
-          return true
-      case (.new, .new):
-          return true
-      case (.local, .local):
-          return true
-      case (.custom, .custom):
-          return true
-      default:
-          return false
-      }
-  }
+enum RadioChannel: Int {
   case all
   case new
   case local

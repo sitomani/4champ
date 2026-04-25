@@ -80,7 +80,13 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore {
     }
     if let pl = frc?.fetchedObjects?.first(where: { ($0 as Playlist).plId == selectedPlaylistId }) {
       let resp = Playlists.Select.Response(selectedPlaylist: pl)
+      settings.lastActivePlaylist = pl.plId ?? "default"
       presenters.forEach { $0.presentPlaylist(response: resp) }
+    } else {
+      if selectedPlaylistId != "default" {
+        // playlist not found => go to default
+        selectPlaylist(request: Playlists.Select.Request(playlistId: "default"))
+      }
     }
   }
 
