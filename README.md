@@ -16,7 +16,7 @@ You can read more about the history of the app and follow my work on the app at 
 
 You can also follow the 4champ accounts on [X (4champ_app)](https://x.com/4champ_app) or [Mastodon (@4champ@mastodon.social)](https://mastodon.social/@4champ) to stay up to date on what's happening with the app.
 
-### Main Features of the app
+## Main Features of the app
 
 - Search: Search the AMP database by module, composer, group name or sampletexts.
 - Radio: You can listen to a random set of tunes from the whole collection of over 150000 modules, or stream from the head, i.e. the most recently added ones. You can also play from the local collection from set of modules that you've selected to keep for offline mode and build your own custom channels through from search results.
@@ -26,30 +26,35 @@ You can also follow the 4champ accounts on [X (4champ_app)](https://x.com/4champ
 - Import modules from filesystem (local / cloud / network)
 - CarPlay support
 
-### Dependencies
+## Dependencies
 
-#### Optional dependencies
+### Optional dependencies
 
 The project has build phase for running **[SwiftLint](https://github.com/realm/SwiftLint)** which will be skipped if you do not have swiftlint installed, so you do not need it to build the project.
 
-#### Module Playback Libraries
-
-4champ uses [libOpenMPT](https://github.com/OpenMPT/openmpt), [Hivelytracker](https://github.com/pete-gordon/hivelytracker) and [UADE](https://gitlab.com/sitomani/uade-ios) for module playback.
+### Module Playback Libraries (mandatory)
 
 **Hivelytracker** replayer code is included in [4champ/Replay/Hively](4champ/replay/hively) folder, so it will be built automatically when you build xcode projects in this repository, no further actions needed.
 
-**LibOpenMPT** repo does not build for iOS without small tweaks, which I have done on my own fork of the lib at https://github.com/sitomani/openmpt. In order to build it for use in connection with 4champ and the SamplePlayer demo app in this repository, you will need to take the following steps:
+**LibOpenMPT** repo does not build for iOS without small tweaks, which I have done on my own fork of the lib at https://github.com/sitomani/openmpt. 
 
-1. Make sure you have the [GENie](https://github.com/bkaradzic/GENie) project generator tool installed to your system
-2. Clone https://github.com/sitomani/openmpt at same folder where you cloned this repository at (the repositories will be subfolders in same level in the directory tree).
-3. Navigate in terminal to the openmpt repository root folder
-4. Execute `iOS_genproject.sh` to generate the xcode project files for libopenmpt.
-5. Execute `iOS_build.sh` to build the fat framework file for iOS use (supports simulators on both Intel and M1 macs and all Arm64 iOS devices)
-6. After successful build, the framework file `libopenmpt.framework` will be found under openmpt repository root, and 4champ repository projects are configured to find it there, provided that you have cloned this repository and openmpt repository in the same folder.
+**UADE** likewise, the UADE framework implementation is my port for iOS at https://gitlab.com/sitomani/uade-ios.
 
-**UADE** likewise, the UADE framework implementation is my port for iOS at https://gitlab.com/sitomani/uade-ios. Clone the repository in the same parent folder and build the framework following instructions in the cloned repository before building the app.
+The **LibOpenMPT** and **UADE** are configured as submodules in this repository. When you clone this repo, you need to build the libraries first to build 4champ. The following following tooling is needed to build these libraries.
 
-### Building the app
+| Tool | Purpose |
+|------|---------|
+|[xcodegen](https://github.com/yonaskolb/XcodeGen)| Used in both LibOpenMPT and UADE forks to construct the xcode project file for build. Expected to be available in the command line. |
+|[libao](https://xiph.org/ao/) | Needed for UADE build |
+
+
+Run the following shell script in the root of this repository to update the submodules and build the frameworks that are necessary to build the main app.
+
+```shell
+./build_deps.sh
+```
+
+## Building the app
 
 After setting up the dependencies you can open 4champ.xcodeproj in Xcode and build the application. On simulator you can run the app without any further changes.
 
@@ -57,7 +62,7 @@ In order to run the app on device, you will need to replace the bundle identifie
 
 The Xcode generated developer certificate will only be valid for 7 days, which means that you'll need to reinstall from Xcode every week to use the app. To work around this nuisance, you can create an ad hoc distribution certificate for signing the app in Apple Developer Center if you are a member of the Apple Developer Program.
 
-### License
+## License
 
 The code in this repository is copyright © Aleksi Sitomaniemi and dual licensed under [GPL](LICENSE.GPL) and [MIT](LICENSE.MIT), **except** for HivelyTracker replay routine code which is by licenced under [BSD-3](4champ/replay/hively/LICENSE) by [Pete Gordon](https://github.com/pete-gordon).
 
@@ -67,5 +72,6 @@ _1st_intro.mod_ by florist (Aleksi Sitomaniemi - yup that's me!)<br/>
 _all.in.eightchannels.xm_ by Daze (Patrick Glasby-Baldwin)<br/>
 _jinx.jam_ by Jeff (Ingmar Hänsch)<br/>
 _mislead.ahx_ by Pink (Manfred Linzner)<br/>
+_octagroove.ml_ by Ziphoid (John Carehag)<br/>
 _peanuts!.hvl_ by Lavaburn (Dale Whinham)<br/>
 _sweet_dreams.aon_ by Toodeloo (Anders Nilsson)<br/>

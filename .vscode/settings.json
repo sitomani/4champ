@@ -1,0 +1,4 @@
+{
+  "C_Cpp.codeAnalysis.clangTidy.codeAction.formatFixes": false,
+  "C_Cpp.formatting": "disabled"
+}

@@ -8,16 +8,16 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+  
   @IBOutlet weak var modLabel: UILabel!
   @IBOutlet weak var modStack: UIStackView!
   @IBOutlet weak var viewTitle: UILabel!
-
+  
   private var modulesUrl: URL?
   private var modulePaths: [String] = []
-
+  
   let replay = Replay()
-
+  
   override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
     if let url = Bundle.main.url(forResource: "Modules", withExtension: "bundle") {
       modulesUrl = url
@@ -29,7 +29,7 @@ class ViewController: UIViewController {
     }
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
   }
-
+  
   required init?(coder: NSCoder) {
     if let url = Bundle.main.url(forResource: "Modules", withExtension: "bundle") {
       modulesUrl = url
@@ -41,25 +41,25 @@ class ViewController: UIViewController {
     }
     super.init(coder: coder)
   }
-
+  
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     modLabel.textColor = .black
     viewTitle.textColor = .black
-
+    
   }
-
+  
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     replay.initAudio()
-
+    
     modStack.spacing = 8.0
     modStack.distribution = .fillEqually
-
+    
     let bundle = Bundle.main // init(identifier: "lib.uade.ios")
     viewTitle.text = bundle.resourcePath ?? ""
-//    NSString *bd = [uadeBundle pathForResource:@"UADERes" ofType:@"bundle"];
-
+    //    NSString *bd = [uadeBundle pathForResource:@"UADERes" ofType:@"bundle"];
+    
     // Add module buttons
     modulePaths.forEach { path in
       let btn = UIButton()
@@ -69,9 +69,9 @@ class ViewController: UIViewController {
       btn.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
       modStack.addArrangedSubview(btn)
     }
-
+    
   }
-
+  
   @IBAction func buttonTapped(_ sender: UIButton) {
     if let btn = sender.titleLabel?.text {
       switch btn {
