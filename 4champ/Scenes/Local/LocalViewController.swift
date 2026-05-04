@@ -26,7 +26,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
   @IBOutlet var noModulesLabel: UILabel!
 
   private var searchBar: UISearchBar?
-  private var sortKey: LocalSortKey = .module
+  private var sortKey: LocalSortKey = settings.lastSortFilter.sortKey
 
   // MARK: Object lifecycle
 
@@ -76,7 +76,6 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
     tableView.delegate = self
     tableView.register(UINib(nibName: "ModuleCell", bundle: nil), forCellReuseIdentifier: "ModuleCell")
     modulePlayer.addPlayerObserver(self)
-    prepareView()
 
     searchBar = UISearchBar.init(frame: CGRect.init(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
     searchBar?.searchTextField.textColor = .white
@@ -94,6 +93,7 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
     tableView.estimatedRowHeight = 76
 
     noModulesLabel.text = "ModulesView_NoModules".l13n()
+    prepareView()
 
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
     self.view.addGestureRecognizer(longPressRecognizer)
@@ -179,8 +179,10 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
 
   // MARK: Do something
   func prepareView() {
-    let request = Local.SortFilter.Request(sortKey: .module, filterText: nil, ascending: true)
+    let request = settings.lastSortFilter
     interactor?.sortAndFilter(request: request)
+    updateBarButtons()
+    searchBar?.text = request.filterText
   }
 
   func displayModules(viewModel: Local.SortFilter.ViewModel) {

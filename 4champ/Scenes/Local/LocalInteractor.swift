@@ -66,6 +66,7 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore {
     } catch {
       log.error("Fetch failed \(error)")
     }
+    settings.lastSortFilter = request
     presenter?.presentModules(response: Local.SortFilter.Response())
   }
 

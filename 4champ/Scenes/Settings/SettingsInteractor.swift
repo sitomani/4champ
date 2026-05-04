@@ -52,6 +52,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     static let lastActivePlaylist = "lastActivePlaylist"
     static let lastSearch = "lastSearch"
     static let lastRadioChannel = "lastRadioChannel"
+    static let lastSortFilter = "lastSortFilter"
   }
 
   var presenter: SettingsPresentationLogic?
@@ -203,6 +204,21 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     set {
       if let data = try? JSONEncoder().encode(newValue) {
         UserDefaults.standard.set(String(data: data, encoding: .utf8) ?? "", forKey: SettingKeys.lastSearch)
+      }
+    }
+  }
+  
+  var lastSortFilter: Local.SortFilter.Request {
+    get {
+      if let data = UserDefaults.standard.string(forKey: SettingKeys.lastSortFilter),
+         let value = try? JSONDecoder().decode(Local.SortFilter.Request.self, from: data.data(using: .utf8)!) {
+        return value
+      }
+      return Local.SortFilter.Request(sortKey: .module, filterText: nil, ascending: true)
+    }
+    set {
+      if let data = try? JSONEncoder().encode(newValue) {
+        UserDefaults.standard.set(String(data: data, encoding: .utf8) ?? "", forKey: SettingKeys.lastSortFilter)
       }
     }
   }
