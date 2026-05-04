@@ -123,21 +123,15 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
         tf.leftView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
         tf.leftView?.tintColor = .lightGray
       }
+
       searchBar?.scopeButtonTitles = searchScopes.map { $0.l13n() }
       let request = settings.lastSearchRequest
       searchBar?.searchTextField.text = request.text
       searchBar?.showsScopeBar = true
-      switch request.type {
-      case .composer:
-        searchBar?.selectedScopeButtonIndex = 0
-      case .module:
-        searchBar?.selectedScopeButtonIndex = 1
-      case .group:
-        searchBar?.selectedScopeButtonIndex = 2
-      case .meta:
-        searchBar?.selectedScopeButtonIndex = 3
+      if let index = searchScopes.firstIndex(of: request.type) {
+        searchBar?.selectedScopeButtonIndex = index
+        interactor?.search(request)
       }
-      interactor?.search(request)
     } else {
       searchBar?.removeFromSuperview()
       if router?.dataStore?.autoListType == .composer {

@@ -71,17 +71,9 @@ class MainViewController: UITabBarController {
       }
     }
     // make the app start at the last active tab
-    switch settings.lastActiveTab {
-    case .local:
-      selectedIndex = 0
-    case .playlists:
-      selectedIndex = 1
-    case .search:
-      selectedIndex = 2
-    case .radio:
-      selectedIndex = 3
-    case .about:
-      selectedIndex = 4
+    let lastTabIndex = settings.lastActiveTab.rawValue
+    if lastTabIndex < tabBar.items!.count {
+      selectedIndex = lastTabIndex
     }
   }
 
@@ -124,8 +116,6 @@ class MainViewController: UITabBarController {
     }))
     present(migrationAlert, animated: true)
   }
-  
-  
 
   func toggleNowPlaying(_ value: Bool) {
     log.debug("")
