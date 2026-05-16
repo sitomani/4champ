@@ -85,8 +85,8 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     let router = RadioRouter()
     viewController.interactor = interactor
     viewController.router = router
-    interactor.addPresenter(presenter)
     presenter.viewController = viewController
+    interactor.addPresenter(presenter)
     router.viewController = viewController
     router.dataStore = interactor
     interactor.refreshBadge()
@@ -149,6 +149,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     self.navigationItem.rightBarButtonItem = notifyItem
     updateUIElements()
   }
+  
 
   private func updateCustomChannelSegment(selection: Radio.CustomSelection?) {
     let channelname = selection?.name ?? "Radio_Custom".l13n()
@@ -158,6 +159,8 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
   private func updateUIElements() {
     displayControlStatus(viewModel: Radio.Control.ViewModel(status: router?.dataStore?.status ?? .off))
     displayChannelBuffer(viewModel: currentChannelBuffer)
+    displaySessionHistoryInsert()
+
     if let channel = router?.dataStore?.channel, let channelIndex = segmentDict.first(where: { elem in
       elem.value == channel
     }) {
@@ -304,7 +307,6 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
       tableBottomConstraint?.constant = 0
       radioTable?.reloadData()
       animateGradient(.out)
-      historyTitle?.text = ""
       playerLabel?.text = ""
     }
   }
@@ -338,7 +340,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
   }
 
   func displaySessionHistoryInsert() {
-    historyTitle?.text = "Radio_Previous".l13n()
+    historyTitle?.text = "Radio_PlayHistory".l13n()
     radioTable?.reloadData()
   }
 

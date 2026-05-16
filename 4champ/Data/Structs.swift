@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 /// Enumeration identifying the source of a module
-enum ModuleService: Int {
+enum ModuleService: Int, Decodable, Encodable {
   case local = 0
   case amp = 1
 }
@@ -27,7 +27,7 @@ struct Notifications {
   static let badgeUpdate = Notification.Name("badge_update")
 }
 
-struct MMD: Identifiable, NameComparable, IdComparable {
+struct MMD: Identifiable, NameComparable, IdComparable, Decodable, Encodable {
   
   init() {
     name = ""

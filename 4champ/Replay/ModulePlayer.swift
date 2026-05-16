@@ -39,6 +39,7 @@ enum SampleInterpolation: Int {
  Note that there can be multiple observers for the player
  */
 protocol ModulePlayerObserver: class {
+  
   /// called when player state changes (e.g. play/pause)
   /// - parameters:
   ///    - status: new status
@@ -149,6 +150,11 @@ class ModulePlayer: NSObject {
   /// - parameters:
   ///    - observer: Object implementing ModulePlayerObserver` protocol
   func addPlayerObserver(_ observer: ModulePlayerObserver) {
+    if observers.firstIndex(where: { mp -> Bool in
+      return mp === observer
+    }) != nil {
+      return
+    }
     observers.append(observer)
   }
 

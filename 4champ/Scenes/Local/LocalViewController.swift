@@ -183,6 +183,9 @@ class LocalViewController: UIViewController, LocalDisplayLogic {
     interactor?.sortAndFilter(request: request)
     updateBarButtons()
     searchBar?.text = request.filterText
+    if let txt = request.filterText, txt.count > 0 {
+      tableView.setContentOffset(CGPoint.zero, animated: false)
+    }
   }
 
   func displayModules(viewModel: Local.SortFilter.ViewModel) {

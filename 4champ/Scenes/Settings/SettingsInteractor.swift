@@ -53,6 +53,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     static let lastSearch = "lastSearch"
     static let lastRadioChannel = "lastRadioChannel"
     static let lastSortFilter = "lastSortFilter"
+    static let sessionHistory = "sessionHistory"
   }
 
   var presenter: SettingsPresentationLogic?
@@ -169,6 +170,21 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     }
   }
   
+  var sessionHistory: [MMD] {
+    get {
+      if let data = UserDefaults.standard.string(forKey: SettingKeys.sessionHistory),
+         let value = try? JSONDecoder().decode([MMD].self, from: data.data(using: .utf8)!) {
+        return value
+      }
+      return []
+    }
+    set {
+      if let data = try? JSONEncoder().encode(Array(newValue.prefix(20))) {
+        UserDefaults.standard.set(String(data: data, encoding: .utf8) ?? "", forKey: SettingKeys.sessionHistory)
+      }
+    }
+  }
+  
   var lastActiveTab: MainTabs {
     get {
       if let lastActive = UserDefaults.standard.value(forKey: SettingKeys.lastActiveTab) as? Int {
@@ -234,6 +250,8 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
       UserDefaults.standard.set(newValue.rawValue, forKey: SettingKeys.lastRadioChannel)
     }
   }
+  
+  
 
   // MARK: Do something
 

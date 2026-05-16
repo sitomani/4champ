@@ -200,6 +200,8 @@
 
 "Radio_Previous" = "Anterior:";
 
+"Radio_PlayHistory" = "Histórico de reprodução";
+
 "Radio_NByN" = "%1$@ por %2$@";
 
 /* Radio view: Fetching status label */

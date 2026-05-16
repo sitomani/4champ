@@ -222,9 +222,8 @@ extension PlaylistInteractor: NSFetchedResultsControllerDelegate {
 
     if let pl = anObject as? Playlist, pl.plId == selectedPlaylistId {
       rebuildQueue()
-    } else {
-      rebuildList()
     }
+    rebuildList()
   }
 
   func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {

@@ -194,6 +194,8 @@
 
 "Radio_Previous" = "Tidligere:";
 
+"Radio_PlayHistory" = "Avspillingshistorikk";
+
 "Radio_NByN" = "%1$@ av %2$@";
 
 /* Radio view: Fetching status label */
