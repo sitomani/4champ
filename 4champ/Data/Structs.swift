@@ -21,6 +21,7 @@ struct Constants {
   static let amigaResamplerDefault: Bool = false // Emulate Amiga resampler for Amiga modules
   static let latestDummy: Int = 152506 // Initial newest module id in case update fails
   static let maxBadgeValue = 999 // maximum badge value for new mods
+  static let sessionHistoryLen = 30 // how many play history entries persisted
 }
 
 struct Notifications {

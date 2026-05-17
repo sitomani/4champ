@@ -256,9 +256,14 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   func addToSessionHistory(module: MMD) {
     if !radioSessionHistory.contains(module) {
       radioSessionHistory.insert(module, at: 0)
-      settings.sessionHistory = radioSessionHistory
-      presenters.forEach { $0.presentSessionHistoryInsert() }
+    } else {
+      radioSessionHistory.move(fromOffsets: [radioSessionHistory.firstIndex(of: module)!], toOffset: 0)
     }
+    while radioSessionHistory.count > Constants.sessionHistoryLen {
+      radioSessionHistory.removeLast()
+    }
+    settings.sessionHistory = radioSessionHistory
+    presenters.forEach { $0.presentSessionHistoryInsert() }
   }
 
   @objc func refreshLocalNotificationsStatus() {
@@ -484,9 +489,6 @@ extension RadioInteractor: ModulePlayerObserver {
     fillBuffer()
     triggerBufferPresentation()
     addToSessionHistory(module: module)
-//    if let previous = previous {
-//      addToSessionHistory(module: previous)
-//    }
     presenters.forEach { $0.presentReplayer(name: modulePlayer.renderer.name) }
   }
 

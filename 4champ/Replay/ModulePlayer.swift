@@ -39,7 +39,6 @@ enum SampleInterpolation: Int {
  Note that there can be multiple observers for the player
  */
 protocol ModulePlayerObserver: class {
-  
   /// called when player state changes (e.g. play/pause)
   /// - parameters:
   ///    - status: new status

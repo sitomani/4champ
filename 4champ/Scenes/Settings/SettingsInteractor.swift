@@ -179,7 +179,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
       return []
     }
     set {
-      if let data = try? JSONEncoder().encode(Array(newValue.prefix(20))) {
+      if let data = try? JSONEncoder().encode(Array(newValue.prefix(Constants.sessionHistoryLen))) {
         UserDefaults.standard.set(String(data: data, encoding: .utf8) ?? "", forKey: SettingKeys.sessionHistory)
       }
     }
