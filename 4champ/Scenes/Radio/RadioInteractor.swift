@@ -254,6 +254,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   }
 
   func addToSessionHistory(module: MMD) {
+    
     if !radioSessionHistory.contains(module) {
       radioSessionHistory.insert(module, at: 0)
     } else {

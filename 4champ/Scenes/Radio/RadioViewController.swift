@@ -113,11 +113,11 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
 
     UIUtils.roundCornersInView(currentModuleView)
     navigationItem.title = "RadioView_Title".l13n().uppercased()
+    historyTitle?.text = "Radio_PlayHistory".l13n()
 
     localLabel?.isHidden = true
     shareButton?.isHidden = true
     faveButton?.isHidden = false
-//    saveButton?.isHidden = true
 
     channelSegments?.setTitle("Radio_All".l13n(), forSegmentAt: 0)
     channelSegments?.setTitle("Radio_New".l13n(), forSegmentAt: 1)
@@ -150,7 +150,6 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
     updateUIElements()
   }
   
-
   private func updateCustomChannelSegment(selection: Radio.CustomSelection?) {
     let channelname = selection?.name ?? "Radio_Custom".l13n()
     channelSegments?.setTitle(channelname, forSegmentAt: 3)
@@ -159,7 +158,6 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
   private func updateUIElements() {
     displayControlStatus(viewModel: Radio.Control.ViewModel(status: router?.dataStore?.status ?? .off))
     displayChannelBuffer(viewModel: currentChannelBuffer)
-    displaySessionHistoryInsert()
 
     if let channel = router?.dataStore?.channel, let channelIndex = segmentDict.first(where: { elem in
       elem.value == channel
@@ -340,8 +338,7 @@ class RadioViewController: UIViewController, RadioDisplayLogic {
   }
 
   func displaySessionHistoryInsert() {
-    historyTitle?.text = "Radio_PlayHistory".l13n()
-    radioTable?.reloadData()
+    radioTable?.reloadSections(IndexSet(integer: 0), with: .automatic)
   }
 
   @IBAction private func saveTapped(_ sender: UIButton) {

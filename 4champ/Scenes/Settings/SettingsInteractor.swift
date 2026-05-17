@@ -251,8 +251,6 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
     }
   }
   
-  
-
   // MARK: Do something
 
   func updateSettings(request: Settings.Update.ValueBag?) {
