@@ -469,7 +469,6 @@ extension RadioInteractor: ModuleFetcherDelegate {
       modulePlayer.addPlayerObserver(self)
       modulePlayer.play(mmd: mmd)
     }
-    postFetchAction = .appendToQueue // reset to default
 
     self.triggerBufferPresentation()
     if let first = modulePlayer.playQueue.first, first == mmd {
@@ -477,6 +476,12 @@ extension RadioInteractor: ModuleFetcherDelegate {
     }
     self.fillBuffer()
     self.status = .on
+    
+    if postFetchAction == .startPlay, let module = modulePlayer.currentModule {
+      addToSessionHistory(module: module)
+    }
+    
+    postFetchAction = .appendToQueue // reset to default
   }
 }
 
