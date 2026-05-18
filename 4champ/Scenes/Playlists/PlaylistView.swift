@@ -113,7 +113,9 @@ struct PlaylistView: View {
           .foregroundColor(Color(.white))
           .padding(EdgeInsets.init(top: 5, leading: 0, bottom: -5, trailing: 0))
       }) .sheet(isPresented: self.$showModal) {
-        PlaylistSelectorSUI(showModal: self.$showModal).environment(\.managedObjectContext, self.managedObjectContext).onDisappear {
+        PlaylistSelectorSUI(showModal: self.$showModal)
+          .environment(\.managedObjectContext, self.managedObjectContext)
+          .onDisappear {
           self.navigationButtonID = UUID()
         }
       }

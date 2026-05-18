@@ -216,6 +216,7 @@ extension PlaylistInteractor: NSFetchedResultsControllerDelegate {
                   for type: NSFetchedResultsChangeType,
                   newIndexPath: IndexPath?) {
 
+    rebuildList()
     guard modulePlayer.radioOn == false else {
       return
     }
@@ -223,10 +224,13 @@ extension PlaylistInteractor: NSFetchedResultsControllerDelegate {
     if let pl = anObject as? Playlist, pl.plId == selectedPlaylistId {
       rebuildQueue()
     }
-    rebuildList()
   }
 
   func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    if nil == playlists.first(where: { $0.id == moduleStorage.currentPlaylist?.plId }) {
+      // user deleted current playlist. fall back to default
+      selectPlaylist(request: Playlists.Select.Request(playlistId: "default"))
+    }
     doPresentMetadataChanged()
   }
 }
