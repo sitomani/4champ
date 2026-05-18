@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 /// Enumeration identifying the source of a module
-enum ModuleService: Int {
+enum ModuleService: Int, Decodable, Encodable {
   case local = 0
   case amp = 1
 }
@@ -21,13 +21,14 @@ struct Constants {
   static let amigaResamplerDefault: Bool = false // Emulate Amiga resampler for Amiga modules
   static let latestDummy: Int = 152506 // Initial newest module id in case update fails
   static let maxBadgeValue = 999 // maximum badge value for new mods
+  static let sessionHistoryLen = 30 // how many play history entries persisted
 }
 
 struct Notifications {
   static let badgeUpdate = Notification.Name("badge_update")
 }
 
-struct MMD: Identifiable, NameComparable, IdComparable {
+struct MMD: Identifiable, NameComparable, IdComparable, Decodable, Encodable {
   
   init() {
     name = ""

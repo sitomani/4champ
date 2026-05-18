@@ -76,10 +76,11 @@ class AboutViewController: UIViewController, AboutDisplayLogic {
     self.navigationItem.leftBarButtonItem = buttonItem
   }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        toggleNowPlaying(modulePlayer.status.rawValue > PlayerStatus.stopped.rawValue)
-    }
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    toggleNowPlaying(modulePlayer.status.rawValue > PlayerStatus.stopped.rawValue)
+    settings.lastActiveTab = .about
+  }
 
   // MARK: Display Logic
   func displayNowPlaying(_ viewModel: About.Status.ViewModel) {

@@ -94,7 +94,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   private var customChannelIndex = 0 // index of module in custom channel
   var customSelection: Radio.CustomSelection = settings.radioCustomSelection
   // Keep session history for getting back to modules listened in the radio mode.
-  private var radioSessionHistory: [MMD] = []
+  private var radioSessionHistory: [MMD] = settings.sessionHistory
 
   private var fetchers: [ModuleFetcher] = []
 
@@ -136,6 +136,7 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
     NotificationCenter.default.addObserver(self, selector: #selector(refreshLocalNotificationsStatus),
                                            name: UIApplication.willEnterForegroundNotification, object: nil)
     modulePlayer.radioRemoteControl = self
+    channel = settings.lastRadioChannel
   }
 
   deinit {
@@ -175,13 +176,11 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
 
       presenters.forEach { $0.presentChannelBuffer(buffer: [], history: []) }
       modulePlayer.cleanup()
-      radioSessionHistory.removeAll()
       return 0
     }
 
     modulePlayer.addPlayerObserver(self)
     modulePlayer.cleanup()
-    radioSessionHistory.removeAll()
 
     playbackTimer?.invalidate()
     playbackTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
@@ -255,10 +254,17 @@ class RadioInteractor: NSObject, RadioBusinessLogic, RadioDataStore, RadioRemote
   }
 
   func addToSessionHistory(module: MMD) {
+    
     if !radioSessionHistory.contains(module) {
       radioSessionHistory.insert(module, at: 0)
-      presenters.forEach { $0.presentSessionHistoryInsert() }
+    } else {
+      radioSessionHistory.move(fromOffsets: [radioSessionHistory.firstIndex(of: module)!], toOffset: 0)
     }
+    while radioSessionHistory.count > Constants.sessionHistoryLen {
+      radioSessionHistory.removeLast()
+    }
+    settings.sessionHistory = radioSessionHistory
+    presenters.forEach { $0.presentSessionHistoryInsert() }
   }
 
   @objc func refreshLocalNotificationsStatus() {
@@ -460,9 +466,9 @@ extension RadioInteractor: ModuleFetcherDelegate {
     case .insertToQueue:
       modulePlayer.playQueue.insert(mmd, at: 0)
     case .startPlay:
+      modulePlayer.addPlayerObserver(self)
       modulePlayer.play(mmd: mmd)
     }
-    postFetchAction = .appendToQueue // reset to default
 
     self.triggerBufferPresentation()
     if let first = modulePlayer.playQueue.first, first == mmd {
@@ -470,6 +476,12 @@ extension RadioInteractor: ModuleFetcherDelegate {
     }
     self.fillBuffer()
     self.status = .on
+    
+    if postFetchAction == .startPlay, let module = modulePlayer.currentModule {
+      addToSessionHistory(module: module)
+    }
+    
+    postFetchAction = .appendToQueue // reset to default
   }
 }
 
@@ -482,9 +494,7 @@ extension RadioInteractor: ModulePlayerObserver {
     }
     fillBuffer()
     triggerBufferPresentation()
-    if let previous = previous {
-      addToSessionHistory(module: previous)
-    }
+    addToSessionHistory(module: module)
     presenters.forEach { $0.presentReplayer(name: modulePlayer.renderer.name) }
   }
 
@@ -517,7 +527,6 @@ extension RadioInteractor: ModulePlayerObserver {
         return
       }
       status = .off
-      radioSessionHistory.removeAll()
       modulePlayer.removePlayerObserver(self)
       presenters.forEach { $0.presentChannelBuffer(buffer: [], history: []) }
       presenters.forEach { $0.presentControlStatus(status: .off) }

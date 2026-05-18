@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum LocalSortKey: Int {
+enum LocalSortKey: Int, Decodable, Encodable {
   case module
   case size
   case type
@@ -26,7 +26,7 @@ enum SpecialFunctions: Int {
 enum Local {
   // MARK: Use cases
   enum SortFilter {
-    struct Request {
+    struct Request: Decodable, Encodable {
       let sortKey: LocalSortKey
       let filterText: String?
       let ascending: Bool

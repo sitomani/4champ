@@ -184,10 +184,11 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In this session" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xOC-w0-98Y">
-                                <rect key="frame" x="20" y="216" width="335" height="16"/>
-                                <fontDescription key="fontDescription" name="DINAlternate-Bold" family="DIN Alternate" pointSize="13"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Play history" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xOC-w0-98Y">
+                                <rect key="frame" x="20" y="222" width="335" height="16.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="DINAlternate-Bold" family="DIN Alternate" pointSize="14"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qcG-Wi-evM">
@@ -203,14 +204,14 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F68-Dd-9Qo">
-                                <rect key="frame" x="20" y="234" width="335" height="2"/>
+                                <rect key="frame" x="20" y="242.5" width="335" height="2"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="F52-jD-ZWK"/>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="zEe-nb-Fcg">
-                                <rect key="frame" x="0.0" y="238" width="375" height="272"/>
+                                <rect key="frame" x="0.0" y="246.5" width="375" height="263.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <connections>
                                     <outlet property="delegate" destination="9pv-A4-QxB" id="8fj-kd-O1d"/>
@@ -240,7 +241,7 @@
                             <constraint firstItem="QUj-fw-iU8" firstAttribute="centerY" secondItem="AIU-Eo-k1H" secondAttribute="centerY" id="T2I-Kk-iKD"/>
                             <constraint firstItem="PQr-Ze-W5v" firstAttribute="trailing" secondItem="YZW-HR-7AL" secondAttribute="trailing" constant="10" id="VeX-Mh-tp5"/>
                             <constraint firstItem="xOC-w0-98Y" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="20" id="Wc0-En-mfq"/>
-                            <constraint firstItem="xOC-w0-98Y" firstAttribute="top" secondItem="RQm-Tf-BLL" secondAttribute="bottom" constant="2" id="buj-Jc-cVx"/>
+                            <constraint firstItem="xOC-w0-98Y" firstAttribute="top" secondItem="RQm-Tf-BLL" secondAttribute="bottom" constant="8" id="buj-Jc-cVx"/>
                             <constraint firstItem="TVg-ts-xlz" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="20" id="cVD-Fa-67C"/>
                             <constraint firstItem="YZW-HR-7AL" firstAttribute="top" secondItem="PQr-Ze-W5v" secondAttribute="top" constant="9" id="eaS-8A-lRx"/>
                             <constraint firstItem="zEe-nb-Fcg" firstAttribute="top" secondItem="F68-Dd-9Qo" secondAttribute="bottom" constant="2" id="jfW-yn-67d"/>
@@ -251,7 +252,7 @@
                             <constraint firstItem="qcG-Wi-evM" firstAttribute="leading" secondItem="QUj-fw-iU8" secondAttribute="trailing" constant="10" id="tWO-1Q-Sj5"/>
                             <constraint firstItem="F68-Dd-9Qo" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="20" id="twK-CW-5rG"/>
                             <constraint firstItem="RQm-Tf-BLL" firstAttribute="top" secondItem="TVg-ts-xlz" secondAttribute="bottom" constant="8" id="ucR-wn-bN9"/>
-                            <constraint firstItem="F68-Dd-9Qo" firstAttribute="top" secondItem="xOC-w0-98Y" secondAttribute="bottom" constant="2" id="ucy-9c-rkQ"/>
+                            <constraint firstItem="F68-Dd-9Qo" firstAttribute="top" secondItem="xOC-w0-98Y" secondAttribute="bottom" constant="4" id="ucy-9c-rkQ"/>
                             <constraint firstItem="YZW-HR-7AL" firstAttribute="leading" secondItem="qcG-Wi-evM" secondAttribute="trailing" constant="10" id="ue5-Lv-IBl"/>
                             <constraint firstItem="zEe-nb-Fcg" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" id="yZi-LK-Ymc"/>
                         </constraints>

@@ -125,22 +125,33 @@ class ModuleStorage: NSObject {
     var _ = persistentStoreCoordinator
     let name = managedObjectContext.name
     log.info(name ?? "managedObjectContext does not have name")
-
-    setCurrentPlaylist(playlist: getDefaultPlaylist())
+    
+    setCurrentPlaylist(playlist: getLastActivePlaylist())
   }
 
-  private func getDefaultPlaylist() -> Playlist {
+  private func getLastActivePlaylist() -> Playlist {
     let fetchRequest = NSFetchRequest<Playlist>.init(entityName: "Playlist")
     fetchRequest.sortDescriptors = []
-    let filterString = "plId == 'default'"
-    fetchRequest.predicate = NSPredicate.init(format: filterString)
-    let frc = createFRC(fetchRequest: fetchRequest, entityName: "Playlist")
-    try? frc.performFetch()
-    guard let defaultPl = frc.fetchedObjects?.first else {
-      // No Default playlist yet, must create it
-      return createPlaylist(name: "default", id: "default")
+    
+    var plCandidates = [settings.lastActivePlaylist]
+    if plCandidates.first != "default" {
+      plCandidates.append("default")
     }
-    return defaultPl
+    
+    while plCandidates.count > 0 {
+      let plId = plCandidates[0]
+      let filterString = "plId == '" + plId + "'"
+      fetchRequest.predicate = NSPredicate.init(format: filterString)
+      let frc = createFRC(fetchRequest: fetchRequest, entityName: "Playlist")
+      try? frc.performFetch()
+      if let activePl = frc.fetchedObjects?.first {
+        return activePl
+      }
+      plCandidates.removeFirst()
+    }
+    
+    // No default playlist yet, must create it
+    return createPlaylist(name: "default", id: "default")
   }
 
   private func setCurrentPlaylist(playlist: Playlist?) {

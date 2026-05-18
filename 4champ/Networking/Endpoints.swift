@@ -11,7 +11,7 @@ let pageSize = 50
 /**
  Search type enumeration identifies the target context for search
  */
-enum SearchType: String {
+enum SearchType: String, Encodable, Decodable {
   case module
   case group
   case composer

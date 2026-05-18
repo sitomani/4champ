@@ -149,6 +149,11 @@ class ModulePlayer: NSObject {
   /// - parameters:
   ///    - observer: Object implementing ModulePlayerObserver` protocol
   func addPlayerObserver(_ observer: ModulePlayerObserver) {
+    if observers.firstIndex(where: { mp -> Bool in
+      return mp === observer
+    }) != nil {
+      return
+    }
     observers.append(observer)
   }
 

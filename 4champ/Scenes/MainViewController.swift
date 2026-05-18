@@ -70,8 +70,11 @@ class MainViewController: UITabBarController {
         tab.title = titles[index].l13n()
       }
     }
-    // make the app start at Radio tab
-    selectedIndex = 3
+    // make the app start at the last active tab
+    let lastTabIndex = settings.lastActiveTab.rawValue
+    if lastTabIndex < tabBar.items!.count {
+      selectedIndex = lastTabIndex
+    }
   }
 
   override func viewWillAppear(_ animated: Bool) {

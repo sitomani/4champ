@@ -80,7 +80,13 @@ class PlaylistInteractor: NSObject, PlaylistBusinessLogic, PlaylistDataStore {
     }
     if let pl = frc?.fetchedObjects?.first(where: { ($0 as Playlist).plId == selectedPlaylistId }) {
       let resp = Playlists.Select.Response(selectedPlaylist: pl)
+      settings.lastActivePlaylist = pl.plId ?? "default"
       presenters.forEach { $0.presentPlaylist(response: resp) }
+    } else {
+      if selectedPlaylistId != "default" {
+        // playlist not found => go to default
+        selectPlaylist(request: Playlists.Select.Request(playlistId: "default"))
+      }
     }
   }
 
@@ -210,18 +216,21 @@ extension PlaylistInteractor: NSFetchedResultsControllerDelegate {
                   for type: NSFetchedResultsChangeType,
                   newIndexPath: IndexPath?) {
 
+    rebuildList()
     guard modulePlayer.radioOn == false else {
       return
     }
 
     if let pl = anObject as? Playlist, pl.plId == selectedPlaylistId {
       rebuildQueue()
-    } else {
-      rebuildList()
     }
   }
 
   func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    if nil == playlists.first(where: { $0.id == moduleStorage.currentPlaylist?.plId }) {
+      // user deleted current playlist. fall back to default
+      selectPlaylist(request: Playlists.Select.Request(playlistId: "default"))
+    }
     doPresentMetadataChanged()
   }
 }

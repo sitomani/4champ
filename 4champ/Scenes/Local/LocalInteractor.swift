@@ -45,10 +45,13 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore {
     }
     // Add Sort Descriptors
     let sortDescriptor: NSSortDescriptor
+    let stringSortKeys: Set<LocalSortKey> = [.module, .composer, .type]
     if request.sortKey == .favorite {
       sortDescriptor = NSSortDescriptor(key: sortkey, ascending: false)
-    } else {
+    } else if stringSortKeys.contains(request.sortKey) {
       sortDescriptor = NSSortDescriptor(key: sortkey, ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
+    } else {
+      sortDescriptor = NSSortDescriptor(key: sortkey, ascending: true)
     }
 
     let fetchRequest = NSFetchRequest<ModuleInfo>.init(entityName: "ModuleInfo")
@@ -66,6 +69,7 @@ class LocalInteractor: NSObject, LocalBusinessLogic, LocalDataStore {
     } catch {
       log.error("Fetch failed \(error)")
     }
+    settings.lastSortFilter = request
     presenter?.presentModules(response: Local.SortFilter.Response())
   }
 

@@ -44,7 +44,7 @@ struct GroupInfo: NameComparable {
 }
 
 enum Search {
-  struct Request {
+  struct Request: Decodable, Encodable {
     var text: String
     var type: SearchType
     var pagingIndex: Int = 0

@@ -69,7 +69,7 @@ struct PlaylistView: View {
   @State var showNowPlaying: Bool = false
   @State var isEditing: Bool = false
   @State var navigationButtonID = UUID()
-  @State var selectedPlaylistId: String = "default" {
+  @State var selectedPlaylistId: String = settings.lastActivePlaylist {
     didSet {
       store.interactor?.selectPlaylist(request: Playlists.Select.Request(playlistId: self.selectedPlaylistId))
     }
@@ -113,7 +113,9 @@ struct PlaylistView: View {
           .foregroundColor(Color(.white))
           .padding(EdgeInsets.init(top: 5, leading: 0, bottom: -5, trailing: 0))
       }) .sheet(isPresented: self.$showModal) {
-        PlaylistSelectorSUI(showModal: self.$showModal).environment(\.managedObjectContext, self.managedObjectContext).onDisappear {
+        PlaylistSelectorSUI(showModal: self.$showModal)
+          .environment(\.managedObjectContext, self.managedObjectContext)
+          .onDisappear {
           self.navigationButtonID = UUID()
         }
       }
@@ -179,6 +181,11 @@ class PlaylistHostingViewController: UIHostingController<AnyView> {
     store.router?.viewController = self
     super.viewDidLoad()
     self.view.backgroundColor = Appearance.darkBlueColor
+  }
+
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    settings.lastActiveTab = .playlists
   }
 }
 

@@ -195,6 +195,8 @@
 
 "Radio_Previous" = "Предыдущий:";
 
+"Radio_PlayHistory" = "История воспроизведения";
+
 "Radio_NByN" = "%1$@ от %2$@";
 
 /* Radio view: Fetching status label */

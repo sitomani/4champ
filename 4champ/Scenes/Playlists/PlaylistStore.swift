@@ -47,7 +47,7 @@ class PlaylistStore: ObservableObject, PlaylistDisplayLogic {
 
   func setup() {
     let viewController = self
-    let interactor = PlaylistInteractor()
+    let interactor = PlaylistInteractor.sharedInstance
     let presenter = PlaylistPresenter()
     let router = PlaylistRouter()
     viewController.interactor = interactor
@@ -55,7 +55,7 @@ class PlaylistStore: ObservableObject, PlaylistDisplayLogic {
     interactor.addPresenter(presenter)
     presenter.viewController = viewController
     router.dataStore = interactor
-    interactor.selectPlaylist(request: Playlists.Select.Request(playlistId: ""))
+    interactor.selectPlaylist(request: Playlists.Select.Request(playlistId: settings.lastActivePlaylist))
   }
 
   func displayPlaylist(viewModel: Playlists.Select.ViewModel) {
