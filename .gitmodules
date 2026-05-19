@@ -1,6 +1,6 @@
 [submodule "uade-ios"]
 	path = uade-ios
-	url = git@gitlab.com:sitomani/uade-ios.git
+	url = https://gitlab.com/sitomani/uade-ios.git
 [submodule "openmpt"]
 	path = openmpt
-	url = git@github.com:sitomani/openmpt.git
+	url = https://github.com/sitomani/openmpt.git

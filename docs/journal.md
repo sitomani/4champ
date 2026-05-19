@@ -1,5 +1,9 @@
 # 4champ Development Journal
 
+### May 2026
+
+Preserving the custom channel between launches triggered another set of changes: The UI state is now preserved between launches on all tabs, and radio play history is preserved as well (up to 30 most recent modules). A lot of small changes all over the place to support this. I keep asking myself why not earlier, it's just so nice to get back to the app where I left off when restarting after a while.
+
 ### April 2026
 
 It feels good to work on in a more regular pace with 4champ features after a while. During April I've done a couple of smaller improvements, one that is visible for the end users (custom channel in radio is persisted between launches) and one refactoring that has been waiting a long time in the issues list. Then, a bigger change that updates both UADE and OpenMPT to latest version of the lib and reintroduces the libraries as submodules. Along with the UADE update, I cherrypicked the change done by Matti Tiainen that enables long filepaths for all formats in UADE. This enabled playback of MusiclineEditor (ML) files in the app! There are some really banger tunes in that format in AMP, so it's great to have support available, check e.g. [Take the Ragga Muffin](https://4champ.net/mod?id=171566) by Firefox or [OctaGroove](https://4champ.net/mod?id=170589) by Ziphoid.
