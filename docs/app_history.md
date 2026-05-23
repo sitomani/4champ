@@ -164,3 +164,10 @@ Minor patch to use LibOpenMPT for MED file playback
 - Carplay support
 - Module results sorting for composer modules list
 - Text mode change by swipe/pagecontrol on visualizer view
+
+### Version 3.15 May 2026
+
+- UADE and LibOpenMPT updated to recent versions and added as submodules
+- MusiclineEditor modules supported now thanks to Matti Tiainen's merge request at the UADE gitlab repository
+- UI state is preserved between app sessions
+  
