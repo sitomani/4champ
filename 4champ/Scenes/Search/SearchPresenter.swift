@@ -26,24 +26,24 @@ class SearchPresenter: SearchPresentationLogic {
     var composers: [ComposerInfo] = []
     var groups: [GroupInfo] = []
     switch T.self {
-    case is ComposerResult.Type:
-      if let composersResponse = (response as? Search.Response<ComposerResult>)?.result {
+    case is ComposerDetails.Type:
+      if let composersResponse = (response as? Search.Response<ComposerDetails>)?.result {
         composers = composersResponse.compactMap {
           return getComposerInfoFrom(resultObject: $0)
         }.sorted(by: nameSorterBlockAsc)
       }
-    case is ModuleResult.Type:
-      if let modulesResponse = (response as? Search.Response<ModuleResult>)?.sortedResult(sortType: response.sortType) {
+    case is ModuleDetails.Type:
+      if let modulesResponse = (response as? Search.Response<ModuleDetails>)?.sortedResult(sortType: response.sortType) {
         modules = modulesResponse.compactMap {
-          return MMD.init(searchResult: $0)
+          return MMD.init(details: $0)
         }
       }
-    case is GroupResult.Type:
-      if let groupsResponse = (response as? Search.Response<GroupResult>)?.result {
+    case is GroupDetails.Type:
+      if let groupsResponse = (response as? Search.Response<GroupDetails>)?.result {
         groups = groupsResponse.compactMap {
           return getGroupInfoFrom(resultObject: $0)
         }.sorted(by: nameSorterBlockAsc)
-      }
+      } 
     default:
         break
     }
@@ -107,18 +107,18 @@ class SearchPresenter: SearchPresentationLogic {
     return Int(idString)
   }
 
-  private func getGroupInfoFrom(resultObject: GroupResult) -> GroupInfo? {
-    guard let id = getIdFrom(href: resultObject.href) else { return nil }
+  private func getGroupInfoFrom(resultObject: GroupDetails) -> GroupInfo? {
+    guard let id = resultObject.id else { return nil }
     return GroupInfo(id: id,
-                     name: resultObject.label)
+                     name: resultObject.name)
 
   }
 
-  private func getComposerInfoFrom(resultObject: ComposerResult) -> ComposerInfo? {
-    guard let id = getIdFrom(href: resultObject.handle.href) else { return nil }
+  private func getComposerInfoFrom(resultObject: ComposerDetails) -> ComposerInfo? {
+    guard let id = resultObject.id else { return nil }
     return ComposerInfo(id: id,
-                        name: resultObject.handle.label,
-                        realName: resultObject.realname,
+                        name: resultObject.handle,
+                        realName: resultObject.realName,
                         groups: resultObject.groups)
   }
 }

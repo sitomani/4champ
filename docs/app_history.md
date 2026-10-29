@@ -170,4 +170,6 @@ Minor patch to use LibOpenMPT for MED file playback
 - UADE and LibOpenMPT updated to recent versions and added as submodules
 - MusiclineEditor modules supported now thanks to Matti Tiainen's merge request at the UADE gitlab repository
 - UI state is preserved between app sessions
-  
+
+### Version 3.16 Nov 2026
+- migration to new generation amp.dascene.net interface
