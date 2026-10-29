@@ -23,17 +23,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       self.window = window
       window.makeKeyAndVisible()
     }
-    
-    let urlContexts = connectionOptions.urlContexts
-    if !urlContexts.isEmpty {
-      handleURLContexts(urlContexts) // Extract and process URLs
-    }
-    
+    handleURLContexts(connectionOptions.urlContexts)
+    handleUserActivities(connectionOptions.userActivities)
   }
   
   private func handleURLContexts(_ contexts: Set<UIOpenURLContext>) {
     guard let context = contexts.first else { return }
-    let url = context.url // The incoming URL (e.g., myapp://test)
+    handleURL(context.url)
+  }
+  
+  private func handleUserActivities(_ activities: Set<NSUserActivity>) {
+    guard let activity = activities.first, let url = activity.webpageURL else { return }
+    handleURL(url)
+  }
+  
+  private func handleURL(_ url: URL) {
     print("Handling URL: \(url)")
     
     DispatchQueue.main.async {
@@ -48,12 +52,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let idString = url.path.split(separator: "/").first, let modId = Int(idString) {
           dlController.show(modId: modId)
         }
+      } else if url.path() == "/mod" {
+        if let idString = url.query?.components(separatedBy: "=").last, let modId = Int(idString) {
+          dlController.show(modId: modId)
+        }
       } else {
         dlController.showImport(for: [url])
       }
     }
   }
-  
+ 
   func sceneDidDisconnect(_ scene: UIScene) {
     // Called as the scene is being released by the system.
     // This occurs shortly after the scene enters the background, or when its session is discarded.
@@ -90,4 +98,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     handleURLContexts(URLContexts)
   }
   
+  func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+    handleUserActivities([userActivity])
+  }
 }

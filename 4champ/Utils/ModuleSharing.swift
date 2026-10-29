@@ -45,7 +45,8 @@ class ShareUtility: NSObject, UIActivityItemSource {
     }
 
     self.sharedMod = mod
-    let shareUrl = URL.init(string: "https://4champ.net/mod?id=\(mod!.id!)")!
+    let req = SharePage(moduleId: mod!.id!)
+    let shareUrl = req.url!
 
     let activityVC = UIActivityViewController.init(activityItems: [self, shareUrl], applicationActivities: nil)
     activityVC.excludedActivityTypes = [.addToReadingList, .assignToContact, .markupAsPDF, .openInIBooks, .print, .saveToCameraRoll]

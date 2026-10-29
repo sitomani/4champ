@@ -49,7 +49,7 @@ enum Search {
     var type: SearchType
     var pagingIndex: Int = 0
   }
-
+  
   struct RadioSetup {
     struct Request {
       var selection: Radio.CustomSelection?
@@ -64,7 +64,7 @@ enum Search {
       var message: String
     }
   }
-
+  
   struct ProgressResponse {
     var progress: Float
     var error: Error?
@@ -73,7 +73,7 @@ enum Search {
       var error: String?
     }
   }
-
+  
   struct BatchDownload {
     struct Request {
       var moduleIds: [Int]
@@ -92,25 +92,25 @@ enum Search {
       var favoritedModuleId: Int
     }
   }
-
+  
   struct Response<T> {
     var result: [T]
     var text: String
     var sortType: SortType?
   }
-
+  
   struct ViewModel {
     var modules: [MMD]
     var composers: [ComposerInfo]
     var groups: [GroupInfo]
     var text: String
   }
-
+  
   enum MetaDataChange {
     struct Response {
       var module: MMD
     }
-
+    
     struct ViewModel {
       var module: MMD
     }
@@ -130,7 +130,7 @@ struct ModuleResult: Decodable, IdComparable, NameComparable {
     let modUri = URL.init(string: nameBlock.href)
     var id: Int = 0
     if let idString = modUri?.query?.split(separator: "=").last {
-        id = Int(idString) ?? 0
+      id = Int(idString) ?? 0
     }
     return id
   }
@@ -154,13 +154,198 @@ struct ComposerResult: Codable {
   let realname, groups: String
 }
 
+struct LatestModule: Codable {
+  let provider: String
+  let id: String
+  enum CodingKeys: String, CodingKey {
+    case provider
+    case id
+  }
+}
+
+// MARK: - ModuleDetails
+struct ModuleDetailsResponse: Decodable {
+  let provider: String
+  let item: ModuleDetails
+  
+  enum CodingKeys: String, CodingKey {
+    case provider
+    case item
+  }
+}
+
+struct ModuleSearchResponse: Decodable {
+  let provider: String
+  let range: Range
+  let items: [ModuleDetails]
+}
+
+struct ListModulesResponse: Decodable {
+  let provider: String
+  let items: [ModuleDetails]
+}
+
+struct ListComposersResponse: Decodable {
+  let provider: String
+  let items: [ComposerDetails]
+}
+
+struct Range: Codable {
+  let start: Int
+  let end: Int
+  
+  enum CodingKeys: String, CodingKey {
+    case start
+    case end
+  }
+}
+
+struct ComposerSearchResponse: Decodable {
+  let provider: String
+  let range: Range
+  let items: [ComposerDetails]
+}
+struct GroupSearchResponse: Decodable {
+  let provider: String
+  let range: Range
+  let items: [GroupDetails]
+}
+
+// MARK: - ModuleDetails
+@propertyWrapper
+struct IntFromString: Decodable {
+  var wrappedValue: Int?
+  
+  init(from decoder: Decoder) throws {
+    let container = try decoder.singleValueContainer()
+    let string = try container.decode(String.self)
+    
+    guard let value = Int(string) else {
+      throw DecodingError.dataCorruptedError(
+        in: container,
+        debugDescription: "Expected a string containing an integer"
+      )
+    }
+    
+    wrappedValue = value
+  }
+}
+
+struct ModuleDetails: Decodable, IdComparable, NameComparable {
+  let kind: String
+  @IntFromString var id: Int?
+  let name: String
+  let composer: ModuleComposer
+  let authors: [ModuleComposer]?
+  let format: String
+  let sizeLabel: String
+  let sizeBytes: Int
+  let tracker: String?
+  let duration: String?
+  let downloadsLabel: String
+  let links: Links
+  
+  enum CodingKeys: String, CodingKey {
+    case kind
+    case id
+    case name = "title"
+    case composer
+    case authors
+    case format
+    case sizeLabel
+    case sizeBytes
+    case tracker
+    case duration
+    case downloadsLabel
+    case links
+  }
+}
+
+struct ComposerDetails: Decodable {
+  let kind: String?
+  @IntFromString var id: Int?
+  let handle: String
+  let realName: String
+  let groups: String
+  let country: [DetailRef]?
+  let groupRefs: [DetailRef]?
+  let moduleCount: Int?
+  let links: Links?
+  
+  enum CodingKeys: String, CodingKey {
+    case kind
+    case id
+    case handle
+    case realName
+    case groups
+    case country
+    case groupRefs
+    case moduleCount
+    case links
+  }
+}
+
+struct GroupDetails: Decodable {
+  let kind: String
+  @IntFromString var id: Int?
+  let name: String
+  
+  enum CodingKeys: String, CodingKey {
+    case kind
+    case id
+    case name
+  }
+}
+
+// MARK: - Country
+struct DetailRef: Codable {
+  let id: String
+  let name: String
+  
+  enum CodingKeys: String, CodingKey {
+    case id
+    case name
+  }
+}
+
+// MARK: - Composer
+struct ModuleComposer: Codable {
+  let id: String
+  let name: String
+  
+  enum CodingKeys: String, CodingKey {
+    case id
+    case name
+  }
+}
+
+// MARK: - Links
+struct Links: Codable {
+  let source: String
+  
+  enum CodingKeys: String, CodingKey {
+    case source
+  }
+}
+
+struct ModulePathResponse: Codable {
+  let provider: String
+  let id: String
+  let url: String
+  enum CodingKeys: String, CodingKey {
+    case provider
+    case id
+    case url
+  }
+}
+
 struct GroupResult: Codable {
   let label: String
   let href: String
 }
 
-extension Search.Response where T == ModuleResult {
-  func sortedResult(sortType: SortType?) -> [ModuleResult] {
+extension Search.Response where T == ModuleDetails {
+  func sortedResult(sortType: SortType?) -> [ModuleDetails] {
     return sortModules(modules: result, sortType: sortType)
   }
 }

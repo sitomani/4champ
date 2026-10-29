@@ -68,7 +68,7 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
   private var favoritedModuleId: Int = 0
   private var originalQueueLenght: Int = 0
   private var fetcher: ModuleFetcher?
-  private var latestModuleResponse = Search.Response<ModuleResult>(result: [], text: "")
+  private var latestModuleResponse = Search.Response<ModuleDetails>(result: [], text: "")
   private var nwClient = NetworkClient()
 
   init() {
@@ -98,13 +98,13 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
       do {
         let responseData = try await nwClient.send(req)
         if false == processResponse(request: request, responseData: responseData) {
-          self.latestModuleResponse = Search.Response<ModuleResult>(result: [], text: request.text)
+          self.latestModuleResponse = Search.Response<ModuleDetails>(result: [], text: request.text)
           self.presenter?.presentSearchResponse(self.latestModuleResponse)
         }
         self.pagingIndex = request.pagingIndex
         settings.lastSearchRequest = request
       } catch let err {
-        self.latestModuleResponse = Search.Response<ModuleResult>(result: [], text: request.text)
+        self.latestModuleResponse = Search.Response<ModuleDetails>(result: [], text: request.text)
         self.presenter?.presentSearchResponse(self.latestModuleResponse)
         log.error(String.init(describing: err))
       }
@@ -115,20 +115,20 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
 
   private func processResponse(request: Search.Request, responseData: Data) -> Bool {
     switch request.type {
-    case SearchType.module, SearchType.meta:
-      if let modules = try? JSONDecoder().decode([ModuleResult].self, from: responseData) {
-        self.latestModuleResponse = Search.Response<ModuleResult>(result: modules, text: request.text)
+    case SearchType.modules, SearchType.meta:
+      if let response = try? JSONDecoder().decode(ModuleSearchResponse.self, from: responseData) {
+        self.latestModuleResponse = Search.Response<ModuleDetails>(result: response.items, text: request.text)
         self.presenter?.presentSearchResponse(self.latestModuleResponse)
         return true
       }
-    case SearchType.composer:
-      if let composers = try? JSONDecoder().decode([ComposerResult].self, from: responseData) {
-        self.presenter?.presentSearchResponse(Search.Response<ComposerResult>(result: composers, text: request.text))
+    case SearchType.composers:
+      if let response = try? JSONDecoder().decode(ComposerSearchResponse.self, from: responseData) {
+        self.presenter?.presentSearchResponse(Search.Response<ComposerDetails>(result: response.items, text: request.text))
         return true
       }
-    case SearchType.group:
-      if let groups = try? JSONDecoder().decode([GroupResult].self, from: responseData) {
-        self.presenter?.presentSearchResponse(Search.Response<GroupResult>(result: groups, text: request.text))
+    case SearchType.groups:
+      if let response = try? JSONDecoder().decode(GroupSearchResponse.self, from: responseData) {
+        self.presenter?.presentSearchResponse(Search.Response<GroupDetails>(result: response.items, text: request.text))
         return true
       }
       // fallback for the AMP response for direct group match: returns composers
@@ -171,19 +171,19 @@ class SearchInteractor: SearchBusinessLogic, SearchDataStore {
     guard let id = autoListId, let type = autoListType else { return }
     let sortType = autoListSort ?? settings.composerModuleListSort
     
-    if type == .composer {
+    if type == .composers {
       let req = APIListModulesRequest(composerId: id)
       Task {
         if let response = try? await nwClient.send(req) {
-          self.latestModuleResponse = Search.Response<ModuleResult>(result: response, text: "", sortType: sortType)
+          self.latestModuleResponse = Search.Response<ModuleDetails>(result: response.items, text: "", sortType: sortType)
           self.presenter?.presentSearchResponse(self.latestModuleResponse)
         }
       }
-    } else if type == .group {
+    } else if type == .groups {
       let req = APIListComposersRequest(groupId: id)
       Task {
         if let response = try? await nwClient.send(req) {
-          self.presenter?.presentSearchResponse(Search.Response<ComposerResult>(result: response, text: ""))
+          self.presenter?.presentSearchResponse(Search.Response<ComposerDetails>(result: response.items, text: ""))
         }
       }
     } else {

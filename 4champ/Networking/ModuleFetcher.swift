@@ -48,6 +48,7 @@ class ModuleFetcher: NSObject {
 
   private var currentTask: Task<Sendable, Error>?
   private var downloadTask: URLSessionDownloadTask?
+  private var moduleDetails: ModuleDetails?
   private var state: FetcherState = .idle {
     didSet {
       let state = state
@@ -87,10 +88,12 @@ class ModuleFetcher: NSObject {
 
     currentTask = Task {
       do {
+        moduleDetails = nil
         let client = NetworkClient()
-        let requ = APIModulePathRequest(moduleId: ampId)
-        let resp = try await client.send(requ)
-        if resp.count > 0, let modUrl = URL.init(string: resp) {
+        let requ = APIModuleDetailsRequest(moduleId: ampId)
+        let downloadResponse = try await client.send(requ)
+        if let modUrl = URL.init(string: downloadResponse.item.links.source) {
+          moduleDetails = downloadResponse.item
           self.fetchModule(modUrl: modUrl, id: ampId)
         }
       } catch {
@@ -139,8 +142,8 @@ extension ModuleFetcher: URLSessionDownloadDelegate {
   func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
     self.state = .unpacking
     if let moduleDataUnzipped = self.gunzip(dataURL: location),
-        let modId = targetModuleId {
-      var mmd = MMD.init(path: downloadTask.originalRequest!.url!.path, modId: modId)
+      let details = moduleDetails {
+      var mmd = MMD.init(details: details)
       mmd.size = Int(moduleDataUnzipped.count / 1024)
 
       // Make sure that we only process supported mods further

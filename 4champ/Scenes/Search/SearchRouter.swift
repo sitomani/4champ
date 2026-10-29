@@ -24,10 +24,10 @@ class SearchRouter: NSObject, SearchRoutingLogic, SearchDataPassing {
 
   // MARK: Routing
   func toComposerList(title: String, groupId: Int) {
-    spawnSearch(title: title, type: .group, id: groupId)
+    spawnSearch(title: title, type: .groups, id: groupId)
   }
   func toModulesList(title: String, composerId: Int) {
-    spawnSearch(title: title, type: .composer, id: composerId)
+    spawnSearch(title: title, type: .composers, id: composerId)
   }
 
   func toPlaylistSelector(module: MMD) {

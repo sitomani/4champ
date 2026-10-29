@@ -215,7 +215,7 @@ class SettingsInteractor: SettingsBusinessLogic, SettingsDataStore {
          let value = try? JSONDecoder().decode(Search.Request.self, from: data.data(using: .utf8)!) {
         return value
       }
-      return Search.Request(text: "", type: .composer)
+      return Search.Request(text: "", type: .composers)
     }
     set {
       if let data = try? JSONEncoder().encode(newValue) {
