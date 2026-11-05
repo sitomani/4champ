@@ -88,8 +88,8 @@ func == (lhs: MMD, rhs: MMD) -> Bool {
 protocol MMDInstantiable {
   /// Instantiate from CoreData `ModuleInfo` object
   init(cdi: ModuleInfo)
-  /// Instantiate from 4champ.net search response `ModuleResult`
-  init(searchResult: ModuleResult)
+  /// Instantiate from 4champ.net search response `ModuleDetails`
+  init(details: ModuleDetails)
   /// Instantiate from remote URL and moduleID
   init(path: String, modId: Int)
   /// Instantiate from local file name  (path will be determined after instantiation)
@@ -118,16 +118,15 @@ extension MMD: MMDInstantiable {
     loop = cdi.loop?.intValue ?? 0
   }
   
-  init(searchResult: ModuleResult) {
+  init(details: ModuleDetails) {
     self.init()
-    id = searchResult.id
-    downloadPath = URL.init(string: searchResult.nameBlock.href)
-    name = searchResult.nameBlock.label
-    size = Int(searchResult.size.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
-    type = searchResult.format.uppercased()
-    composer = searchResult.composer.label
+    downloadPath = URL.init(string: details.links.source)
+    id = details.id
+    composer = details.composer.name
+    size = details.sizeBytes / 1024
+    name = details.name
+    type = details.format.uppercased()
     serviceId = .amp
-    note = searchResult.note
     if let localCopy = moduleStorage.getModuleById(id ?? 0) {
       localPath = localCopy.localPath
     }

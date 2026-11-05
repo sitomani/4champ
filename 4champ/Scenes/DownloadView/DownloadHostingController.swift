@@ -80,10 +80,12 @@ class DownloadController: NSObject, ObservableObject {
       model.progress = 1.0
       model.status = "ShareDialog_DownloadComplete".l13n()
       model.summary = buildSummary(mod: mod)
+      downloadedModule = mod
     } else if let mod = moduleStorage.getModuleById(modId) {
       model.progress = 1.0
       model.status = "ShareDialog_DownloadComplete".l13n()
       model.summary = buildSummary(mod: mod)
+      downloadedModule = mod
     } else {
       let fetcher = ModuleFetcher(delegate: self)
       fetcher.fetchModule(ampId: modId)

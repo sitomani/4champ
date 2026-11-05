@@ -27,7 +27,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
   var interactor: SearchBusinessLogic?
   var router: (NSObjectProtocol & SearchRoutingLogic & SearchDataPassing)?
 
-  var searchScopes = [SearchType.composer, SearchType.module, SearchType.group, SearchType.meta]
+  var searchScopes = [SearchType.composers, SearchType.modules, SearchType.groups, SearchType.meta]
 
   var shouldDisplaySearchBar: Bool = true
 
@@ -134,7 +134,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       }
     } else {
       searchBar?.removeFromSuperview()
-      if router?.dataStore?.autoListType == .composer {
+      if router?.dataStore?.autoListType == .composers {
         composerTitleView?.titleLabel.text = router?.dataStore?.autoListTitle?.uppercased()
         composerTitleView?.updateSortType(router?.dataStore?.autoListSort)
 
@@ -205,7 +205,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
       self.animateRadioButton()
     }
     updateDownloadAllButton()
-    if router?.dataStore?.autoListType == .composer {
+    if router?.dataStore?.autoListType == .composers {
       composerTitleView?.updateSortType(router?.dataStore?.autoListSort)
     }
   }
@@ -464,22 +464,9 @@ extension SearchViewController: UITableViewDataSource {
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let vm = viewModel else { return UITableViewCell() }
-
-    let rows = vm.numberOfRows()
-    let pagingIndex = router?.dataStore?.pagingIndex ?? 0
-    if pagingIndex != rows &&
-      pagingRequestActive == false &&
-      rows > 30 && indexPath.row > rows - 5 {
-      if let text = searchBar?.text {
-        pagingRequestActive = true
-        let nextPageRequest = Search.Request(text: text, type: searchScopes[searchBar?.selectedScopeButtonIndex ?? 0], pagingIndex: rows)
-        interactor?.search(nextPageRequest)
-      }
-    }
     let cell = vm.dequeueCell(for: tableView, at: indexPath.row)
     if let modCell = (cell as? ModuleCell) {
       modCell.delegate = self
-//      modCell.faveButton?.isHidden = true
     }
     return cell
   }

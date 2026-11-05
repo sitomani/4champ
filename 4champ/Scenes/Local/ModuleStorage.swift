@@ -50,8 +50,8 @@ class ModuleStorage: NSObject {
 
   /// Identifier ranges for different services
   private let idRanges = [
-    ModuleService.amp: 0..<1000000,
-    ModuleService.local: 1000000..<2000000
+    ModuleService.amp: 0..<1_000_000,
+    ModuleService.local: 1_000_000..<2_000_000
   ]
 
     // MARK: Core Data lazy initialisers

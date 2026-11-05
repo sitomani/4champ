@@ -1,5 +1,8 @@
 # 4champ Development Journal
 
+# Oct 2026
+In early October 2026 I was notified by Monty that amp.dascene.net is getting rebuilt from scratch, and the new site would be superseding the old in roughly a month. Exciting times! During October I managed to pull out an update to my proxy server at 4champ.net and adapted to the new AMP JSON API. No more HTML scraping for search features ❤️. The new API will also provide for some fancy new features, coming in later updates. 
+
 ### May 2026
 
 Preserving the custom channel between launches triggered another set of changes: The UI state is now preserved between launches on all tabs, and radio play history is preserved as well (up to 30 most recent modules). A lot of small changes all over the place to support this. I keep asking myself why not earlier, it's just so nice to get back to the app where I left off when restarting after a while.

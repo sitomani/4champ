@@ -251,7 +251,7 @@ class VisualizerViewController: UIViewController, UIScrollViewDelegate, UIGestur
     sizeLabel.text = "\(info.size!) Kb"
 
     let playlistName = modulePlayer.radioOn ? " | Radio" : ""
-    composerLabel.text = info.composer! + playlistName
+    composerLabel.text = info.composer ?? "" + playlistName
     faveStar.isSelected = info.favorite
     loopButton.isSelected = info.loop > 0
     loopButton.isEnabled = modulePlayer.renderer.name != "UADE"

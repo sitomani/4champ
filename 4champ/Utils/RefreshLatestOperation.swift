@@ -48,8 +48,8 @@ class RefreshLatestOperation: Operation, @unchecked Sendable {
   func getLatestId() async -> Int {
     do {
       let client = NetworkClient()
-      let collectionSize = try await client.send(APILatestIdRequest())
-      return Int(collectionSize) ?? 0
+      let response = try await client.send(APILatestIdRequest())
+      return Int(response.id) ?? 0
     } catch {
       return 0
     }
