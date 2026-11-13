@@ -54,6 +54,23 @@ Run the following shell script in the root of this repository to update the subm
 ./build_deps.sh
 ```
 
+## API
+
+The application makes use of API proxy running at https://4champ.net. In order for the app to call the API, you need to have an API key specified at `4champ/Keys.plist` that shall be a file in the following format:
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>APIKey</key>
+	<string>YOUR_4CHAMP_API_KEY</string>
+</dict>
+</plist>
+```
+
+API keys are available upon request via my mastodon account at https://mastodon.social/@4champ. Send me a direct message and and ask for an API key. Key requests that are sent as public messages are ignored.
+
 ## Building the app
 
 After setting up the dependencies you can open 4champ.xcodeproj in Xcode and build the application. On simulator you can run the app without any further changes.

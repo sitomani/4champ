@@ -96,6 +96,7 @@
 		733ACA832F66BFAA007E6D83 /* CPPlayQueueController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733ACA822F66BFA5007E6D83 /* CPPlayQueueController.swift */; };
 		733F495E2DD0DA4700334C8A /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733F495D2DD0DA4400334C8A /* APIRequest.swift */; };
 		733F49602DD0DAF200334C8A /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733F495F2DD0DAF100334C8A /* NetworkClient.swift */; };
+		73543C3230A756B800BFFA82 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 73543C3130A756B800BFFA82 /* Keys.plist */; };
 		736C7D852F02A9F700725D28 /* PatternModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736C7D842F02A9F400725D28 /* PatternModels.swift */; };
 		736DAC5F2C862F4D005C07B4 /* VisualisationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736DAC5E2C862F4D005C07B4 /* VisualisationMenu.swift */; };
 		73759FD228EB34DF00535F8E /* libopenmpt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73759FD128EB34DF00535F8E /* libopenmpt.xcframework */; };
@@ -240,6 +241,7 @@
 		733ACA822F66BFA5007E6D83 /* CPPlayQueueController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPPlayQueueController.swift; sourceTree = "<group>"; };
 		733F495D2DD0DA4400334C8A /* APIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		733F495F2DD0DAF100334C8A /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
+		73543C3130A756B800BFFA82 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		735A274D264FE9EA004EAC0C /* AmpCDModel 9 (imports).xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AmpCDModel 9 (imports).xcdatamodel"; sourceTree = "<group>"; };
 		7364535E2B6C1F9E009A0F7A /* pt-BR */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		7364535F2B6C1F9E009A0F7A /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -528,6 +530,7 @@
 				45D392AF20B1DDEE00EEF4E3 /* LaunchScreen.storyboard */,
 				45D392B220B1DDEE00EEF4E3 /* Info.plist */,
 				45CEA1DE2413C8E300930A72 /* SceneDelegate.swift */,
+				73543C3130A756B800BFFA82 /* Keys.plist */,
 			);
 			path = 4champ;
 			sourceTree = "<group>";
@@ -682,6 +685,7 @@
 				4543984D20D0366E00991ADC /* Localizable.strings in Resources */,
 				45D392AE20B1DDEE00EEF4E3 /* Assets.xcassets in Resources */,
 				454F521021610F83007011F3 /* ComposerCell.xib in Resources */,
+				73543C3230A756B800BFFA82 /* Keys.plist in Resources */,
 				45D392AC20B1DDEC00EEF4E3 /* Main.storyboard in Resources */,
 				4543984E20D0366E00991ADC /* InfoPlist.strings in Resources */,
 			);
@@ -1000,7 +1004,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 63;
+				CURRENT_PROJECT_VERSION = 64;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					../openmpt/libopenmpt,
@@ -1036,7 +1040,7 @@
 				CODE_SIGN_ENTITLEMENTS = ampplayer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 63;
+				CURRENT_PROJECT_VERSION = 64;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					../openmpt/libopenmpt,
