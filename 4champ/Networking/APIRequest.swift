@@ -70,17 +70,14 @@ struct APIListModulesRequest: APIRequest {
   }
 }
 
-struct APIModulePathRequest: APIRequest {
-  
-  typealias Response = ModulePathResponse
+struct APIModuleDownloadRequest: APIRequest {
+  typealias Response = Data
   var endpoint: Endpoint
   var parameters: [String: String]?
-  
   init(moduleId: Int) {
     endpoint = .modulePath(id: moduleId)
   }
 }
-
 struct APIRandomModuleRequest: APIRequest {
   typealias Response = ModuleDetailsResponse
   var endpoint: Endpoint = .randomModule
@@ -95,3 +92,5 @@ struct APIModuleDetailsRequest: APIRequest {
     endpoint = .moduleDetails(id: moduleId)
   }
 }
+
+

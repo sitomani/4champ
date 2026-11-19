@@ -19,7 +19,7 @@ enum NetworkError: Error {
 final class NetworkClient {
   init() {}
   
-  lazy var APIKey: String = {
+  static var APIKey: String = {
     var key = ""
     if let path = Bundle.main.path(forResource: "Keys", ofType: "plist"),
        let keys = NSDictionary(contentsOfFile: path) {
@@ -35,7 +35,7 @@ final class NetworkClient {
     
     var urlRequest = URLRequest(url: url)
     urlRequest.httpMethod = request.endpoint.method.rawValue
-    urlRequest.addValue(self.APIKey, forHTTPHeaderField: "X-API-Key")
+    urlRequest.addValue(NetworkClient.APIKey, forHTTPHeaderField: "X-API-Key")
     
     let (data, response): (Data, URLResponse)
     do {

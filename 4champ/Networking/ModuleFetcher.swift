@@ -125,22 +125,31 @@ class ModuleFetcher: NSObject {
   private func fetchModule(modUrl: URL, id: Int) {
     log.debug("")
     state = .downloading(progress: 0)
+    
     targetModuleId = id
+
+    let downloadRequest = APIModuleDownloadRequest(moduleId: id)
+
+    guard let url = downloadRequest.url else {
+        return
+    }
+
+    var request = URLRequest(url: url)
+    request.addValue(NetworkClient.APIKey, forHTTPHeaderField: "X-API-Key")
 
     let configuration = URLSessionConfiguration.default
     let operationQueue = OperationQueue()
     let session = URLSession(configuration: configuration, delegate: self, delegateQueue: operationQueue)
-
-    downloadTask = session.downloadTask(with: modUrl)
+    downloadTask = session.downloadTask(with: request)
     downloadTask?.resume()
     return
   }
-
 }
 
 extension ModuleFetcher: URLSessionDownloadDelegate {
   func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
     self.state = .unpacking
+    
     if let moduleDataUnzipped = self.gunzip(dataURL: location),
       let details = moduleDetails {
       var mmd = MMD.init(details: details)

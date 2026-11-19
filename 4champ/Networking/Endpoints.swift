@@ -55,7 +55,7 @@ enum Endpoint {
     case .listComposers(let id):
       return "/api/v2/amp/groups/\(id)/composers"
     case .modulePath(let id):
-      return "/api/v2/amp/modules/\(id)/download"
+      return "/api/v2/amp/modules/\(id)/file"
     case .moduleDetails(let id):
       return "/api/v2/amp/modules/\(id)"
     case .randomModule:
